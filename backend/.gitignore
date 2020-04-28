@@ -3,3 +3,8 @@
 
 # Ignore Gradle build output directory
 build
+
+# Ignore gradle wrapper (it is only used for sources distribution)
+gradlew
+gradlew.bat
+gradle
