@@ -17,9 +17,6 @@
     var _ = require('lodash');
     module.exports = {
         methods: {
-            flip: function () {
-                alert('flip');
-            },
             shuffle() {
                 this.heroes.splice(0, this.heroes.length);
                 var supports =
