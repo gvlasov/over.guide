@@ -23,13 +23,13 @@
             shuffle() {
                 this.heroes.splice(0, this.heroes.length);
                 var supports =
-                    _.shuffle(heroes.filter(hero => hero.role === 'Support'))
+                    _.shuffle(heroes.filter(hero => hero.isSupport()))
                         .slice(0, 2);
                 var tanks =
-                    _.shuffle(heroes.filter(hero => hero.role === 'Tank'))
+                    _.shuffle(heroes.filter(hero => hero.isTank()))
                         .slice(0, 2);
                 var damage =
-                    _.shuffle(heroes.filter(hero => hero.role === 'Damage'))
+                    _.shuffle(heroes.filter(hero => hero.isDamage()))
                         .slice(0, 2);
                 this.heroes.push(...tanks.concat(damage).concat(supports));
             }

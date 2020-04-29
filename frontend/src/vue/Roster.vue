@@ -37,13 +37,13 @@
             return {
                 tanks:
                     heroes
-                        .filter(hero => hero.role === 'Tank'),
+                        .filter(hero => hero.isTank()),
                 damage:
                     heroes
-                        .filter(hero => hero.role === 'Damage'),
+                        .filter(hero => hero.isDamage()),
                 supports:
                     heroes
-                        .filter(hero => hero.role === 'Support'),
+                        .filter(hero => hero.isSupport()),
                 showName: true,
                 onclick: function () {
 
