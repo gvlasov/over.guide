@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "vue": "^2.4.4"
+    "vue": "^2.4.4",
+    "lodash": "latest"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
