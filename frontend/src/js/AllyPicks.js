@@ -1,18 +1,18 @@
 var _ = require('lodash');
 
 /**
- * @param {Hero[]} heroes
+ * @param {(Hero|null)[]} heroes
  * @constructor
  */
 function AllyPicks(heroes) {
-    if (heroes.length !== 5) {
+    if (heroes.length !== 6 || !heroes.includes(null)) {
         throw new Error(
-            "There must be exactly 5 heros in ally picks"
+            "There must be exactly 6 positions in ally picks, one of which is null"
         )
     }
     if (
         _.uniq(
-            heroes.map(hero => hero.name)
+            heroes.map(hero => hero === null ? null : hero.name)
         )
             .length < heroes.length
     ) {

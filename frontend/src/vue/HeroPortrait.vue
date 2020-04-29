@@ -1,7 +1,7 @@
 <template>
     <li class="overwatch-font-shadowed hero">
-        <img :src="hero.imgSrc()" v-on:click="onclick"/>
-        <div v-if="showName" class="portrait-title">{{ hero.name }}</div>
+        <img :src="imgSrc(hero)" v-on:click="onclick"/>
+        <!--        <div v-if="showName" class="portrait-title">{{ hero.name }}</div>-->
     </li>
 </template>
 
@@ -10,7 +10,9 @@
     module.exports = {
         name: 'HeroPortrait',
         props: {
-            'hero': Hero,
+            'hero': {
+                type: Hero
+            },
             'show-name': Boolean,
             onclick: {
                 type: Function,
@@ -20,11 +22,19 @@
             },
         },
         methods: {
-
+            /**
+             * @param {Hero|String} hero
+             */
+            imgSrc(hero) {
+                if (hero === null) {
+                    return '/images/undefined-hero.png'
+                } else {
+                    return "https://d1u1mce87gyfbn.cloudfront.net/hero/" + hero.imgName + "/hero-select-portrait.png"
+                }
+            },
         },
         data() {
-            return {
-            }
+            return {}
         },
     };
 
