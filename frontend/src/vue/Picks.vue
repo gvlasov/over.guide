@@ -24,16 +24,13 @@
                 this.heroes.splice(0, this.heroes.length);
                 var supports =
                     _.shuffle(heroes.filter(hero => hero.role === 'Support'))
-                        .slice(0, 2)
-                        .map(hero => new Hero(hero));
+                        .slice(0, 2);
                 var tanks =
                     _.shuffle(heroes.filter(hero => hero.role === 'Tank'))
-                        .slice(0, 2)
-                        .map(hero => new Hero(hero));
+                        .slice(0, 2);
                 var damage =
                     _.shuffle(heroes.filter(hero => hero.role === 'Damage'))
-                        .slice(0, 2)
-                        .map(hero => new Hero(hero));
+                        .slice(0, 2);
                 this.heroes.push(...tanks.concat(damage).concat(supports));
             }
         },

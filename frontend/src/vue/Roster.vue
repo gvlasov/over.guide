@@ -36,17 +36,14 @@
             var self = this;
             return {
                 tanks:
-                    Object.values(heroes)
-                        .filter(hero => hero.role === 'Tank')
-                        .map(hero => new Hero(hero)),
+                    heroes
+                        .filter(hero => hero.role === 'Tank'),
                 damage:
-                    Object.values(heroes)
-                        .filter(hero => hero.role === 'Damage')
-                        .map(hero => new Hero(hero)),
+                    heroes
+                        .filter(hero => hero.role === 'Damage'),
                 supports:
-                    Object.values(heroes)
-                        .filter(hero => hero.role === 'Support')
-                        .map(hero => new Hero(hero)),
+                    heroes
+                        .filter(hero => hero.role === 'Support'),
                 showName: true,
                 onclick: function () {
 

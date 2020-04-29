@@ -1,3 +1,4 @@
+var Hero = require('../js/Hero.js');
 module.exports = [
     {
         name: 'Ana',
@@ -160,6 +161,7 @@ module.exports = [
         imgName: 'zenyatta'
     }
 ]
+    .map(data => new Hero(data))
 ;
 
 
