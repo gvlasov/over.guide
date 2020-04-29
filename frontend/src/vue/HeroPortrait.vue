@@ -24,6 +24,7 @@
         },
         data() {
             return {
+                onclick: function() { }
             }
         },
     };
