@@ -1,17 +1,17 @@
 module.exports = [
     {
         name: 'Ana',
-        role: 'support',
+        role: 'Support',
         imgName: 'ana'
     },
     {
         name: 'Ashe',
-        role: 'damage',
+        role: 'Damage',
         imgName: 'ashe'
     },
     {
         name: 'Baptiste',
-        role: 'support',
+        role: 'Support',
         imgName: 'baptiste'
     },
     {
@@ -63,6 +63,11 @@ module.exports = [
         name: 'McCree',
         role: 'Damage',
         imgName: 'mccree'
+    },
+    {
+        name: 'Mercy',
+        role: 'Support',
+        imgName: 'mercy'
     },
     {
         name: 'Mei',
