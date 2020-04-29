@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1 class="overwatch-font-shadowed">Overwatch Counters</h1>
-        <!--        <Picks></Picks>-->
-        <Roster :on-hero-click="heroTest"/>
+        <Picks></Picks>
+        <!--        <Roster :on-hero-click="heroTest"/>-->
     </div>
 </template>
 
