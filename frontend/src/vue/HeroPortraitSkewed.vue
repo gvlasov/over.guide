@@ -44,7 +44,7 @@
         transform: skew(-25deg, 0deg);
         /*outline:1px solid #fff;*/
         overflow: hidden;
-        border-radius: .3em;
+        border-radius: .4em;
         margin-right: .4em;
         border: 1px solid white;
         cursor: pointer;
