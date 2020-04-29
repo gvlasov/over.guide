@@ -1,13 +1,11 @@
 <template>
     <div>
-        <h1>Picks</h1>
         <ul>
-            <li class="picks__hero" v-for="hero in heroes">
+            <li class="overwatch-font-shadowed hero" v-for="hero in heroes">
                 <img :src="hero.imgSrc()" v-on:click="shuffle"/>
-                <div class="picks__portrait-title">{{ hero.name }}</div>
+                <div class="portrait-title">{{ hero.name }}</div>
             </li>
         </ul>
-        <button v-on:click="flip">Flip</button>
     </div>
 </template>
 
@@ -50,11 +48,7 @@
 <style scoped>
     @import '../css/fonts.css';
 
-    h1 {
-        color: green
-    }
-
-    .picks__portrait-title {
+    .portrait-title {
         position: absolute;
         bottom: 0px;
         color: white;
@@ -64,10 +58,9 @@
         display: block;
         text-align: center;
         width: 100%;
-        font-family: BigNoodleTooOblique, sans-serif;
     }
 
-    .picks__hero {
+    .hero {
         position: relative;
         display: inline-block;
     }

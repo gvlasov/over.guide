@@ -36,6 +36,12 @@ module.exports = function (grunt) {
                 dest: 'dist/fonts',
                 expand: true,
                 flatten: true
+            },
+            favicons: {
+                src: 'src/favicons/*',
+                dest: 'dist/favicons',
+                expand: true,
+                flatten: true
             }
         },
         watch: {

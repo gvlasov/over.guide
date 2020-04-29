@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Overwatch Counters</h1>
+        <h1 class="overwatch-font-shadowed">Overwatch Counters</h1>
         <picks></picks>
     </div>
 </template>
@@ -14,7 +14,4 @@
 </script>
 
 <style scoped>
-    h1 {
-        color: red
-    }
 </style>
