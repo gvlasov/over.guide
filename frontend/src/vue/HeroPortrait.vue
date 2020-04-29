@@ -50,4 +50,8 @@
         position: relative;
         display: inline-block;
     }
+
+    .hero > img {
+        width: 100%;
+    }
 </style>
