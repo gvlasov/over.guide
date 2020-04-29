@@ -59,9 +59,7 @@
         bottom: 0px;
         color: white;
         text-shadow: 0px 0px 4px black;
-        font-variant: small-caps;
-        font-variant-caps: all-small-caps;
-        font-size: 2.7em;
+        font-size: 2.4em;
         font-weight: bold;
         display: block;
         text-align: center;

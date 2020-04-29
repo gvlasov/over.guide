@@ -5,6 +5,7 @@
     url("/fonts/koverwatch.woff") format("woff"),
     url("/fonts/koverwatch.woff2") format("woff2")
 ;
+    font-variant: small-caps;
 }
 
 @font-face {
@@ -13,4 +14,5 @@
     url("/fonts/bignoodletoo.woff") format("woff"),
     url("/fonts/bignoodletoo.ttf") format("ttf")
 ;
+    font-variant: small-caps;
 }
