@@ -1,3 +1,10 @@
+/**
+ * @param {object} data
+ * @property {string} name
+ * @property {string} role
+ * @property {string} imgName
+ * @constructor
+ */
 function Hero(data) {
     Object.assign(this, data)
 }

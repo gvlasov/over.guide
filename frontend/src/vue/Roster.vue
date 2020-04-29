@@ -4,7 +4,7 @@
             <HeroPortraitSkewed
                     v-for="hero in tanks"
                     :hero="hero"
-                    :onclick="onclick"
+                    :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
             />
         </ul>
@@ -12,7 +12,7 @@
             <HeroPortraitSkewed
                     v-for="hero in damage"
                     :hero="hero"
-                    :onclick="onclick"
+                    :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
             />
         </ul>
@@ -20,7 +20,7 @@
             <HeroPortraitSkewed
                     v-for="hero in supports"
                     :hero="hero"
-                    :onclick="onclick"
+                    :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
             />
         </ul>
@@ -31,6 +31,11 @@
     var Hero = require('../js/Hero.js');
     var heroes = require('../js/heroes.js');
     module.exports = {
+        props: {
+            onHeroClick: {
+                type: Function,
+            }
+        },
         methods: {},
         data() {
             var self = this;
