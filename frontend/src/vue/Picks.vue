@@ -1,5 +1,5 @@
 <template>
-    <picks>
+    <div>
         <h1>Picks</h1>
         <ul>
             <li class="picks__hero" v-for="hero in heroes">
@@ -8,7 +8,7 @@
             </li>
         </ul>
         <button v-on:click="flip">Flip</button>
-    </picks>
+    </div>
 </template>
 
 <script>
@@ -48,6 +48,8 @@
 </script>
 
 <style scoped>
+    @import '../css/fonts.css';
+
     h1 {
         color: green
     }
@@ -58,11 +60,13 @@
         color: white;
         text-shadow: 0px 0px 4px black;
         font-variant: small-caps;
-        font-size: 1.8em;
+        font-variant-caps: all-small-caps;
+        font-size: 2.7em;
         font-weight: bold;
         display: block;
         text-align: center;
         width: 100%;
+        font-family: BigNoodleTooOblique, sans-serif;
     }
 
     .picks__hero {

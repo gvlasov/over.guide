@@ -21,15 +21,26 @@ module.exports = function (grunt) {
             }
         },
         copy: {
-            images: {
-                src: 'img/**',
-                dest: 'dist/',
-                expand: true
+            html: {
+                src: 'src/index.html',
+                dest: 'dist/index.html'
+            },
+            css: {
+                src: 'src/css/*',
+                dest: 'dist/css',
+                expand: true,
+                flatten: true
+            },
+            fonts: {
+                src: 'src/fonts/*',
+                dest: 'dist/fonts',
+                expand: true,
+                flatten: true
             }
         },
         watch: {
             scripts: {
-                files: ['src/js/*.js', 'src/**/*.vue'],
+                files: ['src/**', 'Gruntfile.js'],
                 tasks: ['default'],
                 options: {
                     spawn: false,

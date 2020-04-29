@@ -6,7 +6,7 @@ module.exports = {
 var websocket = {
 
 };
-(function() {
+function setUpWebsockets() {
     var socket = null;
 
     function connect() {
@@ -43,4 +43,4 @@ var websocket = {
 
 
     connect();
-})();
+}
