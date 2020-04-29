@@ -19,6 +19,7 @@
         },
         data() {
             return {
+                onclick: function() { }
             }
         },
     };
