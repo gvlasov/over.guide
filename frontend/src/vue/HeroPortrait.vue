@@ -12,7 +12,12 @@
         props: {
             'hero': Hero,
             'show-name': Boolean,
-            onclick: Function,
+            onclick: {
+                type: Function,
+                default: function () {
+
+                }
+            },
         },
         methods: {
 
