@@ -1,14 +1,14 @@
 <template>
     <div>
         <h1 class="overwatch-font-shadowed">Overwatch Counters</h1>
-        <picks></picks>
+        <Picks></Picks>
     </div>
 </template>
 
 <script>
     module.exports = {
         components: {
-            picks: require('../vue/Picks.vue')
+            Picks: require('../vue/Picks.vue')
         },
     }
 </script>
