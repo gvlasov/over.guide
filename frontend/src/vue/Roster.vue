@@ -6,6 +6,7 @@
                     :hero="hero"
                     :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
             />
         </ul>
         <ul class="damage">
@@ -14,6 +15,7 @@
                     :hero="hero"
                     :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
             />
         </ul>
         <ul class="supports">
@@ -22,6 +24,7 @@
                     :hero="hero"
                     :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
             />
         </ul>
     </div>
@@ -37,7 +40,21 @@
                 type: Function,
             }
         },
-        methods: {},
+        methods: {
+            /**
+             * @param {string} category
+             */
+            selectCategory(category) {
+                this.selectedCategories = [category];
+            },
+            /**
+             * @param {Hero} hero
+             * @return {boolean}
+             */
+            isHeroActive(hero) {
+                return this.selectedCategories.indexOf(hero.role) > -1;
+            }
+        },
         data() {
             const self = this;
             return {
@@ -51,6 +68,9 @@
                     [...heroes]
                         .filter(hero => hero.isSupport()),
                 showName: true,
+                selectedCategories: [
+                    'Tank', 'Support', 'Damage'
+                ],
                 onclick: function () {
 
                 }
@@ -64,5 +84,10 @@
 </script>
 
 <style scoped>
+    .enabled {
+    }
 
+    .disable {
+        opacity: .5;
+    }
 </style>
