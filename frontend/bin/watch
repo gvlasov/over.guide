@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+cd `git rev-parse --show-toplevel`
+
+cd frontend/dist
+grunt watch
