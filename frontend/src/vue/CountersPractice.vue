@@ -1,7 +1,12 @@
 <template>
     <div>
-        <Picks/>
-        <Roster/>
+        <Picks
+                ref="picks"
+                v-on:click.native="nextPick"
+        />
+        <Roster
+                ref="roster"
+        />
     </div>
 </template>
 
@@ -10,7 +15,11 @@
     import Roster from '../vue/Roster.vue';
 
     export default {
-        methods: {},
+        methods: {
+            nextPick() {
+                this.$refs.picks.shuffle();
+            }
+        },
         data() {
             const self = this;
             return {}

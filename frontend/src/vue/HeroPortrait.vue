@@ -1,6 +1,6 @@
 <template>
     <li class="overwatch-font-shadowed hero">
-        <img :src="imgSrc(hero)" v-on:click="onclick"/>
+        <img :src="imgSrc(hero)"/>
         <!--        <div v-if="showName" class="portrait-title">{{ hero.name }}</div>-->
     </li>
 </template>
@@ -15,12 +15,6 @@
                 type: Hero
             },
             'show-name': Boolean,
-            onclick: {
-                type: Function,
-                default: function () {
-
-                }
-            },
         },
         methods: {
             /**

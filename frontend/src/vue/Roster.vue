@@ -4,7 +4,6 @@
             <HeroPortraitSkewed
                     v-for="hero in tanks"
                     :hero="hero"
-                    :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
                     v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
             />
@@ -13,7 +12,6 @@
             <HeroPortraitSkewed
                     v-for="hero in damage"
                     :hero="hero"
-                    :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
                     v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
             />
@@ -22,7 +20,6 @@
             <HeroPortraitSkewed
                     v-for="hero in supports"
                     :hero="hero"
-                    :onclick="e=>onHeroClick(hero)"
                     style="width: 3em;"
                     v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
             />

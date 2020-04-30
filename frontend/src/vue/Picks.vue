@@ -5,7 +5,6 @@
                     v-for="hero in heroes"
                     :hero="hero"
                     :show-name="showName"
-                    :onclick="onclick"
             />
         </ul>
     </div>
@@ -35,11 +34,8 @@
         data() {
             const self = this;
             return {
-                heroes: generator.generateSeeded(shuffleCounter - 1).heroes,
+                heroes: [null, null, null, null, null, null],
                 showName: true,
-                onclick: function () {
-                    self.shuffle()
-                }
             }
         },
         components: {
