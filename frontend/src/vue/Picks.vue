@@ -16,11 +16,12 @@
     var generator = new (require('../js/AllyPicksGenerator.js'));
     var heroes = require('../js/heroes.js');
     var _ = require('lodash');
+    var shuffleCounter = 0;
     module.exports = {
         methods: {
             shuffle() {
                 this.setAllyPicks(
-                    generator.generate('Tank')
+                    generator.generateSeeded(shuffleCounter++)
                 )
             },
             /**
