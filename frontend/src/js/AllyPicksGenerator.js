@@ -51,7 +51,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
  */
 AllyPicksGenerator.prototype.generateSeeded = function (seed) {
 
-    var random = (new Random(seed)).nextInt() % 3;
+    var random = Math.abs((new Random(seed)).nextInt()) % 3;
     if (random === 0) {
         return this.generateForRole('Tank', seed);
     } else if (random === 1) {
