@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="overwatch-font-shadowed">Overwatch Counters</h1>
-        <Picks></Picks>
+        <CountersPractice/>
         <!--        <Roster :on-hero-click="heroTest"/>-->
     </div>
 </template>
@@ -18,8 +18,7 @@
             }
         },
         components: {
-            Picks: require('../vue/Picks.vue'),
-            Roster: require('../vue/Roster.vue'),
+            CountersPractice: require('../vue/CountersPractice.vue'),
         },
     }
 </script>
