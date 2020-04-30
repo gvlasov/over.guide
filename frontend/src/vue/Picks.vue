@@ -19,8 +19,16 @@
     module.exports = {
         methods: {
             shuffle() {
+                this.setAllyPicks(
+                    generator.generate('Tank')
+                )
+            },
+            /**
+             * @param {AllyPicks} picks
+             */
+            setAllyPicks(picks) {
                 this.heroes.splice(0, this.heroes.length);
-                this.heroes.push(...generator.generate('Tank').heroes);
+                this.heroes.push(...picks.heroes);
             }
         },
         data() {

@@ -9,7 +9,7 @@ function AllyPicksGenerator() {
 }
 
 /**
- * @param {string} yourRole
+ * @param {string|undefined} yourRole
  * @returns {AllyPicks}
  */
 AllyPicksGenerator.prototype.generate = function (yourRole) {
