@@ -1,5 +1,5 @@
 import heroes from "../js/heroes.js";
-import Random from "java-random";
+import seedrandom from "seedrandom";
 import shuffle from "fast-shuffle";
 import AllyPicks from "../js/AllyPicks.js";
 
@@ -16,11 +16,11 @@ function AllyPicksGenerator() {
  * @returns {AllyPicks}
  */
 AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
-    let random = new Random(seed);
+    let random = seedrandom(seed);
     var supports =
         shuffle(
             heroes.filter(hero => hero.isSupport()),
-            () => random.nextDouble()
+            () => random()
         )
             .slice(0, yourRole === 'Support' ? 1 : 2);
     if (yourRole === 'Support') {
@@ -29,7 +29,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     var tanks =
         shuffle(
             heroes.filter(hero => hero.isTank()),
-            () => random.nextDouble()
+            () => random()
         )
             .slice(0, yourRole === 'Tank' ? 1 : 2);
     if (yourRole === 'Tank') {
@@ -38,7 +38,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     var damage =
         shuffle(
             heroes.filter(hero => hero.isDamage()),
-            () => random.nextDouble()
+            () => random()
         )
             .slice(0, yourRole === 'Damage' ? 1 : 2);
     if (yourRole === 'Damage') {
@@ -51,7 +51,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
  */
 AllyPicksGenerator.prototype.generateSeeded = function (seed) {
 
-    var random = Math.abs((new Random(seed)).nextInt()) % 3;
+    var random = Math.ceil(seedrandom(seed)() * 3);
     if (random === 0) {
         return this.generateForRole('Tank', seed);
     } else if (random === 1) {
