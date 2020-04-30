@@ -35,7 +35,7 @@
         data() {
             const self = this;
             return {
-                heroes: Object.values(heroes).map(hero => new Hero(hero)).slice(0, 6),
+                heroes: generator.generateSeeded(shuffleCounter - 1).heroes,
                 showName: true,
                 onclick: function () {
                     self.shuffle()

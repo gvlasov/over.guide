@@ -41,13 +41,13 @@
             var self = this;
             return {
                 tanks:
-                    heroes
+                    [...heroes]
                         .filter(hero => hero.isTank()),
                 damage:
-                    heroes
+                    [...heroes]
                         .filter(hero => hero.isDamage()),
                 supports:
-                    heroes
+                    [...heroes]
                         .filter(hero => hero.isSupport()),
                 showName: true,
                 onclick: function () {
