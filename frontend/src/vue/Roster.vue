@@ -33,23 +33,27 @@
 
     export default {
         props: {
+            enabledHeroes: {
+                type: Array,
+                default() {
+                    return new Array(heroes);
+                }
+            },
             onHeroClick: {
                 type: Function,
             }
         },
         methods: {
             /**
-             * @param {string} category
-             */
-            selectCategory(category) {
-                this.selectedCategories = [category];
-            },
-            /**
              * @param {Hero} hero
              * @return {boolean}
              */
             isHeroActive(hero) {
-                return this.selectedCategories.indexOf(hero.role) > -1;
+                console.log(
+                    hero.name,
+                    this.enabledHeroes.map(h => h.name)
+                );
+                return this.enabledHeroes.filter(h => h.name === hero.name).length > 0;
             }
         },
         data() {
@@ -65,9 +69,6 @@
                     [...heroes]
                         .filter(hero => hero.isSupport()),
                 showName: true,
-                selectedCategories: [
-                    'Tank', 'Support', 'Damage'
-                ],
                 onclick: function () {
 
                 }
@@ -84,7 +85,7 @@
     .enabled {
     }
 
-    .disable {
-        opacity: .5;
+    .disabled {
+        display: none !important;
     }
 </style>

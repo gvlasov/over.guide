@@ -11,7 +11,7 @@ function AllyPicksGenerator() {
 }
 
 /**
- * @param {string|undefined} yourRole
+ * @param {string} yourRole
  * @param {number|string} seed
  * @returns {AllyPicks}
  */
@@ -48,13 +48,13 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
 };
 /**
  * @param {number} seed
+ * @return {AllyPicks}
  */
 AllyPicksGenerator.prototype.generateSeeded = function (seed) {
-
-    var random = Math.ceil(seedrandom(seed)() * 3);
-    if (random === 0) {
+    const random = Math.ceil(seedrandom(seed)() * 3);
+    if (random === 1) {
         return this.generateForRole('Tank', seed);
-    } else if (random === 1) {
+    } else if (random === 2) {
         return this.generateForRole('Support', seed);
     } else {
         return this.generateForRole('Damage', seed);
