@@ -1,4 +1,4 @@
-var _ = require('lodash');
+import _ from "lodash";
 
 /**
  * @param {(Hero|null)[]} heroes
@@ -23,4 +23,4 @@ function AllyPicks(heroes) {
     this.heroes = heroes;
 }
 
-module.exports = AllyPicks;
+export default AllyPicks;

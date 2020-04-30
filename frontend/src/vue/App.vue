@@ -7,18 +7,14 @@
 </template>
 
 <script>
-    module.exports = {
+    import CountersPractice from '../vue/CountersPractice.vue';
+
+    export default {
         methods: {
-            /**
-             * @param {Hero} hero
-             * @return {string}
-             */
-            heroTest: function (hero) {
-                alert(hero.name);
-            }
+
         },
         components: {
-            CountersPractice: require('../vue/CountersPractice.vue'),
+            CountersPractice: CountersPractice,
         },
     }
 </script>

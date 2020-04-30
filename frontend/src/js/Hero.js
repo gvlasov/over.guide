@@ -17,4 +17,4 @@ Hero.prototype.isDamage = function () {
 Hero.prototype.isSupport = function () {
     return this.role === 'Support';
 };
-module.exports = Hero;
+export default Hero;

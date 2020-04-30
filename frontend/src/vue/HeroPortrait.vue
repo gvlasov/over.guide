@@ -6,8 +6,9 @@
 </template>
 
 <script>
-    var Hero = require('../js/Hero.js');
-    module.exports = {
+    import Hero from "../js/Hero.js";
+
+    export default {
         name: 'HeroPortrait',
         props: {
             'hero': {

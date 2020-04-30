@@ -1,8 +1,7 @@
-var heroes = require('../js/heroes.js');
-var _ = require('lodash');
-var Random = require('java-random');
-var shuffle = require('fast-shuffle').default;
-var AllyPicks = require('../js/AllyPicks.js');
+import heroes from "../js/heroes.js";
+import Random from "java-random";
+import shuffle from "fast-shuffle";
+import AllyPicks from "../js/AllyPicks.js";
 
 /**
  * @constructor
@@ -62,4 +61,4 @@ AllyPicksGenerator.prototype.generateSeeded = function (seed) {
     }
 };
 
-module.exports = AllyPicksGenerator;
+export default AllyPicksGenerator;

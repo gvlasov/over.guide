@@ -1,5 +1,6 @@
-var Hero = require('../js/Hero.js');
-module.exports = [
+import Hero from "../js/Hero.js";
+
+export default [
     {
         name: 'Ana',
         role: 'Support',
@@ -161,7 +162,6 @@ module.exports = [
         imgName: 'zenyatta'
     }
 ]
-    .map(data => new Hero(data))
-;
+    .map(data => new Hero(data));
 
 

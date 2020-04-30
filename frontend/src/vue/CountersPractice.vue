@@ -6,17 +6,18 @@
 </template>
 
 <script>
-    var Hero = require('../js/Hero.js');
-    var _ = require('lodash');
-    module.exports = {
+    import Picks from '../vue/Picks.vue';
+    import Roster from '../vue/Roster.vue';
+
+    export default {
         methods: {},
         data() {
             const self = this;
             return {}
         },
         components: {
-            Picks: require('../vue/Picks.vue'),
-            Roster: require('../vue/Roster.vue'),
+            Picks: Picks,
+            Roster: Roster,
         },
     };
 

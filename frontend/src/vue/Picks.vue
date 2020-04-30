@@ -12,12 +12,12 @@
 </template>
 
 <script>
-    var Hero = require('../js/Hero.js');
-    var generator = new (require('../js/AllyPicksGenerator.js'));
-    var heroes = require('../js/heroes.js');
-    var _ = require('lodash');
-    var shuffleCounter = 0;
-    module.exports = {
+    import AllyPicksGenerator from "../js/AllyPicksGenerator";
+    import HeroPortrait from "./HeroPortrait.vue";
+
+    const generator = new AllyPicksGenerator();
+    let shuffleCounter = 0;
+    export default {
         methods: {
             shuffle() {
                 this.setAllyPicks(
@@ -43,7 +43,7 @@
             }
         },
         components: {
-            HeroPortrait: require('../vue/HeroPortrait.vue')
+            HeroPortrait: HeroPortrait
         },
     };
 

@@ -11,7 +11,7 @@ module.exports = function (grunt) {
                 }
             },
             options: {
-                transform: ['vueify']
+                transform: ['vueify', 'babelify']
             }
         },
         rework: {

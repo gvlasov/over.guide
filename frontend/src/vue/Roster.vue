@@ -28,9 +28,10 @@
 </template>
 
 <script>
-    var Hero = require('../js/Hero.js');
-    var heroes = require('../js/heroes.js');
-    module.exports = {
+    import HeroPortraitSkewed from "./HeroPortraitSkewed.vue";
+    import heroes from "../js/heroes.js";
+
+    export default {
         props: {
             onHeroClick: {
                 type: Function,
@@ -38,7 +39,7 @@
         },
         methods: {},
         data() {
-            var self = this;
+            const self = this;
             return {
                 tanks:
                     [...heroes]
@@ -56,7 +57,7 @@
             }
         },
         components: {
-            HeroPortraitSkewed: require('../vue/HeroPortraitSkewed.vue'),
+            HeroPortraitSkewed: HeroPortraitSkewed,
         },
     };
 

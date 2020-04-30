@@ -11,8 +11,10 @@
 </template>
 
 <script>
-    var Hero = require('../js/Hero.js');
-    module.exports = {
+    import Hero from '../js/Hero.js';
+    import HeroPortrait from "./HeroPortrait.vue";
+
+    export default {
         name: 'HeroPortraitSkewed',
         props: {
             'hero': Hero,
@@ -29,7 +31,7 @@
             return {}
         },
         components: {
-            HeroPortrait: require('../vue/HeroPortrait.vue'),
+            HeroPortrait: HeroPortrait,
         },
     };
 

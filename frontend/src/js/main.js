@@ -1,5 +1,4 @@
-var Vue = require('vue');
-var HeroPortrait = require('../vue/HeroPortrait.vue');
+import Vue from "vue";
 
 var app = new Vue({
     el: '#app',
