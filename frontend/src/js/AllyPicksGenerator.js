@@ -11,11 +11,16 @@ function AllyPicksGenerator() {
 }
 
 /**
- * @param {string} yourRole
+ * @param {string|object} yourRole null to generate all 6 picks, role name string to generate ally picks
  * @param {number|string} seed
  * @returns {AllyPicks}
  */
 AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
+    if (
+        ![null, 'Tank', 'Damage', 'Support'].includes(yourRole)
+    ) {
+        throw new Error("Role must be 'Tank', 'Damage', 'Support' or null");
+    }
     let random = seedrandom(seed);
     var supports =
         shuffle(

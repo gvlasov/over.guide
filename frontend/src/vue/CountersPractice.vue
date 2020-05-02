@@ -1,6 +1,10 @@
 <template>
     <div>
         <Picks
+                ref="enemyPicks"
+                v-on:click.native="nextPick"
+        />
+        <Picks
                 ref="allyPicks"
                 v-on:click.native="nextPick"
         />
@@ -21,8 +25,10 @@
     export default {
         methods: {
             nextPick() {
-                let picks = generator.generateSeeded(shuffleCounter++);
+                let seed = shuffleCounter++;
+                let picks = generator.generateSeeded(seed);
                 this.setAllyPicks(picks);
+                this.setEnemyPicks(generator.generateForRole(null, shuffleCounter));
                 let disabledCategories = picks.getCompletelyPickedCategories();
                 this.$refs.roster.enabledHeroes.splice(0, this.$refs.roster.enabledHeroes.length);
                 let enabledHeroes = heroes.filter(
@@ -40,6 +46,13 @@
             setAllyPicks(picks) {
                 this.$refs.allyPicks.heroes.splice(0, picks.heroes.length);
                 this.$refs.allyPicks.heroes.push(...picks.heroes);
+            },
+            /**
+             * @param {AllyPicks} picks
+             */
+            setEnemyPicks(picks) {
+                this.$refs.enemyPicks.heroes.splice(0, picks.heroes.length);
+                this.$refs.enemyPicks.heroes.push(...picks.heroes);
             }
         },
         data() {

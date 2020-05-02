@@ -5,9 +5,9 @@ import _ from "lodash";
  * @constructor
  */
 function AllyPicks(heroes) {
-    if (heroes.length !== 6 || !heroes.includes(null)) {
+    if (heroes.length !== 6) {
         throw new Error(
-            "There must be exactly 6 positions in ally picks, one of which is null"
+            "There must be exactly 6 positions"
         )
     }
     if (
