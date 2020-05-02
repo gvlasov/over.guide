@@ -5,7 +5,7 @@
                     v-for="hero in tanks"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero)}"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
             />
         </ul>
         <ul class="damage">
@@ -13,7 +13,7 @@
                     v-for="hero in damage"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero)}"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
             />
         </ul>
         <ul class="supports">
@@ -21,7 +21,7 @@
                     v-for="hero in supports"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero)}"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
             />
         </ul>
     </div>
@@ -56,10 +56,11 @@
             },
             /**
              * @param {Hero} hero
+             * @return {boolean}
              */
             isHeroBanned(hero) {
                 return this.bans.filter(h => hero.name === h.name).length > 0;
-            }
+            },
         },
         data() {
             const self = this;
