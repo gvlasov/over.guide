@@ -1,7 +1,7 @@
 <template>
     <div>
         <Picks
-                ref="picks"
+                ref="allyPicks"
                 v-on:click.native="nextPick"
         />
         <Roster
@@ -38,8 +38,8 @@
              * @param {AllyPicks} picks
              */
             setAllyPicks(picks) {
-                this.$refs.picks.heroes.splice(0, picks.heroes.length);
-                this.$refs.picks.heroes.push(...picks.heroes);
+                this.$refs.allyPicks.heroes.splice(0, picks.heroes.length);
+                this.$refs.allyPicks.heroes.push(...picks.heroes);
             }
         },
         data() {
