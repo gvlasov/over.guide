@@ -46,7 +46,6 @@
                 this.$refs.roster.enabledHeroes.push(
                     ...enabledHeroes
                 );
-                console.log(this.bans.map(it => it.name));
             },
             /**
              * @param {AllyPicks} picks
