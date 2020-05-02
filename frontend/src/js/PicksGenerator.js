@@ -7,7 +7,7 @@ import AllyPicks from "../js/AllyPicks.js";
  * @constructor
  * @param {Hero[]} bans
  */
-function AllyPicksGenerator(bans) {
+function PicksGenerator(bans) {
     this.bans = bans;
 }
 
@@ -16,7 +16,7 @@ function AllyPicksGenerator(bans) {
  * @param {number|string} seed
  * @returns {AllyPicks}
  */
-AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
+PicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     if (
         ![null, 'Tank', 'Damage', 'Support'].includes(yourRole)
     ) {
@@ -57,7 +57,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
  * @param {number} seed
  * @return {AllyPicks}
  */
-AllyPicksGenerator.prototype.generateSeeded = function (seed) {
+PicksGenerator.prototype.generateSeeded = function (seed) {
     const random = Math.ceil(seedrandom(seed)() * 3);
     if (random === 1) {
         return this.generateForRole('Tank', seed);
@@ -68,4 +68,4 @@ AllyPicksGenerator.prototype.generateSeeded = function (seed) {
     }
 };
 
-export default AllyPicksGenerator;
+export default PicksGenerator;

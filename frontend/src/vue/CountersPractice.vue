@@ -20,7 +20,7 @@
 <script>
     import Picks from '../vue/Picks.vue';
     import Roster from '../vue/Roster.vue';
-    import AllyPicksGenerator from "../js/AllyPicksGenerator";
+    import PicksGenerator from "../js/PicksGenerator";
     import BansGenerator from "../js/BansGenerator";
     import heroes from "../js/heroes";
 
@@ -32,7 +32,7 @@
                 const seed = shuffleCounter++;
                 const bans = bansGenerator.generate(seed);
                 this.bans = bans;
-                const picksGenerator = new AllyPicksGenerator(bans);
+                const picksGenerator = new PicksGenerator(bans);
                 const picks = picksGenerator.generateSeeded(seed);
                 this.setAllyPicks(picks);
                 this.setEnemyPicks(picksGenerator.generateForRole(null, shuffleCounter));
