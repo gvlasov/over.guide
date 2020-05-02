@@ -24,17 +24,19 @@
     import BansGenerator from "../js/BansGenerator";
     import heroes from "../js/heroes";
 
-    const picksGenerator = new AllyPicksGenerator();
     const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
     export default {
         methods: {
             nextPick() {
-                let seed = shuffleCounter++;
-                let picks = picksGenerator.generateSeeded(seed);
+                const seed = shuffleCounter++;
+                const bans = bansGenerator.generate(seed);
+                this.bans = bans;
+                const picksGenerator = new AllyPicksGenerator(bans);
+                const picks = picksGenerator.generateSeeded(seed);
                 this.setAllyPicks(picks);
                 this.setEnemyPicks(picksGenerator.generateForRole(null, shuffleCounter));
-                let disabledCategories = picks.getCompletelyPickedCategories();
+                const disabledCategories = picks.getCompletelyPickedCategories();
                 this.$refs.roster.enabledHeroes.splice(0, this.$refs.roster.enabledHeroes.length);
                 let enabledHeroes = heroes.filter(
                     (hero) =>
@@ -44,7 +46,6 @@
                 this.$refs.roster.enabledHeroes.push(
                     ...enabledHeroes
                 );
-                this.bans = bansGenerator.generate(seed);
                 console.log(this.bans.map(it => it.name));
             },
             /**

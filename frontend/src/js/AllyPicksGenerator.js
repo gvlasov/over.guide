@@ -5,9 +5,10 @@ import AllyPicks from "../js/AllyPicks.js";
 
 /**
  * @constructor
+ * @param {Hero[]} bans
  */
-function AllyPicksGenerator() {
-
+function AllyPicksGenerator(bans) {
+    this.bans = bans;
 }
 
 /**
@@ -22,9 +23,10 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
         throw new Error("Role must be 'Tank', 'Damage', 'Support' or null");
     }
     let random = seedrandom(seed);
+    const availableHeroes = heroes.filter(hero => !this.bans.includes(hero));
     var supports =
         shuffle(
-            heroes.filter(hero => hero.isSupport()),
+            availableHeroes.filter(hero => hero.isSupport()),
             () => random()
         )
             .slice(0, yourRole === 'Support' ? 1 : 2);
@@ -33,7 +35,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     }
     var tanks =
         shuffle(
-            heroes.filter(hero => hero.isTank()),
+            availableHeroes.filter(hero => hero.isTank()),
             () => random()
         )
             .slice(0, yourRole === 'Tank' ? 1 : 2);
@@ -42,7 +44,7 @@ AllyPicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     }
     var damage =
         shuffle(
-            heroes.filter(hero => hero.isDamage()),
+            availableHeroes.filter(hero => hero.isDamage()),
             () => random()
         )
             .slice(0, yourRole === 'Damage' ? 1 : 2);
