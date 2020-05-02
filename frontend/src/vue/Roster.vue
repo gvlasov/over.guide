@@ -5,7 +5,7 @@
                     v-for="hero in tanks"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero)}"
             />
         </ul>
         <ul class="damage">
@@ -13,7 +13,7 @@
                     v-for="hero in damage"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero)}"
             />
         </ul>
         <ul class="supports">
@@ -21,7 +21,7 @@
                     v-for="hero in supports"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero)}"
+                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero)}"
             />
         </ul>
     </div>
@@ -41,6 +41,9 @@
             },
             onHeroClick: {
                 type: Function,
+            },
+            bans: {
+                type: Array,
             }
         },
         methods: {
@@ -49,11 +52,13 @@
              * @return {boolean}
              */
             isHeroActive(hero) {
-                console.log(
-                    hero.name,
-                    this.enabledHeroes.map(h => h.name)
-                );
                 return this.enabledHeroes.filter(h => h.name === hero.name).length > 0;
+            },
+            /**
+             * @param {Hero} hero
+             */
+            isHeroBanned(hero) {
+                return this.bans.filter(h => hero.name === h.name).length > 0;
             }
         },
         data() {
@@ -87,5 +92,10 @@
 
     .disabled {
         display: none !important;
+    }
+
+    .banned {
+        opacity: .3;
+        filter: hue-rotate(-60deg);
     }
 </style>

@@ -3,13 +3,16 @@
         <Picks
                 ref="enemyPicks"
                 v-on:click.native="nextPick"
+                :bans="bans"
         />
         <Picks
                 ref="allyPicks"
                 v-on:click.native="nextPick"
+                :bans="bans"
         />
         <Roster
                 ref="roster"
+                :bans="bans"
         />
     </div>
 </template>
@@ -18,17 +21,19 @@
     import Picks from '../vue/Picks.vue';
     import Roster from '../vue/Roster.vue';
     import AllyPicksGenerator from "../js/AllyPicksGenerator";
+    import BansGenerator from "../js/BansGenerator";
     import heroes from "../js/heroes";
 
-    const generator = new AllyPicksGenerator();
+    const picksGenerator = new AllyPicksGenerator();
+    const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
     export default {
         methods: {
             nextPick() {
                 let seed = shuffleCounter++;
-                let picks = generator.generateSeeded(seed);
+                let picks = picksGenerator.generateSeeded(seed);
                 this.setAllyPicks(picks);
-                this.setEnemyPicks(generator.generateForRole(null, shuffleCounter));
+                this.setEnemyPicks(picksGenerator.generateForRole(null, shuffleCounter));
                 let disabledCategories = picks.getCompletelyPickedCategories();
                 this.$refs.roster.enabledHeroes.splice(0, this.$refs.roster.enabledHeroes.length);
                 let enabledHeroes = heroes.filter(
@@ -38,7 +43,9 @@
                 );
                 this.$refs.roster.enabledHeroes.push(
                     ...enabledHeroes
-                )
+                );
+                this.bans = bansGenerator.generate(seed);
+                console.log(this.bans.map(it => it.name));
             },
             /**
              * @param {AllyPicks} picks
@@ -57,7 +64,9 @@
         },
         data() {
             const self = this;
-            return {}
+            return {
+                bans: []
+            }
         },
         components: {
             Picks: Picks,
