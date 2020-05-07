@@ -24,3 +24,14 @@ application {
     // Define the main class for the application.
     mainClassName = 'org.chriego.overwatch.counters.AppKt'
 }
+
+task copyTestResources(type: Copy) {
+    from "${projectDir}/src/test/resources"
+    into "${buildDir}/classes/kotlin/test"
+}
+processTestResources.dependsOn copyTestResources
+task copyResources(type: Copy) {
+    from "${projectDir}/src/main/resources"
+    into "${buildDir}/classes/kotlin/main"
+}
+processResources.dependsOn copyResources
