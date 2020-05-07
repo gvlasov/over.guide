@@ -3,7 +3,7 @@ package org.chriego.overwatch.counters
 import org.chriego.overwatch.counters.Role.*
 
 enum class Hero(
-    role: Role,
+    val role: Role,
     val fullName: String? = null
 ) {
 
@@ -48,25 +48,25 @@ enum class Hero(
             val size = values.size
             val map = LinkedHashMap<String, Int>(size)
             for (indexed in values.withIndex()) {
-                val heroDataName = indexed.value.jsonName
+                val heroDataName = indexed.value.dataName
                 map[heroDataName] = indexed.index
             }
             map
         }
 
-        val heroesByJsonName: Map<String, Hero> by lazy {
+        val heroesByDataName: Map<String, Hero> by lazy {
             val values = Hero.values()
             val size = values.size
             val map = LinkedHashMap<String, Hero>(size)
             for (hero in values) {
-                map[hero.jsonName] = hero
+                map[hero.dataName] = hero
             }
             map
         }
 
     }
 
-    val jsonName: String
+    val dataName: String
         get() =
             name
                 .toLowerCase()
@@ -74,6 +74,6 @@ enum class Hero(
 
     val id: Int
         get() =
-            heroIdsByName[jsonName]!!
+            heroIdsByName[dataName]!!
 
 }

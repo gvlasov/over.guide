@@ -5,10 +5,26 @@ class PickEvaluator(
 ) {
 
     fun evaluate(pick: Pick): PickEvaluation {
+        val myHero = Hero.heroesByDataName[pick.myPick]!!
+        val allyHeroes = pick.allyPicks.map { Hero.heroesByDataName[it]!! }
+        val enemyHeroes = pick.enemyPicks.map { Hero.heroesByDataName[it]!! }
+        val alternatives = Hero.values()
+            .filter {
+                it.role === myHero.role
+            }
+            .map { it to pickScore(enemyHeroes, it) }
+            .sortedBy { it.second }
+            .filter { it.first !== myHero && !pick.bans.contains(it.first.dataName) }
+            .takeLast(3)
         return PickEvaluation(
-            0,
-            mapOf()
+            pickScore(enemyHeroes, myHero),
+            alternatives.toMap()
         )
     }
+
+    private fun pickScore(enemyHeroes: List<Hero>, hero: Hero): Int =
+        enemyHeroes
+            .map { enemy -> counters.evaluate(hero, enemy) }
+            .sum()
 
 }
