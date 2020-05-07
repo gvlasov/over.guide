@@ -41,4 +41,39 @@ enum class Hero(
     Zenyatta(Support)
     ;
 
+    companion object {
+
+        val heroIdsByName: Map<String, Int> by lazy {
+            val values = Hero.values()
+            val size = values.size
+            val map = LinkedHashMap<String, Int>(size)
+            for (indexed in values.withIndex()) {
+                val heroDataName = indexed.value.jsonName
+                map[heroDataName] = indexed.index
+            }
+            map
+        }
+
+        val heroesByJsonName: Map<String, Hero> by lazy {
+            val values = Hero.values()
+            val size = values.size
+            val map = LinkedHashMap<String, Hero>(size)
+            for (hero in values) {
+                map[hero.jsonName] = hero
+            }
+            map
+        }
+
+    }
+
+    val jsonName: String
+        get() =
+            name
+                .toLowerCase()
+                .replace(Regex("[\\-\\d]+"), "")
+
+    val id: Int
+        get() =
+            heroIdsByName[jsonName]!!
+
 }

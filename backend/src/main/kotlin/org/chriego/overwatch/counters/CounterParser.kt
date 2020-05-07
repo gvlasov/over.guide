@@ -1,14 +1,15 @@
 package org.chriego.overwatch.counters
 
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
-class CounterParser {
+class CounterParser(
+    private val resourceName: String
+) {
 
     fun parse(): Array<IntArray> {
         val table = prepareTable()
-        val heroIds = prepareHeroIds()
-        val resource = this::class.java.getResourceAsStream("/org/chriego/overwatch/counters/counters.owc")!!
+        val heroIds = Hero.heroIdsByName
+        val resource = this::class.java.getResourceAsStream(resourceName)!!
         val scanner =
             Scanner(resource, "UTF-8")
                 .useDelimiter("\n")
@@ -55,16 +56,6 @@ class CounterParser {
     private fun prepareTable(): Array<IntArray> {
         val size = Hero.values().size
         return Array(size) { IntArray(size) { 0 } }
-    }
-
-    private fun prepareHeroIds(): Map<String, Int> {
-        val size = Hero.values().size
-        val map = LinkedHashMap<String, Int>(size)
-        for (indexed in Hero.values().withIndex()) {
-            val heroDataName = indexed.value.name.toLowerCase().replace(Regex("[\\-\\d]+"), "")
-            map[heroDataName] = indexed.index
-        }
-        return map
     }
 
 }
