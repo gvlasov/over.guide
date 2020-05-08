@@ -11,10 +11,10 @@ function Backend(axios, rootUrl) {
     this.rootUrl = rootUrl;
 }
 
-Backend.prototype.evaluatePick = function (pick) {
-    this.axios.post(this.rootUrl + '/evaluate-pick', pick.forRequest(), {})
+Backend.prototype.evaluatePick = async function (pick) {
+    return await this.axios.post(this.rootUrl + '/evaluate-pick', pick.forRequest(), {})
         .then(response => {
-            console.log(response);
+            return response.data;
         });
 };
 export default Backend;

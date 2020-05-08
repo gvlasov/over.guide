@@ -5,6 +5,7 @@
                     v-for="hero in heroes"
                     :hero="hero"
                     :show-name="showName"
+                    class="portrait"
             />
         </ul>
     </div>
@@ -38,4 +39,7 @@
 </script>
 
 <style scoped>
+    .portrait {
+        width: 5em;
+    }
 </style>

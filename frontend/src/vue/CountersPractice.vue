@@ -19,6 +19,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import Picks from '../vue/Picks.vue';
     import Pick from '../js/Pick.js';
     import Backend from '../js/Backend.js';
@@ -28,6 +29,7 @@
     import heroes from "../js/heroes";
     import axios from "axios";
     import env from '../../dist/env.js'
+    import _ from 'lodash'
 
     const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
@@ -57,7 +59,8 @@
              * @param {Hero} hero
              */
             onHeroSelect: function (hero) {
-                backend.evaluatePick(
+                const self = this;
+                const evaluation = backend.evaluatePick(
                     new Pick(
                         hero,
                         this.$refs.allyPicks.heroes.filter(it => it !== null),
@@ -65,7 +68,21 @@
                         this.bans,
                         "Hanamura"
                     )
-                )
+                ).then(evaluation => {
+                    const currentPicks = self.$refs.allyPicks.heroes;
+                    const myPickIndex = [...currentPicks].indexOf(null);
+                    let hero1 = heroes.filter(
+                        hero => hero.dataName ===
+                            _.maxBy(
+                                Object.keys(evaluation.alternatives),
+                                key => evaluation.alternatives[key]
+                            )
+                    )[0];
+                    Vue.set(self.$refs.allyPicks.heroes, myPickIndex, hero1);
+                    setTimeout(function () {
+                        self.nextPick()
+                    }, 500)
+                });
             },
             /**
              * @param {AllyPicks} picks

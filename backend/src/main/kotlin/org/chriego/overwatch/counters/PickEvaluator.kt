@@ -14,6 +14,7 @@ class PickEvaluator(
             .sortedBy { it.second }
             .filter { it.first !== myHero && !pick.bans.contains(it.first.dataName) }
             .takeLast(3)
+            .map { it.first.dataName to it.second }
         return PickEvaluation(
             pickScore(enemyHeroes, myHero),
             alternatives.toMap()
