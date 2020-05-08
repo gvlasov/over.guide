@@ -2,12 +2,10 @@
     <div>
         <Picks
                 ref="enemyPicks"
-                v-on:click.native="nextPick"
                 :bans="bans"
         />
         <Picks
                 ref="allyPicks"
-                v-on:click.native="nextPick"
                 :bans="bans"
         />
         <Roster
@@ -15,6 +13,7 @@
                 :bans="bans"
                 v-on:heroSelect="onHeroSelect"
         />
+        <button class="next-pick-button" v-on:click="nextPick">Next</button>
     </div>
 </template>
 
@@ -79,9 +78,9 @@
                             )
                     )[0];
                     Vue.set(self.$refs.allyPicks.heroes, myPickIndex, hero1);
-                    setTimeout(function () {
-                        self.nextPick()
-                    }, 500)
+                    //     setTimeout(function () {
+                    //         self.nextPick()
+                    //     }, 500)
                 });
             },
             /**
@@ -114,5 +113,10 @@
 </script>
 
 <style scoped>
-
+    .next-pick-button {
+        width: 5em;
+        height: 5em;
+        vertical-align: top;
+        margin-left: 3em;
+    }
 </style>

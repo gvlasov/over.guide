@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="root">
         <ul class="tanks">
             <HeroPortraitSkewed
                     v-for="hero in tanks"
@@ -97,6 +97,9 @@
 </script>
 
 <style scoped>
+    .root {
+        display: inline-block;
+    }
     .enabled {
     }
 
