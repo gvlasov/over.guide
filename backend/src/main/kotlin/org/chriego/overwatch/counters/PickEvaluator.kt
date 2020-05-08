@@ -9,7 +9,7 @@ class PickEvaluator(
         val allyHeroes = pick.allyPicks.map { Hero.heroesByDataName[it]!! }
         val enemyHeroes = pick.enemyPicks.map { Hero.heroesByDataName[it]!! }
         val alternatives = Hero.values()
-            .filter { it.role === myHero.role }
+            .filter { it.role === myHero.role && !allyHeroes.contains(it) }
             .map { it to pickScore(enemyHeroes, it) }
             .sortedBy { it.second }
             .filter { it.first !== myHero && !pick.bans.contains(it.first.dataName) }
