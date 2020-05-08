@@ -2,5 +2,5 @@
 set -e
 cd `git rev-parse --show-toplevel`
 
-cd frontend/dist
-grunt watch
+cd frontend
+grunt watch --env=dev

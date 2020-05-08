@@ -9,10 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "fast-shuffle": "^2.0.2",
     "lodash": "latest",
     "seedrandom": "^3.0.5",
-    "vue": "^2.4.4"
+    "vue": "^2.4.4",
+    "vue-axios": "~2.1.5",
+    "grunt-env": "~1.0.1"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

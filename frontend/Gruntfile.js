@@ -1,4 +1,8 @@
 module.exports = function (grunt) {
+    var env = grunt.option('env');
+    if (!env) {
+        throw new Error("You must provide --env option");
+    }
     grunt.initConfig({
         clean: ['dist/'],
         browserify: {
@@ -6,7 +10,8 @@ module.exports = function (grunt) {
                 files: {
                     'dist/js/scripts.js': [
                         'src/js/**/*.js',
-                        'src/vue/**/*.vue'
+                        'src/vue/**/*.vue',
+                        'src/env/' + env + '.js'
                     ]
                 }
             },
@@ -52,7 +57,7 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**', 'Gruntfile.js'],
+                files: ['src/**', 'Gruntfile.js', 'package*.json'],
                 tasks: ['default'],
                 options: {
                     spawn: false,
@@ -61,6 +66,7 @@ module.exports = function (grunt) {
             }
         }
     });
+
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
