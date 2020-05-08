@@ -1,29 +1,14 @@
 <template>
     <div class="root">
-        <ul class="tanks">
-            <HeroPortraitSkewed
-                    v-for="hero in tanks"
+        <ul
+                v-for="roleGroup in [tanks, damage, supports]"
+        >
+            <RosterPortrait
+                    v-for="hero in roleGroup"
                     :hero="hero"
                     style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
-                    v-on:click.native="selectHero(hero)"
-            />
-        </ul>
-        <ul class="damage">
-            <HeroPortraitSkewed
-                    v-for="hero in damage"
-                    :hero="hero"
-                    style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
-                    v-on:click.native="selectHero(hero)"
-            />
-        </ul>
-        <ul class="supports">
-            <HeroPortraitSkewed
-                    v-for="hero in supports"
-                    :hero="hero"
-                    style="width: 3em;"
-                    v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
+                    :enabled="isHeroActive(hero)"
+                    :banned="hero !== null && isHeroBanned(hero)"
                     v-on:click.native="selectHero(hero)"
             />
         </ul>
@@ -31,8 +16,8 @@
 </template>
 
 <script>
-    import HeroPortraitSkewed from "./HeroPortraitSkewed.vue";
     import heroes from "../js/heroes.js";
+    import RosterPortrait from "./RosterPortrait.vue";
 
     export default {
         props: {
@@ -90,7 +75,7 @@
             }
         },
         components: {
-            HeroPortraitSkewed: HeroPortraitSkewed,
+            RosterPortrait: RosterPortrait,
         },
     };
 
@@ -99,16 +84,5 @@
 <style scoped>
     .root {
         display: inline-block;
-    }
-    .enabled {
-    }
-
-    .disabled {
-        display: none !important;
-    }
-
-    .banned {
-        opacity: .3;
-        filter: hue-rotate(-60deg);
     }
 </style>
