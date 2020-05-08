@@ -68,7 +68,6 @@
              * @param {Hero} hero
              */
             selectHero(hero) {
-                console.log(hero);
                 this.$emit('heroSelect', hero)
             }
         },
