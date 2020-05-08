@@ -22,8 +22,8 @@ class CounterParser(
             val myHeroId = heroIds[split[0]]!!
             val theirHeroId = heroIds[split[1]]!!
             val rating = decodeRating(split[2])
-            println("$myHeroId $theirHeroId $rating")
-            println("${split[0]} ${split[1]} ${split[2]}")
+//            println("$myHeroId $theirHeroId $rating")
+//            println("${split[0]} ${split[1]} ${split[2]}")
             table[myHeroId][theirHeroId] = rating
         }
         validate(table)

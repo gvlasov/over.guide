@@ -4,162 +4,194 @@ export default [
     {
         name: 'Ana',
         role: 'Support',
-        imgName: 'ana'
+        imgName: 'ana',
+        dataName: 'ana',
     },
     {
         name: 'Ashe',
         role: 'Damage',
-        imgName: 'ashe'
+        imgName: 'ashe',
+        dataName: 'ashe',
     },
     {
         name: 'Baptiste',
         role: 'Support',
-        imgName: 'baptiste'
+        imgName: 'baptiste',
+        dataName: 'baptiste',
     },
     {
         name: 'Bastion',
         role: 'Damage',
-        imgName: 'bastion'
+        imgName: 'bastion',
+        dataName: 'bastion',
     },
     {
         name: 'Brigitte',
         role: 'Support',
-        imgName: 'brigitte'
+        imgName: 'brigitte',
+        dataName: 'brigitte',
     },
     {
         name: 'D.Va',
         role: 'Tank',
-        imgName: 'dva'
+        imgName: 'dva',
+        dataName: 'dva',
     },
     {
         name: 'Doomfist',
         role: 'Damage',
-        imgName: 'doomfist'
+        imgName: 'doomfist',
+        dataName: 'doomfist',
     },
     {
         name: 'Echo',
         role: 'Damage',
-        imgName: 'echo'
+        imgName: 'echo',
+        dataName: 'echo',
     },
     {
         name: 'Genji',
         role: 'Damage',
-        imgName: 'genji'
+        imgName: 'genji',
+        dataName: 'genji',
     },
     {
         name: 'Hanzo',
         role: 'Damage',
-        imgName: 'hanzo'
+        imgName: 'hanzo',
+        dataName: 'hanzo',
     },
     {
         name: 'Junkrat',
         role: 'Damage',
-        imgName: 'junkrat'
+        imgName: 'junkrat',
+        dataName: 'junkrat',
     },
     {
         name: 'Lucio',
         role: 'Support',
-        imgName: 'lucio'
+        imgName: 'lucio',
+        dataName: 'lucio',
     },
     {
         name: 'McCree',
         role: 'Damage',
-        imgName: 'mccree'
+        imgName: 'mccree',
+        dataName: 'mccree',
     },
     {
         name: 'Mercy',
         role: 'Support',
-        imgName: 'mercy'
+        imgName: 'mercy',
+        dataName: 'mercy',
     },
     {
         name: 'Mei',
         role: 'Damage',
-        imgName: 'mei'
+        imgName: 'mei',
+        dataName: 'mei',
     },
     {
         name: 'Moira',
         role: 'Support',
-        imgName: 'moira'
+        imgName: 'moira',
+        dataName: 'moira',
     },
     {
         name: 'Orisa',
         role: 'Tank',
-        imgName: 'orisa'
+        imgName: 'orisa',
+        dataName: 'orisa',
     },
     {
         name: 'Pharah',
         role: 'Damage',
-        imgName: 'pharah'
+        imgName: 'pharah',
+        dataName: 'pharah',
     },
     {
         name: 'Reaper',
         role: 'Damage',
-        imgName: 'reaper'
+        imgName: 'reaper',
+        dataName: 'reaper',
     },
     {
         name: 'Reinhardt',
         role: 'Tank',
-        imgName: 'reinhardt'
+        imgName: 'reinhardt',
+        dataName: 'reinhardt',
     },
     {
         name: 'Roadhog',
         role: 'Tank',
-        imgName: 'roadhog'
+        imgName: 'roadhog',
+        dataName: 'roadhog',
     },
     {
         name: 'Sigma',
         role: 'Tank',
-        imgName: 'sigma'
+        imgName: 'sigma',
+        dataName: 'sigma',
     },
     {
         name: 'Soldier: 76',
         role: 'Damage',
-        imgName: 'soldier-76'
+        imgName: 'soldier-76',
+        dataName: 'soldier',
     },
     {
         name: 'Sombra',
         role: 'Damage',
-        imgName: 'sombra'
+        imgName: 'sombra',
+        dataName: 'sombra',
     },
     {
         name: 'Symmetra',
         role: 'Damage',
-        imgName: 'symmetra'
+        imgName: 'symmetra',
+        dataName: 'symmetra',
     },
     {
         name: 'Torbjorn',
         role: 'Damage',
-        imgName: 'torbjorn'
+        imgName: 'torbjorn',
+        dataName: 'torbjorn',
     },
     {
         name: 'Tracer',
         role: 'Damage',
-        imgName: 'tracer'
+        imgName: 'tracer',
+        dataName: 'tracer',
     },
     {
         name: 'Widowmaker',
         role: 'Damage',
-        imgName: 'widowmaker'
+        imgName: 'widowmaker',
+        dataName: 'widowmaker',
     },
     {
         name: 'Winston',
         role: 'Tank',
-        imgName: 'winston'
+        imgName: 'winston',
+        dataName: 'winston',
     },
     {
         name: 'Wrecking Ball',
         role: 'Tank',
-        imgName: 'wrecking-ball'
+        imgName: 'wrecking-ball',
+        dataName: 'wreckingball',
     },
     {
         name: 'Zarya',
         role: 'Tank',
-        imgName: 'zarya'
+        imgName: 'zarya',
+        dataName: 'zarya',
     },
     {
         name: 'Zenyatta',
         role: 'Support',
-        imgName: 'zenyatta'
+        imgName: 'zenyatta',
+        dataName: 'zenyatta',
     }
 ]
     .map(data => new Hero(data));

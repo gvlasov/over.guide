@@ -6,6 +6,7 @@
                     :hero="hero"
                     style="width: 3em;"
                     v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
+                    v-on:click.native="selectHero(hero)"
             />
         </ul>
         <ul class="damage">
@@ -14,6 +15,7 @@
                     :hero="hero"
                     style="width: 3em;"
                     v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
+                    v-on:click.native="selectHero(hero)"
             />
         </ul>
         <ul class="supports">
@@ -22,6 +24,7 @@
                     :hero="hero"
                     style="width: 3em;"
                     v-bind:class="{ enabled : isHeroActive(hero), disabled: !isHeroActive(hero), banned : hero !== null && isHeroBanned(hero) }"
+                    v-on:click.native="selectHero(hero)"
             />
         </ul>
     </div>
@@ -61,6 +64,13 @@
             isHeroBanned(hero) {
                 return this.bans.filter(h => hero.name === h.name).length > 0;
             },
+            /**
+             * @param {Hero} hero
+             */
+            selectHero(hero) {
+                console.log(hero);
+                this.$emit('heroSelect', hero)
+            }
         },
         data() {
             const self = this;

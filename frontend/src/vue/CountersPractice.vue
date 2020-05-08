@@ -13,19 +13,25 @@
         <Roster
                 ref="roster"
                 :bans="bans"
+                v-on:heroSelect="onHeroSelect"
         />
     </div>
 </template>
 
 <script>
     import Picks from '../vue/Picks.vue';
+    import Pick from '../js/Pick.js';
+    import Backend from '../js/Backend.js';
     import Roster from '../vue/Roster.vue';
     import PicksGenerator from "../js/PicksGenerator";
     import BansGenerator from "../js/BansGenerator";
     import heroes from "../js/heroes";
+    import axios from "axios";
+    import env from '../../dist/env.js'
 
     const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
+    const backend = new Backend(axios, env.BACKEND_URL);
     export default {
         methods: {
             nextPick() {
@@ -46,6 +52,20 @@
                 this.$refs.roster.enabledHeroes.push(
                     ...enabledHeroes
                 );
+            },
+            /**
+             * @param {Hero} hero
+             */
+            onHeroSelect: function (hero) {
+                backend.evaluatePick(
+                    new Pick(
+                        hero,
+                        this.$refs.allyPicks.heroes.filter(it => it !== null),
+                        this.$refs.enemyPicks.heroes,
+                        this.bans,
+                        "Hanamura"
+                    )
+                )
             },
             /**
              * @param {AllyPicks} picks

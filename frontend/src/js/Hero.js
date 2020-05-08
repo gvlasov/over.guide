@@ -3,6 +3,7 @@
  * @property {string} name
  * @property {string} role
  * @property {string} imgName
+ * @property {string} dataName
  * @constructor
  */
 function Hero(data) {
