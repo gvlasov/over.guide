@@ -1,12 +1,10 @@
 <template>
     <div>
         <ul class="picks-list">
-            <HeroPortrait
+            <PlayerPick
                     v-for="hero in heroes"
                     :hero="hero"
                     :show-name="showName"
-                    class="portrait"
-                    style="width: 5vw;"
             />
         </ul>
     </div>
@@ -14,6 +12,7 @@
 
 <script>
     import HeroPortrait from "./HeroPortrait.vue";
+    import PlayerPick from "./PlayerPick.vue";
 
     export default {
         props: {
@@ -32,6 +31,7 @@
             }
         },
         components: {
+            PlayerPick: PlayerPick,
             HeroPortrait: HeroPortrait
         },
     };
@@ -39,10 +39,6 @@
 </script>
 
 <style scoped>
-    .portrait {
-        width: 5em;
-    }
-
     .picks-list {
         list-style: none;
         margin-block-start: 0;
