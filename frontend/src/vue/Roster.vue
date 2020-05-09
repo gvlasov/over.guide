@@ -5,7 +5,7 @@
                     v-for="hero in roleGroup"
                     :hero="hero"
                     :isGoodPick="isGoodPick(hero)"
-                    style="width: 3em;"
+                    style="width: 5vmax; margin: 0.4vmax;"
                     :enabled="isHeroActive(hero)"
                     :banned="hero !== null && isHeroBanned(hero)"
                     v-on:click.native="onPortraitClick(hero)"
