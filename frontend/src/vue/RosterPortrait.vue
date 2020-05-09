@@ -55,7 +55,7 @@
     }
 
     .is-good-pick {
-        box-shadow: green 0px 0px 4px 10px;
+        box-shadow: green 0 0 .4vw 1vw;
         z-index: 4;
     }
 </style>

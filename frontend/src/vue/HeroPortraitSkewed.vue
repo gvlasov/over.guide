@@ -4,7 +4,8 @@
                 :hero="hero"
                 :show-name="false"
                 :onclick="onclick"
-                class="underlying"
+                class="skew-underlying"
+                style="min-width: 100%;"
         />
     </div>
 </template>
@@ -45,13 +46,13 @@
         transform: skew(-25deg, 0deg);
         /*outline:1px solid #fff;*/
         overflow: hidden;
-        border-radius: .4em;
-        margin-right: .4em;
-        border: 1px solid white;
+        border-radius: .4vw;
+        margin-right: .4vw;
+        border: .1vw solid white;
         cursor: pointer;
     }
 
-    .underlying {
+    .skew-underlying {
         -ms-transform: skew(25deg, 0deg) scale(2.0);
         -webkit-transform: skew(25deg, 0deg) scale(2.0);
         transform: skew(25deg, 0deg) scale(2.0);
@@ -60,6 +61,6 @@
     .skew:hover {
         transform: skew(-25deg, 0deg) scale(1.4);
         z-index: 9000;
-        box-shadow: black 10px 10px 10px;
+        box-shadow: black 1vw 1vw 1vw;
     }
 </style>

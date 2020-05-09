@@ -5,7 +5,7 @@
                     v-for="hero in roleGroup"
                     :hero="hero"
                     :isGoodPick="isGoodPick(hero)"
-                    style="width: 5vmax; margin: 0.4vmax;"
+                    style="width: 5vw; height: 8vw; margin: 0.4vw;"
                     :enabled="isHeroActive(hero)"
                     :banned="hero !== null && isHeroBanned(hero)"
                     v-on:click.native="onPortraitClick(hero)"
@@ -98,5 +98,9 @@
 
     .role-group {
         display: inline-block;
+        list-style: none;
+        margin-block-start: 0;
+        margin-block-end: 0;
+        padding-inline-start: 0;
     }
 </style>

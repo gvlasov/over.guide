@@ -1,11 +1,12 @@
 <template>
     <div>
-        <ul>
+        <ul class="picks-list">
             <HeroPortrait
                     v-for="hero in heroes"
                     :hero="hero"
                     :show-name="showName"
                     class="portrait"
+                    style="width: 5vw;"
             />
         </ul>
     </div>
@@ -23,8 +24,7 @@
                 }
             }
         },
-        methods: {
-        },
+        methods: {},
         data() {
             const self = this;
             return {
@@ -41,5 +41,12 @@
 <style scoped>
     .portrait {
         width: 5em;
+    }
+
+    .picks-list {
+        list-style: none;
+        margin-block-start: 0;
+        margin-block-end: 0;
+        padding-inline-start: 0;
     }
 </style>
