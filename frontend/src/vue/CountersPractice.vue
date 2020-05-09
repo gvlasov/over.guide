@@ -114,6 +114,9 @@
                 this.$refs.enemyPicks.heroes.push(...picks.heroes);
             }
         },
+        mounted: function () {
+            this.nextPick();
+        },
         data() {
             const self = this;
             return {
