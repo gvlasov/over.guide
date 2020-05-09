@@ -1,6 +1,6 @@
 package org.chriego.overwatch.counters
 
-data class Pick(
+data class PickJson(
     val myPick: String,
     val allyPicks: List<String>,
     val enemyPicks: List<String>,

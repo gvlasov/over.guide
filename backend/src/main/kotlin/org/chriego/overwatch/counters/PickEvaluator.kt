@@ -4,7 +4,7 @@ class PickEvaluator(
     private val counters: Counters
 ) {
 
-    fun evaluate(pick: Pick): PickEvaluation {
+    fun evaluate(pick: PickJson): PickEvaluationJson {
         val myHero = Hero.heroesByDataName[pick.myPick]!!
         val allyHeroes = pick.allyPicks.map { Hero.heroesByDataName[it]!! }
         val enemyHeroes = pick.enemyPicks.map { Hero.heroesByDataName[it]!! }
@@ -15,7 +15,7 @@ class PickEvaluator(
             .filter { it.first !== myHero && !pick.bans.contains(it.first.dataName) }
             .takeLast(3)
             .map { it.first.dataName to it.second }
-        return PickEvaluation(
+        return PickEvaluationJson(
             pickScore(enemyHeroes, myHero),
             alternatives.toMap()
         )
