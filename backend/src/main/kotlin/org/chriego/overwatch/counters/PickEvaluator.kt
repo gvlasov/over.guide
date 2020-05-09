@@ -12,11 +12,10 @@ class PickEvaluator(
             .filter { it.role === myHero.role && !allyHeroes.contains(it) }
             .map { it to pickScore(enemyHeroes, it) }
             .sortedBy { it.second }
-            .filter { it.first !== myHero && !pick.bans.contains(it.first.dataName) }
+            .filter { !pick.bans.contains(it.first.dataName) }
             .takeLast(3)
             .map { it.first.dataName to it.second }
         return PickEvaluationJson(
-            pickScore(enemyHeroes, myHero),
             alternatives.toMap()
         )
     }
