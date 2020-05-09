@@ -43,6 +43,7 @@
         methods: {
             nextPick() {
                 this.pickMade = false;
+                this.$refs.roster.goodPicks.splice(0, this.$refs.roster.enabledHeroes.length);
                 const seed = shuffleCounter++;
                 const bans = bansGenerator.generate(seed);
                 this.bans = bans;
@@ -81,14 +82,18 @@
                 ).then(evaluation => {
                     const currentPicks = self.$refs.allyPicks.heroes;
                     const myPickIndex = [...currentPicks].indexOf(null);
+                    let alternativeHeroesDataNames = Object.keys(evaluation.alternatives);
                     let hero1 = heroes.filter(
                         hero => hero.dataName ===
                             _.maxBy(
-                                Object.keys(evaluation.alternatives),
+                                alternativeHeroesDataNames,
                                 key => evaluation.alternatives[key]
                             )
                     )[0];
                     Vue.set(self.$refs.allyPicks.heroes, myPickIndex, hero1);
+                    let goodPicks = self.$refs.roster.goodPicks;
+                    goodPicks.splice(0, goodPicks.length);
+                    goodPicks.push(...heroes.filter(h => alternativeHeroesDataNames.indexOf(h.dataName) > -1))
                     //     setTimeout(function () {
                     //         self.nextPick()
                     //     }, 500)

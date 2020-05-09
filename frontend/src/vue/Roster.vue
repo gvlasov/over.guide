@@ -6,6 +6,7 @@
             <RosterPortrait
                     v-for="hero in roleGroup"
                     :hero="hero"
+                    :isGoodPick="isGoodPick(hero)"
                     style="width: 3em;"
                     :enabled="isHeroActive(hero)"
                     :banned="hero !== null && isHeroBanned(hero)"
@@ -32,6 +33,10 @@
             },
             bans: {
                 type: Array,
+            },
+            goodPicks: {
+                type: Array,
+                default: () => []
             }
         },
         methods: {
@@ -48,6 +53,11 @@
              */
             isHeroBanned(hero) {
                 return this.bans.filter(h => hero.name === h.name).length > 0;
+            },
+            isGoodPick(hero) {
+                return this.goodPicks
+                    .map(hero => hero.dataName)
+                    .indexOf(hero.dataName) > -1;
             },
             /**
              * @param {Hero} hero
