@@ -1,7 +1,6 @@
 <template>
     <HeroPortraitSkewed
             :hero="hero"
-            style="width: 3em;"
             v-bind:class="{ enabled : enabled, disabled: !enabled, banned : banned, 'is-good-pick': isGoodPick }"
     />
 </template>

@@ -1,8 +1,6 @@
 <template>
     <div class="root">
-        <ul
-                v-for="roleGroup in [tanks, damage, supports]"
-        >
+        <ul class="role-group" v-for="roleGroup in [tanks, damage, supports]">
             <RosterPortrait
                     v-for="hero in roleGroup"
                     :hero="hero"
@@ -95,6 +93,10 @@
 
 <style scoped>
     .root {
+        display: inline-block;
+    }
+
+    .role-group {
         display: inline-block;
     }
 </style>

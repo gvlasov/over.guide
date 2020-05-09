@@ -4,7 +4,6 @@
                 :hero="hero"
                 :show-name="false"
                 :onclick="onclick"
-                style="width: 3em;"
                 class="underlying"
         />
     </div>

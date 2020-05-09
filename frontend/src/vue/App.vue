@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="app">
         <h1 class="overwatch-font-shadowed">Overwatch Counters</h1>
         <CountersPractice/>
         <!--        <Roster :on-hero-click="heroTest"/>-->
@@ -20,4 +20,7 @@
 </script>
 
 <style scoped>
+    .app {
+        text-align: center;
+    }
 </style>
