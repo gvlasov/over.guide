@@ -9,7 +9,7 @@
                     style="width: 3em;"
                     :enabled="isHeroActive(hero)"
                     :banned="hero !== null && isHeroBanned(hero)"
-                    v-on:click.native="selectHero(hero)"
+                    v-on:click.native="onPortraitClick(hero)"
             />
         </ul>
     </div>
@@ -52,8 +52,10 @@
             /**
              * @param {Hero} hero
              */
-            selectHero(hero) {
-                this.$emit('heroSelect', hero)
+            onPortraitClick(hero) {
+                if (!this.isHeroBanned(hero)) {
+                    this.$emit('heroSelect', hero)
+                }
             }
         },
         data() {

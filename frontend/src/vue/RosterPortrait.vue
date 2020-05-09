@@ -48,5 +48,6 @@
     .banned {
         opacity: .3;
         filter: hue-rotate(-60deg);
+        cursor: not-allowed !important;
     }
 </style>
