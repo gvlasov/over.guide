@@ -22,5 +22,6 @@
 <style scoped>
     .app {
         text-align: center;
+        background-color: #405275;
     }
 </style>

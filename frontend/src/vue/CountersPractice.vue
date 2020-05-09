@@ -1,9 +1,10 @@
 <template>
     <div class="root">
         <Keypress
-                key-event="keyup"
+                key-event="keydown"
                 :key-code="32"
                 @success="nextPick"
+                :preventDefault="true"
         />
         <Picks
                 ref="enemyPicks"
@@ -19,7 +20,6 @@
                 v-on:heroSelect="onHeroSelect"
                 class="roster"
         />
-        <button class="next-pick-button" v-on:click="nextPick">Next</button>
     </div>
 </template>
 
@@ -136,10 +136,8 @@
 
 <style scoped>
     .root {
-        width: 50em;
-        height: 50em;
+        /*width: 50em;*/
         text-align: center;
-        background-color: black;
         vertical-align: middle;
         display: inline-block;
     }
