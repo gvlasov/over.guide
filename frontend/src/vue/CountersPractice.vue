@@ -39,7 +39,12 @@
 
     const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
-    const backend = new Backend(axios, env.BACKEND_URL);
+    let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
+    console.log(backendUrl);
+    const backend = new Backend(
+        axios,
+        backendUrl
+    );
     export default {
         methods: {
             nextPick() {

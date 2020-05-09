@@ -21,7 +21,7 @@ import org.chriego.overwatch.counters.PickEvaluator
 import org.chriego.overwatch.counters.PickJson
 
 fun main(args: Array<String>) {
-    val server = embeddedServer(Netty, port = 8080) {
+    val server = embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         install(ContentNegotiation) {
             jackson {
             }

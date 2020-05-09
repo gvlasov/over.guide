@@ -14,6 +14,7 @@ function Backend(axios, rootUrl) {
 Backend.prototype.evaluatePick = async function (pick) {
     return await this.axios.post(this.rootUrl + '/evaluate-pick', pick.forRequest(), {})
         .then(response => {
+            console.log(response);
             return response.data;
         });
 };

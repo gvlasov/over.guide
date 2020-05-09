@@ -8,7 +8,7 @@
                     style="width: 5vw; height: 8vw; margin: 0.4vw;"
                     :enabled="isHeroActive(hero)"
                     :banned="hero !== null && isHeroBanned(hero)"
-                    v-on:click.native="onPortraitClick(hero)"
+                    v-touch="onPortraitTapHacky(hero)"
             />
         </ul>
     </div>
@@ -59,10 +59,14 @@
             },
             /**
              * @param {Hero} hero
+             * @see https://www.npmjs.com/package/vue2-touch-events#how-to-add-extra-parameters The hack
              */
-            onPortraitClick(hero) {
-                if (!this.isHeroBanned(hero)) {
-                    this.$emit('heroSelect', hero)
+            onPortraitTapHacky(hero) {
+                const self = this;
+                return function (event) {
+                    if (!self.isHeroBanned(hero)) {
+                        self.$emit('heroSelect', hero)
+                    }
                 }
             }
         },
