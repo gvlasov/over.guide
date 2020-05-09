@@ -1,5 +1,10 @@
 <template>
     <div>
+        <Keypress
+                key-event="keyup"
+                :key-code="32"
+                @success="nextPick"
+        />
         <Picks
                 ref="enemyPicks"
                 :bans="bans"
@@ -29,6 +34,7 @@
     import axios from "axios";
     import env from '../../dist/env.js'
     import _ from 'lodash'
+    import Keypress from 'vue-keypress'
 
     const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
@@ -36,6 +42,7 @@
     export default {
         methods: {
             nextPick() {
+                this.pickMade = false;
                 const seed = shuffleCounter++;
                 const bans = bansGenerator.generate(seed);
                 this.bans = bans;
@@ -58,6 +65,10 @@
              * @param {Hero} hero
              */
             onHeroSelect: function (hero) {
+                if (this.pickMade === true) {
+                    return;
+                }
+                this.pickMade = true;
                 const self = this;
                 const evaluation = backend.evaluatePick(
                     new Pick(
@@ -101,12 +112,14 @@
         data() {
             const self = this;
             return {
-                bans: []
+                bans: [],
+                pickMade: false
             }
         },
         components: {
             Picks: Picks,
             Roster: Roster,
+            Keypress: Keypress
         },
     };
 

@@ -15,7 +15,8 @@
     "seedrandom": "^3.0.5",
     "vue": "^2.4.4",
     "vue-axios": "~2.1.5",
-    "grunt-env": "~1.0.1"
+    "grunt-env": "~1.0.1",
+    "vue-keypress": "~2.1.1"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
