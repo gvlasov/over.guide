@@ -34,29 +34,11 @@ module.exports = function (grunt) {
                 src: 'src/index.html',
                 dest: 'dist/index.html'
             },
-            css: {
-                src: 'src/css/*',
-                dest: 'dist/css',
+            assets: {
+                src: ['**'],
+                dest: 'dist',
                 expand: true,
-                flatten: true
-            },
-            images: {
-                src: 'src/images/**',
-                dest: 'dist/images',
-                expand: true,
-                cwd: 'src'
-            },
-            fonts: {
-                src: 'src/fonts/*',
-                dest: 'dist/fonts',
-                expand: true,
-                flatten: true
-            },
-            favicons: {
-                src: 'src/favicons/*',
-                dest: 'dist/favicons',
-                expand: true,
-                flatten: true
+                cwd: 'src/assets'
             }
         },
         watch: {
