@@ -24,7 +24,7 @@
                 if (hero === null) {
                     return '/images/undefined-hero.png'
                 } else {
-                    return "https://d1u1mce87gyfbn.cloudfront.net/hero/" + hero.imgName + "/hero-select-portrait.png"
+                    return "/images/hero-portraits/" + hero.imgName + ".png"
                 }
             },
         },

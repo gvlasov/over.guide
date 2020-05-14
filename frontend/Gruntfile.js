@@ -41,10 +41,10 @@ module.exports = function (grunt) {
                 flatten: true
             },
             images: {
-                src: 'src/images/*',
+                src: 'src/images/**',
                 dest: 'dist/images',
                 expand: true,
-                flatten: true
+                cwd: 'src'
             },
             fonts: {
                 src: 'src/fonts/*',
