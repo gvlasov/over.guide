@@ -18,7 +18,8 @@
     "vue-axios": "~2.1.5",
     "vue-fullscreen": "~2.1.6",
     "vue-keypress": "~2.1.1",
-    "vue2-touch-events": "^2.2.1"
+    "vue2-touch-events": "^2.2.1",
+    "kotlin": "^1.3.72"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
@@ -32,6 +33,7 @@
     "babelify": "^8.0.0",
     "babel-core": "^6.22.1",
     "babel-loader": "^7.1.1",
-    "babel-preset-es2015": "^6.24.1"
+    "babel-preset-es2015": "^6.24.1",
+    "shelljs": "^0.8.4"
   }
 }
