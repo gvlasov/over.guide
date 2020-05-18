@@ -50,23 +50,23 @@
         methods: {
             nextPick() {
                 this.pickMade = false;
-                this.$refs.roster.goodPicks.splice(0, this.$refs.roster.enabledHeroes.length);
                 const seed = shuffleCounter++;
                 const bans = bansGenerator.generate(seed);
                 this.bans = bans;
+                let $roster = this.$refs.roster;
+                console.log($roster.goodPicks);
+                $roster.goodPicks.clear();
                 const picksGenerator = new PicksGenerator(bans);
                 const picks = picksGenerator.generateSeeded(seed);
                 this.setAllyPicks(picks);
                 this.setEnemyPicks(picksGenerator.generateForRole(null, shuffleCounter));
                 const disabledCategories = picks.getCompletelyPickedCategories();
-                this.$refs.roster.enabledHeroes.splice(0, this.$refs.roster.enabledHeroes.length);
-                let enabledHeroes = heroes.filter(
-                    (hero) =>
-                        !disabledCategories.includes(hero.role)
-                        && !picks.heroes.includes(hero)
-                );
-                this.$refs.roster.enabledHeroes.push(
-                    ...enabledHeroes
+                $roster.enabledHeroes.replaceAll(
+                    heroes.filter(
+                        (hero) =>
+                            !disabledCategories.includes(hero.role)
+                            && !picks.heroes.includes(hero)
+                    )
                 );
             },
             /**
