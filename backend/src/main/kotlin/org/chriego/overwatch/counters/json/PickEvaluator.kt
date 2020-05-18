@@ -1,4 +1,8 @@
-package org.chriego.overwatch.counters
+package org.chriego.overwatch.counters.json
+
+import org.chriego.overwatch.counters.Counters
+import org.chriego.overwatch.counters.Hero
+import org.chriego.overwatch.counters.PickJson
 
 class PickEvaluator(
     private val counters: Counters
