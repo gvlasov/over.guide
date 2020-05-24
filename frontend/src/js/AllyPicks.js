@@ -52,5 +52,14 @@ AllyPicks.prototype.getCompletelyPickedCategories = function () {
     return answer;
 };
 
+AllyPicks.prototype.remainingRole = function () {
+    const pickedRoles = this.getCompletelyPickedCategories();
+    const remainingRoles = ['Support', 'Damage', 'Tank'].diff(pickedRoles);
+    if (remainingRoles.length !== 1) {
+        throw new Error("More than 1 role remaining: " + remainingRoles.join(', '));
+    }
+    return remainingRoles[0];
+};
+
 
 export default AllyPicks;

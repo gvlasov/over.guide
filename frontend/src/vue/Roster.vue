@@ -1,16 +1,14 @@
 <template>
     <div class="root">
-        <ul class="role-group" v-for="roleGroup in [tanks, damage, supports]">
-            <RosterPortrait
-                    v-for="hero in roleGroup"
-                    :hero="hero"
-                    :isGoodPick="isGoodPick(hero)"
-                    style="width: 5vw; height: 8vw; margin: 0.4vw;"
-                    :enabled="isHeroActive(hero)"
-                    :banned="hero !== null && isHeroBanned(hero)"
-                    v-touch="onPortraitTapHacky(hero)"
-            />
-        </ul>
+        <RosterPortrait
+                v-for="hero in heroes"
+                ref="portraits"
+                :hero="hero"
+                :isGoodPick="isGoodPick(hero)"
+                style="width: 5vw; height: 8vw; margin: 0.4vw;"
+                :banned="isHeroBanned(hero)"
+                v-hammer:tap="onPortraitTapHacky(hero)"
+        />
     </div>
 </template>
 
@@ -20,13 +18,7 @@
 
     export default {
         props: {
-            enabledHeroes: {
-                type: Array,
-                default() {
-                    return new Array(heroes);
-                }
-            },
-            onHeroClick: {
+            onHeroSelect: {
                 type: Function,
             },
             bans: {
@@ -38,13 +30,6 @@
             }
         },
         methods: {
-            /**
-             * @param {Hero} hero
-             * @return {boolean}
-             */
-            isHeroActive(hero) {
-                return this.enabledHeroes.filter(h => h.name === hero.name).length > 0;
-            },
             /**
              * @param {Hero} hero
              * @return {boolean}
@@ -64,6 +49,7 @@
             onPortraitTapHacky(hero) {
                 const self = this;
                 return function (event) {
+                    console.log(hero.name);
                     if (!self.isHeroBanned(hero)) {
                         self.$emit('heroSelect', hero)
                     }
@@ -73,15 +59,7 @@
         data() {
             const self = this;
             return {
-                tanks:
-                    [...heroes]
-                        .filter(hero => hero.isTank()),
-                damage:
-                    [...heroes]
-                        .filter(hero => hero.isDamage()),
-                supports:
-                    [...heroes]
-                        .filter(hero => hero.isSupport()),
+                heroes: [...heroes],
                 showName: true,
                 onclick: function () {
 
@@ -97,10 +75,6 @@
 
 <style scoped>
     .root {
-        display: inline-block;
-    }
-
-    .role-group {
         display: inline-block;
         list-style: none;
         margin-block-start: 0;

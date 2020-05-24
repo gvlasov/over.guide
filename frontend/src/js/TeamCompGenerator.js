@@ -2,21 +2,22 @@ import heroes from "../js/heroes.js";
 import seedrandom from "seedrandom";
 import shuffle from "fast-shuffle";
 import AllyPicks from "../js/AllyPicks.js";
+import RoleGenerator from "./RoleGenerator";
 
 /**
  * @constructor
  * @param {Hero[]} bans
  */
-function PicksGenerator(bans) {
+function TeamCompGenerator(bans) {
     this.bans = bans;
 }
 
 /**
- * @param {string|object} yourRole null to generate all 6 picks, role name string to generate ally picks
+ * @param {string|null} yourRole null to generate all 6 picks, role name string to generate ally picks
  * @param {number|string} seed
  * @returns {AllyPicks}
  */
-PicksGenerator.prototype.generateForRole = function (yourRole, seed) {
+TeamCompGenerator.prototype.generateForRole = function (yourRole, seed) {
     if (
         ![null, 'Tank', 'Damage', 'Support'].includes(yourRole)
     ) {
@@ -24,7 +25,7 @@ PicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     }
     let random = seedrandom(seed);
     const availableHeroes = heroes.filter(hero => !this.bans.includes(hero));
-    var supports =
+    const supports =
         shuffle(
             availableHeroes.filter(hero => hero.isSupport()),
             () => random()
@@ -33,7 +34,7 @@ PicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     if (yourRole === 'Support') {
         supports.push(null);
     }
-    var tanks =
+    const tanks =
         shuffle(
             availableHeroes.filter(hero => hero.isTank()),
             () => random()
@@ -42,7 +43,7 @@ PicksGenerator.prototype.generateForRole = function (yourRole, seed) {
     if (yourRole === 'Tank') {
         tanks.push(null);
     }
-    var damage =
+    const damage =
         shuffle(
             availableHeroes.filter(hero => hero.isDamage()),
             () => random()
@@ -57,15 +58,20 @@ PicksGenerator.prototype.generateForRole = function (yourRole, seed) {
  * @param {number} seed
  * @return {AllyPicks}
  */
-PicksGenerator.prototype.generateSeeded = function (seed) {
-    const random = Math.ceil(seedrandom(seed)() * 3);
-    if (random === 1) {
-        return this.generateForRole('Tank', seed);
-    } else if (random === 2) {
-        return this.generateForRole('Support', seed);
-    } else {
-        return this.generateForRole('Damage', seed);
-    }
+TeamCompGenerator.prototype.generateSeeded = function (seed) {
+    return this.generateForRole(
+        new RoleGenerator().generate(seed),
+        seed
+    );
 };
 
-export default PicksGenerator;
+/**
+ * Generate team composition with all 6 heroes
+ * @param {number} seed
+ * @returns {AllyPicks}
+ */
+TeamCompGenerator.prototype.generateComplete = function (seed) {
+    return this.generateForRole(null, seed);
+};
+
+export default TeamCompGenerator;

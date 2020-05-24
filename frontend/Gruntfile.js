@@ -1,4 +1,3 @@
-var shell = require('shelljs');
 module.exports = function (grunt) {
     var env = grunt.option('env');
     if (!env) {
@@ -57,14 +56,6 @@ module.exports = function (grunt) {
         // grunt.task.run('clean', ['build'])
     });
 
-
-    grunt.registerTask('dto', 'Build DTOs from Kotlin code', function () {
-        shell.exec(
-            'kotlinc-js -no-stdlib ../backend/src/main/kotlin/org/chriego/overwatch/counters/Dto.kt -output build/dto.js; du -sh build/js/dto.js'
-        );
-    });
-
-
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-rework');
@@ -72,5 +63,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-vueify');
 
-    grunt.registerTask('default', ['clean', 'dto', 'copy', 'browserify', 'rework', 'clean-build']);
+    grunt.registerTask('default', ['clean', 'copy', 'browserify', 'rework', 'clean-build']);
 };

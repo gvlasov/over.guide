@@ -12,11 +12,11 @@
 <script>
     import CountersPractice from '../vue/CountersPractice.vue';
     import fullscreen from 'vue-fullscreen';
-    import Vue2TouchEvents from 'vue2-touch-events'
     import Vue from 'vue';
+    import {VueHammer} from 'vue2-hammer';
 
     Vue.use(fullscreen);
-    Vue.use(Vue2TouchEvents);
+    Vue.use(VueHammer);
     export default {
         methods: {
             goFullscreen() {

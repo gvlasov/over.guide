@@ -26,47 +26,36 @@
 </template>
 
 <script>
-    import Vue from 'vue'
     import Picks from '../vue/Picks.vue';
     import Pick from '../js/Pick.js';
     import Backend from '../js/Backend.js';
     import Roster from '../vue/Roster.vue';
-    import PicksGenerator from "../js/PicksGenerator";
-    import BansGenerator from "../js/BansGenerator";
-    import heroes from "../js/heroes";
+    import PickContextGenerator from "../js/PickContextGenerator";
     import axios from "axios";
-    import env from '../../dist/env.js'
-    import _ from 'lodash'
+    import env from '../../build/env.js'
     import Keypress from 'vue-keypress'
 
-    const bansGenerator = new BansGenerator();
     let shuffleCounter = 0;
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
-    const backend = new Backend(
-        axios,
-        backendUrl
-    );
+    const backend = new Backend(axios, backendUrl);
+    const generator = new PickContextGenerator();
     export default {
         methods: {
             nextPick() {
                 this.pickMade = false;
-                const seed = shuffleCounter++;
-                const bans = bansGenerator.generate(seed);
-                this.bans = bans;
-                let $roster = this.$refs.roster;
-                console.log($roster.goodPicks);
-                $roster.goodPicks.clear();
-                const picksGenerator = new PicksGenerator(bans);
-                const picks = picksGenerator.generateSeeded(seed);
-                this.setAllyPicks(picks);
-                this.setEnemyPicks(picksGenerator.generateForRole(null, shuffleCounter));
-                const disabledCategories = picks.getCompletelyPickedCategories();
-                $roster.enabledHeroes.replaceAll(
-                    heroes.filter(
-                        (hero) =>
-                            !disabledCategories.includes(hero.role)
-                            && !picks.heroes.includes(hero)
-                    )
+                const context =
+                    generator.generateForRandomRole(shuffleCounter++);
+                this.bans.replaceAll(context.bans);
+                this.$refs.allyPicks.heroes.replaceAll(
+                    context.allyHeroes.heroes
+                );
+                this.$refs.enemyPicks.heroes.replaceAll(
+                    context.enemyHeroes
+                );
+                this.$refs.roster.goodPicks.clear();
+                this.$refs.roster.bans.replaceAll(context.bans);
+                this.$refs.roster.heroes.replaceAll(
+                    context.heroesLeftForRoster()
                 );
             },
             /**
@@ -77,49 +66,23 @@
                     return;
                 }
                 this.pickMade = true;
-                const self = this;
-                const evaluation = backend.evaluatePick(
+                const $allyPicks = this.$refs.allyPicks;
+                const $enemyPicks = this.$refs.enemyPicks;
+                const $roster = this.$refs.roster;
+                backend.evaluatePick(
                     new Pick(
                         hero,
-                        this.$refs.allyPicks.heroes.filter(it => it !== null),
-                        this.$refs.enemyPicks.heroes,
+                        $allyPicks.heroes.filter(it => it !== null),
+                        $enemyPicks.heroes,
                         this.bans,
                         "Hanamura"
                     )
                 ).then(evaluation => {
-                    const currentPicks = self.$refs.allyPicks.heroes;
-                    const myPickIndex = [...currentPicks].indexOf(null);
-                    let alternativeHeroesDataNames = Object.keys(evaluation.alternatives);
-                    let hero1 = heroes.filter(
-                        hero => hero.dataName ===
-                            _.maxBy(
-                                alternativeHeroesDataNames,
-                                key => evaluation.alternatives[key]
-                            )
-                    )[0];
-                    Vue.set(self.$refs.allyPicks.heroes, myPickIndex, hero1);
-                    let goodPicks = self.$refs.roster.goodPicks;
-                    goodPicks.splice(0, goodPicks.length);
-                    goodPicks.push(...heroes.filter(h => alternativeHeroesDataNames.indexOf(h.dataName) > -1))
-                    //     setTimeout(function () {
-                    //         self.nextPick()
-                    //     }, 500)
+                    $roster.heroes.replaceAll(
+                        evaluation.heroesSorted(a => -a.score)
+                    );
                 });
             },
-            /**
-             * @param {AllyPicks} picks
-             */
-            setAllyPicks(picks) {
-                this.$refs.allyPicks.heroes.splice(0, picks.heroes.length);
-                this.$refs.allyPicks.heroes.push(...picks.heroes);
-            },
-            /**
-             * @param {AllyPicks} picks
-             */
-            setEnemyPicks(picks) {
-                this.$refs.enemyPicks.heroes.splice(0, picks.heroes.length);
-                this.$refs.enemyPicks.heroes.push(...picks.heroes);
-            }
         },
         mounted: function () {
             this.nextPick();

@@ -1,8 +1,9 @@
-import axios from 'axios'
+import Alternative from "./dto/Alternative";
+import PickEvaluation from "./PickEvaluation";
 
 /**
  *
- * @param {axios} axios
+ * @param {AxiosStatic} axios
  * @param {string} rootUrl
  * @constructor
  */
@@ -14,7 +15,10 @@ function Backend(axios, rootUrl) {
 Backend.prototype.evaluatePick = async function (pick) {
     return await this.axios.post(this.rootUrl + '/evaluate-pick', pick.forRequest(), {})
         .then(response => {
-            return response.data;
-        });
+                return new PickEvaluation(
+                    response.data.alternatives.map(data => new Alternative(data))
+                );
+            }
+        );
 };
 export default Backend;

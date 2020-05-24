@@ -4,7 +4,6 @@
  * @param {Array} newElements
  */
 Array.prototype.replaceAll = function replaceAll(newElements) {
-    console.log('replace all');
     this.clear();
     this.push(...newElements)
 };
@@ -12,6 +11,12 @@ Array.prototype.replaceAll = function replaceAll(newElements) {
  * Removes every element from this array. Compatible with Vue data binding.
  */
 Array.prototype.clear = function clear() {
-    console.log('clear');
     this.splice(0, this.length);
+};
+/**
+ * @param {Array} arr2
+ * @returns {*[]}
+ */
+Array.prototype.diff = function diff(arr2) {
+    return this.filter(x => !arr2.includes(x));
 };
