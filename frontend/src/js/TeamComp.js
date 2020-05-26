@@ -4,7 +4,7 @@ import _ from "lodash";
  * @param {(Hero|null)[]} heroes
  * @constructor
  */
-function AllyPicks(heroes) {
+function TeamComp(heroes) {
     if (heroes.length !== 6) {
         throw new Error(
             "There must be exactly 6 positions"
@@ -23,7 +23,7 @@ function AllyPicks(heroes) {
     this.heroes = heroes;
 }
 
-AllyPicks.prototype.getCompletelyPickedCategories = function () {
+TeamComp.prototype.getCompletelyPickedCategories = function () {
     let tanks = 0,
         supports = 0,
         damage = 0;
@@ -52,7 +52,7 @@ AllyPicks.prototype.getCompletelyPickedCategories = function () {
     return answer;
 };
 
-AllyPicks.prototype.remainingRole = function () {
+TeamComp.prototype.remainingRole = function () {
     const pickedRoles = this.getCompletelyPickedCategories();
     const remainingRoles = ['Support', 'Damage', 'Tank'].diff(pickedRoles);
     if (remainingRoles.length !== 1) {
@@ -62,4 +62,4 @@ AllyPicks.prototype.remainingRole = function () {
 };
 
 
-export default AllyPicks;
+export default TeamComp;

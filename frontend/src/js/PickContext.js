@@ -1,7 +1,7 @@
 import heroes from "./heroes";
 
 /**
- * @param {AllyPicks} allyHeroes
+ * @param {TeamComp} allyHeroes
  * @param {Hero[]} enemyHeroes
  * @param {Hero[]} bans
  * @param {string|null} map

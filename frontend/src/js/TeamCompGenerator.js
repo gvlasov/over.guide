@@ -1,7 +1,7 @@
 import heroes from "../js/heroes.js";
 import seedrandom from "seedrandom";
 import shuffle from "fast-shuffle";
-import AllyPicks from "../js/AllyPicks.js";
+import TeamComp from "./TeamComp.js";
 import RoleGenerator from "./RoleGenerator";
 
 /**
@@ -15,7 +15,7 @@ function TeamCompGenerator(bans) {
 /**
  * @param {string|null} yourRole null to generate all 6 picks, role name string to generate ally picks
  * @param {number|string} seed
- * @returns {AllyPicks}
+ * @returns {TeamComp}
  */
 TeamCompGenerator.prototype.generateForRole = function (yourRole, seed) {
     if (
@@ -52,11 +52,11 @@ TeamCompGenerator.prototype.generateForRole = function (yourRole, seed) {
     if (yourRole === 'Damage') {
         damage.push(null);
     }
-    return new AllyPicks(tanks.concat(damage).concat(supports))
+    return new TeamComp(tanks.concat(damage).concat(supports))
 };
 /**
  * @param {number} seed
- * @return {AllyPicks}
+ * @return {TeamComp}
  */
 TeamCompGenerator.prototype.generateSeeded = function (seed) {
     return this.generateForRole(
@@ -68,7 +68,7 @@ TeamCompGenerator.prototype.generateSeeded = function (seed) {
 /**
  * Generate team composition with all 6 heroes
  * @param {number} seed
- * @returns {AllyPicks}
+ * @returns {TeamComp}
  */
 TeamCompGenerator.prototype.generateComplete = function (seed) {
     return this.generateForRole(null, seed);
