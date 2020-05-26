@@ -7,7 +7,7 @@
                 style="width: 5vw; height: 8vw; margin: 0.4vw;"
                 :banned="isHeroBanned(hero)"
                 :selected="isHeroSelected(hero)"
-                :pick-score="scores === null ? undefined : scores.get(hero)"
+                :pick-score="pickScore(hero)"
                 v-hammer:tap="onPortraitTapHacky(hero)"
         />
     </div>
