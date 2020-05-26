@@ -25,10 +25,6 @@
             bans: {
                 type: Array,
             },
-            goodPicks: {
-                type: Array,
-                default: () => []
-            }
         },
         methods: {
             /**
@@ -61,7 +57,6 @@
              * @param {PickContext} context
              */
             updateSelection(context) {
-                this.goodPicks.clear();
                 this.bans.replaceAll(context.bans);
                 this.heroes.replaceAll(context.heroesLeftForRoster());
                 this.selectedHero = null;
