@@ -4,7 +4,6 @@
                 v-for="hero in heroes"
                 ref="portraits"
                 :hero="hero"
-                :isGoodPick="isGoodPick(hero)"
                 style="width: 5vw; height: 8vw; margin: 0.4vw;"
                 :banned="isHeroBanned(hero)"
                 :selected="isHeroSelected(hero)"
@@ -45,11 +44,6 @@
              */
             isHeroSelected(hero) {
                 return this.selectedHero !== null && this.selectedHero.dataName === hero.dataName;
-            },
-            isGoodPick(hero) {
-                return this.goodPicks
-                    .map(hero => hero.dataName)
-                    .indexOf(hero.dataName) > -1;
             },
             /**
              * @param {Hero} hero
