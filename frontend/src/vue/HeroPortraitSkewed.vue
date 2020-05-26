@@ -2,8 +2,6 @@
     <div class="skew">
         <HeroPortrait
                 :hero="hero"
-                :show-name="false"
-                :onclick="onclick"
                 class="skew-underlying"
                 style="min-width: 100%;"
         />
@@ -18,13 +16,6 @@
         name: 'HeroPortraitSkewed',
         props: {
             'hero': Hero,
-            'show-name': Boolean,
-            onclick: {
-                type: Function,
-                default: function () {
-
-                }
-            },
         },
         methods: {},
         data() {

@@ -4,7 +4,6 @@
             <PlayerPick
                     v-for="hero in heroes"
                     :hero="hero"
-                    :show-name="showName"
             />
         </ul>
     </div>
@@ -25,9 +24,7 @@
         },
         methods: {},
         data() {
-            const self = this;
             return {
-                showName: true,
             }
         },
         components: {

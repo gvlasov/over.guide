@@ -1,7 +1,6 @@
 <template>
     <li class="overwatch-font-shadowed hero">
         <img :src="imgSrc(hero)"/>
-        <!--        <div v-if="showName" class="portrait-title">{{ hero.name }}</div>-->
     </li>
 </template>
 
@@ -37,18 +36,6 @@
 
 <style scoped>
     @import '../css/fonts.css';
-
-    .portrait-title {
-        position: absolute;
-        bottom: 0;
-        color: white;
-        text-shadow: 0 0 4px black;
-        font-size: 2.4em;
-        font-weight: bold;
-        display: block;
-        text-align: center;
-        width: 100%;
-    }
 
     .hero {
         position: relative;

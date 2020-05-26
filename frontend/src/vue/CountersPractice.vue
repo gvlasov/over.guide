@@ -8,12 +8,10 @@
         />
         <Picks
                 ref="enemyPicks"
-                :bans="bans"
                 style="margin-bottom: 1.5vw;"
         />
         <Picks
                 ref="allyPicks"
-                :bans="bans"
                 style="margin-bottom: 1.5vw;"
         />
         <Roster
