@@ -1,8 +1,9 @@
 <template>
     <HeroPortraitSkewed
             :hero="hero"
-            v-bind:class="{ enabled : enabled, disabled: !enabled, banned : banned, selected: selected }"
+            v-bind:class="{ enabled : enabled, disabled: !enabled, selected: selected }"
             v-bind:style="{ 'border-color': borderColor }"
+            :banned="banned"
     />
 </template>
 
@@ -66,12 +67,6 @@
 
     .disabled {
         display: none !important;
-    }
-
-    .banned {
-        opacity: .3;
-        filter: hue-rotate(-60deg);
-        cursor: not-allowed !important;
     }
 
     .is-good-pick {

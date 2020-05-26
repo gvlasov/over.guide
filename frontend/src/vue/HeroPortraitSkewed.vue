@@ -1,5 +1,8 @@
 <template>
-    <div class="skew">
+    <div
+            class="skew"
+            v-bind:class="{ banned : banned }"
+    >
         <HeroPortrait
                 :hero="hero"
                 class="skew-underlying"
@@ -16,6 +19,10 @@
         name: 'HeroPortraitSkewed',
         props: {
             'hero': Hero,
+            banned: {
+                type: Boolean,
+                default: false
+            }
         },
         methods: {},
         data() {
@@ -47,5 +54,14 @@
         -ms-transform: skew(25deg, 0deg) scale(2.0);
         -webkit-transform: skew(25deg, 0deg) scale(2.0);
         transform: skew(25deg, 0deg) scale(2.0);
+    }
+
+    .banned > .skew-underlying {
+        opacity: .3;
+        filter: hue-rotate(-60deg);
+    }
+
+    .banned {
+        cursor: not-allowed !important;
     }
 </style>
