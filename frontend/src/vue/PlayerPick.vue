@@ -32,12 +32,11 @@
 <style scoped>
     .portrait {
         width: 7vw;
-        height: 7vw;
-        border-radius: 0 0 50% 50%;
+        height: 8vw;
         padding-top: 2.0vw;
         overflow: hidden;
         display: inline-block;
-        margin-right: .6vw;
+        margin-right: 1vw;
     }
 
     .portrait > * {
