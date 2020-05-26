@@ -24,7 +24,6 @@ Backend.prototype.evaluatePick = async function (pick) {
                 );
             }
         )
-        .catch(reason => alert('Backend is down'))
         ;
 };
 export default Backend;

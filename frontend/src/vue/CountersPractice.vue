@@ -59,7 +59,6 @@
                 if (this.pickMade === true) {
                     return;
                 }
-                this.pickMade = true;
                 const $allyPicks = this.$refs.allyPicks;
                 const $enemyPicks = this.$refs.enemyPicks;
                 const $roster = this.$refs.roster;
@@ -71,9 +70,13 @@
                         this.bans,
                         "Hanamura"
                     )
-                ).then(evaluation => {
-                    $roster.displayEvaluation(hero, evaluation);
-                });
+                )
+                    .then(evaluation => {
+                        this.pickMade = true;
+                        $roster.displayEvaluation(hero, evaluation);
+                    })
+                    .catch(reason => alert('Backend is down'))
+                ;
             },
         },
         mounted: function () {
