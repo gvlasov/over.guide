@@ -23,6 +23,8 @@ Backend.prototype.evaluatePick = async function (pick) {
                     response.data.alternatives.map(data => new Alternative(data))
                 );
             }
-        );
+        )
+        .catch(reason => alert('Backend is down'))
+        ;
 };
 export default Backend;
