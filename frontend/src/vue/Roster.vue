@@ -8,6 +8,7 @@
                 style="width: 5vw; height: 8vw; margin: 0.4vw;"
                 :banned="isHeroBanned(hero)"
                 :selected="isHeroSelected(hero)"
+                :pick-score="scores === null ? undefined : scores.get(hero)"
                 v-hammer:tap="onPortraitTapHacky(hero)"
         />
     </div>
@@ -70,6 +71,7 @@
                 this.bans.replaceAll(context.bans);
                 this.heroes.replaceAll(context.heroesLeftForRoster());
                 this.selectedHero = null;
+                this.scores = null;
             },
             /**
              * @param {Hero} playerPick
@@ -80,12 +82,25 @@
                     evaluation.heroesSorted(a => -a.score)
                 );
                 this.selectedHero = playerPick;
-            }
+                this.scores = evaluation.toMap();
+            },
+            /**
+             * @param {Hero} hero
+             * @return {number|undefined}
+             */
+            pickScore(hero) {
+                if (this.scores === null) {
+                    return undefined;
+                } else {
+                    return this.scores.get(hero);
+                }
+            },
         },
         data() {
             const self = this;
             return {
                 heroes: [...heroes],
+                scores: null,
                 showName: true,
                 selectedHero: null,
                 onclick: function () {

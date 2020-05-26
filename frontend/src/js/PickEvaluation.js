@@ -33,7 +33,20 @@ PickEvaluation.prototype.score = function (hero) {
         this.alternatives.find(
             alternative => alternative.dataName === hero.dataName
         );
+    if (typeof bestAlternative === 'undefined') {
+        throw new Error(hero.name + " is not in evaluation");
+    }
     return bestAlternative.score;
+};
+/**
+ * @return {Map<Hero, Number>}
+ */
+PickEvaluation.prototype.toMap = function () {
+    const map = new Map();
+    for (let hero of this.heroesSorted(h => h.score)) {
+        map.set(hero, this.score(hero))
+    }
+    return map;
 };
 
 

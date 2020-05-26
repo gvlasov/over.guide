@@ -48,7 +48,7 @@
         overflow: hidden;
         border-radius: .4vw;
         margin-right: .4vw;
-        border: .1vw solid white;
+        border: .2vw solid white;
         cursor: pointer;
     }
 

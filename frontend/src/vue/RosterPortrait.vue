@@ -2,6 +2,7 @@
     <HeroPortraitSkewed
             :hero="hero"
             v-bind:class="{ enabled : enabled, disabled: !enabled, banned : banned, 'is-good-pick': isGoodPick, selected: selected }"
+            v-bind:style="{ 'border-color': borderColor }"
     />
 </template>
 
@@ -15,6 +16,9 @@
             enabled: {
                 type: Boolean,
                 default: true
+            },
+            pickScore: {
+                default: undefined,
             },
             banned: {
                 type: Boolean,
@@ -30,6 +34,22 @@
             },
         },
         methods: {},
+        computed: {
+            /**
+             * @return {string}
+             */
+            borderColor() {
+                if (this.pickScore === undefined) {
+                    return '';
+                } else if (this.pickScore === 0) {
+                    return '#fdea76'
+                } else if (this.pickScore > 0) {
+                    return '#1eab2f'
+                } else {
+                    return '#f7556d';
+                }
+            }
+        },
         data() {
             return {}
         },
