@@ -39,7 +39,7 @@
         overflow: hidden;
         border-radius: .4vw;
         margin-right: .4vw;
-        border: .2vw solid white;
+        border: .14vw solid white;
         cursor: pointer;
     }
 
