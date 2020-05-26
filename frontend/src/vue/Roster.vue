@@ -49,7 +49,6 @@
             onPortraitTapHacky(hero) {
                 const self = this;
                 return function (event) {
-                    console.log(hero.name);
                     if (!self.isHeroBanned(hero)) {
                         self.$emit('heroSelect', hero)
                     }
