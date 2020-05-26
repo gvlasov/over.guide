@@ -18,4 +18,11 @@ Hero.prototype.isDamage = function () {
 Hero.prototype.isSupport = function () {
     return this.role === 'Support';
 };
+/**
+ * @param {Hero} hero
+ * @returns {boolean}
+ */
+Hero.prototype.equals = function (hero) {
+    return this.dataName === hero.dataName;
+};
 export default Hero;

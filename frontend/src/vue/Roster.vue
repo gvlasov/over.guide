@@ -39,7 +39,7 @@
              * @return {boolean}
              */
             isHeroSelected(hero) {
-                return this.selectedHero !== null && this.selectedHero.dataName === hero.dataName;
+                return this.selectedHero !== null && this.selectedHero.equals(hero);
             },
             /**
              * @param {Hero} hero

@@ -20,7 +20,7 @@ function PickEvaluation(alternatives) {
 PickEvaluation.prototype.heroesSorted = function (sortFunction) {
     return _
         .sortBy(this.alternatives, sortFunction)
-        .map(a => heroes.find(hero => hero.dataName === a.dataName))
+        .map(a => heroes.find(hero => hero.equals(a)));
 };
 
 /**

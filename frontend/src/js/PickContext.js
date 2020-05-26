@@ -37,7 +37,7 @@ PickContext.prototype.heroesLeftForRoster = function () {
     return heroes.filter(
         hero =>
             !this.allyHeroes.heroes.find(
-                allyHero => allyHero !== null && allyHero.dataName === hero.dataName
+                allyHero => allyHero !== null && allyHero.equals(hero)
             )
             && hero.role === remainingRole
     );
