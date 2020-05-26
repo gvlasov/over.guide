@@ -7,6 +7,7 @@
                 :isGoodPick="isGoodPick(hero)"
                 style="width: 5vw; height: 8vw; margin: 0.4vw;"
                 :banned="isHeroBanned(hero)"
+                :selected="isHeroSelected(hero)"
                 v-hammer:tap="onPortraitTapHacky(hero)"
         />
     </div>
@@ -37,6 +38,13 @@
             isHeroBanned(hero) {
                 return this.bans.filter(h => hero.name === h.name).length > 0;
             },
+            /**
+             * @param {Hero} hero
+             * @return {boolean}
+             */
+            isHeroSelected(hero) {
+                return this.selectedHero !== null && this.selectedHero.dataName === hero.dataName;
+            },
             isGoodPick(hero) {
                 return this.goodPicks
                     .map(hero => hero.dataName)
@@ -55,31 +63,23 @@
                 }
             },
             /**
-             * @param {Hero} hero
-             * @returns {RosterPortrait|undefined}
-             */
-            getHeroPortrait(hero) {
-                return this.$refs.portraits
-                    .find(portrait => portrait.hero.dataName === hero.dataName);
-            },
-            /**
-             * @param {Hero} hero
-             */
-            pickHero(hero) {
-                const heroPortrait = this.getHeroPortrait(hero);
-                if (typeof heroPortrait === 'undefined') {
-                    throw new Error(hero.name + " is not in roster");
-                }
-                heroPortrait.selected = true;
-            },
-            /**
              * @param {PickContext} context
              */
             updateSelection(context) {
                 this.goodPicks.clear();
                 this.bans.replaceAll(context.bans);
                 this.heroes.replaceAll(context.heroesLeftForRoster());
-                this.$refs.portraits.forEach(portrait => portrait.selected = false);
+                this.selectedHero = null;
+            },
+            /**
+             * @param {Hero} playerPick
+             * @param {PickEvaluation} evaluation
+             */
+            displayEvaluation(playerPick, evaluation) {
+                this.heroes.replaceAll(
+                    evaluation.heroesSorted(a => -a.score)
+                );
+                this.selectedHero = playerPick;
             }
         },
         data() {
@@ -87,6 +87,7 @@
             return {
                 heroes: [...heroes],
                 showName: true,
+                selectedHero: null,
                 onclick: function () {
 
                 }

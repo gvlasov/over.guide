@@ -12,6 +12,10 @@ function Backend(axios, rootUrl) {
     this.rootUrl = rootUrl;
 }
 
+/**
+ * @param {Pick} pick
+ * @returns {Promise<PickEvaluation>}
+ */
 Backend.prototype.evaluatePick = async function (pick) {
     return await this.axios.post(this.rootUrl + '/evaluate-pick', pick.forRequest(), {})
         .then(response => {

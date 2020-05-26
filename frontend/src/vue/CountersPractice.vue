@@ -74,10 +74,7 @@
                         "Hanamura"
                     )
                 ).then(evaluation => {
-                    $roster.heroes.replaceAll(
-                        evaluation.heroesSorted(a => -a.score)
-                    );
-                    $roster.pickHero(hero);
+                    $roster.displayEvaluation(hero, evaluation);
                 });
             },
         },
