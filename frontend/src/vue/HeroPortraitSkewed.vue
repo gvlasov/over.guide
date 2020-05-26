@@ -57,10 +57,4 @@
         -webkit-transform: skew(25deg, 0deg) scale(2.0);
         transform: skew(25deg, 0deg) scale(2.0);
     }
-
-    .skew:hover {
-        transform: skew(-25deg, 0deg) scale(1.4);
-        z-index: 9000;
-        box-shadow: black 1vw 1vw 1vw;
-    }
 </style>

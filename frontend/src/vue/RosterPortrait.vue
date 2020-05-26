@@ -1,7 +1,7 @@
 <template>
     <HeroPortraitSkewed
             :hero="hero"
-            v-bind:class="{ enabled : enabled, disabled: !enabled, banned : banned, 'is-good-pick': isGoodPick }"
+            v-bind:class="{ enabled : enabled, disabled: !enabled, banned : banned, 'is-good-pick': isGoodPick, selected: selected }"
     />
 </template>
 
@@ -23,7 +23,11 @@
             isGoodPick: {
                 type: Boolean,
                 default: false
-            }
+            },
+            selected: {
+                type: Boolean,
+                default: () => false,
+            },
         },
         methods: {},
         data() {
@@ -57,5 +61,11 @@
     .is-good-pick {
         box-shadow: green 0 0 .4vw 1vw;
         z-index: 4;
+    }
+
+    .selected {
+        transform: skew(-25deg, 0deg) scale(1.4) !important;
+        z-index: 9000;
+        box-shadow: black 1vw 1vw 1vw;
     }
 </style>

@@ -53,6 +53,33 @@
                         self.$emit('heroSelect', hero)
                     }
                 }
+            },
+            /**
+             * @param {Hero} hero
+             * @returns {RosterPortrait|undefined}
+             */
+            getHeroPortrait(hero) {
+                return this.$refs.portraits
+                    .find(portrait => portrait.hero.dataName === hero.dataName);
+            },
+            /**
+             * @param {Hero} hero
+             */
+            pickHero(hero) {
+                const heroPortrait = this.getHeroPortrait(hero);
+                if (typeof heroPortrait === 'undefined') {
+                    throw new Error(hero.name + " is not in roster");
+                }
+                heroPortrait.selected = true;
+            },
+            /**
+             * @param {PickContext} context
+             */
+            updateSelection(context) {
+                this.goodPicks.clear();
+                this.bans.replaceAll(context.bans);
+                this.heroes.replaceAll(context.heroesLeftForRoster());
+                this.$refs.portraits.forEach(portrait => portrait.selected = false);
             }
         },
         data() {

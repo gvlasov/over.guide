@@ -52,11 +52,7 @@
                 this.$refs.enemyPicks.heroes.replaceAll(
                     context.enemyHeroes
                 );
-                this.$refs.roster.goodPicks.clear();
-                this.$refs.roster.bans.replaceAll(context.bans);
-                this.$refs.roster.heroes.replaceAll(
-                    context.heroesLeftForRoster()
-                );
+                this.$refs.roster.updateSelection(context);
             },
             /**
              * @param {Hero} hero
@@ -81,6 +77,7 @@
                     $roster.heroes.replaceAll(
                         evaluation.heroesSorted(a => -a.score)
                     );
+                    $roster.pickHero(hero);
                 });
             },
         },
