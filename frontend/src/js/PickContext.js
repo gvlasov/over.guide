@@ -19,16 +19,6 @@ function PickContext(
     this.map = map;
 }
 
-PickContext.prototype.forRequest = function () {
-    return {
-        myPick: this.hero.dataName,
-        allyPicks: this.allyComp.heroes.map(hero => hero.dataName),
-        enemyPicks: this.enemyComp.heroes.map(hero => hero.dataName),
-        bans: this.bans.map(hero => hero.dataName),
-        map: this.map
-    }
-};
-
 /**
  * @returns {Hero[]}
  */
@@ -42,4 +32,5 @@ PickContext.prototype.heroesLeftForRoster = function () {
             && hero.role === remainingRole
     );
 };
+
 export default PickContext;

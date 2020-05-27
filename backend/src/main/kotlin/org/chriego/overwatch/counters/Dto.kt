@@ -9,10 +9,10 @@ data class PickEvaluationJson(
     val alternatives: List<AlternativeJson>
 )
 
-data class PickJson(
+data class PickInContextJson(
     val myPick: String,
-    val allyPicks: List<String>,
-    val enemyPicks: List<String>,
+    val allyComp: List<String>,
+    val enemyComp: List<String>,
     val bans: List<String>,
     val map: String
 )

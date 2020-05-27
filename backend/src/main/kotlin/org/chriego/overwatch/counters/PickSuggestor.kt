@@ -1,6 +1,6 @@
 package org.chriego.overwatch.counters
 
-class PickEvaluator(
+class PickSuggestor(
     private val counters: Counters
 ) {
 

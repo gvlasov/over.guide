@@ -10,10 +10,12 @@
             <Picks
                     ref="enemyPicks"
                     style="margin-bottom: 1.5vw;"
+                    :teamComp="enemyComp"
             />
             <Picks
                     ref="allyPicks"
                     style="margin-bottom: 1.5vw;"
+                    :teamComp="allyComp"
             />
             <input
                     type="button"
@@ -41,6 +43,7 @@
     import axios from "axios";
     import env from '../../build/env.js'
     import Keypress from 'vue-keypress'
+    import TeamComp from "../js/TeamComp";
 
     let shuffleCounter = 0;
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
@@ -53,8 +56,8 @@
                 const context =
                     generator.generateForRandomRole(shuffleCounter++);
                 this.bans.replaceAll(context.bans);
-                this.$refs.allyPicks.teamComp = context.allyComp;
-                this.$refs.enemyPicks.teamComp = context.enemyComp;
+                this.allyComp = context.allyComp;
+                this.enemyComp = context.enemyComp;
                 this.$refs.roster.updateSelection(context);
             },
             /**
@@ -91,7 +94,9 @@
             const self = this;
             return {
                 bans: [],
-                pickMade: false
+                pickMade: false,
+                allyComp: TeamComp.empty(),
+                enemyComp: TeamComp.empty()
             }
         },
         components: {

@@ -23,8 +23,8 @@ function Pick(
 Pick.prototype.forRequest = function () {
     return {
         myPick: this.hero.dataName,
-        allyPicks: this.allyComp.heroes.filter(h => h !== null).map(hero => hero.dataName),
-        enemyPicks: this.enemyComp.heroes.filter(h => h !== null).map(hero => hero.dataName),
+        allyComp: this.allyComp.heroes.filter(h => h !== null).map(hero => hero.dataName),
+        enemyComp: this.enemyComp.heroes.filter(h => h !== null).map(hero => hero.dataName),
         bans: this.bans.map(hero => hero.dataName),
         map: this.map
     }
