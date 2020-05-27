@@ -4,6 +4,8 @@
             v-bind:class="{ enabled : enabled, disabled: !enabled, selected: selected }"
             v-bind:style="{ 'border-color': borderColor }"
             :banned="banned"
+            class="roster-portrait"
+            v-flex-touch="() => e.preventDefault()"
     />
 </template>
 
@@ -58,20 +60,8 @@
 </script>
 
 <style scoped>
-    .root {
-        display: inline-block;
-    }
-
-    .enabled {
-    }
-
     .disabled {
         display: none !important;
-    }
-
-    .is-good-pick {
-        box-shadow: green 0 0 .4vw 1vw;
-        z-index: 4;
     }
 
     .selected {

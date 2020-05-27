@@ -13,9 +13,11 @@
     import fullscreen from 'vue-fullscreen';
     import Vue from 'vue';
     import {VueHammer} from 'vue2-hammer';
+    import flexTouch from 'vue-flex-touch';
 
     Vue.use(fullscreen);
     Vue.use(VueHammer);
+    Vue.use(flexTouch);
     export default {
         methods: {
         },
