@@ -6,7 +6,7 @@
             :banned="banned"
             :selected-out="selectedOut"
             class="roster-portrait"
-            v-flex-touch="() => e.preventDefault()"
+            v-flex-touch="(e) => e.preventDefault()"
     />
 </template>
 

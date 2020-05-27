@@ -3,7 +3,7 @@
         <HeroPortrait
                 :hero="hero"
                 :show-name="showName"
-                v-flex-touch="() => e.preventDefault()"
+                v-flex-touch="(e) => e.preventDefault()"
         />
     </div>
 </template>
