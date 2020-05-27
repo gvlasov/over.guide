@@ -53,12 +53,8 @@
                 const context =
                     generator.generateForRandomRole(shuffleCounter++);
                 this.bans.replaceAll(context.bans);
-                this.$refs.allyPicks.heroes.replaceAll(
-                    context.allyHeroes.heroes
-                );
-                this.$refs.enemyPicks.heroes.replaceAll(
-                    context.enemyHeroes
-                );
+                this.$refs.allyPicks.teamComp = context.allyComp;
+                this.$refs.enemyPicks.teamComp = context.enemyComp;
                 this.$refs.roster.updateSelection(context);
             },
             /**
@@ -74,8 +70,8 @@
                 backend.evaluatePick(
                     new Pick(
                         hero,
-                        $allyPicks.heroes.filter(it => it !== null),
-                        $enemyPicks.heroes,
+                        $allyPicks.teamComp,
+                        $enemyPicks.teamComp,
                         this.bans,
                         "Hanamura"
                     )
@@ -84,7 +80,7 @@
                         this.pickMade = true;
                         $roster.displayEvaluation(hero, evaluation);
                     })
-                    .catch(reason => alert('Backend is down'))
+                    .catch(reason => alert(reason))
                 ;
             },
         },

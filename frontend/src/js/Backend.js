@@ -23,7 +23,6 @@ Backend.prototype.evaluatePick = async function (pick) {
                     response.data.alternatives.map(data => new Alternative(data))
                 );
             }
-        )
-        ;
+        );
 };
 export default Backend;

@@ -1,20 +1,20 @@
 import heroes from "./heroes";
 
 /**
- * @param {TeamComp} allyHeroes
- * @param {Hero[]} enemyHeroes
+ * @param {TeamComp} allyComp
+ * @param {TeamComp} enemyComp
  * @param {Hero[]} bans
  * @param {string|null} map
  * @constructor
  */
 function PickContext(
-    allyHeroes,
-    enemyHeroes,
+    allyComp,
+    enemyComp,
     bans,
     map
 ) {
-    this.allyHeroes = allyHeroes;
-    this.enemyHeroes = enemyHeroes;
+    this.allyComp = allyComp;
+    this.enemyComp = enemyComp;
     this.bans = bans;
     this.map = map;
 }
@@ -22,8 +22,8 @@ function PickContext(
 PickContext.prototype.forRequest = function () {
     return {
         myPick: this.hero.dataName,
-        allyPicks: this.allyHeroes.map(hero => hero.dataName),
-        enemyPicks: this.enemyHeroes.map(hero => hero.dataName),
+        allyPicks: this.allyComp.heroes.map(hero => hero.dataName),
+        enemyPicks: this.enemyComp.heroes.map(hero => hero.dataName),
         bans: this.bans.map(hero => hero.dataName),
         map: this.map
     }
@@ -33,10 +33,10 @@ PickContext.prototype.forRequest = function () {
  * @returns {Hero[]}
  */
 PickContext.prototype.heroesLeftForRoster = function () {
-    const remainingRole = this.allyHeroes.remainingRole();
+    const remainingRole = this.allyComp.remainingRole();
     return heroes.filter(
         hero =>
-            !this.allyHeroes.heroes.find(
+            !this.allyComp.heroes.find(
                 allyHero => allyHero !== null && allyHero.equals(hero)
             )
             && hero.role === remainingRole

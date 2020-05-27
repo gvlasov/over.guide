@@ -10,12 +10,11 @@ function TeamComp(heroes) {
             "There must be exactly 6 positions"
         )
     }
-    if (
-        _.uniq(
-            heroes.map(hero => hero === null ? null : hero.name)
-        )
-            .length < heroes.length
-    ) {
+    const picks =
+        heroes
+            .filter(hero => hero !== null)
+            .map(hero => hero.name);
+    if (_.uniq(picks).length < picks.length) {
         throw new Error(
             "Heroes in a team composition must be unique"
         );
@@ -59,6 +58,13 @@ TeamComp.prototype.remainingRole = function () {
         throw new Error("More than 1 role remaining: " + remainingRoles.join(', '));
     }
     return remainingRoles[0];
+};
+
+/**
+ * @returns {TeamComp}
+ */
+TeamComp.empty = function () {
+    return new TeamComp([null, null, null, null, null, null]);
 };
 
 

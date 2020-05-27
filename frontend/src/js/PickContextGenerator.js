@@ -22,7 +22,7 @@ PickContextGenerator.prototype.generateForRole = function (
     const teamCompGenerator = new TeamCompGenerator(bans);
     return new PickContext(
         teamCompGenerator.generateForRole(yourRole, seed),
-        teamCompGenerator.generateComplete(seed + 1).heroes,
+        teamCompGenerator.generateComplete(seed + 1),
         bans,
         "Hanamura"
     );

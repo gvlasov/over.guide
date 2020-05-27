@@ -2,7 +2,7 @@
     <div>
         <ul class="picks-list">
             <PlayerPick
-                    v-for="hero in heroes"
+                    v-for="hero in teamComp.heroes"
                     :hero="hero"
             />
         </ul>
@@ -12,19 +12,15 @@
 <script>
     import HeroPortrait from "./HeroPortrait.vue";
     import PlayerPick from "./PlayerPick.vue";
+    import TeamComp from "../js/TeamComp";
 
     export default {
         props: {
-            heroes: {
-                type: Array,
-                default() {
-                    return [null, null, null, null, null, null];
-                }
-            }
         },
         methods: {},
         data() {
             return {
+                teamComp: TeamComp.empty()
             }
         },
         components: {
