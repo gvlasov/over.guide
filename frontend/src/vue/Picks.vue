@@ -41,5 +41,6 @@
         margin-block-start: 0;
         margin-block-end: 0;
         padding-inline-start: 0;
+        user-select: none;
     }
 </style>
