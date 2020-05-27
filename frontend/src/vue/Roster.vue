@@ -26,9 +26,6 @@
                 type: Array,
                 default: () => [...heroes],
             },
-            onHeroSelect: {
-                type: Function,
-            },
             bans: {
                 type: Array,
                 default: () => []
