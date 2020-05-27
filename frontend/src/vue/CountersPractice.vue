@@ -124,7 +124,8 @@
         background-color: #28253a;
         color: white;
         border: none;
-
+        outline: none;
+        cursor: pointer;
 
         position: absolute;
         top: 20%;
@@ -133,7 +134,7 @@
 
     .next-pick-button[disabled] {
         pointer-events: none;
-        opacity: .5;
+        opacity: .2;
     }
 
 
