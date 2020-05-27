@@ -10,12 +10,12 @@
             <Picks
                     ref="enemyPicks"
                     style="margin-bottom: 1.5vw;"
-                    :teamComp="enemyComp"
+                    :teamComp="context.enemyComp"
             />
             <Picks
                     ref="allyPicks"
                     style="margin-bottom: 1.5vw;"
-                    :teamComp="allyComp"
+                    :teamComp="context.allyComp"
             />
             <input
                     type="button"
@@ -27,9 +27,12 @@
         </div>
         <Roster
                 ref="roster"
-                :bans="bans"
-                v-on:heroSelect="onHeroSelect"
                 class="roster"
+                :bans="context.bans"
+                :suggestion="suggestion"
+                :selected-hero="selectedHero"
+                :heroes="displayedHeroes"
+                v-on:heroSelect="onHeroSelect"
         />
     </div>
 </template>
@@ -42,7 +45,6 @@
     import axios from "axios";
     import env from '../../build/env.js'
     import Keypress from 'vue-keypress'
-    import TeamComp from "../js/TeamComp";
     import PickContext from "../js/PickContext";
 
     let shuffleCounter = 0;
@@ -52,51 +54,57 @@
     export default {
         methods: {
             nextPick() {
-                this.pickMade = false;
-                const context =
-                    generator.generateForRandomRole(shuffleCounter++);
-                this.bans.replaceAll(context.bans);
-                this.allyComp = context.allyComp;
-                this.enemyComp = context.enemyComp;
-                this.$refs.roster.updateSelection(context);
+                this.context = generator.generateForRandomRole(shuffleCounter++);
+                this.selectedHero = null;
+                this.suggestion = null;
             },
             /**
              * @param {Hero} hero
              */
             onHeroSelect: function (hero) {
-                if (this.pickMade === true) {
+                if (this.pickMade) {
                     return;
                 }
-                const $allyPicks = this.$refs.allyPicks;
-                const $enemyPicks = this.$refs.enemyPicks;
-                const $roster = this.$refs.roster;
-                backend.suggestPick(
-                    new PickContext(
-                        $allyPicks.teamComp,
-                        $enemyPicks.teamComp,
-                        this.bans,
-                        "Hanamura"
+                backend
+                    .suggestPick(
+                        new PickContext(
+                            this.context.allyComp,
+                            this.context.enemyComp,
+                            this.context.bans,
+                            "Hanamura"
+                        )
                     )
-                )
                     .then(suggestion => {
-                        this.pickMade = true;
-                        $roster.displaySuggestion(hero, suggestion);
+                        this.suggestion = suggestion;
+                        this.selectedHero = hero;
                     })
-                    .catch(reason => alert(reason))
-                ;
+                    .catch(reason => alert(reason));
             },
         },
-        mounted: function () {
-            this.nextPick();
+        computed: {
+            /**
+             * @return {boolean}
+             */
+            pickMade() {
+                return this.suggestion !== null;
+            },
+            /**
+             * @return {Hero[]}
+             */
+            displayedHeroes() {
+                if (this.suggestion === null) {
+                    return this.context.heroesLeftForRoster();
+                } else {
+                    return this.suggestion.heroesSorted(hero => -this.suggestion.score(hero))
+                }
+            },
         },
         data() {
-            const self = this;
             return {
-                bans: [],
-                pickMade: false,
-                allyComp: TeamComp.empty(),
-                enemyComp: TeamComp.empty()
-            }
+                context: generator.generateForRandomRole(shuffleCounter++),
+                suggestion: null,
+                selectedHero: null,
+            };
         },
         components: {
             Picks: Picks,

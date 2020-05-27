@@ -17,18 +17,33 @@
 <script>
     import heroes from "../js/heroes.js";
     import RosterPortrait from "./RosterPortrait.vue";
+    import PickSuggestion from "../js/PickSuggestion.js";
+    import Hero from "../js/Hero.js";
 
     export default {
         props: {
+            heroes: {
+                type: Array,
+                default: () => [...heroes],
+            },
             onHeroSelect: {
                 type: Function,
             },
             bans: {
                 type: Array,
+                default: () => []
             },
             selectedOutHeroes: {
                 type: Array,
                 default: () => []
+            },
+            suggestion: {
+                type: PickSuggestion,
+                default: () => null
+            },
+            selectedHero: {
+                type: Hero,
+                default: null
             }
         },
         methods: {
@@ -65,47 +80,20 @@
                 }
             },
             /**
-             * @param {PickContext} context
-             */
-            updateSelection(context) {
-                this.bans.replaceAll(context.bans);
-                this.heroes.replaceAll(context.heroesLeftForRoster());
-                this.selectedHero = null;
-                this.scores = null;
-            },
-            /**
-             * @param {Hero} playerPick
-             * @param {PickSuggestion} suggestion
-             */
-            displaySuggestion(playerPick, suggestion) {
-                this.heroes.replaceAll(
-                    suggestion.heroesSorted(a => -a.score)
-                );
-                this.selectedHero = playerPick;
-                this.scores = suggestion.toMap();
-            },
-            /**
              * @param {Hero} hero
              * @return {number|undefined}
              */
             pickScore(hero) {
-                if (this.scores === null) {
+                if (this.suggestion === null) {
                     return undefined;
                 } else {
-                    return this.scores.get(hero);
+                    return this.suggestion.score(hero);
                 }
             },
         },
         data() {
-            const self = this;
             return {
-                heroes: [...heroes],
-                scores: null,
                 showName: true,
-                selectedHero: null,
-                onclick: function () {
-
-                }
             }
         },
         components: {

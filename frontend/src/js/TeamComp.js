@@ -9,7 +9,7 @@ import heroes from "./heroes";
 function TeamComp(heroes) {
     if (heroes.length !== 6) {
         throw new Error(
-            "There must be exactly 6 positions"
+            "There must be exactly 6 positions, but there are " + heroes.length
         )
     }
     const picks =
@@ -91,6 +91,13 @@ TeamComp.prototype.setAtPosition = function (position, hero) {
         }
     }
     Vue.set(this.heroes, position, hero);
+};
+
+/**
+ * @returns {number}
+ */
+TeamComp.prototype.numberOfVacancies = function () {
+    return this.heroes.filter(h => h === null).length;
 };
 
 /**

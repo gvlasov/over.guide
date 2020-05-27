@@ -30,11 +30,23 @@
             />
         </div>
         <Roster
-                ref="roster"
+                ref="picksRoster"
                 class="roster"
-                :bans="[]"
+                :bans="bans"
                 :selected-out-heroes="selectedOutHeroes"
+                :selected-hero="null"
+                :heroes="allHeroes"
                 v-on:heroSelect="onHeroSelect"
+                v-if="suggestion === null"
+        />
+        <Roster
+                ref="suggestionsRoster"
+                class="roster"
+                :bans="bans"
+                :selected-out-heroes="selectedOutHeroes"
+                :heroes="suggestion.heroesSorted(h => -h.score)"
+                :suggestion="suggestion"
+                v-if="suggestion !== null"
         />
     </div>
 </template>
@@ -46,27 +58,38 @@
     import axios from "axios";
     import env from '../../build/env.js'
     import heroes from "../js/heroes.js";
-    import TeamComp from "../js/TeamComp";
+    import TeamComp from "../js/TeamComp.js";
+    import PickContext from "../js/PickContext.js";
 
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
     const backend = new Backend(axios, backendUrl);
     export default {
+        props: {
+            bans: {
+                type: Array,
+                default: () => []
+            }
+        },
         methods: {
             goToAllPick() {
                 this.isAllPick = true;
                 this.allyComp = TeamComp.empty();
                 this.enemyComp = TeamComp.empty();
+                this.suggestion = null;
             },
             goToPreMatchPick() {
                 this.isAllPick = false;
                 this.allyComp = TeamComp.empty();
                 this.enemyComp = TeamComp.empty();
+                this.suggestion = null;
             },
             unselectAllyHero(hero, position) {
                 this.allyComp.unsetAtPosition(position);
+                this.suggestion = null;
             },
             unselectEnemyHero(hero, position) {
                 this.enemyComp.unsetAtPosition(position);
+                this.suggestion = null;
             },
             /**
              * @param {Hero} hero
@@ -83,6 +106,25 @@
                 } else {
                     throw new Error("Can't select " + hero.name + " is either comp");
                 }
+                if (
+                    (!this.isAllPick || this.enemyComp.isFull())
+                    && this.allyComp.numberOfVacancies() === 1
+                ) {
+                    const self = this;
+                    backend
+                        .suggestPick(
+                            new PickContext(
+                                this.allyComp,
+                                this.enemyComp,
+                                [],
+                                "Hanamura"
+                            )
+                        )
+                        .then(suggestion => {
+                            self.suggestion = suggestion;
+                        })
+                        .catch(reason => alert(reason));
+                }
             },
         },
         computed: {
@@ -98,18 +140,17 @@
                         ...this.allyComp.heroesInPickedOutRoles()
                     ];
                 } else {
-                    return heroes;
+                    return this.allHeroes;
                 }
-            }
-        },
-        mounted: function () {
-            this.$refs.roster.heroes.replaceAll(heroes);
+            },
         },
         data() {
             return {
                 isAllPick: true,
                 allyComp: TeamComp.empty(),
                 enemyComp: TeamComp.empty(),
+                suggestion: null,
+                allHeroes: [...heroes],
             }
         },
         components: {
