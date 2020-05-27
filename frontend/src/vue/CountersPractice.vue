@@ -32,6 +32,12 @@
                 :selected-hero="selectedHero"
                 :heroes="displayedHeroes"
                 v-on:heroSelect="onHeroSelect"
+                v-if="suggestion === null"
+        />
+        <SuggestionRoster
+                ref="suggestionRoster"
+                :bans="context.bans"
+                :suggestion="suggestion"
         />
     </div>
 </template>
@@ -45,6 +51,7 @@
     import env from '../../build/env.js'
     import Keypress from 'vue-keypress'
     import PickContext from "../js/PickContext";
+    import SuggestionRoster from "./SuggestionRoster.vue";
 
     let shuffleCounter = 0;
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
@@ -106,10 +113,12 @@
             };
         },
         components: {
+            SuggestionRoster: SuggestionRoster,
             Picks: Picks,
             Roster: Roster,
-            Keypress: Keypress
+            Keypress: Keypress,
         },
+
     };
 
 </script>

@@ -38,13 +38,10 @@
                 v-on:heroSelect="onHeroSelect"
                 v-if="suggestion === null"
         />
-        <Roster
+        <SuggestionRoster
                 ref="suggestionsRoster"
                 :bans="bans"
-                :selected-out-heroes="selectedOutHeroes"
-                :heroes="suggestion.heroesSorted(h => -h.score)"
                 :suggestion="suggestion"
-                v-if="suggestion !== null"
         />
     </div>
 </template>
@@ -58,6 +55,7 @@
     import heroes from "../js/heroes.js";
     import TeamComp from "../js/TeamComp.js";
     import PickContext from "../js/PickContext.js";
+    import SuggestionRoster from "./SuggestionRoster.vue";
 
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
     const backend = new Backend(axios, backendUrl);
@@ -158,6 +156,7 @@
             }
         },
         components: {
+            SuggestionRoster: SuggestionRoster,
             Picks: Picks,
             Roster: Roster,
         },
