@@ -13,7 +13,7 @@ function TeamCompGenerator(bans) {
 }
 
 /**
- * @param {string|null} yourRole null to generate all 6 picks, role name string to generate ally picks
+ * @param {?string} yourRole null to generate all 6 picks, role name string to generate ally picks
  * @param {number|string} seed
  * @returns {TeamComp}
  */

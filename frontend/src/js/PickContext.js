@@ -4,7 +4,7 @@ import heroes from "./heroes";
  * @param {TeamComp} allyComp
  * @param {TeamComp} enemyComp
  * @param {Hero[]} bans
- * @param {string|null} map
+ * @param {?string} map
  * @constructor
  */
 function PickContext(

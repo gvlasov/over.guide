@@ -1,7 +1,7 @@
 <template>
     <div
             class="skew"
-            v-bind:class="{ banned : banned }"
+            v-bind:class="{ banned : banned, 'selected-out' : selectedOut }"
     >
         <HeroPortrait
                 :hero="hero"
@@ -20,6 +20,10 @@
         props: {
             'hero': Hero,
             banned: {
+                type: Boolean,
+                default: false
+            },
+            selectedOut: {
                 type: Boolean,
                 default: false
             }
@@ -63,5 +67,9 @@
 
     .banned {
         cursor: not-allowed !important;
+    }
+
+    .selected-out > .skew-underlying {
+        opacity: .3;
     }
 </style>

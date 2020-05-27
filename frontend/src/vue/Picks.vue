@@ -16,12 +16,13 @@
 
     export default {
         props: {
-        },
-        methods: {},
-        data() {
-            return {
-                teamComp: TeamComp.empty()
+            teamComp: {
+                type: TeamComp,
+                default: () => TeamComp.empty()
             }
+        },
+        data() {
+            return {};
         },
         components: {
             PlayerPick: PlayerPick,

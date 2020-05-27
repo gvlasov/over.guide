@@ -4,6 +4,7 @@
             v-bind:class="{ enabled : enabled, disabled: !enabled, selected: selected }"
             v-bind:style="{ 'border-color': borderColor }"
             :banned="banned"
+            :selected-out="selectedOut"
             class="roster-portrait"
             v-flex-touch="() => e.preventDefault()"
     />
@@ -24,6 +25,10 @@
                 default: undefined,
             },
             banned: {
+                type: Boolean,
+                default: false
+            },
+            selectedOut: {
                 type: Boolean,
                 default: false
             },

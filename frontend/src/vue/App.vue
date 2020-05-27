@@ -1,16 +1,17 @@
 <template>
         <div class="app">
             <AdsensePlaceholder>AdSense</AdsensePlaceholder>
-            <CountersPractice/>
+            <PickSuggestion/>
         </div>
 </template>
 
 <script>
     import CountersPractice from '../vue/CountersPractice.vue';
+    import AdsensePlaceholder from "./AdsensePlaceholder.vue";
+    import PickSuggestion from "./PickSuggestion.vue";
     import Vue from 'vue';
     import {VueHammer} from 'vue2-hammer';
     import flexTouch from 'vue-flex-touch';
-    import AdsensePlaceholder from "./AdsensePlaceholder.vue";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -20,6 +21,7 @@
         components: {
             CountersPractice: CountersPractice,
             AdsensePlaceholder: AdsensePlaceholder,
+            PickSuggestion: PickSuggestion,
         },
     }
 </script>

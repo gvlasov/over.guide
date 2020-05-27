@@ -1,7 +1,9 @@
 import _ from "lodash";
+import Vue from 'vue';
+import heroes from "./heroes";
 
 /**
- * @param {(Hero|null)[]} heroes
+ * @param {?Hero[]} heroes
  * @constructor
  */
 function TeamComp(heroes) {
@@ -58,6 +60,94 @@ TeamComp.prototype.remainingRole = function () {
         throw new Error("More than 1 role remaining: " + remainingRoles.join(', '));
     }
     return remainingRoles[0];
+};
+
+/**
+ * @param {Hero} hero
+ */
+TeamComp.prototype.setNextAvailable = function (hero) {
+    const position = this.getNextVacancyForRole(hero.role);
+    if (position === null) {
+        throw new Error('No position at role ' + hero.role);
+    }
+    Vue.set(this.heroes, position, hero);
+};
+
+/**
+ * @param {string} role
+ * @return {?number} The position that is open for that role, or
+ * null if there is no open position for that role.
+ */
+TeamComp.prototype.getNextVacancyForRole = function (role) {
+    if (role === 'Tank') {
+        if (this.heroes[0] === null) {
+            return 0;
+        } else if (this.heroes[1] === null) {
+            return 1;
+        }
+    } else if (role === 'Damage') {
+        if (this.heroes[2] === null) {
+            return 2;
+        } else if (this.heroes[3] === null) {
+            return 3;
+        }
+    } else if (role === 'Support') {
+        if (this.heroes[4] === null) {
+            return 4;
+        } else if (this.heroes[5] === null) {
+            return 5;
+        }
+    }
+    return null;
+};
+
+/**
+ * @param {string} role
+ * @returns {boolean}
+ */
+TeamComp.prototype.hasVacancyForRole = function (role) {
+    return this.getNextVacancyForRole(role) !== null;
+};
+
+/**
+ * @param {Hero} hero
+ */
+TeamComp.prototype.canSelect = function (hero) {
+    return this.hasVacancyForRole(hero.role) && typeof this.heroes.find(h => h !== null && h.equals(hero)) === 'undefined';
+};
+
+/**
+ * @returns {boolean}
+ */
+TeamComp.prototype.isFull = function () {
+    for (let hero of this.heroes) {
+        if (hero === null) {
+            return false;
+        }
+    }
+    return true;
+};
+
+/**
+ * @returns {Hero[]}
+ */
+TeamComp.prototype.heroesInPickedOutRoles = function () {
+    const result = [];
+    for (let role of this.getCompletelyPickedCategories()) {
+        for (let hero of heroes) {
+            if (hero.role === role) {
+                result.push(hero);
+            }
+        }
+    }
+    return result;
+};
+
+/**
+ * @returns {Hero[]}
+ */
+TeamComp.prototype.picks = function () {
+    return this.heroes.filter(h => h !== null);
 };
 
 /**

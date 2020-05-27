@@ -8,6 +8,7 @@
                 :banned="isHeroBanned(hero)"
                 :selected="isHeroSelected(hero)"
                 :pick-score="pickScore(hero)"
+                :selected-out="isHeroSelectedOut(hero)"
                 v-hammer:tap="onPortraitTapHacky(hero)"
         />
     </div>
@@ -25,6 +26,10 @@
             bans: {
                 type: Array,
             },
+            selectedOutHeroes: {
+                type: Array,
+                default: []
+            }
         },
         methods: {
             /**
@@ -43,12 +48,18 @@
             },
             /**
              * @param {Hero} hero
+             */
+            isHeroSelectedOut(hero) {
+                return typeof this.selectedOutHeroes.find(h => h.equals(hero)) !== 'undefined';
+            },
+            /**
+             * @param {Hero} hero
              * @see https://www.npmjs.com/package/vue2-touch-events#how-to-add-extra-parameters The hack
              */
             onPortraitTapHacky(hero) {
                 const self = this;
                 return function (event) {
-                    if (!self.isHeroBanned(hero)) {
+                    if (!self.isHeroBanned(hero) && !self.isHeroSelectedOut(hero)) {
                         self.$emit('heroSelect', hero)
                     }
                 }
@@ -111,5 +122,9 @@
         margin-block-start: 0;
         margin-block-end: 0;
         padding-inline-start: 0;
+    }
+
+    .selected-out {
+
     }
 </style>
