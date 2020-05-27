@@ -46,7 +46,6 @@
         -ms-transform: skew(-25deg, 0deg);
         -webkit-transform: skew(-25deg, 0deg);
         transform: skew(-25deg, 0deg);
-        /*outline:1px solid #fff;*/
         overflow: hidden;
         border-radius: .4vw;
         margin-right: .4vw;

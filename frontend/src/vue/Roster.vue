@@ -108,8 +108,4 @@
         margin-block-end: 0;
         padding-inline-start: 0;
     }
-
-    .selected-out {
-
-    }
 </style>
