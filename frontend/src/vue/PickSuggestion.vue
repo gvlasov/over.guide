@@ -84,10 +84,16 @@
                 this.suggestion = null;
             },
             unselectAllyHero(hero, position) {
+                if (hero === null) {
+                    return;
+                }
                 this.allyComp.unsetAtPosition(position);
                 this.suggestion = null;
             },
             unselectEnemyHero(hero, position) {
+                if (hero === null) {
+                    return;
+                }
                 this.enemyComp.unsetAtPosition(position);
                 this.suggestion = null;
             },
