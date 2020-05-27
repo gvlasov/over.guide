@@ -6,11 +6,13 @@
                     style="margin-bottom: 1.5vw;"
                     v-bind:style="{ visibility: isAllPick ? 'visible' : 'hidden' }"
                     :teamComp="enemyComp"
+                    @pickTap="unselectEnemyHero"
             />
             <Picks
                     ref="allyPicks"
                     style="margin-bottom: 1.5vw;"
                     :teamComp="allyComp"
+                    @pickTap="unselectAllyHero"
             />
             <input
                     type="button"
@@ -59,6 +61,12 @@
                 this.isAllPick = false;
                 this.allyComp = TeamComp.empty();
                 this.enemyComp = TeamComp.empty();
+            },
+            unselectAllyHero(hero, position) {
+                this.allyComp.unsetAtPosition(position);
+            },
+            unselectEnemyHero(hero, position) {
+                this.enemyComp.unsetAtPosition(position);
             },
             /**
              * @param {Hero} hero

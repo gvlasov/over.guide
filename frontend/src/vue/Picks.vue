@@ -2,8 +2,9 @@
     <div>
         <ul class="picks-list">
             <PlayerPick
-                    v-for="hero in teamComp.heroes"
+                    v-for="(hero, position) in teamComp.heroes"
                     :hero="hero"
+                    v-hammer:tap="() => $emit('pickTap', hero, position)"
             />
         </ul>
     </div>

@@ -70,8 +70,36 @@ TeamComp.prototype.setNextAvailable = function (hero) {
     if (position === null) {
         throw new Error('No position at role ' + hero.role);
     }
+    this.setAtPosition(position, hero);
+};
+
+/**
+ * @param {number} position
+ * @param {Hero} hero
+ */
+TeamComp.prototype.setAtPosition = function (position, hero) {
+    if (position < 0 || position > 5) {
+        throw new Error("Position must be in 0..5");
+    }
+    if (hero !== null) {
+        if (hero.role === 'Tank' && position !== 0 && position !== 1) {
+            throw new Error('Tanks can only be set at positions 0 and 1');
+        } else if (hero.role === 'Damage' && position !== 2 && position !== 3) {
+            throw new Error('Tanks can only be set at positions 2 and 3');
+        } else if (hero.role === 'Support' && position !== 4 && position !== 5) {
+            throw new Error('Tanks can only be set at positions 4 and 5');
+        }
+    }
     Vue.set(this.heroes, position, hero);
 };
+
+/**
+ * @param {number} position
+ */
+TeamComp.prototype.unsetAtPosition = function (position) {
+    this.setAtPosition(position, null);
+};
+
 
 /**
  * @param {string} role
