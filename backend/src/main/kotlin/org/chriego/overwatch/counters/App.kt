@@ -18,7 +18,7 @@ import io.ktor.server.netty.Netty
 import org.chriego.overwatch.counters.CounterParser
 import org.chriego.overwatch.counters.Counters
 import org.chriego.overwatch.counters.PickContextJson
-import org.chriego.overwatch.counters.PickEvaluator
+import org.chriego.overwatch.counters.PickSuggestor
 
 fun main(args: Array<String>) {
     val server = embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
@@ -36,16 +36,16 @@ fun main(args: Array<String>) {
                 call.response.header("Access-Control-Allow-Origin", "*")
                 call.respond(200)
             }
-            post("/evaluate-pick") {
+            post("/suggest-pick") {
                 val pick = call.receive<PickContextJson>()
-                val evaluator = PickEvaluator(
+                val suggestor = PickSuggestor(
                     Counters(
                         CounterParser(
                             "/org/chriego/overwatch/counters/counters.owc"
                         )
                     )
                 )
-                call.respond(evaluator.evaluate(pick))
+                call.respond(suggestor.suggest(pick))
             }
             get("/demo") {
                 call.respondText("HELLO WORLD!")

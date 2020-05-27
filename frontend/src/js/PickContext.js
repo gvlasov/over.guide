@@ -33,4 +33,13 @@ PickContext.prototype.heroesLeftForRoster = function () {
     );
 };
 
+PickContext.prototype.forRequest = function () {
+    return {
+        allyComp: this.allyComp.heroes.filter(h => h !== null).map(hero => hero.dataName),
+        enemyComp: this.enemyComp.heroes.filter(h => h !== null).map(hero => hero.dataName),
+        bans: this.bans.map(hero => hero.dataName),
+        map: this.map
+    }
+};
+
 export default PickContext;

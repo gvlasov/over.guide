@@ -9,7 +9,7 @@ import _ from 'lodash';
  * @property {Alternative[]} alternatives
  * @constructor
  */
-function PickEvaluation(alternatives) {
+function PickSuggestion(alternatives) {
     this.alternatives = alternatives;
 }
 
@@ -17,7 +17,7 @@ function PickEvaluation(alternatives) {
  * @param {function} sortFunction
  * @returns {Hero[]}
  */
-PickEvaluation.prototype.heroesSorted = function (sortFunction) {
+PickSuggestion.prototype.heroesSorted = function (sortFunction) {
     return _
         .sortBy(this.alternatives, sortFunction)
         .map(a => heroes.find(hero => hero.equals(a)));
@@ -28,20 +28,20 @@ PickEvaluation.prototype.heroesSorted = function (sortFunction) {
  * @param {Hero} hero
  * @returns {number} Hero suitability score
  */
-PickEvaluation.prototype.score = function (hero) {
+PickSuggestion.prototype.score = function (hero) {
     const bestAlternative =
         this.alternatives.find(
             alternative => alternative.dataName === hero.dataName
         );
     if (typeof bestAlternative === 'undefined') {
-        throw new Error(hero.name + " is not in evaluation");
+        throw new Error(hero.name + " is not in suggestion");
     }
     return bestAlternative.score;
 };
 /**
  * @return {Map<Hero, Number>}
  */
-PickEvaluation.prototype.toMap = function () {
+PickSuggestion.prototype.toMap = function () {
     const map = new Map();
     for (let hero of this.heroesSorted(h => h.score)) {
         map.set(hero, this.score(hero))
@@ -50,4 +50,4 @@ PickEvaluation.prototype.toMap = function () {
 };
 
 
-export default PickEvaluation;
+export default PickSuggestion;

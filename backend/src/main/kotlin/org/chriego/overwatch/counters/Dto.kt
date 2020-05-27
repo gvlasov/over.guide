@@ -5,7 +5,7 @@ data class AlternativeJson(
     val score: Int
 )
 
-data class PickEvaluationJson(
+data class PickSuggestionJson(
     val alternatives: List<AlternativeJson>
 )
 

@@ -36,7 +36,6 @@
 
 <script>
     import Picks from '../vue/Picks.vue';
-    import Pick from '../js/Pick.js';
     import Backend from '../js/Backend.js';
     import Roster from '../vue/Roster.vue';
     import PickContextGenerator from "../js/PickContextGenerator";
@@ -44,6 +43,7 @@
     import env from '../../build/env.js'
     import Keypress from 'vue-keypress'
     import TeamComp from "../js/TeamComp";
+    import PickContext from "../js/PickContext";
 
     let shuffleCounter = 0;
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
@@ -70,18 +70,17 @@
                 const $allyPicks = this.$refs.allyPicks;
                 const $enemyPicks = this.$refs.enemyPicks;
                 const $roster = this.$refs.roster;
-                backend.evaluatePick(
-                    new Pick(
-                        hero,
+                backend.suggestPick(
+                    new PickContext(
                         $allyPicks.teamComp,
                         $enemyPicks.teamComp,
                         this.bans,
                         "Hanamura"
                     )
                 )
-                    .then(evaluation => {
+                    .then(suggestion => {
                         this.pickMade = true;
-                        $roster.displayEvaluation(hero, evaluation);
+                        $roster.displaySuggestion(hero, suggestion);
                     })
                     .catch(reason => alert(reason))
                 ;

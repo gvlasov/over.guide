@@ -1,5 +1,5 @@
 import Alternative from "./dto/Alternative";
-import PickEvaluation from "./PickEvaluation";
+import PickSuggestion from "./PickSuggestion";
 
 /**
  *
@@ -13,13 +13,13 @@ function Backend(axios, rootUrl) {
 }
 
 /**
- * @param {Pick} pick
- * @returns {Promise<PickEvaluation>}
+ * @param {PickContext} context
+ * @returns {Promise<PickSuggestion>}
  */
-Backend.prototype.evaluatePick = async function (pick) {
-    return await this.axios.post(this.rootUrl + '/evaluate-pick', pick.forRequest(), {})
+Backend.prototype.suggestPick = async function (context) {
+    return await this.axios.post(this.rootUrl + '/suggest-pick', context.forRequest(), {})
         .then(response => {
-                return new PickEvaluation(
+            return new PickSuggestion(
                     response.data.alternatives.map(data => new Alternative(data))
                 );
             }

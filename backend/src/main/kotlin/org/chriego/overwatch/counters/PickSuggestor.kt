@@ -1,10 +1,10 @@
 package org.chriego.overwatch.counters
 
-class PickEvaluator(
+class PickSuggestor(
     private val counters: Counters
 ) {
 
-    fun evaluate(pickInContext: PickContextJson): PickEvaluationJson {
+    fun suggest(pickInContext: PickContextJson): PickSuggestionJson {
         val allyHeroes = pickInContext.allyComp.map { Hero.heroesByDataName[it]!! }
         val enemyHeroes = pickInContext.enemyComp.map { Hero.heroesByDataName[it]!! }
         val missingRole = getMissingRole(allyHeroes)
@@ -13,7 +13,7 @@ class PickEvaluator(
             .map { it to pickScore(enemyHeroes, it) }
             .sortedBy { it.second }
             .map { it.first.dataName to it.second }
-        return PickEvaluationJson(
+        return PickSuggestionJson(
             alternatives.map {
                 AlternativeJson(it.first, it.second)
             }

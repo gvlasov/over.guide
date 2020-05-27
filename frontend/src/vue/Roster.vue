@@ -75,14 +75,14 @@
             },
             /**
              * @param {Hero} playerPick
-             * @param {PickEvaluation} evaluation
+             * @param {PickSuggestion} suggestion
              */
-            displayEvaluation(playerPick, evaluation) {
+            displaySuggestion(playerPick, suggestion) {
                 this.heroes.replaceAll(
-                    evaluation.heroesSorted(a => -a.score)
+                    suggestion.heroesSorted(a => -a.score)
                 );
                 this.selectedHero = playerPick;
-                this.scores = evaluation.toMap();
+                this.scores = suggestion.toMap();
             },
             /**
              * @param {Hero} hero
