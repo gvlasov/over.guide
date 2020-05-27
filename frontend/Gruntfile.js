@@ -41,6 +41,14 @@ module.exports = function (grunt) {
                 cwd: 'src/assets'
             }
         },
+        terser: {
+            my_target: {
+                files: {
+                    'dist/js/scripts.js': 'dist/js/scripts.js'
+                }
+            }
+        },
+
         watch: {
             scripts: {
                 files: ['src/**', 'Gruntfile.js', 'package*.json'],
@@ -62,6 +70,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-vueify');
+    grunt.loadNpmTasks('grunt-terser');
 
     grunt.registerTask('default', ['clean', 'copy', 'browserify', 'rework', 'clean-build']);
+    grunt.registerTask('prod', ['default', 'terser']);
 };
