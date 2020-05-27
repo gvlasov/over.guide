@@ -17,8 +17,8 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.chriego.overwatch.counters.CounterParser
 import org.chriego.overwatch.counters.Counters
+import org.chriego.overwatch.counters.PickContextJson
 import org.chriego.overwatch.counters.PickEvaluator
-import org.chriego.overwatch.counters.PickInContextJson
 
 fun main(args: Array<String>) {
     val server = embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
                 call.respond(200)
             }
             post("/evaluate-pick") {
-                val pick = call.receive<PickInContextJson>()
+                val pick = call.receive<PickContextJson>()
                 val evaluator = PickEvaluator(
                     Counters(
                         CounterParser(
