@@ -27,7 +27,6 @@
         </div>
         <Roster
                 ref="roster"
-                class="roster"
                 :bans="context.bans"
                 :suggestion="suggestion"
                 :selected-hero="selectedHero"
@@ -145,8 +144,4 @@
         opacity: .2;
     }
 
-
-    .roster {
-        text-align: center;
-    }
 </style>

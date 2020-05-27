@@ -31,7 +31,6 @@
         </div>
         <Roster
                 ref="picksRoster"
-                class="roster"
                 :bans="bans"
                 :selected-out-heroes="selectedOutHeroes"
                 :selected-hero="null"
@@ -41,7 +40,6 @@
         />
         <Roster
                 ref="suggestionsRoster"
-                class="roster"
                 :bans="bans"
                 :selected-out-heroes="selectedOutHeroes"
                 :heroes="suggestion.heroesSorted(h => -h.score)"
