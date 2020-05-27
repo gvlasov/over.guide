@@ -6,14 +6,23 @@
                 @success="nextPick"
                 :preventDefault="true"
         />
-        <Picks
-                ref="enemyPicks"
-                style="margin-bottom: 1.5vw;"
-        />
-        <Picks
-                ref="allyPicks"
-                style="margin-bottom: 1.5vw;"
-        />
+        <div style="position: relative">
+            <Picks
+                    ref="enemyPicks"
+                    style="margin-bottom: 1.5vw;"
+            />
+            <Picks
+                    ref="allyPicks"
+                    style="margin-bottom: 1.5vw;"
+            />
+            <input
+                    type="button"
+                    class="next-pick-button"
+                    value="⏭️"
+                    v-hammer:tap="nextPick"
+                    :disabled="!pickMade"
+            />
+        </div>
         <Roster
                 ref="roster"
                 :bans="bans"
@@ -103,15 +112,30 @@
         /*width: 50em;*/
         text-align: center;
         vertical-align: middle;
-        display: inline-block;
+        display: block;
     }
 
     .next-pick-button {
-        width: 5em;
-        height: 5em;
-        vertical-align: top;
-        margin-left: 3em;
+        width: 25vw;
+        height: 18vw;
+        border-radius: 9vw 0 0 9vw;
+        font-size: 6vw;
+        line-height: 6vw;
+        background-color: #28253a;
+        color: white;
+        border: none;
+
+
+        position: absolute;
+        top: 20%;
+        right: 0;
     }
+
+    .next-pick-button[disabled] {
+        pointer-events: none;
+        opacity: .5;
+    }
+
 
     .roster {
         text-align: center;
