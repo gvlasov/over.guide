@@ -1,9 +1,8 @@
 <template>
     <fullscreen ref="fullscreen">
         <div class="app">
-            <h1 class="overwatch-font-shadowed">Overwatch Counters</h1>
+            <AdsensePlaceholder>AdSense</AdsensePlaceholder>
             <CountersPractice/>
-            <!--        <Roster :on-hero-click="heroTest"/>-->
         </div>
     </fullscreen>
 </template>
@@ -14,6 +13,7 @@
     import Vue from 'vue';
     import {VueHammer} from 'vue2-hammer';
     import flexTouch from 'vue-flex-touch';
+    import AdsensePlaceholder from "./AdsensePlaceholder.vue";
 
     Vue.use(fullscreen);
     Vue.use(VueHammer);
@@ -23,6 +23,7 @@
         },
         components: {
             CountersPractice: CountersPractice,
+            AdsensePlaceholder: AdsensePlaceholder,
         },
     }
 </script>
