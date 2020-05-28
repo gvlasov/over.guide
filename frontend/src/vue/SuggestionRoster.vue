@@ -2,14 +2,15 @@
     <Roster
             :bans="bans"
             :heroes="suggestion.heroesSorted(h => -h.score)"
-            :suggestion="suggestion"
-            v-if="suggestion !== null"
+            :selected-hero="selectedHero"
+            :pick-score="pickScore"
     />
 </template>
 
 <script>
     import PickSuggestion from "../js/PickSuggestion.js";
     import Roster from "./Roster.vue";
+    import Hero from "../js/Hero";
 
     export default {
         props: {
@@ -21,8 +22,16 @@
                 type: PickSuggestion,
                 default: () => null
             },
+            selectedHero: {
+                type: Hero,
+                default: () => null
+            }
         },
-        methods: {},
+        methods: {
+            pickScore: function (hero) {
+                return this.suggestion.score(hero);
+            }
+        },
         data() {
             return {}
         },

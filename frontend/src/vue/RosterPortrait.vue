@@ -1,12 +1,12 @@
 <template>
     <HeroPortraitSkewed
+            class="roster-portrait"
             :hero="hero"
-            v-bind:class="{ enabled : enabled, disabled: !enabled, selected: selected }"
-            v-bind:style="{ 'border-color': borderColor }"
             :banned="banned"
             :selected-out="selectedOut"
-            class="roster-portrait"
+            v-bind:style="{ 'border-color': borderColor }"
             v-flex-touch="(e) => e.preventDefault()"
+            v-hammer:tap="onPortraitTap"
     />
 </template>
 
@@ -17,10 +17,6 @@
     export default {
         props: {
             hero: Hero,
-            enabled: {
-                type: Boolean,
-                default: true
-            },
             pickScore: {
                 default: undefined,
             },
@@ -32,12 +28,17 @@
                 type: Boolean,
                 default: false
             },
-            selected: {
-                type: Boolean,
-                default: () => false,
+        },
+        methods: {
+            /**
+             * @see https://www.npmjs.com/package/vue2-touch-events#how-to-add-extra-parameters The hack
+             */
+            onPortraitTap() {
+                if (!this.banned && !this.selectedOut) {
+                    this.$emit('heroSelect', this.hero)
+                }
             },
         },
-        methods: {},
         computed: {
             /**
              * @return {string}
@@ -65,13 +66,9 @@
 </script>
 
 <style scoped>
-    .disabled {
-        display: none !important;
-    }
-
-    .selected {
-        transform: skew(-25deg, 0deg) scale(1.4) !important;
-        z-index: 9000;
-        box-shadow: black 1vw 1vw 1vw;
+    .roster-portrait {
+        width: 5vw;
+        height: 8vw;
+        margin: 0.4vw;
     }
 </style>

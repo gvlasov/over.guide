@@ -2,6 +2,7 @@ import TeamCompGenerator from "./TeamCompGenerator";
 import PickContext from "./PickContext";
 import BansGenerator from "./BansGenerator";
 import RoleGenerator from "./RoleGenerator";
+import TeamComp from "./TeamComp";
 
 /**
  * @constructor
@@ -35,6 +36,26 @@ PickContextGenerator.prototype.generateForRandomRole = function (seed) {
     return this.generateForRole(
         seed,
         new RoleGenerator().generate(seed)
+    );
+};
+
+PickContextGenerator.prototype.generateEmptyAlliesOnly = function (seed) {
+    const bans = new BansGenerator().generate(seed);
+    return new PickContext(
+        new TeamComp([null, null, null, null, null, null]),
+        null,
+        bans,
+        "Hanamura"
+    );
+};
+
+PickContextGenerator.prototype.generateEmptyAllPick = function (seed) {
+    const bans = new BansGenerator().generate(seed);
+    return new PickContext(
+        new TeamComp([null, null, null, null, null, null]),
+        new TeamComp([null, null, null, null, null, null]),
+        bans,
+        "Hanamura"
     );
 };
 

@@ -25,12 +25,10 @@
                     :disabled="!pickMade"
             />
         </div>
-        <Roster
+        <SelectionRoster
                 ref="roster"
-                :bans="context.bans"
-                :suggestion="suggestion"
-                :selected-hero="selectedHero"
-                :heroes="displayedHeroes"
+                :context="context"
+                :show-only-available-roles="true"
                 v-on:heroSelect="onHeroSelect"
                 v-if="suggestion === null"
         />
@@ -38,6 +36,8 @@
                 ref="suggestionRoster"
                 :bans="context.bans"
                 :suggestion="suggestion"
+                :selected-hero="selectedHero"
+                v-if="suggestion !== null"
         />
     </div>
 </template>
@@ -52,10 +52,11 @@
     import Keypress from 'vue-keypress'
     import PickContext from "../js/PickContext";
     import SuggestionRoster from "./SuggestionRoster.vue";
+    import SelectionRoster from "./SelectionRoster.vue";
 
-    let shuffleCounter = 0;
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
     const backend = new Backend(axios, backendUrl);
+    let shuffleCounter = 0;
     const generator = new PickContextGenerator();
     export default {
         methods: {
@@ -113,6 +114,7 @@
             };
         },
         components: {
+            SelectionRoster: SelectionRoster,
             SuggestionRoster: SuggestionRoster,
             Picks: Picks,
             Roster: Roster,

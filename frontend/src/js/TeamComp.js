@@ -53,13 +53,23 @@ TeamComp.prototype.getCompletelyPickedCategories = function () {
     return answer;
 };
 
+/**
+ * @returns {string}
+ */
 TeamComp.prototype.remainingRole = function () {
-    const pickedRoles = this.getCompletelyPickedCategories();
-    const remainingRoles = ['Support', 'Damage', 'Tank'].diff(pickedRoles);
+    const remainingRoles = this.remainingRoles();
     if (remainingRoles.length !== 1) {
         throw new Error("More than 1 role remaining: " + remainingRoles.join(', '));
     }
     return remainingRoles[0];
+};
+
+/**
+ * @returns {string[]}
+ */
+TeamComp.prototype.remainingRoles = function () {
+    const pickedRoles = this.getCompletelyPickedCategories();
+    return ['Support', 'Damage', 'Tank'].diff(pickedRoles);
 };
 
 /**

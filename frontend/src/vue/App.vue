@@ -1,7 +1,7 @@
 <template>
         <div class="app">
             <AdsensePlaceholder>AdSense</AdsensePlaceholder>
-            <CountersPractice/>
+            <PickSuggestion/>
         </div>
 </template>
 

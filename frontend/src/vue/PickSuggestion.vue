@@ -4,14 +4,14 @@
             <Picks
                     ref="enemyPicks"
                     style="margin-bottom: 1.5vw;"
-                    v-bind:style="{ visibility: isAllPick ? 'visible' : 'hidden' }"
-                    :teamComp="enemyComp"
+                    v-bind:style="{ visibility: context.isAllPick() ? 'visible' : 'hidden' }"
+                    :teamComp="enemyCompOrEmpty"
                     @pickTap="unselectEnemyHero"
             />
             <Picks
                     ref="allyPicks"
                     style="margin-bottom: 1.5vw;"
-                    :teamComp="allyComp"
+                    :teamComp="context.allyComp"
                     @pickTap="unselectAllyHero"
             />
             <input
@@ -19,22 +19,20 @@
                     class="mode-change-button"
                     value="all picks"
                     v-hammer:tap="goToAllPick"
-                    v-if="!isAllPick"
+                    v-if="!context.isAllPick()"
             />
             <input
                     type="button"
                     class="mode-change-button"
                     value="pre match picks"
                     v-hammer:tap="goToPreMatchPick"
-                    v-if="isAllPick"
+                    v-if="context.isAllPick()"
             />
         </div>
-        <Roster
+        <SelectionRoster
                 ref="picksRoster"
-                :bans="bans"
-                :selected-out-heroes="selectedOutHeroes"
-                :selected-hero="null"
-                :heroes="allHeroes"
+                :context="context"
+                :show-only-available-roles="false"
                 v-on:heroSelect="onHeroSelect"
                 v-if="suggestion === null"
         />
@@ -42,6 +40,7 @@
                 ref="suggestionsRoster"
                 :bans="bans"
                 :suggestion="suggestion"
+                v-if="suggestion !== null"
         />
     </div>
 </template>
@@ -52,76 +51,63 @@
     import Roster from '../vue/Roster.vue';
     import axios from "axios";
     import env from '../../build/env.js'
-    import heroes from "../js/heroes.js";
-    import TeamComp from "../js/TeamComp.js";
-    import PickContext from "../js/PickContext.js";
     import SuggestionRoster from "./SuggestionRoster.vue";
+    import SelectionRoster from "./SelectionRoster.vue";
+    import PickContextGenerator from "../js/PickContextGenerator";
+    import TeamComp from "../js/TeamComp";
 
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
     const backend = new Backend(axios, backendUrl);
+    const contextGenerator = new PickContextGenerator();
+    let seedCounter = 0;
     export default {
         props: {
-            bans: {
-                type: Array,
-                default: () => []
-            }
         },
         methods: {
             goToAllPick() {
-                this.isAllPick = true;
-                this.allyComp = TeamComp.empty();
-                this.enemyComp = TeamComp.empty();
+                this.context = contextGenerator.generateEmptyAllPick(seedCounter++);
                 this.suggestion = null;
             },
             goToPreMatchPick() {
-                this.isAllPick = false;
-                this.allyComp = TeamComp.empty();
-                this.enemyComp = TeamComp.empty();
+                this.context = contextGenerator.generateEmptyAlliesOnly(seedCounter++);
                 this.suggestion = null;
             },
             unselectAllyHero(hero, position) {
                 if (hero === null) {
                     return;
                 }
-                this.allyComp.unsetAtPosition(position);
+                this.context.allyComp.unsetAtPosition(position);
                 this.suggestion = null;
             },
             unselectEnemyHero(hero, position) {
                 if (hero === null) {
                     return;
                 }
-                this.enemyComp.unsetAtPosition(position);
+                this.context.enemyComp.unsetAtPosition(position);
                 this.suggestion = null;
             },
             /**
              * @param {Hero} hero
              */
             onHeroSelect(hero) {
-                if (this.isAllPick && !this.enemyComp.isFull()) {
-                    if (this.enemyComp.canSelect(hero)) {
-                        this.enemyComp.setNextAvailable(hero);
+                if (this.context.isAllPick() && !this.context.enemyComp.isFull()) {
+                    if (this.context.enemyComp.canSelect(hero)) {
+                        this.context.enemyComp.setNextAvailable(hero);
                     } else {
-                        throw new Error("Can't select " + hero.name + " is enemy comp");
+                        throw new Error("Can't select " + hero.name + " in enemy comp");
                     }
-                } else if (this.allyComp.canSelect(hero)) {
-                    this.allyComp.setNextAvailable(hero);
+                } else if (this.context.allyComp.canSelect(hero)) {
+                    this.context.allyComp.setNextAvailable(hero);
                 } else {
-                    throw new Error("Can't select " + hero.name + " is either comp");
+                    throw new Error("Can't select " + hero.name + " in either comp");
                 }
                 if (
-                    (!this.isAllPick || this.enemyComp.isFull())
-                    && this.allyComp.numberOfVacancies() === 1
+                    (!this.context.isAllPick() || this.context.enemyComp.isFull())
+                    && this.context.allyComp.numberOfVacancies() === 1
                 ) {
                     const self = this;
                     backend
-                        .suggestPick(
-                            new PickContext(
-                                this.allyComp,
-                                this.enemyComp,
-                                [],
-                                "Hanamura"
-                            )
-                        )
+                        .suggestPick(this.context)
                         .then(suggestion => {
                             self.suggestion = suggestion;
                         })
@@ -130,32 +116,22 @@
             },
         },
         computed: {
-            selectedOutHeroes() {
-                if (this.isAllPick && !this.enemyComp.isFull()) {
-                    return [
-                        ...this.enemyComp.picks(),
-                        ...this.enemyComp.heroesInPickedOutRoles()
-                    ];
-                } else if (!this.allyComp.isFull()) {
-                    return [
-                        ...this.allyComp.picks(),
-                        ...this.allyComp.heroesInPickedOutRoles()
-                    ];
-                } else {
-                    return this.allHeroes;
-                }
+            enemyCompOrEmpty() {
+                return this.context.enemyComp || TeamComp.empty();
             },
+        },
+        watch: {
+            'context.allyComp': (n, o) => true,
+            'context.enemyComp': (n, o) => true,
         },
         data() {
             return {
-                isAllPick: true,
-                allyComp: TeamComp.empty(),
-                enemyComp: TeamComp.empty(),
+                context: contextGenerator.generateEmptyAllPick(seedCounter++),
                 suggestion: null,
-                allHeroes: [...heroes],
             }
         },
         components: {
+            SelectionRoster,
             SuggestionRoster: SuggestionRoster,
             Picks: Picks,
             Roster: Roster,

@@ -4,12 +4,11 @@
                 v-for="hero in heroes"
                 ref="portraits"
                 :hero="hero"
-                style="width: 5vw; height: 8vw; margin: 0.4vw;"
                 :banned="isHeroBanned(hero)"
-                :selected="isHeroSelected(hero)"
                 :pick-score="pickScore(hero)"
                 :selected-out="isHeroSelectedOut(hero)"
-                v-hammer:tap="onPortraitTapHacky(hero)"
+                v-bind:class="{ selected: isHeroSelected(hero) }"
+                @heroSelect="onHeroSelect"
         />
     </div>
 </template>
@@ -17,7 +16,6 @@
 <script>
     import heroes from "../js/heroes.js";
     import RosterPortrait from "./RosterPortrait.vue";
-    import PickSuggestion from "../js/PickSuggestion.js";
     import Hero from "../js/Hero.js";
 
     export default {
@@ -28,19 +26,19 @@
             },
             bans: {
                 type: Array,
-                default: () => []
+                default: () => [],
+            },
+            selectedHero: {
+                type: Hero,
+                default: () => null,
             },
             selectedOutHeroes: {
                 type: Array,
                 default: () => []
             },
-            suggestion: {
-                type: PickSuggestion,
-                default: () => null
-            },
-            selectedHero: {
-                type: Hero,
-                default: null
+            pickScore: {
+                type: Function,
+                default: ((hero) => undefined)
             }
         },
         methods: {
@@ -49,7 +47,7 @@
              * @return {boolean}
              */
             isHeroBanned(hero) {
-                return this.bans.filter(h => hero.name === h.name).length > 0;
+                return typeof this.bans.find(h => hero.equals(h)) !== 'undefined';
             },
             /**
              * @param {Hero} hero
@@ -64,29 +62,9 @@
             isHeroSelectedOut(hero) {
                 return typeof this.selectedOutHeroes.find(h => h.equals(hero)) !== 'undefined';
             },
-            /**
-             * @param {Hero} hero
-             * @see https://www.npmjs.com/package/vue2-touch-events#how-to-add-extra-parameters The hack
-             */
-            onPortraitTapHacky(hero) {
-                const self = this;
-                return function (event) {
-                    if (!self.isHeroBanned(hero) && !self.isHeroSelectedOut(hero)) {
-                        self.$emit('heroSelect', hero)
-                    }
-                }
-            },
-            /**
-             * @param {Hero} hero
-             * @return {number|undefined}
-             */
-            pickScore(hero) {
-                if (this.suggestion === null) {
-                    return undefined;
-                } else {
-                    return this.suggestion.score(hero);
-                }
-            },
+            onHeroSelect(hero) {
+                this.$emit('heroSelect', hero);
+            }
         },
         data() {
             return {
@@ -107,5 +85,11 @@
         margin-block-start: 0;
         margin-block-end: 0;
         padding-inline-start: 0;
+    }
+
+    .selected {
+        transform: skew(-25deg, 0deg) scale(1.4) !important;
+        z-index: 9000;
+        box-shadow: black 1vw 1vw 1vw;
     }
 </style>
