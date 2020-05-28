@@ -3,7 +3,8 @@ import seedrandom from "seedrandom";
 /**
  * @constructor
  */
-function RoleGenerator() {
+function RoleGenerator(availableRoles) {
+    this.availableRoles = availableRoles;
 }
 
 /**
@@ -11,14 +12,8 @@ function RoleGenerator() {
  * @return {string}
  */
 RoleGenerator.prototype.generate = function (seed) {
-    const random = Math.ceil(seedrandom(seed)() * 3);
-    if (random === 1) {
-        return 'Tank';
-    } else if (random === 2) {
-        return 'Support';
-    } else {
-        return 'Damage';
-    }
+    const random = Math.ceil(seedrandom(seed)() * this.availableRoles.length);
+    return this.availableRoles[random - 1];
 };
 
 export default RoleGenerator;

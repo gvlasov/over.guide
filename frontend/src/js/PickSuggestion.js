@@ -2,7 +2,7 @@ import './PickOption'
 import './Pick'
 import Alternative from './dto/Alternative.js'
 import heroes from "./heroes";
-import _ from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 /**
  * @param {Alternative[]} alternatives
@@ -18,8 +18,7 @@ function PickSuggestion(alternatives) {
  * @returns {Hero[]}
  */
 PickSuggestion.prototype.heroesSorted = function (sortFunction) {
-    return _
-        .sortBy(this.alternatives, sortFunction)
+    return sortBy(this.alternatives, sortFunction)
         .map(a => heroes.find(hero => hero.equals(a)));
 };
 

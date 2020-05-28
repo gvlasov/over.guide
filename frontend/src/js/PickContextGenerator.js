@@ -30,12 +30,13 @@ PickContextGenerator.prototype.generateForRole = function (
 };
 
 /**
+ * @param {string} availableRoles
  * @param {number} seed
  */
-PickContextGenerator.prototype.generateForRandomRole = function (seed) {
+PickContextGenerator.prototype.generateForRandomRole = function (availableRoles, seed) {
     return this.generateForRole(
         seed,
-        new RoleGenerator().generate(seed)
+        new RoleGenerator(availableRoles).generate(seed)
     );
 };
 

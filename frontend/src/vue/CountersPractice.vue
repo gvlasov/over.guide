@@ -6,39 +6,45 @@
                 @success="nextPick"
                 :preventDefault="true"
         />
-        <div style="position: relative">
-            <Picks
-                    ref="enemyPicks"
-                    style="margin-bottom: 1.5vw;"
-                    :teamComp="context.enemyComp"
+        <RoleSelection
+                @rolesApproved="onRolesApproved"
+                v-if="roles === null"
+        />
+        <div v-if="roles !== null">
+            <div style="position: relative">
+                <Picks
+                        ref="enemyPicks"
+                        style="margin-bottom: 1.5vw;"
+                        :teamComp="context.enemyComp"
+                />
+                <Picks
+                        ref="allyPicks"
+                        style="margin-bottom: 1.5vw;"
+                        :teamComp="context.allyComp"
+                />
+                <input
+                        type="button"
+                        class="next-pick-button"
+                        value="⏭️"
+                        v-hammer:tap="nextPick"
+                        :disabled="!pickMade"
+                />
+            </div>
+            <SelectionRoster
+                    ref="roster"
+                    :context="context"
+                    :show-only-available-roles="true"
+                    v-on:heroSelect="onHeroSelect"
+                    v-if="suggestion === null"
             />
-            <Picks
-                    ref="allyPicks"
-                    style="margin-bottom: 1.5vw;"
-                    :teamComp="context.allyComp"
-            />
-            <input
-                    type="button"
-                    class="next-pick-button"
-                    value="⏭️"
-                    v-hammer:tap="nextPick"
-                    :disabled="!pickMade"
+            <SuggestionRoster
+                    ref="suggestionRoster"
+                    :bans="context.bans"
+                    :suggestion="suggestion"
+                    :selected-hero="selectedHero"
+                    v-if="suggestion !== null"
             />
         </div>
-        <SelectionRoster
-                ref="roster"
-                :context="context"
-                :show-only-available-roles="true"
-                v-on:heroSelect="onHeroSelect"
-                v-if="suggestion === null"
-        />
-        <SuggestionRoster
-                ref="suggestionRoster"
-                :bans="context.bans"
-                :suggestion="suggestion"
-                :selected-hero="selectedHero"
-                v-if="suggestion !== null"
-        />
     </div>
 </template>
 
@@ -53,6 +59,7 @@
     import PickContext from "../js/PickContext";
     import SuggestionRoster from "./SuggestionRoster.vue";
     import SelectionRoster from "./SelectionRoster.vue";
+    import RoleSelection from "./RoleSelection.vue";
 
     let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
     const backend = new Backend(axios, backendUrl);
@@ -61,7 +68,7 @@
     export default {
         methods: {
             nextPick() {
-                this.context = generator.generateForRandomRole(shuffleCounter++);
+                this.context = generator.generateForRandomRole(this.roles, shuffleCounter++);
                 this.selectedHero = null;
                 this.suggestion = null;
             },
@@ -87,6 +94,13 @@
                     })
                     .catch(reason => alert(reason));
             },
+            onRolesApproved(roles) {
+                if (roles === []) {
+                    return;
+                }
+                this.roles = roles;
+                this.context = generator.generateForRandomRole(this.roles, shuffleCounter++);
+            },
         },
         computed: {
             /**
@@ -108,12 +122,14 @@
         },
         data() {
             return {
-                context: generator.generateForRandomRole(shuffleCounter++),
+                context: null,
                 suggestion: null,
                 selectedHero: null,
+                roles: null
             };
         },
         components: {
+            RoleSelection: RoleSelection,
             SelectionRoster: SelectionRoster,
             SuggestionRoster: SuggestionRoster,
             Picks: Picks,

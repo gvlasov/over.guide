@@ -17,6 +17,12 @@
     font-variant: small-caps;
 }
 
+@font-face {
+    font-family: 'Futura Demi Bold';
+    src: local('Futura Demi Bold'),
+    url("/fonts/FuturaBQ-DemiBold.otf") format("opentype");
+}
+
 .overwatch-font-shadowed {
     font-family: BigNoodleTooOblique, sans-serif;
 }

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import uniq from "lodash/uniq";
 import Vue from 'vue';
 import heroes from "./heroes";
 
@@ -16,7 +16,7 @@ function TeamComp(heroes) {
         heroes
             .filter(hero => hero !== null)
             .map(hero => hero.name);
-    if (_.uniq(picks).length < picks.length) {
+    if (uniq(picks).length < picks.length) {
         throw new Error(
             "Heroes in a team composition must be unique"
         );
