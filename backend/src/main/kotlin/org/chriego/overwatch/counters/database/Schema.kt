@@ -1,40 +1,34 @@
 package org.chriego.overwatch.counters.database
 
 import org.chriego.overwatch.counters.Role
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
-import java.sql.DriverManager
 
-object Hero : IntIdTable() {
+object Heroes : IntIdTable() {
     val name = varchar("name", 32)
     val role = enumeration("role", Role::class)
     override val primaryKey = PrimaryKey(id)
 }
 
-object MatchupEvaluation : IntIdTable() {
-    val subjectId = reference("subject_id", Hero.id)
-    val objectId = reference("object_id", Hero.id)
+class Hero(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Hero>(Heroes)
+
+    var name by Heroes.name
+    var role by Heroes.role
+}
+
+object MatchupEvaluations : IntIdTable() {
+    val subjectId = reference("subject_id", Heroes.id)
+    val objectId = reference("object_id", Heroes.id)
     val score = integer("score")
 }
 
-fun main() {
-    Database.connect(
-        {
-            DriverManager.getConnection(
-                "jdbc:mariadb://localhost:3306/overwatch",
-                "root",
-                "1"
-            )
-        }
-    )
-    transaction {
-        val tables = arrayOf(
-            Hero,
-            MatchupEvaluation
-        )
-        SchemaUtils.drop(*tables)
-        SchemaUtils.create(*tables)
-    }
+class MatchupEvaluation(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<MatchupEvaluation>(MatchupEvaluations)
+
+    var subject by Hero referencedOn MatchupEvaluations.subjectId
+    var `object` by Hero referencedOn MatchupEvaluations.objectId
+    var score by MatchupEvaluations.score
 }
