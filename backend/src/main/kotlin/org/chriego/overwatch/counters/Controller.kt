@@ -1,4 +1,4 @@
-
+package org.chriego.overwatch.counters
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CORS
@@ -15,10 +15,6 @@ import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import org.chriego.overwatch.counters.CounterParser
-import org.chriego.overwatch.counters.Counters
-import org.chriego.overwatch.counters.PickContextJson
-import org.chriego.overwatch.counters.PickSuggestor
 
 fun main(args: Array<String>) {
     val server = embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
