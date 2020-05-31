@@ -5,7 +5,7 @@ import org.chriego.overwatch.counters.database.Hero
 import org.chriego.overwatch.counters.database.MatchupEvaluation
 import org.jetbrains.exposed.sql.Transaction
 
-class TestFixture : Fixture() {
+object TestFixture : Fixture() {
 
     override fun Transaction.load() {
         val ana = Hero.new {
