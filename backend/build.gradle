@@ -1,10 +1,10 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.61'
     id 'application'
-    id "org.flywaydb.flyway" version "6.4.3"
 }
 
 ext.ktor_version = '1.3.2'
+ext.exposed_version = '0.25.1'
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
@@ -27,6 +27,9 @@ dependencies {
     implementation "io.ktor:ktor-jackson:$ktor_version"
     implementation 'ch.qos.logback:logback-classic:1.2.3'
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.6.0'
+    implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
+    implementation "org.jetbrains.exposed:exposed-dao:$exposed_version"
+    implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
 
 }
 
@@ -45,10 +48,3 @@ task copyResources(type: Copy) {
     into "${buildDir}/classes/kotlin/main"
 }
 processResources.dependsOn copyResources
-
-flyway {
-    url = 'jdbc:mariadb://localhost:3306/overwatch'
-    user = 'root'
-    password = '1'
-    schemas = ['overwatch']
-}
