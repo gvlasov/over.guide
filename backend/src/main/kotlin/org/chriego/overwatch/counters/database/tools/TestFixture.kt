@@ -24,16 +24,19 @@ object TestFixture : Fixture() {
             `object` = ana
             subject = reinhardt
             score = -4
+            ip = "127.0.0.1"
         }
         MatchupEvaluation.new {
             `object` = ana
             subject = reaper
             score = 4
+            ip = "127.0.0.1"
         }
         MatchupEvaluation.new {
             `object` = reaper
             subject = reinhardt
             score = 8
+            ip = "127.0.0.1"
         }
     }
 

@@ -23,6 +23,7 @@ object MatchupEvaluations : IntIdTable() {
     val subjectId = reference("subject_id", Heroes.id)
     val objectId = reference("object_id", Heroes.id)
     val score = integer("score")
+    val ip = varchar("ip", 14)
 }
 
 class MatchupEvaluation(id: EntityID<Int>) : IntEntity(id) {
@@ -31,4 +32,5 @@ class MatchupEvaluation(id: EntityID<Int>) : IntEntity(id) {
     var subject by Hero referencedOn MatchupEvaluations.subjectId
     var `object` by Hero referencedOn MatchupEvaluations.objectId
     var score by MatchupEvaluations.score
+    var ip by MatchupEvaluations.ip
 }

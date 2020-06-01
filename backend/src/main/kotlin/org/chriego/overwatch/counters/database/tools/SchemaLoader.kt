@@ -6,14 +6,20 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object SchemaLoader {
+    val tables = arrayOf(Heroes, MatchupEvaluations)
 
     fun load() {
         ConnectionCreator.connect()
         transaction {
-            SchemaUtils.create(
-                Heroes,
-                MatchupEvaluations
-            )
+            SchemaUtils.createMissingTablesAndColumns(*tables)
+        }
+    }
+
+    fun loadClean() {
+        ConnectionCreator.connect()
+        transaction {
+            SchemaUtils.drop(*tables)
+            SchemaUtils.create(*tables)
         }
     }
 
