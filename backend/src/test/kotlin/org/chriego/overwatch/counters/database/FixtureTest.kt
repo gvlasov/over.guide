@@ -19,7 +19,7 @@ class FixtureTest {
         transaction {
             MatchupEvaluation.all()
                 .forEach {
-                    println("${it.subject.name} ${it.`object`.name}")
+                    println("${it.patch.title}")
                 }
         }
     }
