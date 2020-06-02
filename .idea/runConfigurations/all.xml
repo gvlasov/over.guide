@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="all" type="CompoundRunConfigurationType">
+    <toRun name="serve" type="BashConfigurationType" />
+    <toRun name="watch" type="BashConfigurationType" />
+    <toRun name="backend" type="JetRunConfigurationType" />
+    <toRun name="Backend" type="docker-deploy" />
+    <method v="2" />
+  </configuration>
+</component>
