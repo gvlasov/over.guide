@@ -1,5 +1,5 @@
 <template>
-    <li class="overwatch-font-shadowed hero">
+    <li class="hero">
         <img :src="imgSrc(hero)"/>
     </li>
 </template>
@@ -14,6 +14,10 @@
                 type: Hero
             },
             'show-name': Boolean,
+            'baseUrl': {
+                type: String,
+                default: '/images/hero-portraits'
+            }
         },
         methods: {
             /**
@@ -23,7 +27,7 @@
                 if (hero === null) {
                     return '/images/undefined-hero.png'
                 } else {
-                    return "/images/hero-portraits/" + hero.imgName + ".png"
+                    return this.baseUrl + '/' + hero.imgName + ".png"
                 }
             },
         },

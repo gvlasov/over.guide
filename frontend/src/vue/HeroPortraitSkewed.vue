@@ -7,6 +7,7 @@
                 :hero="hero"
                 class="skew-underlying"
                 style="min-width: 100%;"
+                :base-url="'/images/roster-portraits'"
         />
     </div>
 </template>
@@ -56,7 +57,9 @@
     .skew-underlying {
         -ms-transform: skew(25deg, 0deg) scale(2.0);
         -webkit-transform: skew(25deg, 0deg) scale(2.0);
-        transform: skew(25deg, 0deg) scale(2.0);
+        transform: skew(25deg, 0deg) scale(1.0);
+        height: 100%;
+        width: auto;
     }
 
     .banned > .skew-underlying {

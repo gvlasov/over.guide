@@ -68,7 +68,7 @@
 <style scoped>
     .roster-portrait {
         width: 5vw;
-        height: 8vw;
+        height: 7vw;
         margin: 0.4vw;
     }
 </style>
