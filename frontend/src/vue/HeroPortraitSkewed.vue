@@ -60,6 +60,9 @@
         transform: skew(25deg, 0deg) scale(1.0);
         height: 100%;
         width: auto;
+        margin-right: -100%;
+        margin-left: -100%;
+        text-align: center;
     }
 
     .banned > .skew-underlying {

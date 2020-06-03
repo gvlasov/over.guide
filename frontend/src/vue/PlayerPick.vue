@@ -34,14 +34,10 @@
     .portrait {
         width: 7vw;
         height: 8vw;
-        padding-top: 2.0vw;
-        overflow: hidden;
         display: inline-block;
         margin-right: 1vw;
     }
 
     .portrait > * {
-        top: 65%;
-        transform: translateY(-50%);
     }
 </style>

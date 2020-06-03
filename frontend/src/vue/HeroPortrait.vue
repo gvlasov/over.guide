@@ -1,7 +1,5 @@
 <template>
-    <li class="hero">
-        <img :src="imgSrc(hero)"/>
-    </li>
+    <img :src="imgSrc(hero)"/>
 </template>
 
 <script>
@@ -13,7 +11,6 @@
             'hero': {
                 type: Hero
             },
-            'show-name': Boolean,
             'baseUrl': {
                 type: String,
                 default: '/images/hero-portraits'
@@ -39,14 +36,7 @@
 </script>
 
 <style scoped>
-    @import '../css/fonts.css';
-
-    .hero {
-        position: relative;
-        display: inline-block;
-    }
-
-    .hero > img {
+    img {
         width: 100%;
     }
 </style>
