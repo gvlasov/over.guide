@@ -32,12 +32,14 @@
 
 <style scoped>
     .portrait {
-        width: 7vw;
-        height: 8vw;
         display: inline-block;
         margin-right: 1vw;
+        overflow: hidden;
+        height: 9vw;
     }
 
     .portrait > * {
+        width: 7vw;
+        height: auto;
     }
 </style>
