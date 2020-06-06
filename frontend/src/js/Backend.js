@@ -1,5 +1,6 @@
 import Alternative from "./dto/Alternative";
 import PickSuggestion from "./PickSuggestion";
+import MatchupEvaluation from "./dto/MatchupEvaluation";
 
 /**
  *
@@ -24,5 +25,21 @@ Backend.prototype.suggestPick = async function (context) {
                 );
             }
         );
+};
+/**
+ * @param {Hero} subject
+ * @param {Hero} object
+ * @returns {Promise<MatchupEvaluation>}
+ */
+Backend.prototype.evaluateMatchup = async function (subject, object) {
+    return await this.axios.post(
+        this.rootUrl + '/matchup-evaluation',
+        {
+            subject: subject.dataName,
+            object: object.dataName
+        },
+        {}
+    )
+        .then(response => new MatchupEvaluation(response.data));
 };
 export default Backend;

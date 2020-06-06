@@ -23,9 +23,8 @@ data class PickContextJson(
 class AbilityUseEvaluationJson(
     abilityUseEvaluation: AbilityUseEvaluation
 ) {
-
     val ability: String = abilityUseEvaluation.ability.name
-    val `object`: String = abilityUseEvaluation.`object`.name
+    val `object`: String = abilityUseEvaluation.`object`.dataName
     val description: String = abilityUseEvaluation.description
 }
 
@@ -33,15 +32,15 @@ class AbilityCounterEvaluationJson(
     abilityCounterEvaluation: AbilityCounterEvaluation
 ) {
     val ability: String = abilityCounterEvaluation.ability.name
-    val `object`: String = abilityCounterEvaluation.`object`.name
+    val `object`: String = abilityCounterEvaluation.`object`.dataName
     val description: String = abilityCounterEvaluation.description
 }
 
 class MatchupEvaluationJson(
     matchupEvaluation: MatchupEvaluation
 ) {
-    val subject: String = matchupEvaluation.subject.name
-    val `object`: String = matchupEvaluation.`object`.name
+    val subject: String = matchupEvaluation.subject.dataName
+    val `object`: String = matchupEvaluation.`object`.dataName
     val score: Int = matchupEvaluation.score
     val abilityUses: List<AbilityUseEvaluationJson> =
         matchupEvaluation.abilityUseEvaluations.map {
