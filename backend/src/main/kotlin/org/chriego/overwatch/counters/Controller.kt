@@ -15,6 +15,9 @@ import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import org.chriego.overwatch.counters.database.MatchupEvaluation
+import org.chriego.overwatch.counters.database.tools.ConnectionCreator
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>) {
     val server = embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
@@ -45,6 +48,15 @@ fun main(args: Array<String>) {
             }
             get("/demo") {
                 call.respondText("HELLO WORLD!")
+            }
+            post("/matchup-evaluation") {
+                ConnectionCreator.connect()
+                val evaluation = transaction {
+                    MatchupEvaluationJson(
+                        MatchupEvaluation.get(1)
+                    )
+                }
+                call.respond(evaluation)
             }
         }
 

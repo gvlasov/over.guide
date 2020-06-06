@@ -5,7 +5,14 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object SchemaLoader {
-    val tables = arrayOf(Heroes, MatchupEvaluations, Patches, Abilities, AbilityUseEvaluations)
+    val tables = arrayOf(
+        Heroes,
+        MatchupEvaluations,
+        Patches,
+        Abilities,
+        AbilityUseEvaluations,
+        AbilityCounterEvaluations
+    )
 
     fun load() {
         ConnectionCreator.connect()

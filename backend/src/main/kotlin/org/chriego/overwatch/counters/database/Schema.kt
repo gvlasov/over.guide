@@ -6,6 +6,7 @@ import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.`java-time`.date
+import org.jetbrains.exposed.sql.select
 
 object Heroes : IntIdTable() {
     val name = varchar("name", 32)
@@ -25,7 +26,7 @@ object MatchupEvaluations : IntIdTable() {
     val objectId = reference("object_id", Heroes.id)
     val score = integer("score")
     val ip = varchar("ip", 14)
-    val patchId = reference("patch", Patches.id)
+    val patchId = reference("patch_id", Patches.id)
 }
 
 class MatchupEvaluation(id: EntityID<Int>) : IntEntity(id) {
@@ -36,6 +37,26 @@ class MatchupEvaluation(id: EntityID<Int>) : IntEntity(id) {
     var score by MatchupEvaluations.score
     var ip by MatchupEvaluations.ip
     var patch by Patch referencedOn MatchupEvaluations.patchId
+    val abilityUseEvaluations: List<AbilityUseEvaluation>
+        get() {
+            return AbilityUseEvaluation
+                .wrapRows(
+                    AbilityUseEvaluations
+                        .innerJoin(Heroes)
+                        .select { Heroes.id eq subject.id }
+                )
+                .toList()
+        }
+    val abilityCounterEvaluations: List<AbilityCounterEvaluation>
+        get() {
+            return AbilityCounterEvaluation
+                .wrapRows(
+                    AbilityCounterEvaluations
+                        .innerJoin(Heroes)
+                        .select { Heroes.id eq subject.id }
+                )
+                .toList()
+        }
 }
 
 object Patches : IntIdTable() {
@@ -78,6 +99,21 @@ class AbilityUseEvaluation(id: EntityID<Int>) : IntEntity(id) {
     var ability by Ability referencedOn AbilityUseEvaluations.abilityId
     var `object` by Hero referencedOn AbilityUseEvaluations.objectId
     var description by AbilityUseEvaluations.description
+
+}
+
+object AbilityCounterEvaluations : IntIdTable() {
+    val abilityId = reference("ability_id", Abilities.id)
+    val objectId = reference("object_id", Heroes.id)
+    val description = text("description")
+}
+
+class AbilityCounterEvaluation(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<AbilityCounterEvaluation>(AbilityCounterEvaluations)
+
+    var ability by Ability referencedOn AbilityCounterEvaluations.abilityId
+    var `object` by Hero referencedOn AbilityCounterEvaluations.objectId
+    var description by AbilityCounterEvaluations.description
 
 }
 
