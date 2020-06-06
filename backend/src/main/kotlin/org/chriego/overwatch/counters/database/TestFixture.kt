@@ -1,7 +1,7 @@
-package org.chriego.overwatch.counters.database.tools
+package org.chriego.overwatch.counters.database
 
 import org.chriego.overwatch.counters.Role
-import org.chriego.overwatch.counters.database.*
+import org.chriego.overwatch.counters.database.tools.Fixture
 import org.jetbrains.exposed.sql.Transaction
 import java.time.LocalDate
 
