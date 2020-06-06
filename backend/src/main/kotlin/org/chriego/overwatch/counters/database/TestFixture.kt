@@ -1,6 +1,6 @@
 package org.chriego.overwatch.counters.database
 
-import org.chriego.overwatch.counters.Role
+import org.chriego.overwatch.counters.Hero
 import org.chriego.overwatch.counters.database.tools.Fixture
 import org.jetbrains.exposed.sql.Transaction
 import java.time.LocalDate
@@ -18,21 +18,13 @@ object TestFixture : Fixture() {
             title = "Winter Madness"
             date = LocalDate.of(2020, 2, 10)
         }
-        val ana = Hero.new {
-            name = "Ana"
-            dataName = "ana"
-            role = Role.Support
+        Hero.values().forEach {
+            it.createRecord()
         }
-        val reaper = Hero.new {
-            name = "Reaper"
-            dataName = "reaper"
-            role = Role.Damage
-        }
-        val reinhardt = Hero.new {
-            name = "Reinhardt"
-            dataName = "reinhardt"
-            role = Role.Tank
-        }
+        val ana = Hero.Ana.dao
+        val reinhardt = Hero.Reinhardt.dao
+        val reaper = Hero.Reaper.dao
+
         val anaReinEval = MatchupEvaluation.new {
             `object` = ana
             subject = reinhardt

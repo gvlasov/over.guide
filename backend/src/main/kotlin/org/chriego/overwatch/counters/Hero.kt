@@ -1,6 +1,8 @@
 package org.chriego.overwatch.counters
 
 import org.chriego.overwatch.counters.Role.*
+import org.chriego.overwatch.counters.database.Heroes
+import org.chriego.overwatch.counters.database.Hero as HeroDao
 
 enum class Hero(
     val role: Role,
@@ -75,5 +77,18 @@ enum class Hero(
     val id: Int
         get() =
             heroIdsByName[dataName]!!
+
+    val dao: HeroDao
+        get() {
+            return HeroDao.find { Heroes.dataName eq dataName }.single()
+        }
+
+    fun createRecord(): HeroDao {
+        return HeroDao.new {
+            name = this@Hero.name
+            dataName = this@Hero.dataName
+            role = this@Hero.role
+        }
+    }
 
 }
