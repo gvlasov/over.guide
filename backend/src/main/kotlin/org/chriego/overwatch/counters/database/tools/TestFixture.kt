@@ -1,9 +1,7 @@
 package org.chriego.overwatch.counters.database.tools
 
 import org.chriego.overwatch.counters.Role
-import org.chriego.overwatch.counters.database.Hero
-import org.chriego.overwatch.counters.database.MatchupEvaluation
-import org.chriego.overwatch.counters.database.Patch
+import org.chriego.overwatch.counters.database.*
 import org.jetbrains.exposed.sql.Transaction
 import java.time.LocalDate
 
@@ -32,7 +30,7 @@ object TestFixture : Fixture() {
             name = "Reinhardt"
             role = Role.Tank
         }
-        MatchupEvaluation.new {
+        val anaReinEval = MatchupEvaluation.new {
             `object` = ana
             subject = reinhardt
             score = -4
@@ -52,6 +50,19 @@ object TestFixture : Fixture() {
             score = 8
             ip = "127.0.0.1"
             patch = winterMadnessPatch
+        }
+        val bioticGrenade = Ability.new {
+            name = "Biotic grenade"
+            hero = ana
+        }
+        val sleepDart = Ability.new {
+            name = "Sleep dart"
+            hero = ana
+        }
+        val anaReinGrenadeEval = AbilityUseEvaluation.new {
+            ability = bioticGrenade
+            `object` = reinhardt
+            description = "Watch rein to lower his shield"
         }
     }
 

@@ -1,12 +1,11 @@
 package org.chriego.overwatch.counters.database.tools
 
-import org.chriego.overwatch.counters.database.Heroes
-import org.chriego.overwatch.counters.database.MatchupEvaluations
+import org.chriego.overwatch.counters.database.*
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object SchemaLoader {
-    val tables = arrayOf(Heroes, MatchupEvaluations)
+    val tables = arrayOf(Heroes, MatchupEvaluations, Patches, Abilities, AbilityUseEvaluations)
 
     fun load() {
         ConnectionCreator.connect()

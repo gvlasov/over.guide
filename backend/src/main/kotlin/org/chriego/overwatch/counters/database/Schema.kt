@@ -51,3 +51,33 @@ class Patch(id: EntityID<Int>) : IntEntity(id) {
     var date by Patches.date
     var title by Patches.title
 }
+
+object Abilities : IntIdTable() {
+    val name = varchar("name", 32)
+    val heroId = reference("hero_id", Heroes.id)
+    val removedAtPatchId = reference("removed_at_version_id", Patches.id).nullable()
+}
+
+class Ability(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Ability>(Abilities)
+
+    var name by Abilities.name
+    var hero by Hero referencedOn Abilities.heroId
+    var removedAtPatch by Patch optionalReferencedOn Abilities.removedAtPatchId
+}
+
+object AbilityUseEvaluations : IntIdTable() {
+    val abilityId = reference("ability_id", Abilities.id)
+    val objectId = reference("object_id", Heroes.id)
+    val description = text("description")
+}
+
+class AbilityUseEvaluation(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<AbilityUseEvaluation>(AbilityUseEvaluations)
+
+    var ability by Ability referencedOn AbilityUseEvaluations.abilityId
+    var `object` by Hero referencedOn AbilityUseEvaluations.objectId
+    var description by AbilityUseEvaluations.description
+
+}
+
