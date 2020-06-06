@@ -10,6 +10,7 @@ import org.jetbrains.exposed.sql.select
 
 object Heroes : IntIdTable() {
     val name = varchar("name", 32)
+    val dataName = varchar("data_name", 32)
     val role = enumeration("role", Role::class)
     override val primaryKey = PrimaryKey(id)
 }
@@ -18,6 +19,7 @@ class Hero(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Hero>(Heroes)
 
     var name by Heroes.name
+    var dataName by Heroes.dataName
     var role by Heroes.role
 }
 

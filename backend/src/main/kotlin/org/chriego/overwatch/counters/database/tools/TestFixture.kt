@@ -20,14 +20,17 @@ object TestFixture : Fixture() {
         }
         val ana = Hero.new {
             name = "Ana"
+            dataName = "ana"
             role = Role.Support
         }
         val reaper = Hero.new {
             name = "Reaper"
+            dataName = "reaper"
             role = Role.Damage
         }
         val reinhardt = Hero.new {
             name = "Reinhardt"
+            dataName = "reinhardt"
             role = Role.Tank
         }
         val anaReinEval = MatchupEvaluation.new {
