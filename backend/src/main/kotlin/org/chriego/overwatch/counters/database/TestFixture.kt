@@ -1,5 +1,6 @@
 package org.chriego.overwatch.counters.database
 
+import org.chriego.overwatch.counters.Ability
 import org.chriego.overwatch.counters.Hero
 import org.chriego.overwatch.counters.database.tools.Fixture
 import org.jetbrains.exposed.sql.Transaction
@@ -19,6 +20,9 @@ object TestFixture : Fixture() {
             date = LocalDate.of(2020, 2, 10)
         }
         Hero.values().forEach {
+            it.createRecord()
+        }
+        Ability.values().forEach {
             it.createRecord()
         }
         val ana = Hero.Ana.dao
@@ -46,14 +50,8 @@ object TestFixture : Fixture() {
             ip = "127.0.0.1"
             patch = winterMadnessPatch
         }
-        val bioticGrenade = Ability.new {
-            name = "Biotic grenade"
-            hero = ana
-        }
-        val sleepDart = Ability.new {
-            name = "Sleep dart"
-            hero = ana
-        }
+        val bioticGrenade = Ability.BioticGrenade.dao
+        val sleepDart = Ability.SleepDart.dao
         val anaReinGrenadeEval = AbilityUseEvaluation.new {
             ability = bioticGrenade
             `object` = reinhardt

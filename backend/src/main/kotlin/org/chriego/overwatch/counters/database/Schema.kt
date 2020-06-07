@@ -77,6 +77,7 @@ class Patch(id: EntityID<Int>) : IntEntity(id) {
 
 object Abilities : IntIdTable() {
     val name = varchar("name", 32)
+    val dataName = varchar("data_name", 32)
     val heroId = reference("hero_id", Heroes.id)
     val removedAtPatchId = reference("removed_at_version_id", Patches.id).nullable()
 }
@@ -85,6 +86,7 @@ class Ability(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Ability>(Abilities)
 
     var name by Abilities.name
+    var dataName by Abilities.dataName
     var hero by Hero referencedOn Abilities.heroId
     var removedAtPatch by Patch optionalReferencedOn Abilities.removedAtPatchId
 }
