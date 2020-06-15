@@ -16,19 +16,27 @@
     import {VueHammer} from 'vue2-hammer';
     import flexTouch from 'vue-flex-touch';
     import MatchupEvaluation from "./MatchupEvaluation.vue";
+
     import heroes from "../js/heroes";
+    import TopicComments from "./TopicComments.vue";
+    import Topic from "../js/Topic";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
     export default {
         methods: {},
         data() {
+
+            const subject = heroes.find(h => h.dataName === 'pharah');
+            const object = heroes.find(h => h.dataName === 'mei');
             return {
-                subject: heroes.find(h => h.dataName === 'pharah'),
-                object: heroes.find(h => h.dataName === 'mei')
+                subject: subject,
+                object: object,
+                topic: new Topic([subject, object]),
             };
         },
         components: {
+            TopicComments: TopicComments,
             MatchupEvaluation: MatchupEvaluation,
             CountersPractice: CountersPractice,
             AdsensePlaceholder: AdsensePlaceholder,
