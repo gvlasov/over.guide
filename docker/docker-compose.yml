@@ -12,3 +12,36 @@ services:
       MYSQL_ROOT_PASSWORD: "1"
       MYSQL_DATABASE: "overwatch"
       MYSQL_INITDB_SKIP_TZINFO: "1"
+  remark:
+    build: ../../remark42/
+    #    image: umputun/remark42:v1.6.0
+    container_name: "remark42"
+    hostname: "remark42"
+    restart: always
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    # uncomment to expose directly (no proxy)
+    ports:
+      - "8081:8080"
+      - "8443:8443"
+
+    environment:
+      - REMARK_URL=https://localhost:8443
+      - SECRET=12345
+      - STORE_BOLT_PATH=/srv/var/db
+      - BACKUP_PATH=/srv/var/backup
+      - DEBUG=true
+      - SITE=overwatch_compendium
+      - AUTH_BATTLENET_CID=9b012b6e1edf492085cfc5eded56adae
+      - AUTH_BATTLENET_CSEC=Rif8Ug708T47DUw7rxftqCOuonwgETOu
+      - ADMIN_PASSWD=password
+      - SSL_TYPE=static
+      - SSL_CERT=/cert.pem
+      - SSL_KEY=/key.pem
+    volumes:
+      - ./var:/srv/var
