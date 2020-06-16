@@ -1,10 +1,21 @@
 <template>
     <div class="app">
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
-        <MatchupEvaluation
-                :subject="subject"
-                :object="object"
-        />
+        <div>
+            <YoutubeVideo
+                    :videoId="'XlUXWvTp0Bg'"
+                    :start="10"
+                    :loop="true"
+                    :autoplay="true"
+            />
+            <YoutubeVideo
+                    :videoId="'FktsFcooIG8'"
+                    :start="16"
+                    :end="17"
+                    :loop="true"
+                    :autoplay="true"
+            />
+        </div>
     </div>
 </template>
 
@@ -18,8 +29,8 @@
     import MatchupEvaluation from "./MatchupEvaluation.vue";
 
     import heroes from "../js/heroes";
-    import TopicComments from "./TopicComments.vue";
     import Topic from "../js/Topic";
+    import YoutubeVideo from "./YoutubeVideo.vue";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -36,7 +47,7 @@
             };
         },
         components: {
-            TopicComments: TopicComments,
+            YoutubeVideo: YoutubeVideo,
             MatchupEvaluation: MatchupEvaluation,
             CountersPractice: CountersPractice,
             AdsensePlaceholder: AdsensePlaceholder,
