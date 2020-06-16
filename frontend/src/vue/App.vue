@@ -1,21 +1,7 @@
 <template>
     <div class="app">
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
-        <div>
-            <YoutubeVideo
-                    :videoId="'XlUXWvTp0Bg'"
-                    :start="10"
-                    :loop="true"
-                    :autoplay="true"
-            />
-            <YoutubeVideo
-                    :videoId="'FktsFcooIG8'"
-                    :start="16"
-                    :end="17"
-                    :loop="true"
-                    :autoplay="true"
-            />
-        </div>
+        <YoutubeExcerptEditor/>
     </div>
 </template>
 
@@ -30,7 +16,7 @@
 
     import heroes from "../js/heroes";
     import Topic from "../js/Topic";
-    import YoutubeVideo from "./YoutubeVideo.vue";
+    import YoutubeExcerptEditor from "./YoutubeExcerptEditor.vue";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -47,7 +33,7 @@
             };
         },
         components: {
-            YoutubeVideo: YoutubeVideo,
+            YoutubeExcerptEditor: YoutubeExcerptEditor,
             MatchupEvaluation: MatchupEvaluation,
             CountersPractice: CountersPractice,
             AdsensePlaceholder: AdsensePlaceholder,
