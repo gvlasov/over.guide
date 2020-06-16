@@ -13,8 +13,8 @@ services:
       MYSQL_DATABASE: "overwatch"
       MYSQL_INITDB_SKIP_TZINFO: "1"
   remark:
-    build: ../../remark42/
-    #    image: umputun/remark42:v1.6.0
+    #    build: ../../remark42/
+    image: umputun/remark42:latest
     container_name: "remark42"
     hostname: "remark42"
     restart: always
