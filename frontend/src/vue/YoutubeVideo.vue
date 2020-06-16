@@ -3,6 +3,8 @@
 </template>
 
 <script>
+    var player;
+    var timeout;
     export default {
         name: 'YoutubeVideo',
         props: {
@@ -24,12 +26,45 @@
             autoplay: {
                 type: Boolean,
                 default: false,
+            },
+        },
+        methods: {
+            rescheduleLooping() {
+                if (this.end !== null) {
+                    this.tryClearingLoopTimeout();
+                    timeout = setTimeout(
+                        () => this.goToLoopStart(),
+                        (this.end - player.getCurrentTime()) * 1000 - 10
+                    );
+                }
+            },
+            tryClearingLoopTimeout() {
+                if (typeof timeout !== 'undefined') {
+                    clearTimeout(timeout);
+                }
+            },
+            goToLoopStart() {
+                player.seekTo(this.start);
             }
         },
-        methods: {},
         computed: {
             elementId() {
                 return 'youtube-player-' + this.videoId;
+            },
+        },
+        watch: {
+            start(value) {
+                player.seekTo(value);
+            },
+            end(value) {
+                this.rescheduleLooping()
+            },
+            loop(value) {
+                if (value === false) {
+                    this.tryClearingLoopTimeout();
+                } else {
+                    this.rescheduleLooping();
+                }
             },
         },
         mounted() {
@@ -38,61 +73,46 @@
             script.src = 'https://www.youtube.com/iframe_api';
             script.defer = true;
             (document.head || document.body).appendChild(script);
-
-            var player;
-            var timeout;
-
-            function onPlayerReady(event) {
-                goToLoopStart();
-                if (self.autoplay) {
-                    player.playVideo();
-                }
-            }
-
-            function tryClearingLoopTimeout() {
-                if (typeof timeout !== 'undefined') {
-                    clearTimeout(timeout);
-                }
-            }
-
-            function goToLoopStart() {
-                player.seekTo(self.start);
-            }
-
-            function onPlayerStateChange(event) {
-                if (event.data === YT.PlayerState.PLAYING) {
-                    if (self.end !== null) {
-                        tryClearingLoopTimeout();
-                        timeout = setTimeout(
-                            goToLoopStart,
-                            (self.end - player.getCurrentTime()) * 1000
-                        );
-                    }
-                } else if (event.data === YT.PlayerState.PAUSED) {
-                    tryClearingLoopTimeout();
-                }
-            }
-
             script.onload = function () {
                 window.YT.ready(function () {
                     player = new YT.Player(self.elementId, {
+                        videoId: self.videoId,
+                        playerVars: {
+                            modestbranding: 1,
+                            rel: 0,
+                            showinfo: 0,
+                            start: 3,
+                            end: 20,
+                        },
                         height: '390',
                         width: '640',
-                        videoId: self.videoId,
-                        startSeconds: self.start,
-                        endSeconds: self.end,
                         events: {
-                            'onReady': onPlayerReady,
-                            'onStateChange': onPlayerStateChange
+                            'onReady': (event) => {
+                                self.goToLoopStart();
+                                if (self.autoplay) {
+                                    player.playVideo();
+                                }
+                                self.$emit('playerReady', player)
+                            },
+                            'onStateChange': (event) => {
+                                if (event.data === YT.PlayerState.PLAYING) {
+                                    self.rescheduleLooping()
+                                } else if (event.data === YT.PlayerState.PAUSED) {
+                                    self.tryClearingLoopTimeout();
+                                }
+                            }
                         }
                     });
                 });
             };
-        },
+        }
+        ,
         data() {
             return {}
-        },
-    };
+        }
+        ,
+    }
+    ;
 
 </script>
 
