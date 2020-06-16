@@ -16,12 +16,21 @@
                     :loop="loop"
                     @playerReady="onPlayerReady"
             />
+            <div>
+                <ExcerptTimebar
+                        :start-seconds="1"
+                        :end-seconds="10"
+                        :current-seconds="4"
+                        :duration-seconds="10"
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import YoutubeVideo from "./YoutubeVideo.vue";
+    import ExcerptTimebar from "./ExcerptTimebar.vue";
 
     export default {
         name: 'YoutubeExcerptEditor',
@@ -36,7 +45,8 @@
         },
         data() {
             return {
-                videoUrl: 'https://www.youtube.com/watch?v=l6Wx75RYBEM',
+                // videoUrl: 'https://www.youtube.com/watch?v=l6Wx75RYBEM',
+                videoUrl: '',
                 startSeconds: 8,
                 endSeconds: 9,
                 durationSeconds: null,
@@ -78,7 +88,8 @@
         mounted() {
         },
         components: {
-            YoutubeVideo: YoutubeVideo
+            YoutubeVideo: YoutubeVideo,
+            ExcerptTimebar: ExcerptTimebar
         }
     };
 
