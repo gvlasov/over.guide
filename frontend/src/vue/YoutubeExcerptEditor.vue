@@ -29,6 +29,7 @@
                         @mouseenter.native="hovered = true"
                         @mouseleave.native="hovered = false"
                         :enable-slider-label="hovered"
+                        @dragEnd="onDragEnd"
                 />
             </div>
         </div>
@@ -64,6 +65,12 @@
             onSkip() {
 
             },
+            onDragEnd(drag) {
+                const start = Math.min(drag.start, drag.end);
+                const end = Math.max(drag.start, drag.end);
+                this.startSeconds = this.durationSeconds * start;
+                this.endSeconds = this.durationSeconds * end;
+            },
             onPause() {
                 this.currentSeconds = this.player.getCurrentTime();
                 this.playing = false;
@@ -71,7 +78,7 @@
                     clearInterval(this.interval);
                     this.interval = null;
                 }
-            }
+            },
         },
         data() {
             return {

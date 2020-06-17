@@ -1,8 +1,14 @@
 <template>
-    <div class="wrap">
+    <div
+            @mousedown="onDragStart"
+            @mouseup="onDragEnd"
+            @mousemove="onMouseMove"
+            class="wrap"
+            ref="wrap"
+    >
         <div class="excerpt-area" v-bind:style="{ width: excerptWidthPercent+'%', left: excerptStartPercent + '%' }">
-            <div class="excerpt-start">{{ formatTimeLabel(startSeconds) }}</div>
-            <div class="excerpt-end">{{ formatTimeLabel(endSeconds) }}</div>
+            <div class="excerpt-start">{{ formatTimeLabel(startSecondsVisual) }}</div>
+            <div class="excerpt-end">{{ formatTimeLabel(endSecondsVisual) }}</div>
         </div>
         <div class="slider" v-bind:style="{ left: sliderPositionPercent+'%' }">
             <div
@@ -38,24 +44,86 @@
         methods: {
             formatTimeLabel(seconds) {
                 return seconds.toFixed(2);
-            }
+            },
+            onDragStart(e) {
+                this.isDragging = true;
+                this.dragStart = this.dragPosition(e);
+                this.currentDragPosition = this.dragStart;
+            },
+            dragPosition(e) {
+                const timebarRect = this.$refs.wrap.getBoundingClientRect();
+                return (e.clientX - timebarRect.x) / timebarRect.width;
+            },
+            onDragEnd(e) {
+                this.isDragging = false;
+                this.$emit(
+                    'dragEnd',
+                    {
+                        start: this.dragStart,
+                        end: this.dragPosition(e)
+                    }
+                );
+                this.currentDragPosition = null;
+            },
+            onMouseMove(e) {
+                if (!this.isDragging) {
+                    return;
+                }
+                this.currentDragPosition = this.dragPosition(e);
+                this.$emit(
+                    'dragContinue',
+                    {
+                        start: this.dragStart,
+                        end: this.currentDragPosition
+                    }
+                );
+            },
         },
         computed: {
             excerptWidthPercent() {
-                return (this.endSeconds - this.startSeconds) / this.durationSeconds * 100;
+                return (this.endSecondsVisual - this.startSecondsVisual) / this.durationSeconds * 100;
             },
             excerptStartPercent() {
-                return this.startSeconds / this.durationSeconds * 100;
+                return this.startSecondsVisual / this.durationSeconds * 100;
             },
             sliderPositionPercent() {
                 return this.currentSeconds / this.durationSeconds * 100;
+            },
+            /**
+             * @returns {number}
+             */
+            startSecondsVisual() {
+                if (this.isDragging) {
+                    return Math.min(this.dragStart, this.currentDragPosition) * this.durationSeconds;
+                } else {
+                    return this.startSeconds;
+                }
+            },
+            /**
+             * @returns {number}
+             */
+            endSecondsVisual() {
+                if (this.isDragging) {
+                    return Math.max(this.dragStart, this.currentDragPosition) * this.durationSeconds;
+                } else {
+                    return this.endSeconds;
+                }
+            },
+            /**
+             * @returns {boolean}
+             */
+            isDragging() {
+                return this.currentDragPosition !== null;
             }
         },
         watch: {},
         mounted() {
         },
         data() {
-            return {}
+            return {
+                currentDragPosition: null,
+                dragStart: null
+            }
         },
     };
 </script>
