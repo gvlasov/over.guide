@@ -153,6 +153,15 @@
             }
         },
         mounted() {
+            const self = this;
+            document.addEventListener('paste', (event) => {
+                console.log(document.activeElement);
+                if (document.activeElement === document.body) {
+                    const clipboardContent =
+                        (event.clipboardData || window.clipboardData).getData('text');
+                    self.videoUrl = clipboardContent;
+                }
+            });
         },
         components: {
             YoutubeVideo: YoutubeVideo,
