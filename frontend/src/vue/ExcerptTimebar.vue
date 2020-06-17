@@ -58,7 +58,13 @@
             },
             dragPosition(e) {
                 const timebarRect = this.$refs.wrap.getBoundingClientRect();
-                return (e.clientX - timebarRect.x) / timebarRect.width;
+                return Math.min(
+                    Math.max(
+                        (e.clientX - timebarRect.x) / timebarRect.width,
+                        0
+                    ),
+                    1.0
+                )
             },
             onDragEnd(e) {
                 this.$emit(
