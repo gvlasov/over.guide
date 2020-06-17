@@ -5,6 +5,7 @@
             <label>Start, s<input v-model.number="startSeconds" type="number" step=".05"/></label>
             <label>End, s<input v-model.number="endSeconds" type="number" step=".05"/></label>
             <label>Loop<input v-model="loop" type="checkbox"/></label>
+            <div>Tip: paste video URL anywhere on this page to load the video!</div>
         </div>
         <div>
             <YoutubeVideo
@@ -143,7 +144,6 @@
                 if (match === null || typeof match[1] == 'undefined') {
                     return null;
                 }
-                console.log('new video id ' + match[1]);
                 return match[1];
             },
             /**
