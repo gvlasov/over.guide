@@ -111,6 +111,7 @@
                 playing: false,
                 hovered: false,
                 playerHasBeenPlaying: null,
+                pasteHandler: null,
             }
         },
         watch: {
@@ -154,14 +155,20 @@
         },
         mounted() {
             const self = this;
-            document.addEventListener('paste', (event) => {
+            this.pasteHandler = (event) => {
                 console.log(document.activeElement);
                 if (document.activeElement === document.body) {
                     const clipboardContent =
                         (event.clipboardData || window.clipboardData).getData('text');
                     self.videoUrl = clipboardContent;
                 }
-            });
+            };
+            document.addEventListener('paste', this.pasteHandler);
+        },
+        beforeDestroy() {
+            if (this.pasteHandler !== null) {
+                document.removeEventListener('paste', this.pasteHandler);
+            }
         },
         components: {
             YoutubeVideo: YoutubeVideo,
