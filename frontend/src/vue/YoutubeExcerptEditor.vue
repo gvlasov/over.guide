@@ -29,7 +29,9 @@
                         @mouseenter.native="hovered = true"
                         @mouseleave.native="hovered = false"
                         :enable-slider-label="hovered"
+                        @dragStart="onDragStart"
                         @dragEnd="onDragEnd"
+                        @dragContinue="onDragContinue"
                 />
             </div>
         </div>
@@ -65,11 +67,27 @@
             onSkip() {
 
             },
+            onDragStart(drag) {
+                this.player.pauseVideo();
+                this.playerHasBeenPlaying = this.player.getPlayerState() === YT.PlayerState.PLAYING;
+                this.player.seekTo(drag.start * this.durationSeconds);
+            },
+            onDragContinue(drag) {
+                this.setBoundsFromDrag(drag);
+                this.player.seekTo(drag.end * this.durationSeconds);
+            },
             onDragEnd(drag) {
+                this.setBoundsFromDrag(drag);
+                if (this.playerHasBeenPlaying) {
+                    this.player.playVideo();
+                    this.playerHasBeenPlaying = null;
+                }
+            },
+            setBoundsFromDrag(drag) {
                 const start = Math.min(drag.start, drag.end);
                 const end = Math.max(drag.start, drag.end);
-                this.startSeconds = this.durationSeconds * start;
-                this.endSeconds = this.durationSeconds * end;
+                this.startSeconds = Number.parseFloat((this.durationSeconds * start).toFixed(2));
+                this.endSeconds = Number.parseFloat((this.durationSeconds * end).toFixed(2));
             },
             onPause() {
                 this.currentSeconds = this.player.getCurrentTime();
@@ -92,6 +110,7 @@
                 loop: true,
                 playing: false,
                 hovered: false,
+                playerHasBeenPlaying: null,
             }
         },
         watch: {

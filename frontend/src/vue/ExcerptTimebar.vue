@@ -46,16 +46,21 @@
                 return seconds.toFixed(2);
             },
             onDragStart(e) {
-                this.isDragging = true;
                 this.dragStart = this.dragPosition(e);
                 this.currentDragPosition = this.dragStart;
+                for (let element of document.getElementsByTagName('iframe')) {
+                    element.style.pointerEvents = 'none';
+                }
+                this.$emit('dragStart', {
+                    start: this.dragStart,
+                    end: this.dragStart,
+                });
             },
             dragPosition(e) {
                 const timebarRect = this.$refs.wrap.getBoundingClientRect();
                 return (e.clientX - timebarRect.x) / timebarRect.width;
             },
             onDragEnd(e) {
-                this.isDragging = false;
                 this.$emit(
                     'dragEnd',
                     {
@@ -64,6 +69,9 @@
                     }
                 );
                 this.currentDragPosition = null;
+                for (let element of document.getElementsByTagName('iframe')) {
+                    element.style.pointerEvents = 'auto';
+                }
             },
             onMouseMove(e) {
                 if (!this.isDragging) {
@@ -118,11 +126,26 @@
         },
         watch: {},
         mounted() {
+            const self = this;
+            this.mousemove = (e) => {
+                self.onMouseMove(e);
+            };
+            this.mouseup = (e) => {
+                self.onDragEnd(e);
+            };
+            window.addEventListener('mousemove', this.mousemove);
+            window.addEventListener('mouseup', this.mouseup);
+        },
+        beforeDestroy() {
+            window.removeEventListener('mousemove', this.mousemove);
+            window.removeEventListener('mouseup', this.mouseup);
         },
         data() {
             return {
                 currentDragPosition: null,
-                dragStart: null
+                dragStart: null,
+                mousemove: null,
+                mouseup: null,
             }
         },
     };
