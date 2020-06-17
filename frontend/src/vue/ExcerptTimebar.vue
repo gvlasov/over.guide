@@ -137,6 +137,9 @@
                 self.onMouseMove(e);
             };
             this.mouseup = (e) => {
+                if (!self.isDragging) {
+                    return
+                }
                 self.onDragEnd(e);
             };
             window.addEventListener('mousemove', this.mousemove);
