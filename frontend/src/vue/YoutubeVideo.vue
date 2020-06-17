@@ -45,6 +45,50 @@
             },
             goToLoopStart() {
                 player.seekTo(this.start);
+            },
+            rebuildVideo(videoId) {
+                if (typeof player !== 'undefined') {
+                    player.destroy();
+                }
+                const self = this;
+                var script = document.createElement('script');
+                script.src = 'https://www.youtube.com/iframe_api';
+                script.defer = true;
+                (document.head || document.body).appendChild(script);
+                script.onload = function () {
+                    window.YT.ready(function () {
+                        player = new YT.Player(self.elementId, {
+                            videoId: videoId,
+                            playerVars: {
+                                modestbranding: 1,
+                                rel: 0,
+                                showinfo: 0,
+                                start: 3,
+                                end: 20,
+                            },
+                            height: '390',
+                            width: '640',
+                            events: {
+                                'onReady': (event) => {
+                                    self.goToLoopStart();
+                                    if (self.autoplay) {
+                                        player.playVideo();
+                                    }
+                                    self.$emit('playerReady', player)
+                                },
+                                'onStateChange': (event) => {
+                                    if (event.data === YT.PlayerState.PLAYING) {
+                                        self.rescheduleLooping();
+                                        self.$emit('play');
+                                    } else if (event.data === YT.PlayerState.PAUSED) {
+                                        self.tryClearingLoopTimeout();
+                                        self.$emit('pause');
+                                    }
+                                }
+                            }
+                        });
+                    });
+                };
             }
         },
         computed: {
@@ -57,7 +101,9 @@
                 player.seekTo(value);
             },
             end(value) {
-                this.rescheduleLooping()
+                if (typeof player !== 'undefined') {
+                    this.rescheduleLooping()
+                }
             },
             loop(value) {
                 if (value === false) {
@@ -66,47 +112,12 @@
                     this.rescheduleLooping();
                 }
             },
+            videoId(videoId) {
+                this.rebuildVideo(videoId);
+            }
         },
         mounted() {
-            const self = this;
-            var script = document.createElement('script');
-            script.src = 'https://www.youtube.com/iframe_api';
-            script.defer = true;
-            (document.head || document.body).appendChild(script);
-            script.onload = function () {
-                window.YT.ready(function () {
-                    player = new YT.Player(self.elementId, {
-                        videoId: self.videoId,
-                        playerVars: {
-                            modestbranding: 1,
-                            rel: 0,
-                            showinfo: 0,
-                            start: 3,
-                            end: 20,
-                        },
-                        height: '390',
-                        width: '640',
-                        events: {
-                            'onReady': (event) => {
-                                self.goToLoopStart();
-                                if (self.autoplay) {
-                                    player.playVideo();
-                                }
-                                self.$emit('playerReady', player)
-                            },
-                            'onStateChange': (event) => {
-                                if (event.data === YT.PlayerState.PLAYING) {
-                                    self.rescheduleLooping();
-                                    self.$emit('play');
-                                } else if (event.data === YT.PlayerState.PAUSED) {
-                                    self.tryClearingLoopTimeout();
-                                    self.$emit('pause');
-                                }
-                            }
-                        }
-                    });
-                });
-            };
+            this.rebuildVideo(this.videoId);
         },
         data() {
             return {}

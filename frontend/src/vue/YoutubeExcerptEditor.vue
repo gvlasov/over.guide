@@ -5,11 +5,9 @@
             <label>Start, s<input v-model.number="startSeconds" type="number" step=".05"/></label>
             <label>End, s<input v-model.number="endSeconds" type="number" step=".05"/></label>
             <label>Loop<input v-model="loop" type="checkbox"/></label>
-
         </div>
         <div>
             <YoutubeVideo
-                    v-if="videoId !== null"
                     :videoId="videoId"
                     :start="startSeconds"
                     :end="endSeconds"
@@ -54,6 +52,9 @@
                 this.durationSeconds = player.getDuration();
             },
             onPlay() {
+                // Duration may actually be slightly different
+                // after video starts playing
+                this.durationSeconds = this.player.getDuration();
                 this.currentSeconds = this.player.getCurrentTime();
                 this.playing = true;
                 const self = this;
@@ -102,8 +103,8 @@
             return {
                 videoUrl: 'https://www.youtube.com/watch?v=668nUCeBHyY',
                 // videoUrl: '',
-                startSeconds: 8,
-                endSeconds: 9,
+                startSeconds: 7,
+                endSeconds: 12,
                 durationSeconds: null,
                 currentSeconds: 0,
                 player: null,
@@ -139,9 +140,10 @@
                     return null;
                 }
                 var match = this.videoUrl.match(/v=([^&]+)/);
-                if (typeof match[1] == 'undefined') {
+                if (match === null || typeof match[1] == 'undefined') {
                     return null;
                 }
+                console.log('new video id ' + match[1]);
                 return match[1];
             },
             /**
