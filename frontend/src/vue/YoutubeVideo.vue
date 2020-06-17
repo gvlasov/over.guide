@@ -63,8 +63,6 @@
                                 modestbranding: 1,
                                 rel: 0,
                                 showinfo: 0,
-                                start: 3,
-                                end: 20,
                             },
                             height: '390',
                             width: '640',

@@ -45,11 +45,10 @@
         props: {},
         methods: {
             onPlayerReady(player) {
-                if (!this.loop) {
-                    this.end = player.getDuration();
-                }
                 this.player = player;
                 this.durationSeconds = player.getDuration();
+                this.startSeconds = 0;
+                this.endSeconds = player.getDuration();
             },
             onPlay() {
                 // Duration may actually be slightly different
