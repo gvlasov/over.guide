@@ -96,9 +96,11 @@
                             },
                             'onStateChange': (event) => {
                                 if (event.data === YT.PlayerState.PLAYING) {
-                                    self.rescheduleLooping()
+                                    self.rescheduleLooping();
+                                    self.$emit('play');
                                 } else if (event.data === YT.PlayerState.PAUSED) {
                                     self.tryClearingLoopTimeout();
+                                    self.$emit('pause');
                                 }
                             }
                         }

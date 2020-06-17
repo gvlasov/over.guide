@@ -1,11 +1,15 @@
 <template>
     <div class="wrap">
         <div class="excerpt-area" v-bind:style="{ width: excerptWidthPercent+'%', left: excerptStartPercent + '%' }">
-            <div class="excerpt-start">{{ startSeconds }}</div>
-            <div class="excerpt-end">{{ endSeconds }}</div>
+            <div class="excerpt-start">{{ formatTimeLabel(startSeconds) }}</div>
+            <div class="excerpt-end">{{ formatTimeLabel(endSeconds) }}</div>
         </div>
-        <div class="pointer" v-bind:style="{ left: pointerPositionPercent+'%' }">
-            <div class="pointer-label">{{ currentSeconds }}</div>
+        <div class="slider" v-bind:style="{ left: sliderPositionPercent+'%' }">
+            <div
+                    v-if="enableSliderLabel"
+                    class="slider-label"
+            >{{ formatTimeLabel(currentSeconds) }}
+            </div>
         </div>
     </div>
 </template>
@@ -25,9 +29,17 @@
             },
             durationSeconds: {
                 type: Number,
+            },
+            enableSliderLabel: {
+                type: Boolean,
+                default: false
             }
         },
-        methods: {},
+        methods: {
+            formatTimeLabel(seconds) {
+                return seconds.toFixed(2);
+            }
+        },
         computed: {
             excerptWidthPercent() {
                 return (this.endSeconds - this.startSeconds) / this.durationSeconds * 100;
@@ -35,7 +47,7 @@
             excerptStartPercent() {
                 return this.startSeconds / this.durationSeconds * 100;
             },
-            pointerPositionPercent() {
+            sliderPositionPercent() {
                 return this.currentSeconds / this.durationSeconds * 100;
             }
         },
@@ -83,19 +95,19 @@
         transform: translateX(50%);
     }
 
-    .pointer {
-        width: 4px;
+    .slider {
+        width: 2px;
         background-color: black;
         height: 100%;
         position: absolute;
         transform: translateX(-50%);
     }
 
-    .pointer-label {
+    .slider-label {
         background-color: white;
         width: auto;
         display: inline-block;
-        margin-left: -100%;
-        margin-right: -100%;
+        text-align: center;
+        transform: translateX(-50%);
     }
 </style>

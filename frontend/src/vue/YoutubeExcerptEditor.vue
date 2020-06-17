@@ -15,13 +15,20 @@
                     :end="endSeconds"
                     :loop="loop"
                     @playerReady="onPlayerReady"
+                    @play="onPlay"
+                    @pause="onPause"
+                    @skip="onSkip"
             />
             <div>
                 <ExcerptTimebar
-                        :start-seconds="1"
-                        :end-seconds="10"
-                        :current-seconds="4"
-                        :duration-seconds="10"
+                        v-if="isVideoLoaded"
+                        :start-seconds="startSeconds"
+                        :end-seconds="endSeconds"
+                        :current-seconds="currentSeconds"
+                        :duration-seconds="durationSeconds"
+                        @mouseenter.native="hovered = true"
+                        @mouseleave.native="hovered = false"
+                        :enable-slider-label="hovered"
                 />
             </div>
         </div>
@@ -40,17 +47,44 @@
                 if (!this.loop) {
                     this.end = player.getDuration();
                 }
+                this.player = player;
                 this.durationSeconds = player.getDuration();
+            },
+            onPlay() {
+                this.currentSeconds = this.player.getCurrentTime();
+                this.playing = true;
+                const self = this;
+                this.interval = setInterval(
+                    function () {
+                        self.currentSeconds = self.player.getCurrentTime();
+                    },
+                    16
+                );
+            },
+            onSkip() {
+
+            },
+            onPause() {
+                this.currentSeconds = this.player.getCurrentTime();
+                this.playing = false;
+                if (this.interval !== null) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
             }
         },
         data() {
             return {
-                // videoUrl: 'https://www.youtube.com/watch?v=l6Wx75RYBEM',
-                videoUrl: '',
+                videoUrl: 'https://www.youtube.com/watch?v=668nUCeBHyY',
+                // videoUrl: '',
                 startSeconds: 8,
                 endSeconds: 9,
                 durationSeconds: null,
+                currentSeconds: 0,
+                player: null,
                 loop: true,
+                playing: false,
+                hovered: false,
             }
         },
         watch: {
@@ -84,6 +118,12 @@
                 }
                 return match[1];
             },
+            /**
+             * @return {boolean}
+             */
+            isVideoLoaded() {
+                return this.videoId !== null;
+            }
         },
         mounted() {
         },
