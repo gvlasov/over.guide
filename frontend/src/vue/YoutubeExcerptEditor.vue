@@ -136,11 +136,6 @@
                     this.endSeconds = value + 1;
                 }
             },
-            loop(value) {
-                if (value === false) {
-                    this.endSeconds = this.durationSeconds;
-                }
-            },
             endSeconds(value) {
                 if (this.loop) {
                     this.loop = true;
