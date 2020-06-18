@@ -46,7 +46,6 @@
                         .evaluateMatchup(this.subject, this.object)
                         .then(evaluation => {
                             self.evaluation = evaluation;
-                            console.log(self.evaluation);
                         });
             }
         },

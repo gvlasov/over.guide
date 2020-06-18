@@ -195,7 +195,6 @@
         mounted() {
             const self = this;
             this.pasteHandler = (event) => {
-                console.log(document.activeElement);
                 if (document.activeElement === document.body) {
                     const clipboardContent =
                         (event.clipboardData || window.clipboardData).getData('text');

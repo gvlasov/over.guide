@@ -127,7 +127,6 @@
                         'totalValueSecondsChange',
                         newValue
                     );
-                    console.log(newValue);
                 }
             },
         },
