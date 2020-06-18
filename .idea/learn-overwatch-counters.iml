@@ -4,7 +4,7 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$/frontend">
       <sourceFolder url="file://$MODULE_DIR$/frontend/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/frontend/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/frontend/test" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/build" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/dist" />
     </content>
