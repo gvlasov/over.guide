@@ -2,9 +2,19 @@
     <div class="wrap">
         <div class="controls">
             <label>URL<input v-model.trim="videoUrl"/></label>
-            <label>Start, s<input v-model.number="startSeconds" type="number" step=".05"/></label>
-            <label>End, s<input v-model.number="endSeconds" type="number" step=".05"/></label>
-            <label>Loop<input v-model="loop" type="checkbox"/></label>
+            <label v-if="isVideoLoaded">Start, s
+                <PreciseTimeInput
+                        v-model="startSeconds"
+                        :show-hours="durationSeconds > 3600"
+                />
+            </label>
+            <label v-if="isVideoLoaded">End, s
+                <PreciseTimeInput
+                        v-model="endSeconds"
+                        :show-hours="durationSeconds > 3600"
+                />
+            </label>
+            <label v-if="isVideoLoaded">Loop<input v-model="loop" type="checkbox"/></label>
             <div>Tip: paste video URL anywhere on this page to load the video!</div>
         </div>
         <div>
@@ -40,6 +50,7 @@
 <script>
     import YoutubeVideo from "./YoutubeVideo.vue";
     import ExcerptTimebar from "./ExcerptTimebar.vue";
+    import PreciseTimeInput from "./PreciseTimeInput.vue";
 
     export default {
         name: 'YoutubeExcerptEditor',
@@ -171,6 +182,7 @@
             }
         },
         components: {
+            PreciseTimeInput: PreciseTimeInput,
             YoutubeVideo: YoutubeVideo,
             ExcerptTimebar: ExcerptTimebar
         }
