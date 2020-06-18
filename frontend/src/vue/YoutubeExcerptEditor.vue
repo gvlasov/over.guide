@@ -6,12 +6,14 @@
                 <PreciseTimeInput
                         v-model="startSecondsValidated"
                         :show-hours="durationSeconds > 3600"
+                        :current-time-seconds="currentSeconds"
                 />
             </label>
             <label v-if="isVideoLoaded">End, s
                 <PreciseTimeInput
                         v-model="endSecondsValidated"
                         :show-hours="durationSeconds > 3600"
+                        :current-time-seconds="currentSeconds"
                 />
             </label>
             <label v-if="isVideoLoaded">Loop<input v-model="loop" type="checkbox"/></label>
