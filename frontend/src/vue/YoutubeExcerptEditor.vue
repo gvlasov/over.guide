@@ -35,6 +35,7 @@
                         v-model="startSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
+                        :max-seconds="durationSeconds"
                 />
                 <div class="crop-buttons">
                     <button
@@ -61,6 +62,7 @@
                         v-model="endSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
+                        :max-seconds="durationSeconds"
                 />
             </div>
         </div>
@@ -91,6 +93,7 @@
                 this.durationSeconds = player.getDuration();
                 this.startSeconds = 0;
                 this.endSeconds = player.getDuration();
+                this.isVideoLoaded = true;
             },
             onPlay() {
                 // Duration may actually be slightly different
@@ -154,6 +157,7 @@
                 hovered: false,
                 playerHasBeenPlaying: null,
                 pasteHandler: null,
+                isVideoLoaded: false,
             }
         },
         watch: {
@@ -165,6 +169,9 @@
                     this.endSeconds = value + 1;
                 }
             },
+            videoId(value) {
+                this.isVideoLoaded = false;
+            }
         },
         computed: {
             startSecondsValidated: {
@@ -207,12 +214,6 @@
                 }
                 return match[1];
             },
-            /**
-             * @return {boolean}
-             */
-            isVideoLoaded() {
-                return this.videoId !== null;
-            }
         },
         mounted() {
             const self = this;

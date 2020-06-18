@@ -2,44 +2,76 @@
     <div class="wrap">
         <span v-if="showHours">
             <div class="time-part-wrap">
-                <button class="add-button" @click="hours += 1"></button>
+                <button
+                        class="add-button"
+                        @click="hours += 1"
+                        v-bind:disabled="totalValueSeconds === maxSeconds"
+                ></button>
                 <input
                         type="text"
                         v-model.number="hours"
                         size="2"
                 />
-                <button class="subtract-button" @click="hours -= 1"></button>
+                <button
+                        class="subtract-button"
+                        @click="hours -= 1"
+                        v-bind:disabled="totalValueSeconds === 0"
+                ></button>
             </div>
             :
         </span>
         <div class="time-part-wrap">
-            <button class="add-button" @click="minutes += 1"></button>
+            <button
+                    class="add-button"
+                    @click="minutes += 1"
+                    v-bind:disabled="totalValueSeconds === maxSeconds"
+            ></button>
             <input
                     type="text"
                     v-model.number="minutes"
                     size="2"
             />
-            <button class="subtract-button" @click="minutes -= 1"></button>
+            <button
+                    class="subtract-button"
+                    @click="minutes -= 1"
+                    v-bind:disabled="totalValueSeconds === 0"
+            ></button>
         </div>
         :
         <div class="time-part-wrap">
-            <button class="add-button" @click="seconds += 1"></button>
+            <button
+                    class="add-button"
+                    @click="seconds += 1"
+                    v-bind:disabled="totalValueSeconds === maxSeconds"
+            ></button>
             <input
                     type="text"
                     v-model.number="seconds"
                     size="2"
             />
-            <button class="subtract-button" @click="seconds -= 1"></button>
+            <button
+                    class="subtract-button"
+                    @click="seconds -= 1"
+                    v-bind:disabled="totalValueSeconds === 0"
+            ></button>
         </div>
         .
         <div class="time-part-wrap">
-            <button class="add-button" @click="millis += 25"></button>
+            <button
+                    class="add-button"
+                    @click="millis += 25"
+                    v-bind:disabled="totalValueSeconds === maxSeconds"
+            ></button>
             <input
                     type="text"
                     v-model.number="millis"
                     size="3"
             />
-            <button class="subtract-button" @click="millis -= 25" v-bind:disabled="millis === 0"></button>
+            <button
+                    class="subtract-button"
+                    @click="millis -= 25"
+                    v-bind:disabled="totalValueSeconds === 0"
+            ></button>
         </div>
     </div>
 </template>
@@ -52,10 +84,29 @@
             event: 'totalValueSecondsChange',
         },
         props: {
-            totalValueSeconds: Number,
+            totalValueSeconds: {
+                type: Number,
+                required: true,
+            },
+            maxSeconds: {
+                type: Number,
+                required: true,
+            },
             showHours: Boolean,
         },
         methods: {
+            setNewTotalSeconds(value) {
+                if (value === '') {
+                    return;
+                }
+                let newTotalSeconds = value
+                if (newTotalSeconds > this.maxSeconds) {
+                    newTotalSeconds = this.maxSeconds;
+                } else if (newTotalSeconds < 0) {
+                    newTotalSeconds = 0;
+                }
+                this.$emit('totalValueSecondsChange', newTotalSeconds);
+            },
         },
         computed: {
             hours: {
@@ -65,11 +116,7 @@
                     );
                 },
                 set(value) {
-                    if (value === '') {
-                        return;
-                    }
-                    this.$emit(
-                        'totalValueSecondsChange',
+                    this.setNewTotalSeconds(
                         value * 3600 + this.minutes * 60 + this.seconds + this.millis / 1000
                     );
                 }
@@ -81,11 +128,7 @@
                     );
                 },
                 set(value) {
-                    if (value === '') {
-                        return;
-                    }
-                    this.$emit(
-                        'totalValueSecondsChange',
+                    this.setNewTotalSeconds(
                         this.hours * 3600 + value * 60 + this.seconds + this.millis / 1000
                     );
                 }
@@ -97,11 +140,7 @@
                     );
                 },
                 set(value) {
-                    if (value === '') {
-                        return;
-                    }
-                    this.$emit(
-                        'totalValueSecondsChange',
+                    this.setNewTotalSeconds(
                         this.hours * 3600 + this.minutes * 60 + value + this.millis / 1000
                     );
                 }
@@ -111,13 +150,8 @@
                     return Math.round(((this.totalValueSeconds % 1) * 1000));
                 },
                 set(value) {
-                    if (value === '') {
-                        return;
-                    }
-                    const newValue = this.hours * 3600 + this.minutes * 60 + this.seconds + value / 1000;
-                    this.$emit(
-                        'totalValueSecondsChange',
-                        newValue
+                    this.setNewTotalSeconds(
+                        this.hours * 3600 + this.minutes * 60 + this.seconds + value / 1000
                     );
                 }
             },
