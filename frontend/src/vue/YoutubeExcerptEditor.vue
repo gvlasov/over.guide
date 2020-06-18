@@ -5,7 +5,7 @@
                     :videoId="videoId"
                     :start="startSeconds"
                     :end="endSeconds"
-                    :loop="loop"
+                    :loop="true"
                     @playerReady="onPlayerReady"
                     @play="onPlay"
                     @pause="onPause"
@@ -35,7 +35,6 @@
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
                 />
-                <label v-if="isVideoLoaded">Loop<input v-model="loop" type="checkbox"/></label>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="endSecondsValidated"
@@ -120,7 +119,6 @@
                 durationSeconds: null,
                 currentSeconds: 0,
                 player: null,
-                loop: true,
                 playing: false,
                 hovered: false,
                 playerHasBeenPlaying: null,
@@ -136,11 +134,6 @@
                     this.endSeconds = value + 1;
                 }
             },
-            endSeconds(value) {
-                if (this.loop) {
-                    this.loop = true;
-                }
-            }
         },
         computed: {
             startSecondsValidated: {
