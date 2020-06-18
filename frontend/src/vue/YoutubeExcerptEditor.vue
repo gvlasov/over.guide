@@ -4,13 +4,13 @@
             <label>URL<input v-model.trim="videoUrl"/></label>
             <label v-if="isVideoLoaded">Start, s
                 <PreciseTimeInput
-                        v-model="startSeconds"
+                        v-model="startSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                 />
             </label>
             <label v-if="isVideoLoaded">End, s
                 <PreciseTimeInput
-                        v-model="endSeconds"
+                        v-model="endSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                 />
             </label>
@@ -51,6 +51,7 @@
     import YoutubeVideo from "./YoutubeVideo.vue";
     import ExcerptTimebar from "./ExcerptTimebar.vue";
     import PreciseTimeInput from "./PreciseTimeInput.vue";
+    import formatInterval from "../js/utils/format-interval";
 
     export default {
         name: 'YoutubeExcerptEditor',
@@ -147,6 +148,27 @@
             }
         },
         computed: {
+            startSecondsValidated: {
+                get() {
+                    return this.startSeconds;
+                },
+                set(value) {
+                    if (this.endSeconds > value) {
+                        this.startSeconds = value
+                    }
+                }
+            },
+            endSecondsValidated: {
+                get() {
+                    return this.endSeconds;
+                },
+                set(value) {
+                    if (this.startSeconds < value) {
+                        this.endSeconds = value;
+                        console.log(formatInterval(value, true, true));
+                    }
+                }
+            },
             videoId() {
                 if (this.videoUrl === '') {
                     return null;

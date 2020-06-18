@@ -43,7 +43,7 @@
             hours: {
                 get() {
                     return Number.parseInt(
-                        (this.totalValueSeconds / 3600).toFixed(0)
+                        Math.floor((this.totalValueSeconds / 3600)).toFixed(0)
                     );
                 },
                 set(value) {
@@ -56,20 +56,20 @@
             minutes: {
                 get() {
                     return Number.parseInt(
-                        ((this.totalValueSeconds / 60) % 60).toFixed(0)
+                        Math.floor(((this.totalValueSeconds / 60) % 60)).toFixed(0)
                     );
                 },
                 set(value) {
                     this.$emit(
                         'totalValueSecondsChange',
-                        this.totalValueSeconds = this.hours * 3600 + value * 60 + this.seconds + Math.round(this.millis / 1000)
+                        this.hours * 3600 + value * 60 + this.seconds + Math.round(this.millis / 1000)
                     );
                 }
             },
             seconds: {
                 get() {
                     return Number.parseInt(
-                        (this.totalValueSeconds % 60).toFixed(0)
+                        Math.floor((this.totalValueSeconds % 60)).toFixed(0)
                     );
                 },
                 set(value) {
