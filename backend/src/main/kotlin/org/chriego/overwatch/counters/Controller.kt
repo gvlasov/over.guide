@@ -7,6 +7,7 @@ import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.NotFoundException
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.request.receive
 import io.ktor.response.header
@@ -84,6 +85,16 @@ fun main(args: Array<String>) {
                         excerpt
                     )
                 )
+            }
+            post("/youtube-video-excerpt") {
+                val excerptJson = call.receive<YoutubeVideoExcerptJson>()
+                try {
+                    excerptJson.validate()
+                } catch (e: EntityValidationException) {
+                    throw BadRequestException(e.message!!)
+                }
+                YoutubeVideoExcerpt.newFromJson(excerptJson)
+                call.respond(HttpStatusCode.Created)
             }
         }
 

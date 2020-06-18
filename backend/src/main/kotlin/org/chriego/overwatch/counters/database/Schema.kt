@@ -1,6 +1,7 @@
 package org.chriego.overwatch.counters.database
 
 import org.chriego.overwatch.counters.Role
+import org.chriego.overwatch.counters.YoutubeVideoExcerptJson
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -128,7 +129,17 @@ object YoutubeVideoExcerpts : IntIdTable() {
 }
 
 class YoutubeVideoExcerpt(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<YoutubeVideoExcerpt>(YoutubeVideoExcerpts)
+    companion object : IntEntityClass<YoutubeVideoExcerpt>(YoutubeVideoExcerpts) {
+
+        fun newFromJson(json: YoutubeVideoExcerptJson): YoutubeVideoExcerpt {
+            return YoutubeVideoExcerpt.new {
+                videoId = json.videoId
+                startSeconds = json.startSeconds
+                endSeconds = json.endSeconds
+            }
+        }
+
+    }
 
     var videoId by YoutubeVideoExcerpts.videoId
     var startSeconds by YoutubeVideoExcerpts.startSeconds

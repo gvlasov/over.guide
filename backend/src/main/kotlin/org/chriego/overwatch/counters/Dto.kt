@@ -5,6 +5,7 @@ import org.chriego.overwatch.counters.database.AbilityUseEvaluation
 import org.chriego.overwatch.counters.database.MatchupEvaluation
 import org.chriego.overwatch.counters.database.YoutubeVideoExcerpt
 
+class EntityValidationException(message: String) : RuntimeException(message)
 data class AlternativeJson(
     val dataName: String,
     val score: Int
@@ -59,4 +60,13 @@ class YoutubeVideoExcerptJson(
     val videoId = excerpt.videoId
     val startSeconds = excerpt.startSeconds
     val endSeconds = excerpt.endSeconds
+
+    fun validate() {
+        if (startSeconds >= endSeconds) {
+            throw EntityValidationException(
+                "Start seconds must be < endSeconds; startSeconds = $startSeconds, endSeconds = $endSeconds"
+            )
+        }
+    }
+
 }
