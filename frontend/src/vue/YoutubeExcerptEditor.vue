@@ -1,7 +1,6 @@
 <template>
     <div class="wrap">
         <div class="controls">
-            <label>URL<input v-model.trim="videoUrl"/></label>
             <label v-if="isVideoLoaded">Start, s
                 <PreciseTimeInput
                         v-model="startSecondsValidated"
@@ -20,6 +19,7 @@
             <div>Tip: paste video URL anywhere on this page to load the video!</div>
         </div>
         <div>
+            <input class="video-url-input" v-model.trim="videoUrl" placeholder="Youtube video URL"/>
             <YoutubeVideo
                     :videoId="videoId"
                     :start="startSeconds"
@@ -29,6 +29,7 @@
                     @play="onPlay"
                     @pause="onPause"
                     @skip="onSkip"
+                    style="margin-bottom: .4em;"
             />
             <div>
                 <ExcerptTimebar
@@ -236,5 +237,14 @@
 
     .controls > label > input {
         margin-left: .5em;
+    }
+
+    .video-url-input {
+        display: block;
+        width: 100%;
+        border-radius: .3em;
+        box-sizing: border-box;
+        font-size: 1.2em;
+        margin-bottom: .4em;
     }
 </style>
