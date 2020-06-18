@@ -47,6 +47,9 @@
                     );
                 },
                 set(value) {
+                    if (value === '') {
+                        return;
+                    }
                     this.$emit(
                         'totalValueSecondsChange',
                         value * 3600 + this.minutes * 60 + this.seconds + Math.round(this.millis / 1000)
@@ -60,6 +63,9 @@
                     );
                 },
                 set(value) {
+                    if (value === '') {
+                        return;
+                    }
                     this.$emit(
                         'totalValueSecondsChange',
                         this.hours * 3600 + value * 60 + this.seconds + Math.round(this.millis / 1000)
@@ -73,6 +79,9 @@
                     );
                 },
                 set(value) {
+                    if (value === '') {
+                        return;
+                    }
                     this.$emit(
                         'totalValueSecondsChange',
                         this.hours * 3600 + this.minutes * 60 + value + Math.round(this.millis / 1000)
@@ -84,6 +93,9 @@
                     return Math.round(((this.totalValueSeconds % 1) * 1000));
                 },
                 set(value) {
+                    if (value === '') {
+                        return;
+                    }
                     this.$emit(
                         'totalValueSecondsChange',
                         this.hours * 3600 + this.minutes * 60 + this.seconds + Math.round(value / 1000)
