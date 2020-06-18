@@ -150,7 +150,7 @@
                     if (value === '') {
                         value = 0;
                     } else {
-                        value = Number.parseInt(value)
+                        value = Number.parseFloat(value)
                     }
                     if (this.endSeconds > value) {
                         this.startSeconds = value
@@ -165,7 +165,7 @@
                     if (value === '') {
                         value = 0;
                     } else {
-                        value = Number.parseInt(value)
+                        value = Number.parseFloat(value)
                     }
                     if (this.startSeconds < value) {
                         this.endSeconds = value;
