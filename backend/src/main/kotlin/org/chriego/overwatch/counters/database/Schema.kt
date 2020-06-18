@@ -121,3 +121,18 @@ class AbilityCounterEvaluation(id: EntityID<Int>) : IntEntity(id) {
 
 }
 
+object YoutubeVideoExcerpts : IntIdTable() {
+    val videoId = varchar("video_id", 16)
+    val startSeconds = float("start_seconds")
+    val endSeconds = float("end_seconds")
+}
+
+class YoutubeVideoExcerpt(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<YoutubeVideoExcerpt>(YoutubeVideoExcerpts)
+
+    var videoId by YoutubeVideoExcerpts.videoId
+    var startSeconds by YoutubeVideoExcerpts.startSeconds
+    var endSeconds by YoutubeVideoExcerpts.endSeconds
+
+}
+

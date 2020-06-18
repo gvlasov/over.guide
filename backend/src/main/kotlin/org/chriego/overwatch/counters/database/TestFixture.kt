@@ -57,6 +57,11 @@ object TestFixture : Fixture() {
             `object` = reinhardt
             description = "Watch rein to lower his shield"
         }
+        YoutubeVideoExcerpt.new {
+            videoId = "knENwlh0FFA"
+            startSeconds = 489.34f
+            endSeconds = 531.214f
+        }
     }
 
 }

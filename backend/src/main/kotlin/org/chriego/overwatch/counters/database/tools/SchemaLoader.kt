@@ -11,7 +11,8 @@ object SchemaLoader {
         Patches,
         Abilities,
         AbilityUseEvaluations,
-        AbilityCounterEvaluations
+        AbilityCounterEvaluations,
+        YoutubeVideoExcerpts
     )
 
     fun load() {
