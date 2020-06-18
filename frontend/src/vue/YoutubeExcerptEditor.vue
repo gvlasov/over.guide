@@ -35,11 +35,26 @@
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
                 />
-                <button
-                        class="reset-button"
-                        @click="resetLoopWindow"
-                        title="Reset loop window to entire video"
-                ></button>
+                <div class="crop-buttons">
+                    <button
+                            class="reset-button"
+                            @click="resetLoopWindow"
+                            title="Reset loop window to entire video"
+                    ><img src="/icons/clear-selection.svg" class="button-icon"/>
+                    </button>
+                    <button
+                            class="start-cut"
+                            @click="startCut"
+                            title="Start loop at current position"
+                    >[
+                    </button>
+                    <button
+                            class="end-cut"
+                            @click="endCut"
+                            title="End loop at current position"
+                    >]
+                    </button>
+                </div>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="endSecondsValidated"
@@ -60,6 +75,12 @@
         name: 'YoutubeExcerptEditor',
         props: {},
         methods: {
+            startCut() {
+                this.startSeconds = this.player.getCurrentTime();
+            },
+            endCut() {
+                this.endSeconds = this.player.getCurrentTime();
+            },
             resetLoopWindow() {
                 this.startSeconds = 0;
                 this.endSeconds = this.durationSeconds;
@@ -232,12 +253,18 @@
         margin-bottom: .4em;
     }
 
-    .reset-button {
-        background-size: 2em;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-image: url("/icons/clear-selection.svg");
-        width: 3em;
-        height: 3em;
+    .crop-buttons {
+        display: inline-block;
+    }
+
+    .crop-buttons > button {
+        width: 2em;
+        height: 2em;
+        vertical-align: top;
+    }
+
+    .button-icon {
+        width: 100%;
+        height: 100%;
     }
 </style>

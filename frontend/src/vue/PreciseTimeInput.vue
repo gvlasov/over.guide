@@ -41,7 +41,6 @@
             />
             <button class="subtract-button" @click="millis -= 25" v-bind:disabled="millis === 0"></button>
         </div>
-        <button class="now" @click="setNow">Now</button>
     </div>
 </template>
 
@@ -55,15 +54,8 @@
         props: {
             totalValueSeconds: Number,
             showHours: Boolean,
-            currentTimeSeconds: Number
         },
         methods: {
-            setNow() {
-                this.$emit(
-                    'totalValueSecondsChange',
-                    this.currentTimeSeconds
-                )
-            }
         },
         computed: {
             hours: {
@@ -172,10 +164,6 @@
         text-align: center;
         font-family: monospace;
         font-size: 1.5em;
-    }
-
-    .now {
-        height: 100%;
     }
 
     .wrap {
