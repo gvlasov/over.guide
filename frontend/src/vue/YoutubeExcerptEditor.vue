@@ -35,6 +35,11 @@
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
                 />
+                <button
+                        class="reset-button"
+                        @click="resetLoopWindow"
+                        title="Reset loop window to entire video"
+                ></button>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="endSecondsValidated"
@@ -55,6 +60,10 @@
         name: 'YoutubeExcerptEditor',
         props: {},
         methods: {
+            resetLoopWindow() {
+                this.startSeconds = 0;
+                this.endSeconds = this.durationSeconds;
+            },
             onPlayerReady(player) {
                 this.player = player;
                 this.durationSeconds = player.getDuration();
@@ -221,5 +230,14 @@
 
     .timebar {
         margin-bottom: .4em;
+    }
+
+    .reset-button {
+        background-size: 2em;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-image: url("/icons/clear-selection.svg");
+        width: 3em;
+        height: 3em;
     }
 </style>
