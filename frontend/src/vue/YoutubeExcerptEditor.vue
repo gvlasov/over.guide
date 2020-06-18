@@ -6,6 +6,7 @@
                     :start="startSeconds"
                     :end="endSeconds"
                     :loop="true"
+                    :autoplay="false"
                     @playerReady="onPlayerReady"
                     @play="onPlay"
                     @pause="onPause"

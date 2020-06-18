@@ -63,6 +63,7 @@
                                 modestbranding: 1,
                                 rel: 0,
                                 showinfo: 0,
+                                autoplay: self.autoplay,
                             },
                             height: '390',
                             width: '640',
@@ -71,6 +72,8 @@
                                     self.goToLoopStart();
                                     if (self.autoplay) {
                                         player.playVideo();
+                                    } else {
+                                        player.pauseVideo();
                                     }
                                     self.$emit('playerReady', player)
                                 },
