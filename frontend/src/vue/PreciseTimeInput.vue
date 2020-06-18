@@ -33,13 +33,13 @@
         </div>
         .
         <div class="time-part-wrap">
-            <button class="add-button" @click="millis += 10"></button>
+            <button class="add-button" @click="millis += 25"></button>
             <input
                     type="text"
                     v-model.number="millis"
                     size="3"
             />
-            <button class="subtract-button" @click="millis -= 10" v-bind:disabled="millis === 0"></button>
+            <button class="subtract-button" @click="millis -= 25" v-bind:disabled="millis === 0"></button>
         </div>
         <button class="now" @click="setNow">Now</button>
     </div>
