@@ -21,6 +21,8 @@
 </template>
 
 <script>
+    import formatInterval from "../js/utils/format-interval";
+
     export default {
         name: 'ExcerptTimebar',
         props: {
@@ -43,7 +45,7 @@
         },
         methods: {
             formatTimeLabel(seconds) {
-                return seconds.toFixed(2);
+                return formatInterval(seconds, this.durationSeconds > 3600, true);
             },
             onDragStart(e) {
                 this.dragStart = this.dragPosition(e);
