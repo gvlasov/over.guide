@@ -1,8 +1,11 @@
 package org.chriego.overwatch.counters
+
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.features.BadRequestException
 import io.ktor.features.CORS
 import io.ktor.features.ContentNegotiation
+import io.ktor.features.NotFoundException
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
 import io.ktor.request.receive
@@ -16,6 +19,7 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.chriego.overwatch.counters.database.MatchupEvaluation
+import org.chriego.overwatch.counters.database.YoutubeVideoExcerpt
 import org.chriego.overwatch.counters.database.tools.ConnectionCreator
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -57,6 +61,29 @@ fun main(args: Array<String>) {
                     )
                 }
                 call.respond(evaluation)
+            }
+            get("/youtube-video-excerpt") {
+                val idParameter = call.request.queryParameters["id"]
+                if (idParameter === null) {
+                    throw BadRequestException(
+                        "id parameter missing"
+                    )
+                }
+                val id: Int = idParameter.toInt()
+                ConnectionCreator.connect()
+                var excerpt = transaction {
+                    YoutubeVideoExcerpt.findById(id)
+                }
+                if (excerpt === null) {
+                    throw NotFoundException(
+                        "No youtube video excerpt with id $id"
+                    )
+                }
+                call.respond(
+                    YoutubeVideoExcerptJson(
+                        excerpt
+                    )
+                )
             }
         }
 

@@ -3,6 +3,7 @@ package org.chriego.overwatch.counters
 import org.chriego.overwatch.counters.database.AbilityCounterEvaluation
 import org.chriego.overwatch.counters.database.AbilityUseEvaluation
 import org.chriego.overwatch.counters.database.MatchupEvaluation
+import org.chriego.overwatch.counters.database.YoutubeVideoExcerpt
 
 data class AlternativeJson(
     val dataName: String,
@@ -50,4 +51,12 @@ class MatchupEvaluationJson(
         matchupEvaluation.abilityCounterEvaluations.map {
             AbilityCounterEvaluationJson(it)
         }
+}
+
+class YoutubeVideoExcerptJson(
+    excerpt: YoutubeVideoExcerpt
+) {
+    val videoId = excerpt.videoId
+    val startSeconds = excerpt.startSeconds
+    val endSeconds = excerpt.endSeconds
 }
