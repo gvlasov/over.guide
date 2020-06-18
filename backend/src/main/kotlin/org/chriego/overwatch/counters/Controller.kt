@@ -81,7 +81,7 @@ fun main(args: Array<String>) {
                     )
                 }
                 call.respond(
-                    YoutubeVideoExcerptJson(
+                    YoutubeVideoExcerptJson.fromEntity(
                         excerpt
                     )
                 )
@@ -93,8 +93,15 @@ fun main(args: Array<String>) {
                 } catch (e: EntityValidationException) {
                     throw BadRequestException(e.message!!)
                 }
-                YoutubeVideoExcerpt.newFromJson(excerptJson)
-                call.respond(HttpStatusCode.Created)
+                ConnectionCreator.connect()
+                val entity = transaction {
+                    YoutubeVideoExcerpt.newFromJson(excerptJson)
+                }
+
+                data class ResponseJson(val id: Int)
+                call.response.status(HttpStatusCode.Created)
+                println(entity.id.value)
+                call.respond(ResponseJson(entity.id.value))
             }
         }
 

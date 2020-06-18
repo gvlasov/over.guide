@@ -42,4 +42,28 @@ Backend.prototype.evaluateMatchup = async function (subject, object) {
     )
         .then(response => new MatchupEvaluation(response.data));
 };
+/**
+ * @param {string} videoId
+ * @param {number} startSeconds
+ * @param {number} endSeconds
+ * @returns {Promise<number|null>}
+ */
+Backend.prototype.saveVideoExcerpt = async function (videoId, startSeconds, endSeconds) {
+    return await this.axios.post(
+        this.rootUrl + '/youtube-video-excerpt',
+        {
+            videoId: videoId,
+            startSeconds: startSeconds,
+            endSeconds: endSeconds,
+        },
+        {}
+    )
+        .then((response) => {
+            if (response.status === 201) {
+                return response.data.id;
+            } else {
+                return null;
+            }
+        });
+};
 export default Backend;

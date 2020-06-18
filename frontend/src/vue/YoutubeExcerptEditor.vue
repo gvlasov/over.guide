@@ -56,6 +56,11 @@
                             title="End loop at current position"
                     >]
                     </button>
+                    <button
+                            v-bind:disabled="!canSave"
+                            @click="saveToServer"
+                    >{{ canSave ? 'Save' : whyCantSave}}
+                    </button>
                 </div>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
@@ -73,11 +78,26 @@
     import YoutubeVideo from "./YoutubeVideo.vue";
     import ExcerptTimebar from "./ExcerptTimebar.vue";
     import PreciseTimeInput from "./PreciseTimeInput.vue";
+    import Backend from "../js/Backend";
+    import axios from "axios";
+    import env from '../../build/env.js'
 
+    let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
+    const backend = new Backend(axios, backendUrl);
     export default {
         name: 'YoutubeExcerptEditor',
         props: {},
         methods: {
+            saveToServer() {
+                backend.saveVideoExcerpt(this.videoId, this.startSeconds, this.endSeconds)
+                    .then((id) => {
+                        if (id === null) {
+                            alert('error saving excerpt');
+                        } else {
+                            alert('created excerpt ' + id);
+                        }
+                    })
+            },
             startCut() {
                 this.startSeconds = this.player.getCurrentTime();
             },
@@ -213,6 +233,18 @@
                     return null;
                 }
                 return match[1];
+            },
+            /**
+             * @return {boolean}
+             */
+            canSave() {
+                return this.whyCantSave === null
+            },
+            /**
+             * @return {string|null}
+             */
+            whyCantSave() {
+                return null;
             },
         },
         mounted() {

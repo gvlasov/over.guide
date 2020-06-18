@@ -54,12 +54,21 @@ class MatchupEvaluationJson(
         }
 }
 
-class YoutubeVideoExcerptJson(
-    excerpt: YoutubeVideoExcerpt
+data class YoutubeVideoExcerptJson(
+    val videoId: String,
+    val startSeconds: Float,
+    val endSeconds: Float
 ) {
-    val videoId = excerpt.videoId
-    val startSeconds = excerpt.startSeconds
-    val endSeconds = excerpt.endSeconds
+    companion object {
+        fun fromEntity(
+            excerpt: YoutubeVideoExcerpt
+        ): YoutubeVideoExcerptJson =
+            YoutubeVideoExcerptJson(
+                excerpt.videoId,
+                excerpt.startSeconds,
+                excerpt.endSeconds
+            )
+    }
 
     fun validate() {
         if (startSeconds >= endSeconds) {
