@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="learn-overwatch-counters_backend" target="11" />
       <module name="learn-overwatch-counters_backend.main" target="11" />
       <module name="learn-overwatch-counters_backend.test" target="11" />
     </bytecodeTargetLevel>
