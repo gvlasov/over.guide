@@ -51,7 +51,6 @@
     import YoutubeVideo from "./YoutubeVideo.vue";
     import ExcerptTimebar from "./ExcerptTimebar.vue";
     import PreciseTimeInput from "./PreciseTimeInput.vue";
-    import formatInterval from "../js/utils/format-interval";
 
     export default {
         name: 'YoutubeExcerptEditor',
@@ -148,6 +147,11 @@
                     return this.startSeconds;
                 },
                 set(value) {
+                    if (value === '') {
+                        value = 0;
+                    } else {
+                        value = Number.parseInt(value)
+                    }
                     if (this.endSeconds > value) {
                         this.startSeconds = value
                     }
@@ -158,9 +162,13 @@
                     return this.endSeconds;
                 },
                 set(value) {
+                    if (value === '') {
+                        value = 0;
+                    } else {
+                        value = Number.parseInt(value)
+                    }
                     if (this.startSeconds < value) {
                         this.endSeconds = value;
-                        console.log(formatInterval(value, true, true));
                     }
                 }
             },
