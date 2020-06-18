@@ -93,6 +93,7 @@
                 if (this.playerHasBeenPlaying) {
                     this.player.playVideo();
                     this.playerHasBeenPlaying = null;
+                    this.player.seekTo(drag.start * this.durationSeconds);
                 }
             },
             setBoundsFromDrag(drag) {
