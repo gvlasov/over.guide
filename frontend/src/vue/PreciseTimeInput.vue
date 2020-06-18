@@ -1,5 +1,5 @@
 <template>
-    <div style="display: inline-block;">
+    <div class="wrap">
         <span v-if="showHours">
             <div class="time-part-wrap">
                 <button class="add-button" @click="hours += 1"></button>
@@ -171,9 +171,14 @@
     input[type='text'] {
         text-align: center;
         font-family: monospace;
+        font-size: 1.5em;
     }
 
     .now {
         height: 100%;
+    }
+
+    .wrap {
+        display: inline-block;
     }
 </style>
