@@ -1,29 +1,46 @@
 <template>
     <div style="display: inline-block;">
         <span v-if="showHours">
-            <input
-                    type="text"
-                    v-model.number="hours"
-                    size="2"
-            />
+            <div class="time-part-wrap">
+                <button class="add-button" @click="hours += 1"></button>
+                <input
+                        type="text"
+                        v-model.number="hours"
+                        size="2"
+                />
+                <button class="subtract-button" @click="hours -= 1"></button>
+            </div>
             :
         </span>
-        <input
-                type="text"
-                v-model.number="minutes"
-                size="2"
-        />:
-        <input
-                type="text"
-                v-model.number="seconds"
-                size="2"
-        />
+        <div class="time-part-wrap">
+            <button class="add-button" @click="minutes += 1"></button>
+            <input
+                    type="text"
+                    v-model.number="minutes"
+                    size="2"
+            />
+            <button class="subtract-button" @click="minutes -= 1"></button>
+        </div>
+        :
+        <div class="time-part-wrap">
+            <button class="add-button" @click="seconds += 1"></button>
+            <input
+                    type="text"
+                    v-model.number="seconds"
+                    size="2"
+            />
+            <button class="subtract-button" @click="seconds -= 1"></button>
+        </div>
         .
-        <input
-                type="text"
-                v-model.number="millis"
-                size="3"
-        />
+        <div class="time-part-wrap">
+            <button class="add-button" @click="millis += 10"></button>
+            <input
+                    type="text"
+                    v-model.number="millis"
+                    size="3"
+            />
+            <button class="subtract-button" @click="millis -= 10" v-bind:disabled="millis === 0"></button>
+        </div>
     </div>
 </template>
 
@@ -114,4 +131,38 @@
 </script>
 
 <style scoped>
+    .time-part-wrap {
+        display: inline-block;
+    }
+
+    .add-button, .subtract-button {
+        display: block;
+        width: 100%;
+        height: 1em;
+        border: 1px solid grey;
+        background-color: lightgrey;
+        background-size: .5em;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .add-button[disabled], .subtract-button[disabled] {
+        visibility: hidden;
+    }
+
+    .add-button {
+        border-radius: .3em .3em 0 0;
+        background-image: url("/icons/arrow-up.svg");
+    }
+
+    .subtract-button {
+        border-radius: 0 0 .3em .3em;
+        background-image: url("/icons/arrow-down.svg");
+    }
+
+    input[type='text'] {
+        text-align: center;
+        font-family: monospace;
+    }
+
 </style>
