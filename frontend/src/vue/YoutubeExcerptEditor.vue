@@ -1,25 +1,6 @@
 <template>
     <div class="wrap">
-        <div class="controls">
-            <label v-if="isVideoLoaded">Start, s
-                <PreciseTimeInput
-                        v-model="startSecondsValidated"
-                        :show-hours="durationSeconds > 3600"
-                        :current-time-seconds="currentSeconds"
-                />
-            </label>
-            <label v-if="isVideoLoaded">End, s
-                <PreciseTimeInput
-                        v-model="endSecondsValidated"
-                        :show-hours="durationSeconds > 3600"
-                        :current-time-seconds="currentSeconds"
-                />
-            </label>
-            <label v-if="isVideoLoaded">Loop<input v-model="loop" type="checkbox"/></label>
-            <div>Tip: paste video URL anywhere on this page to load the video!</div>
-        </div>
         <div>
-            <input class="video-url-input" v-model.trim="videoUrl" placeholder="Youtube video URL"/>
             <YoutubeVideo
                     :videoId="videoId"
                     :start="startSeconds"
@@ -44,6 +25,22 @@
                         @dragStart="onDragStart"
                         @dragEnd="onDragEnd"
                         @dragContinue="onDragContinue"
+                        class="timebar"
+                />
+            </div>
+            <div class="controls">
+                <PreciseTimeInput
+                        v-if="isVideoLoaded"
+                        v-model="startSecondsValidated"
+                        :show-hours="durationSeconds > 3600"
+                        :current-time-seconds="currentSeconds"
+                />
+                <label v-if="isVideoLoaded">Loop<input v-model="loop" type="checkbox"/></label>
+                <PreciseTimeInput
+                        v-if="isVideoLoaded"
+                        v-model="endSecondsValidated"
+                        :show-hours="durationSeconds > 3600"
+                        :current-time-seconds="currentSeconds"
                 />
             </div>
         </div>
@@ -116,7 +113,7 @@
         },
         data() {
             return {
-                videoUrl: 'https://www.youtube.com/watch?v=raZhJt0fCOI',
+                videoUrl: 'https://www.youtube.com/watch?v=1Oq-jvwQEj4',
                 // videoUrl: '',
                 startSeconds: 7,
                 endSeconds: 12,
@@ -225,26 +222,11 @@
     }
 
     .controls {
-        text-align: right;
+        display: flex;
+        justify-content: space-between;
     }
 
-    .controls > label {
-        display: block;
-        white-space: nowrap;
-        padding: .5em;
-        font-family: sans-serif;
-    }
-
-    .controls > label > input {
-        margin-left: .5em;
-    }
-
-    .video-url-input {
-        display: block;
-        width: 100%;
-        border-radius: .3em;
-        box-sizing: border-box;
-        font-size: 1.2em;
+    .timebar {
         margin-bottom: .4em;
     }
 </style>
