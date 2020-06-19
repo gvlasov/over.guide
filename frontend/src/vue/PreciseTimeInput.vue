@@ -11,6 +11,7 @@
                         type="text"
                         v-model.number="hours"
                         size="2"
+                        tabindex="1"
                 />
                 <button
                         class="subtract-button"
@@ -30,6 +31,7 @@
                     type="text"
                     v-model.number="minutes"
                     size="2"
+                    tabindex="1"
             />
             <button
                     class="subtract-button"
@@ -48,6 +50,7 @@
                     type="text"
                     v-model.number="seconds"
                     size="2"
+                    tabindex="1"
             />
             <button
                     class="subtract-button"
@@ -66,6 +69,7 @@
                     type="text"
                     v-model.number="millis"
                     size="3"
+                    tabindex="1"
             />
             <button
                     class="subtract-button"
