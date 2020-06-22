@@ -27,6 +27,10 @@
                 type: Boolean,
                 default: false,
             },
+            width: {
+                type: Number,
+                default: 640
+            },
         },
         methods: {
             rescheduleLooping() {
@@ -65,8 +69,8 @@
                                 showinfo: 0,
                                 autoplay: self.autoplay,
                             },
-                            height: '390',
-                            width: '640',
+                            height: self.width / 640 * 390,
+                            width: self.width,
                             events: {
                                 'onReady': (event) => {
                                     self.goToLoopStart();
