@@ -1,7 +1,9 @@
 <template>
     <div class="app">
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
-        <YoutubeExcerptEditor/>
+        <div>
+            <GuideEditor/>
+        </div>
     </div>
 </template>
 
@@ -17,6 +19,7 @@
     import heroes from "../js/heroes";
     import Topic from "../js/Topic";
     import YoutubeExcerptEditor from "./YoutubeExcerptEditor.vue";
+    import GuideEditor from "./GuideEditor.vue";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -33,6 +36,7 @@
             };
         },
         components: {
+            GuideEditor,
             YoutubeExcerptEditor: YoutubeExcerptEditor,
             MatchupEvaluation: MatchupEvaluation,
             CountersPractice: CountersPractice,
