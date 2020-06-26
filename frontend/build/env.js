@@ -1,0 +1,3 @@
+var ENVIRONMENT = {};
+ENVIRONMENT.BACKEND_PORT = '8080';
+export default ENVIRONMENT;

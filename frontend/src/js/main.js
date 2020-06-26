@@ -7,6 +7,6 @@ Vue.use(VueAxios, axios);
 const app = new Vue({
     el: '#app',
     render: function (h) {
-        return h(require('../vue/App.vue'));
+        return h(require('../vue/App.vue').default);
     },
 });

@@ -20,6 +20,7 @@
     import Topic from "../js/Topic";
     import YoutubeExcerptEditor from "./YoutubeExcerptEditor.vue";
     import GuideEditor from "./GuideEditor.vue";
+    import RoleSelection from "./RoleSelection";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -36,6 +37,7 @@
             };
         },
         components: {
+            RoleSelection,
             GuideEditor,
             YoutubeExcerptEditor: YoutubeExcerptEditor,
             MatchupEvaluation: MatchupEvaluation,

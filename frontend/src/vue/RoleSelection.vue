@@ -3,6 +3,7 @@
         <div class="checkboxes-wrap">
             <RoleCheckbox
                     v-for="role in availableRoles"
+                    v-bind:key="role"
                     :value="role"
                     v-model="roles"
             />
@@ -43,7 +44,7 @@
 </script>
 
 <style scoped>
-    @import '../css/fonts.css';
+    @import '../assets/css/fonts.css';
 
     .approve-button {
         background-color: orange;

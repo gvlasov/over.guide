@@ -67,7 +67,7 @@
 </script>
 
 <style scoped>
-    @import '../css/fonts.css';
+    @import '../assets/css/fonts.css';
 
     .role {
         padding: 1vw;

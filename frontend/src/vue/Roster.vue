@@ -2,6 +2,7 @@
     <div class="root">
         <RosterPortrait
                 v-for="hero in heroes"
+                v-bind:key="hero.dataName"
                 ref="portraits"
                 :hero="hero"
                 :banned="isHeroBanned(hero)"
@@ -38,7 +39,7 @@
             },
             pickScore: {
                 type: Function,
-                default: ((hero) => undefined)
+                default: (hero) => undefined
             }
         },
         methods: {
