@@ -1,0 +1,11 @@
+[
+  {
+    "model": "Hero",
+    "data": {
+      "id": 1,
+      "name": "Ana",
+      "dataName": "ana",
+      "role": 2
+    }
+  }
+]

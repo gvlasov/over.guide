@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="learn-overwatch-counters_backend-jvm">
+    <output-path>$PROJECT_DIR$/backend/build/libs</output-path>
+    <root id="archive" name="learn-overwatch-counters_backend-jvm.jar">
+      <element id="module-output" name="learn-overwatch-counters_backend.jvmMain" />
+    </root>
+  </artifact>
+</component>

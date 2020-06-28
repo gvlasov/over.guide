@@ -2,7 +2,7 @@
     <div class="app">
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
         <div>
-            <GuideEditor/>
+            <RoleSelection/>
         </div>
     </div>
 </template>

@@ -76,6 +76,7 @@ class Patch(id: EntityID<Int>) : IntEntity(id) {
     var title by Patches.title
 }
 
+
 object Abilities : IntIdTable() {
     val name = varchar("name", 32)
     val dataName = varchar("data_name", 32)
