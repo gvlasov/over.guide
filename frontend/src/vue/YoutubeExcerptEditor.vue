@@ -89,7 +89,11 @@
         props: {},
         methods: {
             saveToServer() {
-                backend.saveVideoExcerpt(this.videoId, this.startSeconds, this.endSeconds)
+                backend.saveVideoExcerpt({
+                    videoId: this.videoId,
+                    startSeconds: this.startSeconds,
+                    endSeconds: this.endSeconds
+                })
                     .then((id) => {
                         if (id === null) {
                             alert('error saving excerpt');

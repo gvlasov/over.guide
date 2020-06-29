@@ -1,9 +1,10 @@
 import Alternative from "data/dto/Alternative";
 import PickSuggestion from "./PickSuggestion";
 import MatchupEvaluation from "data/dto/MatchupEvaluation";
-import {AxiosStatic} from "axios";
+import {AxiosResponse, AxiosStatic} from "axios";
 import PickContext from "./PickContext";
 import Hero from "data/dto/Hero"
+import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
 
 export default class Backend {
     private axios: AxiosStatic;
@@ -14,47 +15,49 @@ export default class Backend {
         this.rootUrl = rootUrl;
     }
 
+    protected async query<R>(
+        url: string, inDto: object, onResponse: (response: AxiosResponse) => R): Promise<R> {
+        return await this.axios.post(url, inDto, {})
+            .then(onResponse);
+    }
+
     async suggestPick(context: PickContext): Promise<PickSuggestion> {
-        return await this.axios.post(this.rootUrl + '/suggest-pick', context.forRequest(), {})
-            .then(response => {
-                    return new PickSuggestion(
-                        response.data.alternatives.map(
-                            (data: object) => data as Alternative
-                        )
-                    );
-                }
-            );
+        return this.query(
+            this.rootUrl + '/suggest-pick',
+            context.forRequest(),
+            response => {
+                return new PickSuggestion(
+                    response.data.alternatives.map(
+                        (data: object) => data as Alternative
+                    )
+                );
+            }
+        )
     }
 
     async evaluateMatchup(subject: Hero, object: Hero): Promise<MatchupEvaluation> {
-        return await this.axios.post(
+        return this.query(
             this.rootUrl + '/matchup-evaluation',
             {
                 subject: subject.dataName,
                 object: object.dataName
             },
-            {}
+            response => response.data as MatchupEvaluation
         )
-            .then(response => response.data as MatchupEvaluation);
     };
 
-    async saveVideoExcerpt(videoId: string, startSeconds: number, endSeconds: number): Promise<number | null> {
-        return await this.axios.post(
+    async saveVideoExcerpt(excerpt: YoutubeVideoExcerpt): Promise<number | null> {
+        return this.query(
             this.rootUrl + '/youtube-video-excerpt',
-            {
-                videoId: videoId,
-                startSeconds: startSeconds,
-                endSeconds: endSeconds,
-            },
-            {}
-        )
-            .then((response) => {
+            excerpt,
+            (response) => {
                 if (response.status === 201) {
                     return response.data.id;
                 } else {
                     return null;
                 }
-            });
+            }
+        )
     };
 }
 
