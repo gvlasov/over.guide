@@ -17,13 +17,13 @@ export default class Backend {
 
     protected async query<R>(
         url: string, inDto: object, onResponse: (response: AxiosResponse) => R): Promise<R> {
-        return await this.axios.post(url, inDto, {})
+        return await this.axios.post(this.rootUrl + url, inDto, {})
             .then(onResponse);
     }
 
     async suggestPick(context: PickContext): Promise<PickSuggestion> {
         return this.query(
-            this.rootUrl + '/suggest-pick',
+            '/suggest-pick',
             context.forRequest(),
             response => {
                 return new PickSuggestion(
@@ -37,7 +37,7 @@ export default class Backend {
 
     async evaluateMatchup(subject: Hero, object: Hero): Promise<MatchupEvaluation> {
         return this.query(
-            this.rootUrl + '/matchup-evaluation',
+            '/matchup-evaluation',
             {
                 subject: subject.dataName,
                 object: object.dataName
@@ -48,7 +48,7 @@ export default class Backend {
 
     async saveVideoExcerpt(excerpt: YoutubeVideoExcerpt): Promise<number | null> {
         return this.query(
-            this.rootUrl + '/youtube-video-excerpt',
+            '/youtube-video-excerpt',
             excerpt,
             (response) => {
                 if (response.status === 201) {
