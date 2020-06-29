@@ -1,5 +1,6 @@
 import {Column, Model, PrimaryKey, Table, Unique} from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
+import Role from "../../data/Role"
 
 @Table({
     name: {
