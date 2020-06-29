@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import Hero from "../js/Hero.js";
+    import Hero from "data/dto/Hero";
 
     export default {
         name: 'HeroPortrait',

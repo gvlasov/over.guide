@@ -4,10 +4,13 @@
     <file type="web" url="file://$PROJECT_DIR$/backend" />
   </component>
   <component name="JavaScriptSettings">
-    <option name="languageLevel" value="ES6" />
+    <option name="languageLevel" value="FLOW" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="Kotlin SDK" project-jdk-type="KotlinSDK">
     <output url="file://compile" />
+  </component>
+  <component name="WebPackConfiguration">
+    <option name="path" value="$PROJECT_DIR$/frontend/build/webpack.dev.conf.js" />
   </component>
 </project>

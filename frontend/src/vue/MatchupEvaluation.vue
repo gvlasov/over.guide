@@ -6,12 +6,12 @@
         <PlayerPick
                 :hero="subject"
         />
-        <div v-if="evaluation !== null" class="wrap">
-            <div v-for="abilityEvaluation in evaluation.abilityUses">
-                <h3>{{ abilityEvaluation.abilityName }}</h3>
-                <div>{{ abilityEvaluation.description }}</div>
-            </div>
-        </div>
+        <!--        <div v-if="evaluation !== null" class="wrap">-->
+        <!--            <div v-for="abilityEvaluation in evaluation.abilityUses">-->
+        <!--                <h3>{{ abilityEvaluation.abilityName }}</h3>-->
+        <!--                <div>{{ abilityEvaluation.description }}</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
         <div class="wrap" style="width: 30vw;">
             <TopicComments :topic="topic"/>
         </div>
@@ -23,7 +23,7 @@
 
 <script>
     import PlayerPick from "./PlayerPick.vue";
-    import Hero from "../js/Hero";
+    import Hero from "data/dto/Hero";
     import Backend from "../js/Backend";
     import axios from 'axios';
     import env from '../../build/env.js'

@@ -47,7 +47,7 @@
 
 <script>
     import Picks from '../vue/Picks.vue';
-    import Backend from '../js/Backend.js';
+    import Backend from '../js/Backend';
     import Roster from '../vue/Roster.vue';
     import axios from "axios";
     import env from '../../build/env.js'

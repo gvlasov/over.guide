@@ -1,5 +1,5 @@
 import assert from "assert";
-import intervalToSeconds from "../src/js/utils/interval-to-seconds";
+import intervalToSeconds from "../src/js/utils/interval-to-seconds.js";
 
 it('parses 01:00:00.000', () => {
     assert.equal(

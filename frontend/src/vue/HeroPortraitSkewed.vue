@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import Hero from '../js/Hero.js';
+    import Hero from 'data/dto/Hero';
     import HeroPortrait from "./HeroPortrait.vue";
 
     export default {

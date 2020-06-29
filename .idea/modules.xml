@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/backend-js/backend-js.iml" filepath="$PROJECT_DIR$/backend-js/backend-js.iml" />
-      <module fileurl="file://$PROJECT_DIR$/docker/docker.iml" filepath="$PROJECT_DIR$/docker/docker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/learn-overwatch-counters.iml" filepath="$PROJECT_DIR$/.idea/learn-overwatch-counters.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/learn-overwatch-counters_backend.iml" filepath="$PROJECT_DIR$/.idea/modules/learn-overwatch-counters_backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/learn-overwatch-counters_backend.main.iml" filepath="$PROJECT_DIR$/.idea/modules/learn-overwatch-counters_backend.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/learn-overwatch-counters_backend.test.iml" filepath="$PROJECT_DIR$/.idea/modules/learn-overwatch-counters_backend.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/learn-overwatch-counters.iml" filepath="$PROJECT_DIR$/learn-overwatch-counters.iml" />
     </modules>
   </component>
 </project>

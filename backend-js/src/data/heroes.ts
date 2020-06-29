@@ -1,199 +1,205 @@
-import Hero from "../js/Hero.js";
+import Hero from "./dto/Hero";
+import Role from "./Role"
 
-export default [
+const data = [
     {
         name: 'Ana',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'ana',
         dataName: 'ana',
     },
     {
         name: 'Ashe',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'ashe',
         dataName: 'ashe',
     },
     {
         name: 'Baptiste',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'baptiste',
         dataName: 'baptiste',
     },
     {
         name: 'Bastion',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'bastion',
         dataName: 'bastion',
     },
     {
         name: 'Brigitte',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'brigitte',
         dataName: 'brigitte',
     },
     {
         name: 'D.Va',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'dva',
         dataName: 'dva',
     },
     {
         name: 'Doomfist',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'doomfist',
         dataName: 'doomfist',
     },
     {
         name: 'Echo',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'echo',
         dataName: 'echo',
     },
     {
         name: 'Genji',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'genji',
         dataName: 'genji',
     },
     {
         name: 'Hanzo',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'hanzo',
         dataName: 'hanzo',
     },
     {
         name: 'Junkrat',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'junkrat',
         dataName: 'junkrat',
     },
     {
         name: 'Lucio',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'lucio',
         dataName: 'lucio',
     },
     {
         name: 'McCree',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'mccree',
         dataName: 'mccree',
     },
     {
         name: 'Mercy',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'mercy',
         dataName: 'mercy',
     },
     {
         name: 'Mei',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'mei',
         dataName: 'mei',
     },
     {
         name: 'Moira',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'moira',
         dataName: 'moira',
     },
     {
         name: 'Orisa',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'orisa',
         dataName: 'orisa',
     },
     {
         name: 'Pharah',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'pharah',
         dataName: 'pharah',
     },
     {
         name: 'Reaper',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'reaper',
         dataName: 'reaper',
     },
     {
         name: 'Reinhardt',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'reinhardt',
         dataName: 'reinhardt',
     },
     {
         name: 'Roadhog',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'roadhog',
         dataName: 'roadhog',
     },
     {
         name: 'Sigma',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'sigma',
         dataName: 'sigma',
     },
     {
         name: 'Soldier: 76',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'soldier-76',
         dataName: 'soldier',
     },
     {
         name: 'Sombra',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'sombra',
         dataName: 'sombra',
     },
     {
         name: 'Symmetra',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'symmetra',
         dataName: 'symmetra',
     },
     {
         name: 'Torbjorn',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'torbjorn',
         dataName: 'torbjorn',
     },
     {
         name: 'Tracer',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'tracer',
         dataName: 'tracer',
     },
     {
         name: 'Widowmaker',
-        role: 'Damage',
+        role: Role.Damage,
         imgName: 'widowmaker',
         dataName: 'widowmaker',
     },
     {
         name: 'Winston',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'winston',
         dataName: 'winston',
     },
     {
         name: 'Wrecking Ball',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'wrecking-ball',
         dataName: 'wreckingball',
     },
     {
         name: 'Zarya',
-        role: 'Tank',
+        role: Role.Tank,
         imgName: 'zarya',
         dataName: 'zarya',
     },
     {
         name: 'Zenyatta',
-        role: 'Support',
+        role: Role.Support,
         imgName: 'zenyatta',
         dataName: 'zenyatta',
     }
 ]
-    .map(data => new Hero(data));
-
-
+const map = new Map<string, Hero>()
+data.forEach(
+    d => {
+        const hero: Hero = {name: d.name, dataName: d.dataName, role: d.role}
+        map.set(d.dataName, hero)
+    }
+)
+export default map

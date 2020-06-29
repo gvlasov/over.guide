@@ -10,7 +10,7 @@
 
 <script>
     import HeroPortrait from "./HeroPortrait.vue";
-    import Hero from "../js/Hero";
+    import Hero from "data/dto/Hero";
 
     export default {
         props: {

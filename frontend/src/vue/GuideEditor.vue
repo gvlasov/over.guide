@@ -32,7 +32,7 @@
     import GuidePartVideo from '../js/GuidePartVideo';
     import YoutubeVideo from "./YoutubeVideo.vue";
     import draggable from 'vuedraggable'
-    import YoutubeVideoExcerpt from "../js/dto/YoutubeVideoExcerpt";
+    import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
 
     export default {
         model: {},
@@ -41,15 +41,9 @@
             createNewPart() {
 
             },
-            /**
-             * @param {GuidePart} part
-             */
             isTextPart(part) {
                 return part instanceof GuidePartText;
             },
-            /**
-             * @param {GuidePart} part
-             */
             isVideoPart(part) {
                 return part instanceof GuidePartVideo;
             },
@@ -60,13 +54,11 @@
                     new GuidePartText('You penis girl'),
                     new GuidePartText('I like you lets fuck'),
                     new GuidePartVideo(
-                        new YoutubeVideoExcerpt(
-                            {
-                                videoId: 'qhtQx9ZXrf8',
-                                startSeconds: 12.32,
-                                endSeconds: 865.3
-                            }
-                        )
+                        {
+                            videoId: 'qhtQx9ZXrf8',
+                            startSeconds: 12.32,
+                            endSeconds: 865.3,
+                        }
                     ),
                 ]
             }

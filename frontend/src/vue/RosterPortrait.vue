@@ -12,7 +12,7 @@
 
 <script>
     import HeroPortraitSkewed from "./HeroPortraitSkewed.vue";
-    import Hero from "../js/Hero";
+    import Hero from "data/dto/Hero";
 
     export default {
         props: {

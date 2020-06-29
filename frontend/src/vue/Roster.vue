@@ -15,9 +15,9 @@
 </template>
 
 <script>
-    import heroes from "../js/heroes.js";
+    import heroes from "data/heroes";
     import RosterPortrait from "./RosterPortrait.vue";
-    import Hero from "../js/Hero.js";
+    import Hero from "data/dto/Hero";
 
     export default {
         props: {

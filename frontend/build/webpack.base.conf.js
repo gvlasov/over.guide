@@ -1,8 +1,10 @@
 'use strict'
+
 const path = require('path')
 const utils = require('./utils')
 const config = require('./config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const {VueLoaderPlugin} = require("vue-loader");
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -12,7 +14,7 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/js/main.js'
+    app: './src/js/main.ts'
   },
   output: {
     path: config.build.assetsRoot,
@@ -22,13 +24,19 @@ module.exports = {
         : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json', '.ts'],
     alias: {
       '@': resolve('src'),
+      'data': resolve('/../backend-js/src/data/')
     }
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -65,6 +73,10 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    // make sure to include the plugin for the magic
+    new VueLoaderPlugin()
+  ],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).

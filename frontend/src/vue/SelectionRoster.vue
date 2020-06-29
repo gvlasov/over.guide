@@ -10,7 +10,7 @@
 <script>
     import PickContext from "../js/PickContext";
     import Roster from "./Roster.vue";
-    import heroes from "../js/heroes";
+    import heroes from "data/heroes";
 
     export default {
         props: {

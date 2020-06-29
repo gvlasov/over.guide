@@ -16,7 +16,7 @@
     import flexTouch from 'vue-flex-touch';
     import MatchupEvaluation from "./MatchupEvaluation.vue";
 
-    import heroes from "../js/heroes";
+    import heroes from "data/heroes";
     import Topic from "../js/Topic";
     import YoutubeExcerptEditor from "./YoutubeExcerptEditor.vue";
     import GuideEditor from "./GuideEditor.vue";
@@ -28,8 +28,8 @@
         methods: {},
         data() {
 
-            const subject = heroes.find(h => h.dataName === 'pharah');
-            const object = heroes.find(h => h.dataName === 'mei');
+            const subject = heroes.values().find(h => h.dataName === 'pharah');
+            const object = heroes.values().find(h => h.dataName === 'mei');
             return {
                 subject: subject,
                 object: object,
