@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --require babel-core/register",
     "build": "node_modules/.bin/webpack --config build/webpack.dev.conf.js --mode development",
-    "dev-server": "node_modules/.bin/webpack-dev-server --config build/webpack.dev.conf.js"
+    "dev-server": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --config build/webpack.dev.conf.js"
   },
   "author": "",
   "license": "ISC",

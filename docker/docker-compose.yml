@@ -1,5 +1,15 @@
 version: "3.3"
 services:
+  frontend:
+    image: node:14.4-alpine
+    working_dir: "/home/node/app"
+    #    expose:
+    #      - "8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ..:/home/node/app
+    command: "sh -c 'cd frontend; npm run dev-server'"
   redis:
     image: redis:alpine
   mariadb:
@@ -45,3 +55,20 @@ services:
       - SSL_KEY=/key.pem
     volumes:
       - ./var:/srv/var
+  selenium-hub:
+    image: selenium/hub:3.141
+    network_mode: host
+    expose:
+      - "4444"
+    ports:
+      - "4444:4444"
+  selenium-chrome:
+    image: selenium/node-chrome:3.141
+    network_mode: host
+    links:
+      - "selenium-hub"
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+      - HUB_PORT_4444_TCP_PORT=4444
+    expose:
+      - "5555"
