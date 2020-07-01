@@ -21,14 +21,14 @@ export default class PickContextGenerator {
         );
     };
 
-    generateForRandomRole(availableRoles: Role[], seed: string) {
+    generateForRandomRole(availableRoles: Role[], seed: string): PickContext {
         return this.generateForRole(
             seed,
             new RoleGenerator(availableRoles).generate(seed)
         );
     };
 
-    generateEmptyAlliesOnly(seed: string) {
+    generateEmptyAlliesOnly(seed: string): PickContext {
         const bans = new BansGenerator().generate(seed);
         return new PickContext(
             new TeamComp([null, null, null, null, null, null]),

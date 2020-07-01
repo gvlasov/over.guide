@@ -13,13 +13,14 @@
                 class="hidden-checkbox"
         />
         <img
-                v-bind:src="'/images/' + value.toLowerCase() + '.svg'"
+                v-bind:src="'/images/' + roleName(value) + '.svg'"
         />
-        <div>{{ value }}</div>
+        <div>{{ roleName(value) }}</div>
     </div>
 </template>
 
 <script>
+    import Role from "data/Role";
 
     export default {
         model: {
@@ -31,11 +32,18 @@
                 default: () => [],
             },
             value: {
-                type: String,
+                type: Number,
                 required: true
             },
         },
         methods: {
+            /**
+             * @param {Role} value
+             * @return {string}
+             */
+            roleName(value) {
+                return Role[value].toLowerCase();
+            },
             onTap() {
             },
             updateInput(event) {

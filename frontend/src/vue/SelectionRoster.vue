@@ -25,13 +25,15 @@
         computed: {
             heroes() {
                 if (this.showOnlyAvailableRoles) {
-                    return this.context.heroesLeftForRoster()
+                    const lefr = this.context.heroesLeftForRoster();
+                    console.log(lefr)
+                    return lefr
                 } else {
-                    return [...heroes];
+                    return Array.from(heroes.values());
                 }
             },
             hs() {
-                return [...heroes];
+                return Array.from(heroes.value());
             }
         },
         methods: {

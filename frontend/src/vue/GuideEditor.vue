@@ -32,7 +32,6 @@
     import GuidePartVideo from '../js/GuidePartVideo';
     import YoutubeVideo from "./YoutubeVideo.vue";
     import draggable from 'vuedraggable'
-    import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
 
     export default {
         model: {},
@@ -55,7 +54,7 @@
                     new GuidePartText('I like you lets fuck'),
                     new GuidePartVideo(
                         {
-                            videoId: 'qhtQx9ZXrf8',
+                            youtubeVideoId: 'qhtQx9ZXrf8',
                             startSeconds: 12.32,
                             endSeconds: 865.3,
                         }

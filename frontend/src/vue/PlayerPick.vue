@@ -14,7 +14,7 @@
 
     export default {
         props: {
-            hero: Hero
+            hero: Object,
         },
         methods: {},
         data() {

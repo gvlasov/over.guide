@@ -23,7 +23,7 @@
                 default: () => null
             },
             selectedHero: {
-                type: Hero,
+                type: Object,
                 default: () => null
             }
         },

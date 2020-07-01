@@ -90,7 +90,7 @@
         methods: {
             saveToServer() {
                 backend.saveVideoExcerpt({
-                    videoId: this.videoId,
+                    youtubeVideoId: this.videoId,
                     startSeconds: this.startSeconds,
                     endSeconds: this.endSeconds
                 })

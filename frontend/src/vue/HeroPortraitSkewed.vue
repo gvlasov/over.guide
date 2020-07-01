@@ -19,7 +19,7 @@
     export default {
         name: 'HeroPortraitSkewed',
         props: {
-            'hero': Hero,
+            'hero': Object,
             banned: {
                 type: Boolean,
                 default: false

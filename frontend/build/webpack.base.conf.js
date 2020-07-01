@@ -27,7 +27,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json', '.ts'],
     alias: {
       '@': resolve('src'),
-      'data': resolve('/../backend-js/src/data/')
+      'data': resolve('/../backend/src/data/')
     }
   },
   module: {

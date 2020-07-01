@@ -92,14 +92,15 @@
                         this.suggestion = suggestion;
                         this.selectedHero = hero;
                     })
-                    .catch(reason => alert(reason));
+                    .catch(reason => console.log(reason));
             },
             onRolesApproved(roles) {
                 if (roles === []) {
                     return;
                 }
                 this.roles = roles;
-                this.context = generator.generateForRandomRole(this.roles, shuffleCounter++);
+                console.log('approve role', roles)
+                this.context = generator.generateForRandomRole(roles, shuffleCounter++);
             },
         },
         computed: {

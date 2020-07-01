@@ -9,7 +9,7 @@
         name: 'HeroPortrait',
         props: {
             'hero': {
-                type: Hero
+                type: Object,
             },
             'baseUrl': {
                 type: String,
@@ -24,7 +24,7 @@
                 if (hero === null) {
                     return '/images/undefined-hero.png'
                 } else {
-                    return this.baseUrl + '/' + hero.imgName + ".png"
+                    return this.baseUrl + '/' + hero.dataName + ".png"
                 }
             },
         },

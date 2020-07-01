@@ -2,7 +2,7 @@
     <div class="app">
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
         <div>
-            <RoleSelection/>
+            <PickSuggestion/>
         </div>
     </div>
 </template>
@@ -28,8 +28,8 @@
         methods: {},
         data() {
 
-            const subject = heroes.values().find(h => h.dataName === 'pharah');
-            const object = heroes.values().find(h => h.dataName === 'mei');
+            const subject = heroes['pharah'];
+            const object = heroes['mei'];
             return {
                 subject: subject,
                 object: object,

@@ -16,7 +16,7 @@
         "src/*"
       ],
       "data/*": [
-        "../backend-js/src/data/*"
+        "../backend/src/data/*"
       ]
     },
     "lib": [

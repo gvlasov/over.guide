@@ -19,6 +19,7 @@
 
 <script>
     import RoleCheckbox from "./RoleCheckbox.vue";
+    import Role from "data/Role";
 
     export default {
         props: {},
@@ -34,7 +35,7 @@
         },
         data() {
             return {
-                availableRoles: ['Tank', 'Damage', 'Support'],
+                availableRoles: [Role.Tank, Role.Damage, Role.Support],
                 roles: []
             }
         },

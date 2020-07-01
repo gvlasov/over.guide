@@ -35,8 +35,8 @@
 
     export default {
         props: {
-            subject: Hero,
-            object: Hero
+            subject: Object,
+            object: Object,
         },
         methods: {
             evaluateMatchup() {

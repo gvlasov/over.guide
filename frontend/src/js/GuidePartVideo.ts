@@ -11,6 +11,6 @@ export default class GuidePartVideo implements GuidePart {
     }
 
     id() {
-        return md5('guide-part-video' + this.excerpt.videoId + '-' + this.excerpt.startSeconds + '-' + this.excerpt.endSeconds);
+        return md5('guide-part-video' + this.excerpt.youtubeVideoId + '-' + this.excerpt.startSeconds + '-' + this.excerpt.endSeconds);
     };
 }

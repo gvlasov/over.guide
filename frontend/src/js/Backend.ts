@@ -1,7 +1,7 @@
 import Alternative from "data/dto/Alternative";
 import PickSuggestion from "./PickSuggestion";
 import MatchupEvaluation from "data/dto/MatchupEvaluation";
-import {AxiosResponse, AxiosStatic} from "axios";
+import {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
 import Hero from "data/dto/Hero"
 import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
@@ -16,18 +16,27 @@ export default class Backend {
     }
 
     protected async query<R>(
-        url: string, inDto: object, onResponse: (response: AxiosResponse) => R): Promise<R> {
-        return await this.axios.post(this.rootUrl + url, inDto, {})
+        method: Method,
+        url: string,
+        inDto: object,
+        onResponse: (response: AxiosResponse) => R
+    ): Promise<R> {
+        return await this.axios.request({
+            url: this.rootUrl + url,
+            data: inDto,
+            method: method
+        })
             .then(onResponse);
     }
 
     async suggestPick(context: PickContext): Promise<PickSuggestion> {
         return this.query(
+            'POST',
             '/suggest-pick',
             context.forRequest(),
             response => {
                 return new PickSuggestion(
-                    response.data.alternatives.map(
+                    response.data.map(
                         (data: object) => data as Alternative
                     )
                 );
@@ -37,6 +46,7 @@ export default class Backend {
 
     async evaluateMatchup(subject: Hero, object: Hero): Promise<MatchupEvaluation> {
         return this.query(
+            'POST',
             '/matchup-evaluation',
             {
                 subject: subject.dataName,
@@ -48,9 +58,11 @@ export default class Backend {
 
     async saveVideoExcerpt(excerpt: YoutubeVideoExcerpt): Promise<number | null> {
         return this.query(
+            'PUT',
             '/youtube-video-excerpt',
             excerpt,
             (response) => {
+                console.log(response);
                 if (response.status === 201) {
                     return response.data.id;
                 } else {

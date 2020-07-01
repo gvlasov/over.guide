@@ -3,7 +3,7 @@
         <ul class="picks-list">
             <PlayerPick
                     v-for="(hero, position) in teamComp.heroes"
-                    v-bind:key="hero.dataName"
+                    v-bind:key="position"
                     :hero="hero"
                     v-hammer:tap="() => $emit('pickTap', hero, position)"
             />

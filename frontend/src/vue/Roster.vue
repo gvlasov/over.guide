@@ -30,7 +30,7 @@
                 default: () => [],
             },
             selectedHero: {
-                type: Hero,
+                type: Object,
                 default: () => null,
             },
             selectedOutHeroes: {
@@ -48,20 +48,20 @@
              * @return {boolean}
              */
             isHeroBanned(hero) {
-                return typeof this.bans.find(h => hero.equals(h)) !== 'undefined';
+                return typeof this.bans.find(h => hero.dataName === h.dataName) !== 'undefined';
             },
             /**
              * @param {Hero} hero
              * @return {boolean}
              */
             isHeroSelected(hero) {
-                return this.selectedHero !== null && this.selectedHero.equals(hero);
+                return this.selectedHero !== null && this.selectedHero.dataName === hero.dataName;
             },
             /**
              * @param {Hero} hero
              */
             isHeroSelectedOut(hero) {
-                return typeof this.selectedOutHeroes.find(h => h.equals(hero)) !== 'undefined';
+                return typeof this.selectedOutHeroes.find(h => h.dataName === hero.dataName) !== 'undefined';
             },
             onHeroSelect(hero) {
                 this.$emit('heroSelect', hero);
