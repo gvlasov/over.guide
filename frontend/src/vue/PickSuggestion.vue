@@ -50,18 +50,20 @@
     import Backend from '../js/Backend';
     import Roster from '../vue/Roster.vue';
     import axios from "axios";
-    import env from '../../build/env.js'
     import SuggestionRoster from "./SuggestionRoster.vue";
     import SelectionRoster from "./SelectionRoster.vue";
     import PickContextGenerator from "../js/PickContextGenerator";
     import TeamComp from "../js/TeamComp";
 
-    let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
-    const backend = new Backend(axios, backendUrl);
+    const backend = new Backend(axios);
     const contextGenerator = new PickContextGenerator();
     let seedCounter = 0;
     export default {
         props: {
+            bans: {
+                type: Array,
+                default: () => [],
+            },
         },
         methods: {
             goToAllPick() {

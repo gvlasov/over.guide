@@ -5,14 +5,20 @@ import {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
 import Hero from "data/dto/Hero"
 import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
+import env from '../env/dev'
 
 export default class Backend {
-    private axios: AxiosStatic;
-    private rootUrl: string;
+    private readonly axios: AxiosStatic;
+    private readonly rootUrl: string;
 
-    constructor(axios: AxiosStatic, rootUrl: string) {
+    constructor(axios: AxiosStatic) {
         this.axios = axios;
-        this.rootUrl = rootUrl;
+        this.rootUrl = window.location.protocol
+            + "//"
+            + (window.location.hostname === env.DOCKER_FRONTEND_HOST ? env.DOCKER_BACKEND_HOST : window.location.hostname)
+            + ":"
+            + env.BACKEND_PORT;
+        console.log(this.rootUrl)
     }
 
     protected async query<R>(

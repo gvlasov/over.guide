@@ -23,15 +23,12 @@
 
 <script>
     import PlayerPick from "./PlayerPick.vue";
-    import Hero from "data/dto/Hero";
     import Backend from "../js/Backend";
     import axios from 'axios';
-    import env from '../../build/env.js'
     import TopicComments from "./TopicComments.vue";
     import Topic from "../js/Topic";
 
-    let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
-    const backend = new Backend(axios, backendUrl);
+    const backend = new Backend(axios);
 
     export default {
         props: {

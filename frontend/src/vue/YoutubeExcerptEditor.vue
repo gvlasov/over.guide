@@ -80,10 +80,8 @@
     import PreciseTimeInput from "./PreciseTimeInput.vue";
     import Backend from "../js/Backend";
     import axios from "axios";
-    import env from '../../build/env.js'
 
-    let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
-    const backend = new Backend(axios, backendUrl);
+    const backend = new Backend(axios);
     export default {
         name: 'YoutubeExcerptEditor',
         props: {},

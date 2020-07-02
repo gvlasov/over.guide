@@ -54,15 +54,13 @@
     import Roster from '../vue/Roster.vue';
     import PickContextGenerator from "../js/PickContextGenerator";
     import axios from "axios";
-    import env from '../../build/env.js'
     import Keypress from 'vue-keypress'
     import PickContext from "../js/PickContext";
     import SuggestionRoster from "./SuggestionRoster.vue";
     import SelectionRoster from "./SelectionRoster.vue";
     import RoleSelection from "./RoleSelection.vue";
 
-    let backendUrl = window.location.protocol + "//" + window.location.hostname + ":" + env.BACKEND_PORT;
-    const backend = new Backend(axios, backendUrl);
+    const backend = new Backend(axios);
     let shuffleCounter = 0;
     const generator = new PickContextGenerator();
     export default {
