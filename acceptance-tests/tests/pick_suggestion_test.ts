@@ -8,7 +8,7 @@ async function sleep() {
 
 Scenario('suggests a pick', async (I) => {
 
-    I.amOnPage('/')
+    I.amOnPage('/#/suggest-pick')
     I.click('img[src="/images/roster-portraits/bastion.png"]')
     // Enemy team
     Roster.selectHeroFromRoster('bastion')
