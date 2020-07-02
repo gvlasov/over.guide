@@ -1,5 +1,6 @@
 const {I, Roster} = inject();
 Feature('pick suggestion');
+import Role from "../../backend/src/data/Role"
 
 async function sleep() {
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -22,5 +23,5 @@ Scenario('suggests a pick', async (I) => {
     Roster.selectHeroFromRoster('ana')
     Roster.selectHeroFromRoster('lucio')
     Roster.selectHeroFromRoster('sigma')
-    I.saveScreenshot('asdf.png')
+    Roster.waitForOnlyRoleShowing(Role.Tank)
 });

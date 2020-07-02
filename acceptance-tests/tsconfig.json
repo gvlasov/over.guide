@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2017",
     "module": "commonjs",
     "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "*"
+        "./*"
+      ],
+      "data/*": [
+        "../backend/src/data/*"
       ]
     },
     "lib": [
