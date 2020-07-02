@@ -15,14 +15,15 @@
     "fast-shuffle": "^2.0.2",
     "grunt-env": "~1.0.1",
     "lodash": "latest",
+    "md5": "~2.2.1",
     "seedrandom": "^3.0.5",
     "vue": "^2.6.11",
     "vue-axios": "~2.1.5",
-    "vue-keypress": "~2.1.1",
-    "vue2-hammer": "^2.1.2",
     "vue-flex-touch": "^1.0.0",
-    "vuedraggable": "~2.23.2",
-    "md5": "~2.2.1"
+    "vue-keypress": "~2.1.1",
+    "vue-router": "^3.3.4",
+    "vue2-hammer": "^2.1.2",
+    "vuedraggable": "~2.23.2"
   },
   "devDependencies": {
     "@types/fast-shuffle": "^1.0.1",

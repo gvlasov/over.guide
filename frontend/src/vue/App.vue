@@ -1,8 +1,13 @@
 <template>
     <div class="app">
+        <div>
+            <router-link to="/counters-practice">Counters practice</router-link>
+            <router-link to="/suggest-pick">Suggest pick</router-link>
+            <router-link to="/guide-editor">Guide editor</router-link>
+        </div>
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
         <div>
-            <PickSuggestion/>
+            <router-view></router-view>
         </div>
     </div>
 </template>
