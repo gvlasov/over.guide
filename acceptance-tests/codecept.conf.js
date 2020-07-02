@@ -5,8 +5,11 @@ const {setHeadlessWhen} = require('@codeceptjs/configure');
 setHeadlessWhen(process.env.HEADLESS);
 
 exports.config = {
-    tests: './tests/*_test.js',
+    tests: './tests/*_test.ts',
     output: './output',
+    require: [
+        "ts-node/register",
+    ],
     helpers: {
         WebDriver: {
             url: 'http://frontend:8000',
@@ -14,7 +17,8 @@ exports.config = {
         }
     },
     include: {
-        I: './steps_file.js'
+        I: './steps_file.js',
+        Roster: './fragments/Roster.ts',
     },
     bootstrap: null,
     mocha: {},

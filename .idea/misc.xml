@@ -4,7 +4,7 @@
     <file type="web" url="file://$PROJECT_DIR$/backend" />
   </component>
   <component name="JavaScriptSettings">
-    <option name="languageLevel" value="FLOW" />
+    <option name="languageLevel" value="ES6" />
   </component>
   <component name="LibGDXNonGdxJsonFiles">
     <file url="file://$PROJECT_DIR$/backend/src/data/counters.json" />

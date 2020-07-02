@@ -1,0 +1,23 @@
+{
+  "name": "acceptance-tests",
+  "version": "0.0.1",
+  "description": "",
+  "main": "codecept.conf.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "@types/webdriverio": "^4.8.0",
+    "codeceptjs": "^2.6.6",
+    "codeceptjs-webdriverio": "^1.1.0"
+  },
+  "devDependencies": {
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  },
+  "scripts": {
+    "test": "codeceptjs"
+  },
+  "author": "",
+  "license": "ISC"
+}
