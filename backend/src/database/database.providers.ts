@@ -13,8 +13,8 @@ export const databaseProviders = [
         useFactory: async () => {
             const sequelize = new Sequelize({
                 dialect: 'mysql',
-                host: 'localhost',
-                port: 4306,
+                host: 'mariadb',
+                port: 3306,
                 username: 'root',
                 password: '1',
                 database: 'overwatch',
