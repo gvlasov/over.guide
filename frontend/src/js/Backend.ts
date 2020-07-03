@@ -6,6 +6,7 @@ import PickContext from "./PickContext";
 import Hero from "data/dto/Hero"
 import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
 import env from '../env/dev'
+import Cookies from 'js-cookie'
 
 export default class Backend {
     private readonly axios: AxiosStatic;
@@ -27,10 +28,15 @@ export default class Backend {
         inDto: object,
         onResponse: (response: AxiosResponse) => R
     ): Promise<R> {
+        const authToken = Cookies.get('auth-token');
+        let headers = (typeof authToken === 'undefined')
+            ? {}
+            : {'Authorization': 'Bearer ' + authToken};
         return await this.axios.request({
             url: this.rootUrl + url,
             data: inDto,
-            method: method
+            method: method,
+            headers: headers
         })
             .then(onResponse);
     }

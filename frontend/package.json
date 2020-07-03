@@ -11,9 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/js-cookie": "^2.2.6",
     "axios": "^0.19.2",
     "fast-shuffle": "^2.0.2",
     "grunt-env": "~1.0.1",
+    "js-cookie": "^2.2.1",
     "lodash": "latest",
     "md5": "~2.2.1",
     "seedrandom": "^3.0.5",

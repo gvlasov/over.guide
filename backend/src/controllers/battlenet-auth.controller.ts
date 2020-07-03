@@ -36,7 +36,7 @@ export class BattlenetAuthController {
             });
         response.setHeader(
             'Set-Cookie',
-            'auth-token=' + user.name + '; HttpOnly; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/'
+            'auth-token=' + user.name + '; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/'
         )
         response.redirect(FRONTEND_ROOT_URL)
     }

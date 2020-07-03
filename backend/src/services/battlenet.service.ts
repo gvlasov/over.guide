@@ -41,12 +41,11 @@ export class BattlenetService {
     }
 
     async userInfo(token: string) {
-        const authorization = 'Bearer ' + token;
         return await this.httpService.get(
             'https://eu.battle.net/oauth/userinfo',
             {
                 headers: {
-                    'Authorization': authorization
+                    'Authorization': 'Bearer ' + token
                 },
             }
         )
