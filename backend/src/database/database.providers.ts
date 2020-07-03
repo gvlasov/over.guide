@@ -20,7 +20,8 @@ export const databaseProviders = [
                 database: 'overwatch',
                 define: {
                     freezeTableName: true,
-                }
+                },
+                logging: false,
             });
 
             sequelize.addModels([

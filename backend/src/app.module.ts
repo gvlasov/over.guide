@@ -1,4 +1,4 @@
-import {Module} from '@nestjs/common';
+import {HttpModule, Module} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {DatabaseModule} from './database/database.module';
@@ -8,14 +8,16 @@ import {MatchupEvaluationController} from './controllers/matchup-evaluation.cont
 import {YoutubeVideoExcerptController} from './controllers/youtube-video-excerpt.controller';
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import {SuggestPickService} from "src/services/suggest-pick.service";
+import {BattlenetAuthController} from "src/controllers/battlenet-auth.controller";
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, HttpModule],
     controllers: [
         AppController,
         SuggestPickController,
         MatchupEvaluationController,
         YoutubeVideoExcerptController,
+        BattlenetAuthController,
     ],
     providers: [
         ...databaseProviders,
