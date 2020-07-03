@@ -9,6 +9,7 @@ import {YoutubeVideoExcerptController} from './controllers/youtube-video-excerpt
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import {SuggestPickService} from "src/services/suggest-pick.service";
 import {BattlenetAuthController} from "src/controllers/battlenet-auth.controller";
+import {BattlenetService} from "src/services/battlenet.service";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -24,6 +25,7 @@ import {BattlenetAuthController} from "src/controllers/battlenet-auth.controller
         AppService,
         MatchupEvaluationService,
         SuggestPickService,
+        BattlenetService
     ],
 })
 export class AppModule {
