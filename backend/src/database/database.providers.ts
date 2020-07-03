@@ -6,6 +6,7 @@ import {Patch} from "./models/Patch";
 import {Ability} from "./models/Ability";
 import {MatchupEvaluation} from "./models/MatchupEvaluation";
 import {YoutubeVideoExcerpt} from "./models/YoutubeVideoExcerpt";
+import {User} from "src/database/models/User";
 
 export const databaseProviders = [
     {
@@ -30,6 +31,7 @@ export const databaseProviders = [
                 Ability,
                 MatchupEvaluation,
                 YoutubeVideoExcerpt,
+                User,
             ]);
 
             await sequelize.sync();

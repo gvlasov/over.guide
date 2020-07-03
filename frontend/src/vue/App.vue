@@ -7,6 +7,7 @@
         </div>
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
         <div>
+            <BattlenetAuthButton/>
             <router-view></router-view>
         </div>
     </div>
@@ -26,6 +27,7 @@
     import YoutubeExcerptEditor from "./YoutubeExcerptEditor.vue";
     import GuideEditor from "./GuideEditor.vue";
     import RoleSelection from "./RoleSelection";
+    import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -42,6 +44,7 @@
             };
         },
         components: {
+            BattlenetAuthButton,
             RoleSelection,
             GuideEditor,
             YoutubeExcerptEditor: YoutubeExcerptEditor,
