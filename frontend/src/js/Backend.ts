@@ -56,7 +56,19 @@ export default class Backend {
         )
     }
 
-    async evaluateMatchup(subject: Hero, object: Hero): Promise<MatchupEvaluation> {
+    async getMatchupScore(subject: Hero, object: Hero): Promise<MatchupEvaluation> {
+        return this.query(
+            'GET',
+            '/matchup-evaluation',
+            {
+                subject: subject.dataName,
+                object: object.dataName
+            },
+            response => response.data as MatchupEvaluation
+        )
+    };
+
+    async evaluateMatchup(subject: Hero, object: Hero, score: number): Promise<MatchupEvaluation> {
         return this.query(
             'POST',
             '/matchup-evaluation',

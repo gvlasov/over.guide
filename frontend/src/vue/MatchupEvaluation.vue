@@ -1,7 +1,7 @@
 <template>
     <div
             class="all"
-            @click="evaluateMatchup"
+            @click="getMatchupScore"
     >
         <PlayerPick
                 :hero="subject"
@@ -36,11 +36,11 @@
             object: Object,
         },
         methods: {
-            evaluateMatchup() {
+            getMatchupScore() {
                 const self = this;
                 this.evaluation =
                     backend
-                        .evaluateMatchup(this.subject, this.object)
+                        .getMatchupScore(this.subject, this.object)
                         .then(evaluation => {
                             self.evaluation = evaluation;
                         });

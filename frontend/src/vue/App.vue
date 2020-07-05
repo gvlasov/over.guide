@@ -7,7 +7,10 @@
         </div>
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
         <div>
-            <BattlenetAuthButton/>
+            <MatchupEvaluator
+                    :subject="subject"
+                    :object="object"
+            />
             <router-view></router-view>
         </div>
     </div>
@@ -28,6 +31,7 @@
     import GuideEditor from "./GuideEditor.vue";
     import RoleSelection from "./RoleSelection";
     import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
+    import MatchupEvaluator from "@/vue/MatchupEvaluator";
 
     Vue.use(VueHammer);
     Vue.use(flexTouch);
@@ -35,8 +39,8 @@
         methods: {},
         data() {
 
-            const subject = heroes['pharah'];
-            const object = heroes['mei'];
+            const subject = heroes.get('pharah');
+            const object = heroes.get('mei');
             return {
                 subject: subject,
                 object: object,
@@ -44,6 +48,7 @@
             };
         },
         components: {
+            MatchupEvaluator,
             BattlenetAuthButton,
             RoleSelection,
             GuideEditor,

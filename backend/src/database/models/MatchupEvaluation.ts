@@ -9,6 +9,7 @@ import {
 import {Hero} from "./Hero";
 import {DataTypes} from "sequelize";
 import {Patch} from "./Patch";
+import {User} from "src/database/models/User";
 
 @Table
 export class MatchupEvaluation extends Model<MatchupEvaluation> {
@@ -33,6 +34,9 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
 
     @Column
     score: number
+
+    @BelongsTo(() => User, 'createdById')
+    createdBy: User
 
     @Column({type: new DataTypes.STRING({length: 14})})
     ip: string
