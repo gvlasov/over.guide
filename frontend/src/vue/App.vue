@@ -4,13 +4,10 @@
             <router-link to="/counters-practice">Counters practice</router-link>
             <router-link to="/suggest-pick">Suggest pick</router-link>
             <router-link to="/guide-editor">Guide editor</router-link>
+            <router-link to="/testing-ground">Testing ground</router-link>
         </div>
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
         <div>
-            <MatchupEvaluator
-                    :subject="subject"
-                    :object="object"
-            />
             <router-view></router-view>
         </div>
     </div>

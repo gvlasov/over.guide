@@ -6,12 +6,14 @@ import VueRouter from 'vue-router';
 import CountersPractice from '@/vue/CountersPractice.vue';
 import PickSuggestion from "@/vue/PickSuggestion.vue";
 import GuideEditor from "@/vue/GuideEditor.vue";
+import TestingGround from "@/vue/TestingGround";
 
 const router = new VueRouter({
     routes: [
         {path: '/counters-practice', component: CountersPractice},
         {path: '/suggest-pick', component: PickSuggestion},
         {path: '/guide-editor', component: GuideEditor},
+        {path: '/testing-ground', component: TestingGround},
     ]
 });
 Vue.use(VueRouter);
