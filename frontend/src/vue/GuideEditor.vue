@@ -50,8 +50,8 @@
         data() {
             return {
                 parts: [
-                    new GuidePartText('You penis girl'),
-                    new GuidePartText('I like you lets fuck'),
+                    new GuidePartText('Pantenol'),
+                    new GuidePartText('Pantelol'),
                     new GuidePartVideo(
                         {
                             youtubeVideoId: 'qhtQx9ZXrf8',
