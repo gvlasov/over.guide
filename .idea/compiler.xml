@@ -9,7 +9,6 @@
   </component>
   <component name="TypeScriptCompiler">
     <option name="enableServiceForProjectsWithoutConfig" value="false" />
-    <option name="recompileOnChanges" value="true" />
     <option name="showAllErrors" value="true" />
   </component>
 </project>
