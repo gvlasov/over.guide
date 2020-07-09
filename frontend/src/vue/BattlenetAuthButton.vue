@@ -31,9 +31,9 @@
 <style scoped>
     .battle-net-button {
         background-image: url("/icons/battlenet.svg");
-        background-size: 7vw 7vw;
+        background-size: 3vw 3vw;
         display: inline-block;
-        width: 7vw;
-        height: 7vw;
+        width: 3vw;
+        height: 3vw;
     }
 </style>
