@@ -1,0 +1,23 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cypress": "cypress open"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
+    "@types/lodash.flatten": "^4.4.6",
+    "@types/lodash.intersection": "^4.4.6",
+    "cypress": "^4.9.0",
+    "cypress-intellij-reporter": "0.0.4",
+    "lodash.flatten": "^4.4.0",
+    "lodash.intersection": "^4.4.0",
+    "typescript": "^3.9.6",
+    "webpack": "^4.43.0"
+  }
+}

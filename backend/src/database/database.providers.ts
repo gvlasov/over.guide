@@ -12,15 +12,20 @@ export const databaseProviders = [
     {
         provide: SEQUELIZE,
         useFactory: async () => {
+            const host: string = process.env.DB_HOST || 'mariadb';
+            const port: number = Number.parseInt(process.env.DB_PORT, 10) || 3306;
             const sequelize = new Sequelize({
                 dialect: 'mysql',
-                host: 'mariadb',
-                port: 3306,
+                host: host,
+                port: port,
                 username: 'root',
                 password: '1',
                 database: 'overwatch',
                 define: {
                     freezeTableName: true,
+                },
+                dialectOptions: {
+                    multipleStatements: true,
                 },
                 logging: false,
             });

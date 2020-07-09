@@ -3,6 +3,7 @@
             class="role"
             v-hammer:tap="updateInput"
             v-bind:class="{ checked: shouldBeChecked }"
+            v-bind:data-role="roleName(value)"
     >
         <input
                 type="checkbox"

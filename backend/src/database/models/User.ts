@@ -13,6 +13,6 @@ export class User extends Model<User> {
     name: string;
 
     @Unique
-    @Column({type: new DataTypes.INTEGER()})
+    @Column({type: new DataTypes.STRING(15)})
     battleNetUserId: string
 }

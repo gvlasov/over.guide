@@ -1,0 +1,10 @@
+[
+  {
+    "model": "User",
+    "data": {
+      "id": 1,
+      "name": "testuser#123",
+      "battleNetUserId": "12345"
+    }
+  }
+]

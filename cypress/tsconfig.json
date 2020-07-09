@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "target": "es5",
+    "lib": [
+      "es5",
+      "dom",
+      "esnext"
+    ],
+    "esModuleInterop": true,
+    "declaration": false,
+    "types": [
+      "cypress"
+    ],
+    "outDir": "dist",
+    "paths": {
+      "@data/*": [
+        "../backend/src/data/*"
+      ],
+      "@/*": [
+        "./"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ]
+}

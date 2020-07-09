@@ -13,9 +13,13 @@
     "paths": {
       "src/*": [
         "src/*"
+      ],
+      "@fixtures/*": [
+        "src/database/fixtures/*"
       ]
     },
     "incremental": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   }
 }

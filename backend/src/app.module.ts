@@ -10,6 +10,10 @@ import {MatchupEvaluationService} from "src/services/matchup-evaluation.service"
 import {SuggestPickService} from "src/services/suggest-pick.service";
 import {BattlenetAuthController} from "src/controllers/battlenet-auth.controller";
 import {BattlenetService} from "src/services/battlenet.service";
+import {TokenService} from "src/services/token.service";
+import {TestController} from "src/controllers/test.controller";
+import {FixtureController} from "src/controllers/fixture.controller";
+import {FixtureService} from "src/services/fixture.service";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -19,13 +23,17 @@ import {BattlenetService} from "src/services/battlenet.service";
         MatchupEvaluationController,
         YoutubeVideoExcerptController,
         BattlenetAuthController,
+        TestController,
+        FixtureController,
     ],
     providers: [
         ...databaseProviders,
         AppService,
         MatchupEvaluationService,
         SuggestPickService,
-        BattlenetService
+        BattlenetService,
+        TokenService,
+        FixtureService,
     ],
 })
 export class AppModule {

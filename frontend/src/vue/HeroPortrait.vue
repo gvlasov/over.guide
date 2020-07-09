@@ -1,5 +1,8 @@
 <template>
-    <img :src="imgSrc(hero)"/>
+    <img
+            :src="imgSrc(hero)"
+            v-bind:data-hero-data-name="hero ? hero.dataName : ''"
+    />
 </template>
 
 <script>
