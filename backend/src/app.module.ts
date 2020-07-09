@@ -14,6 +14,7 @@ import {TokenService} from "src/services/token.service";
 import {TestController} from "src/controllers/test.controller";
 import {FixtureController} from "src/controllers/fixture.controller";
 import {FixtureService} from "src/services/fixture.service";
+import {AuthService} from "src/services/auth.service";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -30,6 +31,7 @@ import {FixtureService} from "src/services/fixture.service";
         ...databaseProviders,
         AppService,
         MatchupEvaluationService,
+        AuthService,
         SuggestPickService,
         BattlenetService,
         TokenService,

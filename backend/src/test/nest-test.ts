@@ -1,12 +1,13 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {FixtureService} from "src/services/fixture.service";
 import {Provider} from "@nestjs/common/interfaces/modules/provider.interface";
-import {Type} from "@nestjs/common";
+import {INestApplication, Type} from "@nestjs/common";
 import {databaseProviders} from "src/database/database.providers";
 
 class TestContext<T> {
     service: T
     fixtures: (...fixtures: object[][]) => void
+    app: INestApplication
 }
 
 export function nestTest<T>(
@@ -31,8 +32,10 @@ export function nestTest<T>(
 
             const fixtureService = app.get<FixtureService>(FixtureService);
             testContext.service = app.get<T>(serviceToTest);
-            testContext.fixtures = async (fixtures) =>
-                await fixtureService.loadFixtureClear(fixtures)
+            testContext.fixtures = async (...fixtures) =>
+                await fixtureService.loadFixturesClear(...fixtures)
+            testContext.app = app.createNestApplication()
+            await testContext.app.init()
         });
 
         call(testContext)

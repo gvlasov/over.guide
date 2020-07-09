@@ -10,8 +10,9 @@ export class FixtureService {
     ) {
     }
 
-    async loadFixture(fixture: object[]) {
+    async loadFixture(fixture: object[]): Promise<any> {
         // in sequelize-fixtures, a "fixture" is a single database record; here a "fixture" is a collection of database records, as in PHP world I used to work in
+        console.log('loading fixture')
         return await loadFixtures(
             fixture,
             this.sequelize.models
@@ -26,13 +27,14 @@ export class FixtureService {
     async loadFixturesClear(...fixtures: object[][]) {
         this.truncateTables()
         // https://dev.to/afifsohaili/dealing-with-promises-in-an-array-with-async-await-5d7g Ctrl+F "Wait for all promises to complete one-by-one"
-        return await fixtures.map(
-            f => this.loadFixture(f)
-        )
-            .reduce(async (previousPromise, nextAsyncFunction) => {
-                await previousPromise;
-                await nextAsyncFunction;
-            }, Promise.resolve());
+        return await (fixtures.map(
+                f => this.loadFixture(f).then(() => console.log('fixture loaded'))
+            )
+                .reduce(async (previousPromise, nextAsyncFunction) => {
+                    await previousPromise;
+                    await nextAsyncFunction;
+                }, Promise.resolve())
+        );
     }
 
     truncateTables() {

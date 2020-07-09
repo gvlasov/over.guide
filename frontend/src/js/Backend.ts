@@ -70,11 +70,12 @@ export default class Backend {
 
     async evaluateMatchup(subject: Hero, object: Hero, score: number): Promise<MatchupEvaluation> {
         return this.query(
-            'POST',
+            'PUT',
             '/matchup-evaluation',
             {
                 subject: subject.dataName,
-                object: object.dataName
+                object: object.dataName,
+                score: score
             },
             response => response.data as MatchupEvaluation
         )

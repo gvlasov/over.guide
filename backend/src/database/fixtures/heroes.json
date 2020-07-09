@@ -1,0 +1,281 @@
+[
+  {
+    "model": "Hero",
+    "data": {
+      "id": 0,
+      "name": "Ana",
+      "dataName": "ana",
+      "role": 2
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 1,
+      "name": "Ashe",
+      "dataName": "ashe",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 2,
+      "name": "Baptiste",
+      "dataName": "baptiste",
+      "role": 2
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 3,
+      "name": "Bastion",
+      "dataName": "bastion",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 4,
+      "name": "Brigitte",
+      "dataName": "brigitte",
+      "role": 2
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 5,
+      "name": "D.Va",
+      "dataName": "dva",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 6,
+      "name": "Doomfist",
+      "dataName": "doomfist",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 7,
+      "name": "Echo",
+      "dataName": "echo",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 8,
+      "name": "Genji",
+      "dataName": "genji",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 9,
+      "name": "Hanzo",
+      "dataName": "hanzo",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 10,
+      "name": "Junkrat",
+      "dataName": "junkrat",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 11,
+      "name": "Lucio",
+      "dataName": "lucio",
+      "role": 2
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 12,
+      "name": "McCree",
+      "dataName": "mccree",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 13,
+      "name": "Mercy",
+      "dataName": "mercy",
+      "role": 2
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 14,
+      "name": "Mei",
+      "dataName": "mei",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 15,
+      "name": "Moira",
+      "dataName": "moira",
+      "role": 2
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 16,
+      "name": "Orisa",
+      "dataName": "orisa",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 17,
+      "name": "Pharah",
+      "dataName": "pharah",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 18,
+      "name": "Reaper",
+      "dataName": "reaper",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 19,
+      "name": "Reinhardt",
+      "dataName": "reinhardt",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 20,
+      "name": "Roadhog",
+      "dataName": "roadhog",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 21,
+      "name": "Sigma",
+      "dataName": "sigma",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 22,
+      "name": "Soldier: 76",
+      "dataName": "soldier",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 23,
+      "name": "Sombra",
+      "dataName": "sombra",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 24,
+      "name": "Symmetra",
+      "dataName": "symmetra",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 25,
+      "name": "Torbjorn",
+      "dataName": "tracer",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 26,
+      "name": "Widowmaker",
+      "dataName": "widowmaker",
+      "role": 1
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 27,
+      "name": "Winston",
+      "dataName": "winston",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 28,
+      "name": "Wrecking Ball",
+      "dataName": "wreckingball",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 29,
+      "name": "Zarya",
+      "dataName": "zarya",
+      "role": 0
+    }
+  },
+  {
+    "model": "Hero",
+    "data": {
+      "id": 30,
+      "name": "Zenyatta",
+      "dataName": "zenyatta",
+      "role": 2
+    }
+  }
+]

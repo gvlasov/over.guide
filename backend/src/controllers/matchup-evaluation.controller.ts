@@ -1,16 +1,30 @@
-import {Controller, Get, Post} from '@nestjs/common';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Get,
+    HttpStatus,
+    Put,
+    Req,
+    Res,
+    UnauthorizedException
+} from '@nestjs/common';
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import HeroDataNames from "src/data/HeroDataNames";
 import heroes from "src/data/heroes"
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
+import MatchupEvaluationDto from "src/data/dto/MatchupEvaluation";
 import {Hero} from "src/database/models/Hero";
-import MatchupEvaluationUserScore from "src/data/MatchupEvaluationUserScore";
+import {Request, Response} from "express";
+import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
 
 @Controller('matchup-evaluation')
+
 export class MatchupEvaluationController {
     constructor(
-        private readonly service: MatchupEvaluationService
+        private readonly service: MatchupEvaluationService,
+        private readonly authService: AuthService
     ) {
 
     }
@@ -23,15 +37,26 @@ export class MatchupEvaluationController {
         )
     }
 
-    @Post()
+    @Put()
     async createEvaluation(
-        subject: HeroDataNames,
-        object: HeroDataNames,
-        score: MatchupEvaluationUserScore
+        @Res() response: Response,
+        @Req() request: Request,
+        @Body() matchupEvaluation: MatchupEvaluationDto,
     ) {
-        const currentUser = await User.findOne();
-        const subjectId = (await Hero.findOne({where: {dataName: subject}})).id;
-        const objectId = (await Hero.findOne({where: {dataName: object}})).id;
+        const currentUser: User = await this.authService.getUser(request)
+        if (currentUser === null) {
+            throw new UnauthorizedException()
+        }
+        const subject = await Hero.findOne({where: {dataName: matchupEvaluation.subject}});
+        if (subject === null) {
+            throw new BadRequestException()
+        }
+        const subjectId = subject.id;
+        const object = await Hero.findOne({where: {dataName: matchupEvaluation.object}});
+        if (object === null) {
+            throw new BadRequestException()
+        }
+        const objectId = object.id;
         const existingEvaluation = await MatchupEvaluation.findOne({
             where: {
                 createdById: currentUser.id,
@@ -40,20 +65,23 @@ export class MatchupEvaluationController {
             }
         });
         if (existingEvaluation === null) {
-            MatchupEvaluation.create({
+            await MatchupEvaluation.create({
                 subjectId: subjectId,
                 objectId: objectId,
-                score: score,
+                score: matchupEvaluation.score,
                 createdBy: currentUser,
             })
+            response.status(HttpStatus.CREATED)
         } else {
-            existingEvaluation.update({
+            await existingEvaluation.update({
                 subjectId: subjectId,
                 objectId: objectId,
-                score: score,
+                score: matchupEvaluation.score,
                 createdBy: currentUser,
             })
+            response.status(HttpStatus.ACCEPTED)
         }
+        response.send()
     }
 
 }

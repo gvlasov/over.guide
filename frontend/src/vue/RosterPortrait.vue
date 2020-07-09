@@ -7,12 +7,12 @@
             v-bind:style="{ 'border-color': borderColor }"
             v-flex-touch="(e) => e.preventDefault()"
             v-hammer:tap="onPortraitTap"
+            v-bind:data-hero-data-name="hero.dataName"
     />
 </template>
 
 <script>
     import HeroPortraitSkewed from "./HeroPortraitSkewed.vue";
-    import Hero from "data/dto/Hero";
 
     export default {
         props: {

@@ -3,7 +3,7 @@ import {
     Column,
     ForeignKey,
     Model,
-    PrimaryKey,
+    NotNull,
     Table
 } from 'sequelize-typescript';
 import {Hero} from "./Hero";
@@ -13,10 +13,6 @@ import {User} from "src/database/models/User";
 
 @Table
 export class MatchupEvaluation extends Model<MatchupEvaluation> {
-
-    @PrimaryKey
-    @Column
-    public id: number
 
     @ForeignKey(() => Hero)
     @Column
@@ -32,7 +28,8 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
     @BelongsTo(() => Hero, 'objectId')
     object: Hero
 
-    @Column
+    @NotNull
+    @Column({allowNull: false})
     score: number
 
     @BelongsTo(() => User, 'createdById')

@@ -4,7 +4,7 @@ import HeroDataNames from "./HeroDataNames";
 
 const data = [
     {
-        name: 'Ana',
+        name: 'fucka',
         role: Role.Support,
         imgName: 'ana',
         dataName: HeroDataNames.Ana,
