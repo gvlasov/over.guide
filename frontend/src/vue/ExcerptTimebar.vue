@@ -1,21 +1,21 @@
 <template>
     <div
-            @mousedown="onDragStart"
-            @mouseup="onDragEnd"
+            @mousedown="onMouseDown"
+            @mouseup="onMouseUp"
             @mousemove="onMouseMove"
             class="wrap"
             ref="wrap"
     >
         <div class="excerpt-area" v-bind:style="{ width: excerptWidthPercent+'%', left: excerptStartPercent + '%' }">
-            <div class="excerpt-start">{{ formatTimeLabel(startSecondsVisual) }}</div>
-            <div class="excerpt-end">{{ formatTimeLabel(endSecondsVisual) }}</div>
+            <!--            <div class="excerpt-start">{{ formatTimeLabel(startSecondsVisual) }}</div>-->
+            <!--            <div class="excerpt-end">{{ formatTimeLabel(endSecondsVisual) }}</div>-->
         </div>
         <div class="slider" v-bind:style="{ left: sliderPositionPercent+'%' }">
-            <div
-                    v-if="enableSliderLabel"
-                    class="slider-label"
-            >{{ formatTimeLabel(currentSeconds) }}
-            </div>
+            <!--            <div-->
+            <!--                    v-if="enableSliderLabel"-->
+            <!--                    class="slider-label"-->
+            <!--            >{{ formatTimeLabel(currentSeconds) }}-->
+        </div>
         </div>
     </div>
 </template>
@@ -44,12 +44,36 @@
             }
         },
         methods: {
-            formatTimeLabel(seconds) {
-                return formatInterval(seconds, this.durationSeconds > 3600, true);
+            onMouseDown(e) {
+                this.dragStart = this.dragPosition(e);
+                this.isMouseDown = true;
+            },
+            onMouseUp(e) {
+                this.isMouseDown = false;
+                this.currentDragPosition = null;
+                if (this.dragStart === this.dragPosition(e)) {
+                    this.$emit('draglessClick', this.dragStart);
+                } else {
+                    this.onDragEnd(e)
+                }
+            },
+            onMouseMove(e) {
+                if (!this.isMouseDown) {
+                    return;
+                }
+                if (this.currentDragPosition === null) {
+                    this.onDragStart(e);
+                }
+                this.currentDragPosition = this.dragPosition(e);
+                this.$emit(
+                    'dragContinue',
+                    {
+                        start: this.dragStart,
+                        end: this.currentDragPosition
+                    }
+                );
             },
             onDragStart(e) {
-                this.dragStart = this.dragPosition(e);
-                this.currentDragPosition = this.dragStart;
                 for (let element of document.getElementsByTagName('iframe')) {
                     element.style.pointerEvents = 'none';
                 }
@@ -57,6 +81,18 @@
                     start: this.dragStart,
                     end: this.dragStart,
                 });
+            },
+            onDragEnd(e) {
+                this.$emit(
+                    'dragEnd',
+                    {
+                        start: this.dragStart,
+                        end: this.dragPosition(e)
+                    }
+                );
+                for (let element of document.getElementsByTagName('iframe')) {
+                    element.style.pointerEvents = 'auto';
+                }
             },
             dragPosition(e) {
                 const timebarRect = this.$refs.wrap.getBoundingClientRect();
@@ -68,31 +104,8 @@
                     1.0
                 )
             },
-            onDragEnd(e) {
-                this.$emit(
-                    'dragEnd',
-                    {
-                        start: this.dragStart,
-                        end: this.dragPosition(e)
-                    }
-                );
-                this.currentDragPosition = null;
-                for (let element of document.getElementsByTagName('iframe')) {
-                    element.style.pointerEvents = 'auto';
-                }
-            },
-            onMouseMove(e) {
-                if (!this.isDragging) {
-                    return;
-                }
-                this.currentDragPosition = this.dragPosition(e);
-                this.$emit(
-                    'dragContinue',
-                    {
-                        start: this.dragStart,
-                        end: this.currentDragPosition
-                    }
-                );
+            formatTimeLabel(seconds) {
+                return formatInterval(seconds, this.durationSeconds > 3600, true);
             },
         },
         computed: {
@@ -157,6 +170,7 @@
                 dragStart: null,
                 mousemove: null,
                 mouseup: null,
+                isMouseDown: false,
             }
         },
     };

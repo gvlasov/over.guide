@@ -1,32 +1,92 @@
 <template>
     <div class="wrap">
-        <button
-                class="create-new-part"
-                @click="createNewTextPart"
-        >Add new text
-        </button>
-        <button
-                class="create-new-part"
-                @click="createNewVideoPart"
-        >Add new video
-        </button>
-        <draggable v-model="parts" draggable=".item">
-            <div v-for="(part, index) in parts" :key="index + '_' + part.id()" class="item">
-                <div class="text-guide-part" v-if="isTextPart(part)" v-html="renderTextPart(part)"></div>
-                <div v-if="isVideoPart(part)">
-                    <YoutubeVideo
-                            :video-id="part.excerpt.youtubeVideoId"
-                            :start="part.excerpt.startSeconds"
-                            :end="part.excerpt.endSeconds"
-                            :loop="true"
-                            :autoplay="true"
-                            :width="300"
-                            :player-element-id="index + part.excerpt.youtubeVideoId"
-                            style="pointer-events: none;"
-                    />
+        <div class="create-buttons">
+            <button
+                    class="create-new-part-button overwatch-main-button"
+                    @click="createNewTextPart('beginning')"
+            >+ text
+            </button>
+            <button
+                    class="create-new-part-button overwatch-main-button"
+                    @click="createNewVideoPart('beginning')"
+            >+ video
+            </button>
+        </div>
+        <draggable v-model="parts" draggable=".item" :disabled="isEditing()">
+            <div v-for="(widget, index) in parts" :key="index" class="item">
+                <div class="text-guide-part" v-if="widget.isText()">
+                    <a
+                            v-if="!widget.editing"
+                            class="edit-button"
+                            @click="widget.editing = true"
+                    >Edit</a>
+                    <a
+                            v-if="widget.editing"
+                            class="view-button"
+                            @click="widget.editing = false"
+                    >Save</a>
+                    <div
+                            v-if="!widget.editing"
+                            class="text-guide-part-content"
+                            v-html="widget.part.render()"
+                    ></div>
+                    <textarea
+                            v-if="widget.editing"
+                            class="guide-part-text-editor"
+                            v-model="widget.part.text"
+                            rows="10"
+                    ></textarea>
+                </div>
+                <div v-if="widget.isVideo()">
+                    <a
+                            class="edit-button"
+                            @click="widget.editing = true"
+                            v-if="!widget.editing"
+                    >Edit</a>
+                    <a
+                            class="view-button"
+                            @click="widget.editing = false"
+                            v-if="widget.editing"
+                    >Save</a>
+                    <div v-if="widget.editing" key="editor">
+                        <YoutubeExcerptEditor
+                                :video-id="widget.part.excerpt.youtubeVideoId"
+                                :initial-start-seconds="widget.part.excerpt.startSeconds"
+                                :initial-end-seconds="widget.part.excerpt.endSeconds"
+                                :player-element-id="index + '-editor-' + widget.part.excerpt.youtubeVideoId"
+                                @startSecondsChange="onStartSecondsChangeHacky(widget, $event)"
+                                @endSecondsChange="onEndSecondsChangeHacky(widget, $event)"
+                                class="video-editor"
+                        />
+                    </div>
+                    <div v-if="!widget.editing" key="video">
+                        <YoutubeVideo
+                                :video-id="widget.part.excerpt.youtubeVideoId"
+                                :start="widget.part.excerpt.startSeconds"
+                                :end="widget.part.excerpt.endSeconds"
+                                :loop="true"
+                                :autoplay="true"
+                                :mute="true"
+                                :player-element-id="index +'-'+ widget.part.excerpt.youtubeVideoId"
+                                class="video"
+                                v-bind:style="'width: 20em; height: 12.2em'"
+                        />
+                    </div>
                 </div>
             </div>
         </draggable>
+        <div class="create-buttons">
+            <button
+                    class="create-new-part-button overwatch-main-button"
+                    @click="createNewTextPart('end')"
+            >+ text
+            </button>
+            <button
+                    class="create-new-part-button overwatch-main-button"
+                    @click="createNewVideoPart('end')"
+            >+ video
+            </button>
+        </div>
     </div>
 </template>
 
@@ -35,67 +95,110 @@
     import GuidePartVideo from '../js/GuidePartVideo';
     import YoutubeVideo from "./YoutubeVideo.vue";
     import draggable from 'vuedraggable'
-    import marked from 'marked'
+    import GuidePartWidget from "@/js/GuidePartWidget";
+    import YoutubeExcerptEditor from "@/vue/YoutubeExcerptEditor";
 
     export default {
         model: {},
         props: {},
         methods: {
-            createNewTextPart() {
-                const part = new GuidePartText('Pantenol');
-                this.parts.push(part);
-                this.editTextPart(part)
-            },
-            createNewVideoPart() {
-                const part = new GuidePartVideo(
-                    {
-                        youtubeVideoId: 'h2rpFJhBMcs',
-                        startSeconds: 22.32,
-                        endSeconds: 32.3,
-                    }
+            createNewTextPart(where) {
+                this.createNewPart(
+                    where,
+                    () => new GuidePartText('Pantenol')
                 );
-                this.parts.push(part);
+            },
+            createNewVideoPart(where) {
+                this.createNewPart(
+                    where,
+                    () =>
+                        new GuidePartVideo(
+                            {
+                                youtubeVideoId: 'h2rpFJhBMcs',
+                                startSeconds: 22.32,
+                                endSeconds: 30,
+                            }
+                        )
+                );
             },
             /**
-             * @param {GuidePartText} part
+             * @param {string} where 'beninning' or 'end'
+             * @param {Function} how
              */
-            renderTextPart(part) {
-                return marked(part.text);
-            },
-            isTextPart(part) {
-                return part instanceof GuidePartText;
-            },
-            isVideoPart(part) {
-                return part instanceof GuidePartVideo;
+            createNewPart(where, how) {
+                (
+                    (where === 'beginning')
+                        ? this.parts.unshift
+                        : this.parts.push
+                )
+                    .apply(
+                        this.parts,
+                        [
+                            new GuidePartWidget(
+                                how(),
+                                true
+                            )
+                        ]
+                    );
             },
             /**
-             * @param {GuidePartText} part
+             * @return {boolean}
              */
-            editTextPart(part) {
-
-            }
+            isEditing() {
+                return this.parts.some(part => part.editing);
+            },
+            /**
+             * @param {GuidePartWidget} widget
+             * @param {number} newValue
+             */
+            onStartSecondsChangeHacky(widget, newValue) {
+                widget.part.excerpt.startSeconds = newValue;
+            },
+            /**
+             * @param {GuidePartWidget} widget
+             * @param {number} newValue
+             */
+            onEndSecondsChangeHacky(widget, newValue) {
+                widget.part.excerpt.endSeconds = newValue;
+            },
         },
         data() {
             return {
                 parts: [
-                    new GuidePartText(`### Pantenol\nPantenol fucks! )`),
-                    new GuidePartText('Pantelol'),
-                    new GuidePartVideo(
-                        {
-                            youtubeVideoId: 'qhtQx9ZXrf8',
-                            startSeconds: 12.32,
-                            endSeconds: 865.3,
-                        }
+                    new GuidePartWidget(
+                        new GuidePartText('Pantelol')
+                    ),
+                    new GuidePartWidget(
+                        new GuidePartVideo(
+                            {
+                                youtubeVideoId: 'qhtQx9ZXrf8',
+                                startSeconds: 12.32,
+                                endSeconds: 30.3,
+                            }
+                        )
+                    ),
+                    new GuidePartWidget(
+                        new GuidePartText(
+                            `### Pantenol\n![](https://i.imgur.com/Eug7rxn.png) )`
+                        ),
                     ),
                 ]
             }
-        },
-        components: {YoutubeVideo, draggable},
-    };
+        }
+        ,
+        components: {
+            YoutubeExcerptEditor, YoutubeVideo, draggable
+        }
+        ,
+    }
+    ;
 
 </script>
 
 <style scoped>
+    @import '../assets/css/fonts.css';
+    @import '../assets/css/overwatch-ui.css';
+
     .wrap {
         min-width: 20em;
         display: inline-block;
@@ -107,10 +210,46 @@
         border-radius: 1em;
         border: 1px solid hsl(33, 100%, 88%);
         cursor: pointer;
-        pointer-events: initial;
     }
 
     .text-guide-part {
-        text-align: left;
+        max-width: 20em;
     }
+
+    .text-guide-part-content {
+        text-align: left;
+        pointer-events: none;
+    }
+
+    .edit-button {
+
+    }
+
+    .guide-part-text-editor {
+        width: 100%;
+    }
+
+    .text-guide-part-content >>> img {
+        max-width: 100%;
+    }
+
+    .create-buttons {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .create-new-part-button {
+        font-size: 2em;
+        padding: .3em;
+        line-height: 1em;
+    }
+
+    .video {
+        display: block;
+    }
+
+    .video-editor {
+        display: block;
+    }
+
 </style>

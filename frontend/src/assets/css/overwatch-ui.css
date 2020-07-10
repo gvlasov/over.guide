@@ -1,0 +1,19 @@
+@import "./fonts.css";
+
+.overwatch-main-button {
+    background-color: orange;
+    color: white;
+    font-family: 'Futura Demi Bold', sans-serif;
+    font-variant-caps: all-small-caps;
+    border: 0;
+    font-weight: bold;
+    display: inline-block;
+    opacity: .88;
+    cursor: pointer;
+    user-select: none;
+    font-size: 1em;
+    line-height: 1.9em;
+    padding: .4em 2.7em .8em 2.7em;
+    letter-spacing: 0.03em;
+    border-radius: .13em;
+}

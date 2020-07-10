@@ -9,7 +9,7 @@
             />
         </div>
         <div
-                class="approve-button"
+                class="approve-button overwatch-main-button"
                 v-hammer:tap="approveRoles"
                 v-bind:class="{disabled: !canApprove}"
         >READY
@@ -46,23 +46,14 @@
 
 <style scoped>
     @import '../assets/css/fonts.css';
+    @import '../assets/css/overwatch-ui.css';
 
     .approve-button {
-        background-color: orange;
-        color: white;
-        font-family: 'Futura Demi Bold', sans-serif;
         font-size: 2.5vw;
-        font-variant-caps: all-small-caps;
         line-height: 1.9vw;
-        border: 0;
-        font-weight: bold;
         padding: .4vw 2.7vw .8vw 2.7vw;
-        display: inline-block;
         letter-spacing: 0.03em;
         border-radius: .13vw;
-        opacity: .88;
-        cursor: pointer;
-        user-select: none;
     }
 
     .checkboxes-wrap {

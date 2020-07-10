@@ -4,7 +4,7 @@
             <div class="time-part-wrap">
                 <button
                         class="add-button"
-                        @click="hours += 1"
+                        @click="seconds = 0; minutes = 0; millis =0; hours += 1;"
                         v-bind:disabled="totalValueSeconds === maxSeconds"
                 ></button>
                 <input
@@ -99,6 +99,15 @@
             showHours: Boolean,
         },
         methods: {
+            setNewTotalSecondsWithClamping(targetTime, alternativeTime) {
+                if (targetTime > this.maxSeconds) {
+                    this.setNewTotalSeconds(
+                        alternativeTime
+                    );
+                } else {
+                    this.setNewTotalSeconds(targetTime);
+                }
+            },
             setNewTotalSeconds(value) {
                 if (value === '') {
                     return;
@@ -120,8 +129,9 @@
                     );
                 },
                 set(value) {
-                    this.setNewTotalSeconds(
-                        value * 3600 + this.minutes * 60 + this.seconds + this.millis / 1000
+                    this.setNewTotalSecondsWithClamping(
+                        value * 3600 + this.minutes * 60 + this.seconds + this.millis / 1000,
+                        value * 3600
                     );
                 }
             },
@@ -132,8 +142,9 @@
                     );
                 },
                 set(value) {
-                    this.setNewTotalSeconds(
-                        this.hours * 3600 + value * 60 + this.seconds + this.millis / 1000
+                    this.setNewTotalSecondsWithClamping(
+                        this.hours * 3600 + value * 60 + this.seconds + this.millis / 1000,
+                        this.hours * 3600 + value * 60
                     );
                 }
             },
@@ -144,8 +155,9 @@
                     );
                 },
                 set(value) {
-                    this.setNewTotalSeconds(
-                        this.hours * 3600 + this.minutes * 60 + value + this.millis / 1000
+                    this.setNewTotalSecondsWithClamping(
+                        this.hours * 3600 + this.minutes * 60 + value + this.millis / 1000,
+                        this.hours * 3600 + this.minutes * 60 + value
                     );
                 }
             },

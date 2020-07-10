@@ -6,12 +6,14 @@
                     :start="startSeconds"
                     :end="endSeconds"
                     :loop="true"
-                    :autoplay="false"
+                    :autoplay="true"
+                    :player-element-id="playerElementId"
                     @playerReady="onPlayerReady"
                     @play="onPlay"
                     @pause="onPause"
                     @skip="onSkip"
-                    style="margin-bottom: .4em;"
+                    class="video"
+                    v-bind:style="'width: '+videoCssWidth+'; height: '+videoCssHeight"
             />
             <div>
                 <ExcerptTimebar
@@ -26,6 +28,7 @@
                         @dragStart="onDragStart"
                         @dragEnd="onDragEnd"
                         @dragContinue="onDragContinue"
+                        @draglessClick="onDraglessClick"
                         class="timebar"
                 />
             </div>
@@ -35,7 +38,7 @@
                         v-model="startSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
-                        :max-seconds="durationSeconds"
+                        :max-seconds="endSeconds"
                 />
                 <div class="crop-buttons">
                     <button
@@ -84,7 +87,45 @@
     const backend = new Backend(axios);
     export default {
         name: 'YoutubeExcerptEditor',
-        props: {},
+        props: {
+            videoId: {
+                type: String,
+                required: true,
+            },
+            initialStartSeconds: {
+                type: Number,
+                required: true,
+            },
+            initialEndSeconds: {
+                type: Number,
+                required: true,
+            },
+            playerElementId: {
+                type: String
+            },
+            videoCssWidth: {
+                type: String,
+                default: '640px'
+            },
+            videoCssHeight: {
+                type: String,
+                default: '390px'
+            },
+        },
+        data() {
+            return {
+                startSeconds: this.initialStartSeconds,
+                endSeconds: this.initialEndSeconds,
+                durationSeconds: null,
+                currentSeconds: 0,
+                player: null,
+                playing: false,
+                hovered: false,
+                playerHasBeenPlaying: null,
+                pasteHandler: null,
+                isVideoLoaded: false,
+            }
+        },
         methods: {
             saveToServer() {
                 backend.saveVideoExcerpt({
@@ -113,8 +154,8 @@
             onPlayerReady(player) {
                 this.player = player;
                 this.durationSeconds = player.getDuration();
-                this.startSeconds = 0;
-                this.endSeconds = player.getDuration();
+                // this.startSeconds = 0;
+                // this.endSeconds = player.getDuration();
                 this.isVideoLoaded = true;
             },
             onPlay() {
@@ -148,14 +189,21 @@
                 if (this.playerHasBeenPlaying) {
                     this.player.playVideo();
                     this.playerHasBeenPlaying = null;
-                    this.player.seekTo(drag.start * this.durationSeconds);
                 }
             },
+            onDraglessClick(clickCoord) {
+                this.player.seekTo(this.clickCoordToSeconds(clickCoord));
+            },
             setBoundsFromDrag(drag) {
-                const start = Math.min(drag.start, drag.end);
-                const end = Math.max(drag.start, drag.end);
-                this.startSeconds = Number.parseFloat((this.durationSeconds * start).toFixed(2));
-                this.endSeconds = Number.parseFloat((this.durationSeconds * end).toFixed(2));
+                this.startSeconds = this.clickCoordToSeconds(
+                    Math.min(drag.start, drag.end)
+                );
+                this.endSeconds = this.clickCoordToSeconds(
+                    Math.max(drag.start, drag.end)
+                );
+            },
+            clickCoordToSeconds(clickCoord) {
+                return Number.parseFloat((this.durationSeconds * clickCoord).toFixed(2));
             },
             onPause() {
                 this.currentSeconds = this.player.getCurrentTime();
@@ -166,22 +214,6 @@
                 }
             },
         },
-        data() {
-            return {
-                videoUrl: 'https://www.youtube.com/watch?v=1Oq-jvwQEj4',
-                // videoUrl: '',
-                startSeconds: 7,
-                endSeconds: 12,
-                durationSeconds: null,
-                currentSeconds: 0,
-                player: null,
-                playing: false,
-                hovered: false,
-                playerHasBeenPlaying: null,
-                pasteHandler: null,
-                isVideoLoaded: false,
-            }
-        },
         watch: {
             startSeconds(value) {
                 if (
@@ -190,6 +222,11 @@
                 ) {
                     this.endSeconds = value + 1;
                 }
+                this.$emit('startSecondsChange', value);
+            },
+            endSeconds(value) {
+                this.player.seekTo(value - 1);
+                this.$emit('endSecondsChange', value);
             },
             videoId(value) {
                 this.isVideoLoaded = false;
@@ -226,16 +263,6 @@
                     }
                 }
             },
-            videoId() {
-                if (this.videoUrl === '') {
-                    return null;
-                }
-                var match = this.videoUrl.match(/v=([^&]+)/);
-                if (match === null || typeof match[1] == 'undefined') {
-                    return null;
-                }
-                return match[1];
-            },
             /**
              * @return {boolean}
              */
@@ -255,7 +282,12 @@
                 if (document.activeElement === document.body) {
                     const clipboardContent =
                         (event.clipboardData || window.clipboardData).getData('text');
-                    self.videoUrl = clipboardContent;
+
+                    var match = clipboardContent.match(/v=([^&]+)/);
+                    if (match === null || typeof match[1] == 'undefined') {
+                        return null;
+                    }
+                    self.videoId = match[1];
                 }
             };
             document.addEventListener('paste', this.pasteHandler);
@@ -302,5 +334,9 @@
     .button-icon {
         width: 100%;
         height: 100%;
+    }
+
+    .video {
+        margin-bottom: .4em;
     }
 </style>

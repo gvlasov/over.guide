@@ -38,11 +38,15 @@
             playerElementId: {
                 type: String,
                 default: () => undefined
+            },
+            mute: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {
             rescheduleLooping() {
-                if (this.end !== null) {
+                if (this.end !== null && this.player !== undefined) {
                     this.tryClearingLoopTimeout();
                     this.timeout = setTimeout(
                         () => this.goToLoopStart(),
@@ -77,8 +81,8 @@
                                 showinfo: 0,
                                 autoplay: self.autoplay,
                             },
-                            height: self.width / 640 * 390,
-                            width: self.width,
+                            width: null,
+                            height: null,
                             events: {
                                 'onReady': (event) => {
                                     self.goToLoopStart();
@@ -86,6 +90,9 @@
                                         self.player.playVideo();
                                     } else {
                                         self.player.pauseVideo();
+                                    }
+                                    if (self.mute) {
+                                        self.player.mute();
                                     }
                                     self.$emit('playerReady', self.player)
                                 },
