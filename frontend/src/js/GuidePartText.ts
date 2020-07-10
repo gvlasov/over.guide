@@ -3,7 +3,7 @@ import md5 from 'md5'
 
 export default class GuidePartText implements GuidePart {
 
-    private readonly text: string;
+    text: string;
 
     constructor(text: string) {
         this.text = text;

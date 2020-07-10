@@ -4,6 +4,24 @@
                 :subject="subject"
                 :object="object"
         />
+        <YoutubeVideo
+                :video-id="'l_yKE4s-krk'"
+                :start="0"
+                :end="5"
+                :loop="false"
+                :autoplay="true"
+                :width="300"
+                style="pointer-events: none;"
+        />
+        <YoutubeVideo
+                :video-id="'l_yKE4s-krk'"
+                :start="1"
+                :end="5"
+                :loop="false"
+                :autoplay="true"
+                :width="300"
+                style="pointer-events: none;"
+        />
     </div>
 </template>
 
@@ -13,6 +31,7 @@
     import Topic from "../js/Topic";
     import heroes from "data/heroes";
     import MatchupEvaluator from "@/vue/MatchupEvaluator";
+    import YoutubeVideo from "@/vue/YoutubeVideo";
 
     const backend = new Backend(axios);
 
@@ -29,6 +48,7 @@
             };
         },
         components: {
+            YoutubeVideo,
             MatchupEvaluator,
         },
     };

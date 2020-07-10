@@ -3,10 +3,14 @@
 </template>
 
 <script>
-    var player;
-    var timeout;
     export default {
         name: 'YoutubeVideo',
+        data() {
+            return {
+                player: undefined,
+                timeout: undefined,
+            }
+        },
         props: {
             videoId: {
                 type: String
@@ -31,28 +35,32 @@
                 type: Number,
                 default: 640
             },
+            playerElementId: {
+                type: String,
+                default: () => undefined
+            }
         },
         methods: {
             rescheduleLooping() {
                 if (this.end !== null) {
                     this.tryClearingLoopTimeout();
-                    timeout = setTimeout(
+                    this.timeout = setTimeout(
                         () => this.goToLoopStart(),
-                        (this.end - player.getCurrentTime()) * 1000 - 10
+                        (this.end - this.player.getCurrentTime()) * 1000 - 10
                     );
                 }
             },
             tryClearingLoopTimeout() {
-                if (typeof timeout !== 'undefined') {
-                    clearTimeout(timeout);
+                if (typeof this.timeout !== 'undefined') {
+                    clearTimeout(this.timeout);
                 }
             },
             goToLoopStart() {
-                player.seekTo(this.start);
+                this.player.seekTo(this.start);
             },
             rebuildVideo(videoId) {
-                if (typeof player !== 'undefined') {
-                    player.destroy();
+                if (typeof this.player !== 'undefined') {
+                    this.player.destroy();
                 }
                 const self = this;
                 var script = document.createElement('script');
@@ -61,7 +69,7 @@
                 (document.head || document.body).appendChild(script);
                 script.onload = function () {
                     window.YT.ready(function () {
-                        player = new YT.Player(self.elementId, {
+                        self.player = new YT.Player(self.elementId, {
                             videoId: videoId,
                             playerVars: {
                                 modestbranding: 1,
@@ -75,11 +83,11 @@
                                 'onReady': (event) => {
                                     self.goToLoopStart();
                                     if (self.autoplay) {
-                                        player.playVideo();
+                                        self.player.playVideo();
                                     } else {
-                                        player.pauseVideo();
+                                        self.player.pauseVideo();
                                     }
-                                    self.$emit('playerReady', player)
+                                    self.$emit('playerReady', self.player)
                                 },
                                 'onStateChange': (event) => {
                                     if (event.data === YT.PlayerState.PLAYING) {
@@ -98,15 +106,19 @@
         },
         computed: {
             elementId() {
-                return 'youtube-player-' + this.videoId;
+                if (typeof this.playerElementId === 'undefined') {
+                    return 'youtube-player-' + this.videoId + '-' + this.start + '-' + this.end;
+                } else {
+                    return this.playerElementId;
+                }
             },
         },
         watch: {
             start(value) {
-                player.seekTo(value);
+                this.player.seekTo(value);
             },
             end(value) {
-                if (typeof player !== 'undefined') {
+                if (typeof this.player !== 'undefined') {
                     this.rescheduleLooping()
                 }
             },
@@ -123,9 +135,6 @@
         },
         mounted() {
             this.rebuildVideo(this.videoId);
-        },
-        data() {
-            return {}
         },
     };
 

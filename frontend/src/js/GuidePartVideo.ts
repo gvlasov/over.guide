@@ -4,7 +4,7 @@ import md5 from 'md5'
 
 export default class GuidePartVideo implements GuidePart {
 
-    private readonly excerpt: YoutubeVideoExcerpt;
+    excerpt: YoutubeVideoExcerpt;
 
     constructor(excerpt: YoutubeVideoExcerpt) {
         this.excerpt = excerpt;
