@@ -1,5 +1,8 @@
 <template>
     <div class="wrap">
+        <GuideHeroTag
+                :guide-hero-tag="tag"
+        />
         <TagBuilder/>
     </div>
 </template>
@@ -10,6 +13,7 @@
     import Topic from "../js/Topic";
     import heroes from "data/heroes";
     import TagBuilder from "@/vue/TagBuilder";
+    import GuideHeroTag from "@/vue/GuideHeroTag";
 
     const backend = new Backend(axios);
 
@@ -23,9 +27,15 @@
                 subject: subject,
                 object: object,
                 topic: new Topic([subject, object]),
+                tag: {
+                    playerHeroes: [heroes.get('pharah')],
+                    allyHeroes: [heroes.get('lucio'), heroes.get('ana')],
+                    enemyHeroes: [heroes.get('doomfist'), heroes.get('mei')],
+                },
             };
         },
         components: {
+            GuideHeroTag,
             TagBuilder,
         },
     };
