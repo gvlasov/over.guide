@@ -80,7 +80,6 @@
     import heroes from 'data/heroes'
     import HeroPortrait from "@/vue/HeroPortrait";
     import Roster from "@/vue/Roster";
-    import RosterPortrait from "@/vue/RosterPortrait";
 
     export default {
         props: {
@@ -125,7 +124,6 @@
             }
         },
         components: {
-            RosterPortrait,
             Roster,
             HeroPortrait: HeroPortrait
         },
