@@ -49,11 +49,6 @@
     @import '../assets/css/overwatch-ui.css';
 
     .approve-button {
-        font-size: 2.5vw;
-        line-height: 1.9vw;
-        padding: .4vw 2.7vw .8vw 2.7vw;
-        letter-spacing: 0.03em;
-        border-radius: .13vw;
     }
 
     .checkboxes-wrap {

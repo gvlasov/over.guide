@@ -11,9 +11,10 @@
     opacity: .88;
     cursor: pointer;
     user-select: none;
-    font-size: 1em;
-    line-height: 1.9em;
-    padding: .4em 2.7em .8em 2.7em;
+    font-size: 3.0em;
+    line-height: 1em;
+    padding: .03em 1.07em .19em 1.07em;
     letter-spacing: 0.03em;
-    border-radius: .13em;
+    border-radius: .06em;
+
 }
