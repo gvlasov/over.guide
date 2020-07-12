@@ -5,7 +5,7 @@ import Alternative from "src/data/dto/Alternative";
 import heroes from "src/data/heroes"
 import Role from 'src/data/Role';
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
-import * as sum from 'lodash.sum';
+import sum from 'lodash.sum';
 
 @Injectable()
 export class SuggestPickService {
@@ -15,10 +15,7 @@ export class SuggestPickService {
     }
 
     suggestPick(context: PickContext): Alternative[] {
-        console.log(context)
         const allyHeroes: Hero[] = context.allyComp.map(h => heroes.get(h))
-        console.log(allyHeroes)
-        console.log(heroes)
         const enemyHeroes: Hero[] = context.enemyComp.map(h => heroes.get(h))
         const missingRole = SuggestPickService.getMissingRole(allyHeroes)
         return Array.from(heroes.values())
@@ -43,7 +40,6 @@ export class SuggestPickService {
         let tanks = 0
         let damage = 0
         let support = 0
-        console.log(heroes)
         for (let hero of heroes) {
             if (hero === null) {
                 continue;

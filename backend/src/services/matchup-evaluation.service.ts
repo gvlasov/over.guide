@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import Hero from "src/data/dto/Hero";
 
-import * as countersData from "src/data/counters.json"
+import countersData from "src/data/counters.json"
 
 @Injectable()
 export class MatchupEvaluationService {

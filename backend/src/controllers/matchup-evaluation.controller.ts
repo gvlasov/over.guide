@@ -9,7 +9,6 @@ import {
     Res,
     UnauthorizedException
 } from '@nestjs/common';
-import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import HeroDataNames from "src/data/HeroDataNames";
 import heroes from "src/data/heroes"
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
@@ -18,6 +17,7 @@ import {Hero} from "src/database/models/Hero";
 import {Request, Response} from "express";
 import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
+import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 
 @Controller('matchup-evaluation')
 
