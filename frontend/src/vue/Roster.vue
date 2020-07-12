@@ -9,7 +9,7 @@
                 :pick-score="pickScore(hero)"
                 :selected-out="isHeroSelectedOut(hero)"
                 v-bind:class="{ selected: isHeroSelected(hero) }"
-                @heroSelect="onHeroSelect"
+                @heroSelect="onHeroTap"
         />
     </div>
 </template>
@@ -21,6 +21,10 @@
 
     export default {
         props: {
+            selectionOnTapEnabled: {
+                type: Boolean,
+                default: true
+            },
             heroes: {
                 type: Array,
                 default: () => [...heroes],
@@ -29,9 +33,9 @@
                 type: Array,
                 default: () => [],
             },
-            selectedHero: {
-                type: Object,
-                default: () => null,
+            selectedHeroes: {
+                type: Array,
+                default: () => [],
             },
             selectedOutHeroes: {
                 type: Array,
@@ -40,9 +44,12 @@
             pickScore: {
                 type: Function,
                 default: (hero) => undefined
-            }
+            },
         },
         methods: {
+            clearSelection() {
+                this.selectedHeroes.splice(0, this.selectedHeroes.length)
+            },
             /**
              * @param {Hero} hero
              * @return {boolean}
@@ -55,7 +62,7 @@
              * @return {boolean}
              */
             isHeroSelected(hero) {
-                return this.selectedHero !== null && this.selectedHero.dataName === hero.dataName;
+                return this.selectedHeroes.find(h => h.dataName === hero.dataName) !== undefined;
             },
             /**
              * @param {Hero} hero
@@ -63,9 +70,21 @@
             isHeroSelectedOut(hero) {
                 return typeof this.selectedOutHeroes.find(h => h.dataName === hero.dataName) !== 'undefined';
             },
-            onHeroSelect(hero) {
-                this.$emit('heroSelect', hero);
-            }
+            /**
+             * @param {Hero} hero
+             */
+            onHeroTap(hero) {
+                if (!this.selectionOnTapEnabled) {
+                    return;
+                }
+                const index = this.selectedHeroes.findIndex(h => h.dataName === hero.dataName);
+                if (index === -1) {
+                    this.selectedHeroes.push(hero)
+                } else {
+                    this.selectedHeroes.splice(index, 1)
+                }
+                this.$emit('selectedHeroesChange', this.selectedHeroes);
+            },
         },
         data() {
             return {

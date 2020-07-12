@@ -1,9 +1,11 @@
 <template>
     <Roster
+            ref="roster"
             :bans="context.bans"
             :heroes="heroes"
             :selected-out-heroes="context.selectedOutHeroes()"
-            v-on:heroSelect="onHeroSelect"
+            @selectedHeroesChange="onHeroSelect"
+            :selection-on-tap-enabled="true"
     />
 </template>
 
@@ -25,20 +27,16 @@
         computed: {
             heroes() {
                 if (this.showOnlyAvailableRoles) {
-                    const lefr = this.context.heroesLeftForRoster();
-                    console.log(lefr)
-                    return lefr
+                    return this.context.heroesLeftForRoster()
                 } else {
                     return Array.from(heroes.values());
                 }
             },
-            hs() {
-                return Array.from(heroes.value());
-            }
         },
         methods: {
-            onHeroSelect(hero) {
-                this.$emit('heroSelect', hero)
+            onHeroSelect(heroes) {
+                this.$emit('selectedHeroesChange', heroes)
+                this.$refs.roster.clearSelection();
             }
         },
         data() {

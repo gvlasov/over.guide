@@ -34,14 +34,15 @@
                     ref="roster"
                     :context="context"
                     :show-only-available-roles="true"
-                    v-on:heroSelect="onHeroSelect"
+                    @selectedHeroesChange="onHeroSelect"
                     v-if="suggestion === null"
             />
             <SuggestionRoster
                     ref="suggestionRoster"
                     :bans="context.bans"
                     :suggestion="suggestion"
-                    :selected-hero="selectedHero"
+                    :selected-heroes="[selectedHero]"
+                    :selection-on-tap-enabled="false"
                     v-if="suggestion !== null"
             />
         </div>
@@ -71,9 +72,13 @@
                 this.suggestion = null;
             },
             /**
-             * @param {Hero} hero
+             * @param {Hero[]} heroes
              */
-            onHeroSelect: function (hero) {
+            onHeroSelect: function (heroes) {
+                if (heroes.length > 1) {
+                    throw new Error(`${heroes.length} heroes selected`)
+                }
+                const hero = heroes[0];
                 if (this.pickMade) {
                     return;
                 }
@@ -97,7 +102,6 @@
                     return;
                 }
                 this.roles = roles;
-                console.log('approve role', roles)
                 this.context = generator.generateForRandomRole(roles, shuffleCounter++);
             },
         },

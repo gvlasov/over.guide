@@ -33,7 +33,7 @@
                 ref="picksRoster"
                 :context="context"
                 :show-only-available-roles="false"
-                v-on:heroSelect="onHeroSelect"
+                @selectedHeroesChange="onHeroSelect"
                 v-if="suggestion === null"
         />
         <SuggestionRoster
@@ -89,9 +89,13 @@
                 this.suggestion = null;
             },
             /**
-             * @param {Hero} hero
+             * @param {Hero[]} heroes
              */
-            onHeroSelect(hero) {
+            onHeroSelect(heroes) {
+                if (heroes.length > 1) {
+                    throw new Error(`${heroes.length} heroes selected`)
+                }
+                const hero = heroes[0];
                 if (this.context.isAllPick() && !this.context.enemyComp.isFull()) {
                     if (this.context.enemyComp.canSelect(hero)) {
                         this.context.enemyComp.setNextAvailable(hero);

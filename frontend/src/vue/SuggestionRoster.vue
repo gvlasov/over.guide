@@ -2,15 +2,15 @@
     <Roster
             :bans="bans"
             :heroes="suggestion.heroesSorted(h => -h.score)"
-            :selected-hero="selectedHero"
+            :selected-heroes="selectedHeroes"
             :pick-score="pickScore"
+            :selection-on-tap-enabled="false"
     />
 </template>
 
 <script>
     import PickSuggestion from "../js/PickSuggestion";
     import Roster from "./Roster.vue";
-    import Hero from "data/dto/Hero";
 
     export default {
         props: {
@@ -22,9 +22,9 @@
                 type: PickSuggestion,
                 default: () => null
             },
-            selectedHero: {
-                type: Object,
-                default: () => null
+            selectedHeroes: {
+                type: Array,
+                default: () => []
             }
         },
         methods: {
