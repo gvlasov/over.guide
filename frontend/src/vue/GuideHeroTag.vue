@@ -5,7 +5,7 @@
                 <a
                         v-for="hero in guideHeroTag.playerHeroes"
                         v-bind:href="'/#/guide-browser/'+hero.dataName"
-                        v-bind:title="'More guides about teaming up with ' + hero.name">
+                        v-bind:title="'More guides about playing ' + hero.name">
                     <HeroPortrait
                             v-for="hero in guideHeroTag.playerHeroes"
                             :hero="hero"
@@ -78,7 +78,6 @@
     }
 
     .portrait {
-        border-radius: .3em;
         width: 3em;
         vertical-align: middle;
         background-color: #28253a;
@@ -86,12 +85,12 @@
 
     .tag-type-group {
         display: inline-table;
-        border-spacing: .3em;
     }
 
     .tag-type-links-wrap {
         border-radius: .3em;
         display: inline-table;
+        border-spacing: .3em;
     }
 
     .tag-type-links-wrap-player {
@@ -108,6 +107,12 @@
 
     .tag-type-links-wrap > a {
         display: table-cell;
+        overflow: hidden;
+        border-radius: .3em;
+    }
+
+    .tag-type-links-wrap > a:hover > .portrait {
+        transform: scale(1.4);
     }
 
     .tag-type-infix {
