@@ -12,8 +12,8 @@
     import axios from 'axios';
     import Topic from "../js/Topic";
     import heroes from "data/heroes";
-    import TagBuilder from "@/vue/TagBuilder";
-    import GuideHeroTag from "@/vue/GuideHeroTag";
+    import TagBuilder from "@/vue/tags/TagBuilder";
+    import GuideHeroTag from "@/vue/tags/GuideHeroTag";
 
     const backend = new Backend(axios);
 

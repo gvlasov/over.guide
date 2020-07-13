@@ -132,7 +132,7 @@
 </script>
 
 <style scoped>
-    @import '../assets/css/overwatch-ui.css';
+    @import '../../assets/css/overwatch-ui.css';
 
     .wrap {
         text-align: left;
