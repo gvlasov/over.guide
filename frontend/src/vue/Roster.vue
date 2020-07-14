@@ -27,7 +27,7 @@
             },
             heroes: {
                 type: Array,
-                default: () => [...heroes],
+                default: () => Array.from(heroes.values()),
             },
             bans: {
                 type: Array,

@@ -1,9 +1,13 @@
 <template>
     <div class="wrap">
-        <GuideHeroTag
-                :guide-hero-tag="tag"
-        />
-        <TagBuilder/>
+        <div>Tag:</div>
+        <div>
+            <Tag :guide-hero-tag="tag"/>
+        </div>
+        <div>Tag builder:</div>
+        <div>
+            <TagBuilder :guide-hero-tag="tag"/>
+        </div>
     </div>
 </template>
 
@@ -12,8 +16,8 @@
     import axios from 'axios';
     import Topic from "../js/Topic";
     import heroes from "data/heroes";
-    import TagBuilder from "@/vue/tags/TagBuilder";
-    import GuideHeroTag from "@/vue/tags/GuideHeroTag";
+    import TagBuilder from "@/vue/guide-hero-tags/TagBuilder";
+    import Tag from "@/vue/guide-hero-tags/Tag";
 
     const backend = new Backend(axios);
 
@@ -35,7 +39,7 @@
             };
         },
         components: {
-            GuideHeroTag,
+            Tag,
             TagBuilder,
         },
     };
