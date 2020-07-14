@@ -26,8 +26,8 @@
 
 <script>
     import HeroPortrait from "@/vue/HeroPortrait";
-    import TagGroupFrame from "@/vue/guide-hero-tags/TagGroupFrame";
-    import TagGroupInvite from "@/vue/guide-hero-tags/TagGroupInvite";
+    import TagGroupFrame from "@/vue/guide-tags/hero/TagGroupFrame";
+    import TagGroupInvite from "@/vue/guide-tags/hero/TagGroupInvite";
 
     export default {
         props: {
