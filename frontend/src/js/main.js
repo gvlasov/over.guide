@@ -3,9 +3,9 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import './utils/vue-array-replace'
 import VueRouter from 'vue-router';
-import CountersPractice from '@/vue/CountersPractice.vue';
-import PickSuggestion from "@/vue/PickSuggestion.vue";
-import GuideEditor from "@/vue/GuideEditor.vue";
+import CountersPractice from '@/vue/training/CountersPractice.vue';
+import PickSuggestion from "@/vue/training/PickSuggestion.vue";
+import GuideEditor from "@/vue/guides/GuideEditor.vue";
 import TestingGround from "@/vue/TestingGround";
 
 const router = new VueRouter({

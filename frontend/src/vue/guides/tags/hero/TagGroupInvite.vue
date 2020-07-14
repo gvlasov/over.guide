@@ -6,7 +6,7 @@
 
 <script>
 
-    import TagGroupBackground from "@/vue/guide-tags/hero/TagGroupBackground";
+    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
 
     export default {
         props: {},

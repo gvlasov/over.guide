@@ -50,16 +50,16 @@
 </template>
 
 <script>
-    import Picks from '../vue/Picks.vue';
-    import Backend from '../js/Backend';
-    import Roster from '../vue/Roster.vue';
-    import PickContextGenerator from "../js/PickContextGenerator";
+    import Picks from '@/vue/training/Picks.vue';
+    import Backend from '@/js/Backend';
+    import Roster from '@/vue/Roster.vue';
+    import PickContextGenerator from "@/js/PickContextGenerator";
     import axios from "axios";
     import Keypress from 'vue-keypress'
-    import PickContext from "../js/PickContext";
-    import SuggestionRoster from "./SuggestionRoster.vue";
-    import SelectionRoster from "./SelectionRoster.vue";
-    import RoleSelection from "./RoleSelection.vue";
+    import PickContext from "@/js/PickContext";
+    import SuggestionRoster from "@/vue/training/SuggestionRoster.vue";
+    import SelectionRoster from "@/vue/training/SelectionRoster.vue";
+    import RoleSelection from "@/vue/training/RoleSelection.vue";
 
     const backend = new Backend(axios);
     let shuffleCounter = 0;
@@ -173,5 +173,4 @@
         pointer-events: none;
         opacity: .2;
     }
-
 </style>

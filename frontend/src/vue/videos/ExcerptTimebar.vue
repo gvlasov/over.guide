@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import formatInterval from "../js/utils/format-interval";
+    import formatInterval from "@/js/utils/format-interval";
 
     export default {
         name: 'ExcerptTimebar',

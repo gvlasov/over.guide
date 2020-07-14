@@ -9,8 +9,8 @@
 
 <script>
     import HeroPortrait from "@/vue/HeroPortrait";
-    import TagGroupFrame from "@/vue/guide-tags/hero/TagGroupFrame";
-    import TagPortrait from "@/vue/guide-tags/hero/TagPortrait";
+    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+    import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
 
     export default {
         props: {

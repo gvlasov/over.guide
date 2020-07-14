@@ -9,8 +9,8 @@
 </template>
 
 <script>
-    import PickSuggestion from "../js/PickSuggestion";
-    import Roster from "./Roster.vue";
+    import PickSuggestion from "@/js/PickSuggestion";
+    import Roster from "@/vue/Roster.vue";
 
     export default {
         props: {

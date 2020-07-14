@@ -78,10 +78,10 @@
 </template>
 
 <script>
-    import YoutubeVideo from "./YoutubeVideo.vue";
-    import ExcerptTimebar from "./ExcerptTimebar.vue";
-    import PreciseTimeInput from "./PreciseTimeInput.vue";
-    import Backend from "../js/Backend";
+    import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
+    import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
+    import PreciseTimeInput from "@/vue/videos/PreciseTimeInput.vue";
+    import Backend from "@/js/Backend";
     import axios from "axios";
 
     const backend = new Backend(axios);

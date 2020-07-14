@@ -15,19 +15,19 @@
 </template>
 
 <script>
-    import CountersPractice from '../vue/CountersPractice.vue';
-    import AdsensePlaceholder from "./AdsensePlaceholder.vue";
-    import PickSuggestion from "./PickSuggestion.vue";
+    import CountersPractice from '@/vue/training/CountersPractice.vue';
+    import AdsensePlaceholder from "@/vue/AdsensePlaceholder.vue";
+    import PickSuggestion from "@/vue/training/PickSuggestion.vue";
     import Vue from 'vue';
     import {VueHammer} from 'vue2-hammer';
     import flexTouch from 'vue-flex-touch';
-    import MatchupEvaluation from "./MatchupEvaluation.vue";
+    import MatchupEvaluation from "@/vue/MatchupEvaluation.vue";
 
     import heroes from "data/heroes";
-    import Topic from "../js/Topic";
-    import YoutubeExcerptEditor from "./YoutubeExcerptEditor.vue";
-    import GuideEditor from "./GuideEditor.vue";
-    import RoleSelection from "./RoleSelection";
+    import Topic from "@/js/Topic";
+    import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor.vue";
+    import GuideEditor from "@/vue/guides/GuideEditor.vue";
+    import RoleSelection from "@/vue/training/RoleSelection.vue";
     import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
     import MatchupEvaluator from "@/vue/MatchupEvaluator";
 

@@ -14,10 +14,10 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guide-tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guide-tags/hero/TagGroupBackground";
-    import TagPortrait from "@/vue/guide-tags/hero/TagPortrait";
-    import TagGroupInvite from "@/vue/guide-tags/hero/TagGroupInvite";
+    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+    import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
+    import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
     import Roster from "@/vue/Roster";
 
 

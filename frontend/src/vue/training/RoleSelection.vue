@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import RoleCheckbox from "./RoleCheckbox.vue";
+    import RoleCheckbox from "@/vue/training/RoleCheckbox.vue";
     import Role from "data/Role";
 
     export default {
@@ -45,8 +45,8 @@
 </script>
 
 <style scoped>
-    @import '../assets/css/fonts.css';
-    @import '../assets/css/overwatch-ui.css';
+    @import '../../assets/css/fonts.css';
+    @import '../../assets/css/overwatch-ui.css';
 
     .approve-button {
     }

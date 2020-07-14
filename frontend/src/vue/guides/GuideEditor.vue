@@ -91,12 +91,12 @@
 </template>
 
 <script>
-    import GuidePartText from '../js/GuidePartText';
-    import GuidePartVideo from '../js/GuidePartVideo';
-    import YoutubeVideo from "./YoutubeVideo.vue";
+    import GuidePartText from '@/js/GuidePartText';
+    import GuidePartVideo from '@/js/GuidePartVideo';
+    import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
     import draggable from 'vuedraggable'
     import GuidePartWidget from "@/js/GuidePartWidget";
-    import YoutubeExcerptEditor from "@/vue/YoutubeExcerptEditor";
+    import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
 
     export default {
         model: {},
@@ -196,8 +196,8 @@
 </script>
 
 <style scoped>
-    @import '../assets/css/fonts.css';
-    @import '../assets/css/overwatch-ui.css';
+    @import '../../assets/css/fonts.css';
+    @import '../../assets/css/overwatch-ui.css';
 
     .wrap {
         min-width: 20em;

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guide-tags/hero/TagGroupFrame";
+    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
 
     export default {
         props: {},

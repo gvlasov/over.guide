@@ -9,8 +9,7 @@
 </template>
 
 <script>
-    import HeroPortrait from "./HeroPortrait.vue";
-    import Hero from "data/dto/Hero";
+    import HeroPortrait from "@/vue/HeroPortrait.vue";
 
     export default {
         props: {

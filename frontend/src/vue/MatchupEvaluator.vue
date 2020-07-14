@@ -35,11 +35,11 @@
 </template>
 
 <script>
-    import PlayerPick from "./PlayerPick.vue";
-    import Backend from "../js/Backend";
+    import PlayerPick from "@/vue/training/PlayerPick.vue";
+    import Backend from "@/js/Backend";
     import axios from 'axios';
-    import TopicComments from "./TopicComments.vue";
-    import Topic from "../js/Topic";
+    import TopicComments from "@/vue/TopicComments.vue";
+    import Topic from "@/js/Topic";
 
     const backend = new Backend(axios);
 

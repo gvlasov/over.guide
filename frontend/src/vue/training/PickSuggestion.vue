@@ -46,14 +46,14 @@
 </template>
 
 <script>
-    import Picks from '../vue/Picks.vue';
-    import Backend from '../js/Backend';
-    import Roster from '../vue/Roster.vue';
+    import Picks from '@/vue/training/Picks.vue';
+    import Backend from '@/js/Backend';
+    import Roster from '@/vue/Roster.vue';
     import axios from "axios";
     import SuggestionRoster from "./SuggestionRoster.vue";
     import SelectionRoster from "./SelectionRoster.vue";
-    import PickContextGenerator from "../js/PickContextGenerator";
-    import TeamComp from "../js/TeamComp";
+    import PickContextGenerator from "@/js/PickContextGenerator";
+    import TeamComp from "@/js/TeamComp";
 
     const backend = new Backend(axios);
     const contextGenerator = new PickContextGenerator();

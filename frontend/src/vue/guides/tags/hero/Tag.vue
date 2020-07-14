@@ -45,9 +45,9 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guide-tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guide-tags/hero/TagGroupBackground";
-    import TagPortraitLinked from "@/vue/guide-tags/hero/TagPortraitLinked";
+    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+    import TagPortraitLinked from "@/vue/guides/tags/hero/TagPortraitLinked";
 
     export default {
         props: {

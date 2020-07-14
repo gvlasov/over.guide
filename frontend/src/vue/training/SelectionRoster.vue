@@ -10,8 +10,8 @@
 </template>
 
 <script>
-    import PickContext from "../js/PickContext";
-    import Roster from "./Roster.vue";
+    import PickContext from "@/js/PickContext";
+    import Roster from "@/vue/Roster.vue";
     import heroes from "data/heroes";
 
     export default {
