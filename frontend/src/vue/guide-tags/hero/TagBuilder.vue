@@ -1,75 +1,77 @@
 <template>
-    <div class="wrap">
-        <TagGroupFrame>
-            <template slot="infix"></template>
-            <template slot="frame-content">
-                <TagGroupBackground
-                        v-if="guideHeroTag.playerHeroes.length > 0"
-                        class="tag-type-links-wrap-player tappable-background"
-                        v-hammer:tap="() => (selecting = 'player')"
-                        v-bind:class="selecting === 'player' ? 'selected-group' : ''"
-                >
-                    <TagPortrait
-                            v-for="hero in guideHeroTag.playerHeroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                    />
-                </TagGroupBackground>
-                <TagGroupInvite
-                        v-else
-                        v-hammer:tap="() => (selecting = 'player')"
-                        v-bind:class="selecting === 'player' ? 'selected-group' : ''"
-                >Player
-                </TagGroupInvite>
-            </template>
-        </TagGroupFrame><!--
+    <div>
+        <div class="wrap">
+            <TagGroupFrame>
+                <template slot="infix"></template>
+                <template slot="frame-content">
+                    <TagGroupBackground
+                            v-if="guideHeroTag.playerHeroes.length > 0"
+                            class="tag-type-links-wrap-player tappable-background"
+                            v-hammer:tap="() => (selecting = 'player')"
+                            v-bind:class="selecting === 'player' ? 'selected-group' : ''"
+                    >
+                        <TagPortrait
+                                v-for="hero in guideHeroTag.playerHeroes"
+                                :key="hero.dataName"
+                                :hero="hero"
+                        />
+                    </TagGroupBackground>
+                    <TagGroupInvite
+                            v-else
+                            v-hammer:tap="() => (selecting = 'player')"
+                            v-bind:class="selecting === 'player' ? 'selected-group' : ''"
+                    >Player
+                    </TagGroupInvite>
+                </template>
+            </TagGroupFrame><!--
         -->
-        <TagGroupFrame>
-            <template slot="infix">+</template>
-            <template slot="frame-content">
-                <TagGroupBackground
-                        v-if="guideHeroTag.allyHeroes.length > 0"
-                        class="tag-type-links-wrap-ally tappable-background"
-                        v-hammer:tap="() => (selecting = 'ally')"
-                        v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
-                >
-                    <TagPortrait
-                            v-for="hero in guideHeroTag.allyHeroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                    />
-                </TagGroupBackground>
-                <TagGroupInvite
-                        v-else
-                        v-hammer:tap="() => (selecting = 'ally')"
-                        v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
-                >Ally
-                </TagGroupInvite>
-            </template>
-        </TagGroupFrame>
-        <TagGroupFrame>
-            <template slot="infix">VS</template>
-            <template slot="frame-content">
-                <TagGroupBackground
-                        v-if="guideHeroTag.enemyHeroes.length > 0"
-                        class="tag-type-links-wrap-enemy tappable-background"
-                        v-hammer:tap="() => (selecting = 'enemy')"
-                        v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
-                >
-                    <TagPortrait
-                            v-for="hero in guideHeroTag.enemyHeroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                    />
-                </TagGroupBackground>
-                <TagGroupInvite
-                        v-else
-                        v-hammer:tap="() => (selecting = 'enemy')"
-                        v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
-                >Enemy
-                </TagGroupInvite>
-            </template>
-        </TagGroupFrame>
+            <TagGroupFrame>
+                <template slot="infix">+</template>
+                <template slot="frame-content">
+                    <TagGroupBackground
+                            v-if="guideHeroTag.allyHeroes.length > 0"
+                            class="tag-type-links-wrap-ally tappable-background"
+                            v-hammer:tap="() => (selecting = 'ally')"
+                            v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
+                    >
+                        <TagPortrait
+                                v-for="hero in guideHeroTag.allyHeroes"
+                                :key="hero.dataName"
+                                :hero="hero"
+                        />
+                    </TagGroupBackground>
+                    <TagGroupInvite
+                            v-else
+                            v-hammer:tap="() => (selecting = 'ally')"
+                            v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
+                    >Ally
+                    </TagGroupInvite>
+                </template>
+            </TagGroupFrame>
+            <TagGroupFrame>
+                <template slot="infix">VS</template>
+                <template slot="frame-content">
+                    <TagGroupBackground
+                            v-if="guideHeroTag.enemyHeroes.length > 0"
+                            class="tag-type-links-wrap-enemy tappable-background"
+                            v-hammer:tap="() => (selecting = 'enemy')"
+                            v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
+                    >
+                        <TagPortrait
+                                v-for="hero in guideHeroTag.enemyHeroes"
+                                :key="hero.dataName"
+                                :hero="hero"
+                        />
+                    </TagGroupBackground>
+                    <TagGroupInvite
+                            v-else
+                            v-hammer:tap="() => (selecting = 'enemy')"
+                            v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
+                    >Enemy
+                    </TagGroupInvite>
+                </template>
+            </TagGroupFrame>
+        </div>
         <TagBuilderRoster
                 v-model="guideHeroTag.playerHeroes"
                 v-if="selecting === 'player'"
@@ -130,6 +132,7 @@
 
 <style scoped>
     .wrap {
+        display: inline-flex;
     }
 
     .tag-type-links-wrap-player {

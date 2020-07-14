@@ -77,6 +77,7 @@
 
 <style scoped>
     .wrap {
+        display: inline-flex;
     }
 
     .tag-type-links-wrap-player {
