@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/js-cookie": "^2.2.6",
+    "@voerro/vue-tagsinput": "github:gvlasov/vue-tagsinput#slot",
     "axios": "^0.19.2",
     "fast-shuffle": "^2.0.2",
     "grunt-env": "~1.0.1",

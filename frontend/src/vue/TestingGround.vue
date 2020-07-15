@@ -8,6 +8,10 @@
         <div>
             <TagBuilder :guide-hero-tag="tag"/>
         </div>
+        <div>
+            <ThematicTagInput
+            />
+        </div>
     </div>
 </template>
 
@@ -18,6 +22,7 @@
     import heroes from "data/heroes";
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import Tag from "@/vue/guides/tags/hero/Tag";
+    import ThematicTagInput from "@/vue/guides/ThematicTagInput";
 
     const backend = new Backend(axios);
 
@@ -41,6 +46,7 @@
         components: {
             Tag,
             TagBuilder,
+            ThematicTagInput,
         },
     };
 
