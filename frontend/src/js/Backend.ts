@@ -19,7 +19,6 @@ export default class Backend {
             + (window.location.hostname === env.DOCKER_FRONTEND_HOST ? env.DOCKER_BACKEND_HOST : window.location.hostname)
             + ":"
             + env.BACKEND_PORT;
-        console.log(this.rootUrl)
     }
 
     protected async query<R>(
