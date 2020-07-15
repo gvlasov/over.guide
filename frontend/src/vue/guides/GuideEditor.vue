@@ -196,8 +196,8 @@
 </script>
 
 <style scoped>
-    @import '../../assets/css/fonts.css';
-    @import '../../assets/css/overwatch-ui.css';
+    @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/overwatch-ui.css';
 
     .wrap {
         min-width: 20em;

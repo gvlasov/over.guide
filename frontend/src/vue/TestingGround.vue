@@ -12,9 +12,9 @@
 </template>
 
 <script>
-    import Backend from "src/js/Backend";
+    import Backend from "@/js/Backend";
     import axios from 'axios';
-    import Topic from "src/js/Topic";
+    import Topic from "@/js/Topic";
     import heroes from "data/heroes";
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import Tag from "@/vue/guides/tags/hero/Tag";
