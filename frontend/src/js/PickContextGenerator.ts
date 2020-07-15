@@ -4,46 +4,46 @@ import BansGenerator from "./BansGenerator";
 import RoleGenerator from "./RoleGenerator";
 import TeamComp from "./TeamComp";
 import Role from "data/Role";
+import SeededShuffler from "@/js/SeededShuffler";
 
 export default class PickContextGenerator {
 
-    generateForRole(
-        seed: string,
-        yourRole: Role
-    ): PickContext {
-        const bans = new BansGenerator().generate(seed);
-        const teamCompGenerator = new TeamCompGenerator(bans);
+    constructor(private readonly shuffler: SeededShuffler) {
+    }
+
+    generateForRole(yourRole: Role): PickContext {
+        const bans = new BansGenerator(
+            this.shuffler
+        ).generate();
+        const teamCompGenerator = new TeamCompGenerator(bans, this.shuffler);
         return new PickContext(
-            teamCompGenerator.generateForRole(yourRole, seed),
-            teamCompGenerator.generateComplete(seed + 1),
+            teamCompGenerator.generateForRole(yourRole),
+            teamCompGenerator.generateComplete(),
             bans,
             "Hanamura"
         );
     };
 
-    generateForRandomRole(availableRoles: Role[], seed: string): PickContext {
+    generateForRandomRole(availableRoles: Role[]): PickContext {
         return this.generateForRole(
-            seed,
-            new RoleGenerator(availableRoles).generate(seed)
+            new RoleGenerator(availableRoles, this.shuffler).generate()
         );
     };
 
-    generateEmptyAlliesOnly(seed: string): PickContext {
-        const bans = new BansGenerator().generate(seed);
+    generateEmptyAlliesOnly(shuffler: SeededShuffler): PickContext {
         return new PickContext(
             new TeamComp([null, null, null, null, null, null]),
             null,
-            bans,
+            new BansGenerator(shuffler).generate(),
             "Hanamura"
         );
     };
 
-    generateEmptyAllPick = function (seed: string) {
-        const bans = new BansGenerator().generate(seed);
+    generateEmptyAllPick = function (shuffler: SeededShuffler) {
         return new PickContext(
             new TeamComp([null, null, null, null, null, null]),
             new TeamComp([null, null, null, null, null, null]),
-            bans,
+            new BansGenerator(shuffler).generate(),
             "Hanamura"
         );
     };

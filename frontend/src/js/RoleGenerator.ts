@@ -1,17 +1,19 @@
-import seedrandom from "seedrandom";
 import Role from "data/Role"
+import SeededShuffler from "@/js/SeededShuffler";
 
 export default class RoleGenerator {
 
-    private readonly availableRoles: Role[];
 
-    constructor(availableRoles: Role[]) {
-        this.availableRoles = availableRoles;
+    constructor(
+        private readonly availableRoles: Role[],
+        private readonly shuffler: SeededShuffler,
+    ) {
 
     }
 
-    generate(seed: string): Role {
-        const random = Math.ceil(seedrandom(seed)() * this.availableRoles.length);
-        return this.availableRoles[random - 1];
+    generate(): Role {
+        return this.shuffler.shuffle(
+            this.availableRoles
+        )[0];
     };
 }

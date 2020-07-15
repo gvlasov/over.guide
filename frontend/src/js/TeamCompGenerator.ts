@@ -1,44 +1,41 @@
 import heroes from "data/heroes";
-import seedrandom from "seedrandom";
-import shuffle from "fast-shuffle";
 import TeamComp from "./TeamComp";
 import RoleGenerator from "./RoleGenerator";
 import Hero from "data/dto/Hero";
 import Role from "data/Role";
+import SeededShuffler from "@/js/SeededShuffler";
 
 export default class TeamCompGenerator {
-    private bans: Hero[];
 
-    constructor(bans: Hero[]) {
-        this.bans = bans;
+    constructor(
+        private readonly bans: Hero[],
+        private readonly shuffler: SeededShuffler,
+    ) {
     }
 
-    generateForRole(yourRole: Role | null, seed: string): TeamComp {
-        let random = seedrandom(seed);
+    generateForRole(yourRole: Role | null): TeamComp {
+
         const availableHeroes = Array.from(heroes.values())
             .filter(hero => !this.bans.includes(hero));
         const supports: (Hero | null)[] =
-            shuffle(
+            this.shuffler.shuffle(
                 availableHeroes.filter(hero => hero.role === Role.Support),
-                () => random()
             )
                 .slice(0, yourRole === Role.Support ? 1 : 2);
         if (yourRole === Role.Support) {
             supports.push(null);
         }
         const tanks: (Hero | null)[] =
-            shuffle(
+            this.shuffler.shuffle(
                 availableHeroes.filter(hero => hero.role === Role.Tank),
-                () => random()
             )
                 .slice(0, yourRole === Role.Tank ? 1 : 2);
         if (yourRole === Role.Tank) {
             tanks.push(null);
         }
         const damage: (Hero | null)[] =
-            shuffle(
+            this.shuffler.shuffle(
                 availableHeroes.filter(hero => hero.role === Role.Damage),
-                () => random()
             )
                 .slice(0, yourRole === Role.Damage ? 1 : 2);
         if (yourRole === Role.Damage) {
@@ -47,18 +44,20 @@ export default class TeamCompGenerator {
         return new TeamComp(tanks.concat(damage).concat(supports))
     };
 
-    generateSeeded(seed: string): TeamComp {
+    generateSeeded(): TeamComp {
         return this.generateForRole(
-            new RoleGenerator([Role.Tank, Role.Damage, Role.Support]).generate(seed),
-            seed
+            new RoleGenerator(
+                [Role.Tank, Role.Damage, Role.Support],
+                this.shuffler
+            ).generate()
         );
     };
 
     /**
      * Generate team composition with all 6 heroes
      */
-    generateComplete(seed: string): TeamComp {
-        return this.generateForRole(null, seed);
+    generateComplete(): TeamComp {
+        return this.generateForRole(null);
     };
 }
 
