@@ -1,15 +1,20 @@
 <template>
-    <div>
-        <Roster
-                @selectedHeroesChange="emitChange"
-                :selected-heroes="selectedHeroes"
-        />
-
-        <button
-                class="overwatch-main-button"
-                v-hammer:tap="onTap"
-        >Save
-        </button>
+    <div
+            class="roster-fixedbox"
+    >
+        <div class="roster-fixedbox-bg"/>
+        <div class="select-wrap">
+            <Roster
+                    @selectedHeroesChange="emitChange"
+                    :selected-heroes="selectedHeroes"
+                    class="roster"
+            />
+            <button
+                    class="overwatch-main-button"
+                    v-hammer:tap="onTap"
+            >Save
+            </button>
+        </div>
     </div>
 </template>
 
@@ -58,19 +63,14 @@
 </script>
 
 <style scoped>
-    .wrap {
+
+    .select-wrap {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
     }
 
-    .tag-type-links-wrap-player {
-        background-color: rgba(75, 125, 217, 0.9);
-    }
-
-    .tag-type-links-wrap-ally {
-        background-color: rgba(15, 213, 71, 0.9);
-    }
-
-    .tag-type-links-wrap-enemy {
-        background-color: rgba(229, 34, 34, 0.9);
+    .roster {
     }
 
     .tag-type-links-wrap > a {
@@ -83,8 +83,28 @@
         transform: scale(1.4);
     }
 
-    .tappable-background {
-        cursor: pointer;
+    .roster-fixedbox {
+        text-align: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto;
+        margin: auto;
+    }
+
+    .roster-fixedbox-bg {
+        opacity: .8;
+        background-color: black;
+        position: absolute;
+        width: 100%;
+        height: 100%;
     }
 
 </style>

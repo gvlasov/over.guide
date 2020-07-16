@@ -1,15 +1,16 @@
 <template>
     <div class="wrap">
-        <div>Tag:</div>
+        <!--        <div>Tag:</div>-->
+        <!--        <div>-->
+        <!--            <Tag :guide-hero-tag="tag"/>-->
+        <!--        </div>-->
+        <!--        <div>Tag builder:</div>-->
+        <!--        <div>-->
+        <!--            <TagBuilder :guide-hero-tag="tag"/>-->
+        <!--        </div>-->
         <div>
-            <Tag :guide-hero-tag="tag"/>
-        </div>
-        <div>Tag builder:</div>
-        <div>
-            <TagBuilder :guide-hero-tag="tag"/>
-        </div>
-        <div>
-            <ThematicTagInput
+            <SearchBar
+                    @search="onSearch"
             />
         </div>
     </div>
@@ -23,12 +24,17 @@
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import Tag from "@/vue/guides/tags/hero/Tag";
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
+    import SearchBar from "@/vue/guides/tags/SearchBar";
 
     const backend = new Backend(axios);
 
     export default {
         props: {},
-        methods: {},
+        methods: {
+            onSearch($event) {
+                console.log($event);
+            }
+        },
         data() {
             const subject = heroes.get('pharah');
             const object = heroes.get('mei');
@@ -47,6 +53,7 @@
             Tag,
             TagBuilder,
             ThematicTagInput,
+            SearchBar,
         },
     };
 

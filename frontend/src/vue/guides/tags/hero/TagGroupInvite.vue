@@ -26,6 +26,7 @@
     .invite {
         display: inline-block;
         line-height: 2.707em;
+        font-family: 'Futura Demi Bold', 'sans-serif';
         vertical-align: middle;
         width: 3em;
         padding: .3em;

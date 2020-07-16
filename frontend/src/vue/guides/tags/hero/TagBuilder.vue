@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="root">
         <div class="wrap">
             <TagGroupFrame>
                 <template slot="infix"></template>
@@ -20,7 +20,8 @@
                             v-else
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
-                    >Player
+                    >
+                        <div class="invite-text">no<br/>player</div>
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame><!--
@@ -44,7 +45,8 @@
                             v-else
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
-                    >Ally
+                    >
+                        <div class="invite-text">no<br/>ally</div>
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame>
@@ -67,19 +69,20 @@
                             v-else
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
-                    >Enemy
+                    >
+                        <div class="invite-text">no<br/>enemy</div>
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame>
         </div>
         <TagBuilderRoster
-                v-model="guideHeroTag.playerHeroes"
                 v-if="selecting === 'player'"
+                v-model="guideHeroTag.playerHeroes"
                 @save="selecting = null"
         />
         <TagBuilderRoster
-                v-model="guideHeroTag.allyHeroes"
                 v-if="selecting === 'ally'"
+                v-model="guideHeroTag.allyHeroes"
                 @save="selecting = null"
         />
         <TagBuilderRoster
@@ -131,6 +134,9 @@
 </script>
 
 <style scoped>
+    .root {
+    }
+
     .wrap {
         display: inline-flex;
     }
@@ -163,5 +169,13 @@
 
     .selected-group {
         box-shadow: 0 0 3pt 2pt orange;
+    }
+
+    .invite-text {
+        display: inline-block;
+        line-height: 70%;
+        padding-bottom: .33em;
+        vertical-align: middle;
+        font-variant: all-small-caps;
     }
 </style>
