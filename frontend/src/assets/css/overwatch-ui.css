@@ -16,5 +16,5 @@
     padding: .03em 1.07em .19em 1.07em;
     letter-spacing: 0.03em;
     border-radius: .06em;
-
+    overflow: hidden;
 }
