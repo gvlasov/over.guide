@@ -21,7 +21,7 @@
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
                     >
-                        <div class="invite-text">no<br/>player</div>
+                        <div class="invite-text">any<br/>player</div>
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame><!--
@@ -46,7 +46,7 @@
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
                     >
-                        <div class="invite-text">no<br/>ally</div>
+                        <div class="invite-text">any<br/>ally</div>
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame>
@@ -70,7 +70,7 @@
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
                     >
-                        <div class="invite-text">no<br/>enemy</div>
+                        <div class="invite-text">any<br/>enemy</div>
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame>

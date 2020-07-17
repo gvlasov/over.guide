@@ -1,5 +1,10 @@
 <template>
     <div class="wrap">
+        <DescriptorBuilder
+                :descriptor="descriptor"
+                :search-button-enabled="false"
+                class="descriptor-builder"
+        />
         <div class="create-buttons">
             <button
                     class="create-new-part-button overwatch-main-button"
@@ -97,6 +102,7 @@
     import draggable from 'vuedraggable'
     import GuidePartWidget from "@/js/GuidePartWidget";
     import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
+    import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 
     export default {
         model: {},
@@ -164,6 +170,14 @@
         },
         data() {
             return {
+                descriptor: {
+                    heroTag: {
+                        playerHeroes: [],
+                        allyHeroes: [],
+                        enemyHeroes: []
+                    },
+                    thematicTags: []
+                },
                 parts: [
                     new GuidePartWidget(
                         new GuidePartText('Pantelol')
@@ -187,6 +201,7 @@
         }
         ,
         components: {
+            DescriptorBuilder,
             YoutubeExcerptEditor,
             YoutubeVideo,
             draggable,
@@ -238,6 +253,7 @@
     .create-buttons {
         display: flex;
         justify-content: space-evenly;
+        z-index: 1;
     }
 
     .create-new-part-button {
@@ -252,6 +268,14 @@
 
     .video-editor {
         display: block;
+    }
+
+    .descriptor-builder {
+        z-index: 1;
+        position: relative;
+        /* For it to be positioned above everything else,
+               which is important when the dropdown is displayed
+               */
     }
 
 </style>

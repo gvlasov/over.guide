@@ -1,15 +1,16 @@
 <template>
     <div class="searchbox">
         <TagBuilder
-                :guide-hero-tag="heroTag"
+                :guide-hero-tag="descriptor.heroTag"
                 style="display: inline-block;"
         />
         <ThematicTagInput
                 style="display: inline-block;"
-                v-model="thematicTags"
-                :selected-tags="thematicTags"
+                v-model="descriptor.thematicTags"
+                :selected-tags="descriptor.thematicTags"
         />
         <button
+                v-if="searchButtonEnabled"
                 class="overwatch-main-button search-button"
                 v-hammer:tap="onSearch"
         >Search
@@ -24,7 +25,17 @@
 
     export default {
         name: "DescriptorBuilder",
-        props: {},
+        props: {
+            descriptor: {
+                /** @see GuideDescriptor */
+                type: Object,
+                required: true,
+            },
+            searchButtonEnabled: {
+                type: Boolean,
+                default: true,
+            }
+        },
         data() {
             return {
                 heroTag: {
@@ -55,10 +66,7 @@
             onSearch() {
                 this.$emit(
                     'search',
-                    {
-                        heroTag: this.heroTag,
-                        thematicTags: this.thematicTags,
-                    }
+                    this.descriptor,
                 )
             },
         },
