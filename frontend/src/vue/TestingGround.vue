@@ -9,7 +9,7 @@
         <!--            <TagBuilder :guide-hero-tag="tag"/>-->
         <!--        </div>-->
         <div>
-            <SearchBar
+            <DescriptorBuilder
                     @search="onSearch"
             />
         </div>
@@ -24,7 +24,7 @@
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import Tag from "@/vue/guides/tags/hero/Tag";
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
-    import SearchBar from "@/vue/guides/tags/SearchBar";
+    import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 
     const backend = new Backend(axios);
 
@@ -53,7 +53,7 @@
             Tag,
             TagBuilder,
             ThematicTagInput,
-            SearchBar,
+            DescriptorBuilder,
         },
     };
 

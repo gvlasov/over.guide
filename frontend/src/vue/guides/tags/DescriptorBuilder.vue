@@ -23,7 +23,7 @@
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
 
     export default {
-        name: "SearchBar",
+        name: "DescriptorBuilder",
         props: {},
         data() {
             return {

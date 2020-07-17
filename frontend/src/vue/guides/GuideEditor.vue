@@ -187,7 +187,9 @@
         }
         ,
         components: {
-            YoutubeExcerptEditor, YoutubeVideo, draggable
+            YoutubeExcerptEditor,
+            YoutubeVideo,
+            draggable,
         }
         ,
     }
