@@ -1,17 +1,28 @@
 <template>
     <div class="roster-fixedbox">
-        <div class="roster-fixedbox-bg"/>
+        <div class="roster-fixedbox-bg"
+             v-hammer:tap="() => $emit('save')"
+        />
         <div class="select-wrap">
             <Roster
                     @selectedHeroesChange="emitChange"
                     :selected-heroes="selectedHeroes"
                     class="roster"
             />
-            <OverwatchButton
-                    type="main"
-                    v-hammer:tap="onTap"
-            >Save
-            </OverwatchButton>
+            <div class="button-wrap">
+                <OverwatchButton
+                        type="main"
+                        v-hammer:tap="onSaveTap"
+                        class="hanging-button"
+                >Save
+                </OverwatchButton>
+                <OverwatchButton
+                        type="default"
+                        v-hammer:tap="onClearTap"
+                        class="hanging-button"
+                >Clear
+                </OverwatchButton>
+            </div>
         </div>
     </div>
 </template>
@@ -45,8 +56,11 @@
             emitChange($event) {
                 this.$emit('selectedHeroesChange', $event);
             },
-            onTap() {
+            onSaveTap() {
                 this.$emit('save');
+            },
+            onClearTap() {
+                this.$emit('selectedHeroesChange', []);
             },
         },
         computed: {},
@@ -65,12 +79,13 @@
 <style scoped>
 
     .select-wrap {
-        position: absolute;
+        position: relative;
         top: 50%;
         transform: translate(0, -50%);
     }
 
     .roster {
+        margin-bottom: 2rem;
     }
 
     .tag-type-links-wrap > a {
@@ -100,11 +115,34 @@
     }
 
     .roster-fixedbox-bg {
-        opacity: .8;
+        opacity: .9;
         background-color: black;
         position: absolute;
         width: 100%;
         height: 100%;
+        cursor: pointer;
+    }
+
+    .roster-fixedbox-bg:hover {
+        opacity: .8;
+        animation: bgopacity .25s;
+    }
+
+    @keyframes bgopacity {
+        0% {
+            opacity: .9
+        }
+        100% {
+            opacity: .8
+        }
+    }
+
+    .button-wrap {
+        position: absolute;
+        bottom: -5rem;
+        left: 50%;
+        transform: translate(-50%);
+        z-index: 1000;
     }
 
 </style>
