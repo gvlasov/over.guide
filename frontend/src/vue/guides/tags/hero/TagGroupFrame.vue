@@ -32,6 +32,6 @@
         text-align: center;
         font-family: 'Futura Demi Bold', sans-serif;
         color: black;
-        padding: 0 .2em 0 .2em;
+        padding: 0 0 0 0;
     }
 </style>

@@ -27,7 +27,9 @@
             </TagGroupFrame><!--
         -->
             <TagGroupFrame>
-                <template slot="infix">+</template>
+                <template slot="infix">
+                    <span class="infix-content infix-content-ally">+</span>
+                </template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="guideHeroTag.allyHeroes.length > 0"
@@ -51,7 +53,8 @@
                 </template>
             </TagGroupFrame>
             <TagGroupFrame>
-                <template slot="infix">VS</template>
+                <template slot="infix"><span class="infix-content">VS</span>
+                </template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="guideHeroTag.enemyHeroes.length > 0"
@@ -139,6 +142,7 @@
 
     .wrap {
         display: inline-flex;
+        padding: 0 .4rem 0 0;
     }
 
     .tag-type-links-wrap-player {
@@ -177,5 +181,14 @@
         padding-bottom: .33em;
         vertical-align: middle;
         font-variant: all-small-caps;
+    }
+
+    .infix-content {
+        width: 1.5rem;
+        display: inline-block;
+    }
+
+    .infix-content-ally {
+        font-size: 1.3em;
     }
 </style>
