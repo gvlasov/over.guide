@@ -1,8 +1,6 @@
 <template>
     <div class="roster-fixedbox">
-        <div class="roster-fixedbox-bg"
-             v-hammer:tap="() => $emit('save')"
-        />
+        <div class="roster-fixedbox-bg"/>
         <div class="select-wrap">
             <Roster
                     @selectedHeroesChange="emitChange"
@@ -56,11 +54,8 @@
             emitChange($event) {
                 this.$emit('selectedHeroesChange', $event);
             },
-            onSaveTap() {
+            onTap() {
                 this.$emit('save');
-            },
-            onClearTap() {
-                this.$emit('selectedHeroesChange', []);
             },
         },
         computed: {},
@@ -124,7 +119,7 @@
     }
 
     .roster-fixedbox-bg:hover {
-        opacity: .8;
+        opacity: .82;
         animation: bgopacity .25s;
     }
 
@@ -133,7 +128,7 @@
             opacity: .9
         }
         100% {
-            opacity: .8
+            opacity: .82
         }
     }
 
@@ -141,6 +136,7 @@
         position: absolute;
         bottom: -5rem;
         left: 50%;
+        padding-top: 4rem;
         transform: translate(-50%);
         z-index: 1000;
     }
