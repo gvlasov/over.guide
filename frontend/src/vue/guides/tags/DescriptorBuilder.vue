@@ -2,10 +2,10 @@
     <div class="searchbox">
         <TagBuilder
                 :guide-hero-tag="descriptor.heroTag"
-                style="display: inline-block;"
+                style="display: table-cell;"
         />
         <ThematicTagInput
-                style="display: inline-block;"
+                style="display: table-cell; width: 100%;"
                 v-model="descriptor.thematicTags"
                 :selected-tags="descriptor.thematicTags"
         />
@@ -83,13 +83,10 @@
     }
 
     .searchbox {
-        display: inline-block;
+        display: inline-table;
         box-sizing: border-box;
-        padding: .5em .5em .5em .25em;
-
+        padding: .5rem 0 .5rem .25rem;
         background: #fff;
-
-        border: 1px solid transparent;
         border-radius: .25em;
         border-color: #dbdbdb;
     }

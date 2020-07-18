@@ -1,6 +1,8 @@
 <template>
     <TagGroupBackground class="invite">
-        <slot/>
+        <div class="zoomer">
+            <slot/>
+        </div>
     </TagGroupBackground>
 </template>
 
@@ -25,14 +27,18 @@
 <style scoped>
     .invite {
         display: inline-block;
-        line-height: 2.707em;
+        line-height: 2.707rem;
         font-family: 'Futura Demi Bold', 'sans-serif';
         vertical-align: middle;
-        width: 3em;
-        padding: .3em;
-        height: 2.707em;
+        width: 3rem;
+        padding: .3rem;
+        height: 2.707rem;
         background-color: #5f7589;
         color: #32323b;
         cursor: pointer;
+    }
+
+    .invite:hover > .zoomer {
+        transform: scale(1.2);
     }
 </style>

@@ -289,6 +289,8 @@
     .descriptor-builder {
         z-index: 1;
         position: relative;
+        width: 100%;
+        margin-bottom: 1rem;
         /* For it to be positioned above everything else,
                which is important when the dropdown is displayed
                */

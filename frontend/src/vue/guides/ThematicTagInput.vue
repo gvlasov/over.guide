@@ -182,8 +182,6 @@
         box-sizing: border-box;
         max-height: 10em;
         overflow-y: auto;
-        max-width: 30em;
-        min-width: 30em;
         position: absolute;
         background-color: white;
         border: 1px solid transparent;
@@ -218,6 +216,7 @@
     .root >>> .tags-input input[type=text] {
         display: inline-block;
         width: 2em;
+        padding-right: .5rem;
     }
 
     .root >>> .tags-input-badge.map {
