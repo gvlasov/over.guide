@@ -30,20 +30,20 @@ export default class PickContextGenerator {
         );
     };
 
-    generateEmptyAlliesOnly(shuffler: SeededShuffler): PickContext {
+    generateEmptyAlliesOnly(): PickContext {
         return new PickContext(
             new TeamComp([null, null, null, null, null, null]),
             null,
-            new BansGenerator(shuffler).generate(),
+            new BansGenerator(this.shuffler).generate(),
             "Hanamura"
         );
     };
 
-    generateEmptyAllPick = function (shuffler: SeededShuffler) {
+    generateEmptyAllPick(): PickContext {
         return new PickContext(
             new TeamComp([null, null, null, null, null, null]),
             new TeamComp([null, null, null, null, null, null]),
-            new BansGenerator(shuffler).generate(),
+            new BansGenerator(this.shuffler).generate(),
             "Hanamura"
         );
     };

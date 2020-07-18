@@ -11,9 +11,8 @@
             :sort-search-results="false"
             @tags-updated="onTagsUpdated"
     >
-        <template v-slot:tag="{tag, index, removeTag}">
+        <template v-slot:selected-tag="{tag, index, removeTag}">
             <div
-                    v-bind:class="tag.type"
                     class="tag-custom-badge"
                     @click.prevent="removeTag(index)"
             >

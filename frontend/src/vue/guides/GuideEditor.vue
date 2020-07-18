@@ -6,16 +6,18 @@
                 class="descriptor-builder"
         />
         <div class="create-buttons">
-            <button
-                    class="create-new-part-button overwatch-main-button"
-                    @click="createNewTextPart('beginning')"
+            <OverwatchButton
+                    :type="'default'"
+                    class="create-new-part-button"
+                    v-hammer:tap="() => createNewTextPart('beginning')"
             >+ text
-            </button>
-            <button
-                    class="create-new-part-button overwatch-main-button"
-                    @click="createNewVideoPart('beginning')"
+            </OverwatchButton>
+            <OverwatchButton
+                    :type="'default'"
+                    class="create-new-part-button"
+                    v-hammer:tap="() => createNewVideoPart('beginning')"
             >+ video
-            </button>
+            </OverwatchButton>
         </div>
         <draggable v-model="parts" draggable=".item" :disabled="isEditing()">
             <div v-for="(widget, index) in parts" :key="index" class="item">
@@ -81,16 +83,18 @@
             </div>
         </draggable>
         <div class="create-buttons">
-            <button
-                    class="create-new-part-button overwatch-main-button"
-                    @click="createNewTextPart('end')"
+            <OverwatchButton
+                    :type="'default'"
+                    class="create-new-part-button"
+                    v-hammer:tap="() => createNewTextPart('end')"
             >+ text
-            </button>
-            <button
-                    class="create-new-part-button overwatch-main-button"
-                    @click="createNewVideoPart('end')"
+            </OverwatchButton>
+            <OverwatchButton
+                    :type="'default'"
+                    class="create-new-part-button"
+                    v-hammer:tap="() => createNewVideoPart('end')"
             >+ video
-            </button>
+            </OverwatchButton>
         </div>
     </div>
 </template>
@@ -103,6 +107,7 @@
     import GuidePartWidget from "@/js/GuidePartWidget";
     import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
     import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
+    import OverwatchButton from "@/vue/OverwatchButton";
 
     export default {
         model: {},
@@ -201,6 +206,7 @@
         }
         ,
         components: {
+            OverwatchButton,
             DescriptorBuilder,
             YoutubeExcerptEditor,
             YoutubeVideo,
@@ -214,7 +220,6 @@
 
 <style scoped>
     @import '~@/assets/css/fonts.css';
-    @import '~@/assets/css/overwatch-ui.css';
 
     .wrap {
         min-width: 20em;
@@ -257,9 +262,7 @@
     }
 
     .create-new-part-button {
-        font-size: 2em;
-        padding: .3em;
-        line-height: 1em;
+        font-size: 2.5em;
     }
 
     .video {

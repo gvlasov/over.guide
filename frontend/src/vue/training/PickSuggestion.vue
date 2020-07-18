@@ -54,10 +54,12 @@
     import SelectionRoster from "./SelectionRoster.vue";
     import PickContextGenerator from "@/js/PickContextGenerator";
     import TeamComp from "@/js/TeamComp";
+    import SeededShuffler from "@/js/SeededShuffler";
 
     const backend = new Backend(axios);
-    const contextGenerator = new PickContextGenerator();
-    let seedCounter = 0;
+    const contextGenerator = new PickContextGenerator(
+        new SeededShuffler('asdf')
+    );
     export default {
         props: {
             bans: {
@@ -67,11 +69,11 @@
         },
         methods: {
             goToAllPick() {
-                this.context = contextGenerator.generateEmptyAllPick(seedCounter++);
+                this.context = contextGenerator.generateEmptyAllPick();
                 this.suggestion = null;
             },
             goToPreMatchPick() {
-                this.context = contextGenerator.generateEmptyAlliesOnly(seedCounter++);
+                this.context = contextGenerator.generateEmptyAlliesOnly();
                 this.suggestion = null;
             },
             unselectAllyHero(hero, position) {
@@ -132,7 +134,7 @@
         },
         data() {
             return {
-                context: contextGenerator.generateEmptyAllPick(seedCounter++),
+                context: contextGenerator.generateEmptyAllPick(),
                 suggestion: null,
             }
         },

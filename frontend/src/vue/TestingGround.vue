@@ -1,18 +1,8 @@
 <template>
     <div class="wrap">
-        <!--        <div>Tag:</div>-->
-        <!--        <div>-->
-        <!--            <Tag :guide-hero-tag="tag"/>-->
-        <!--        </div>-->
-        <!--        <div>Tag builder:</div>-->
-        <!--        <div>-->
-        <!--            <TagBuilder :guide-hero-tag="tag"/>-->
-        <!--        </div>-->
-        <div>
-            <DescriptorBuilder
-                    @search="onSearch"
-            />
-        </div>
+        asd;lfkjasd;lfkjasd;flkajsd;flkasjdf;lkasdjf
+        <OverwatchButton :type="'main'" style="position: relative; left: -200px;">hello</OverwatchButton>
+        <OverwatchButton :type="'default'" disabled="disabled">hello</OverwatchButton>
     </div>
 </template>
 
@@ -21,10 +11,7 @@
     import axios from 'axios';
     import Topic from "@/js/Topic";
     import heroes from "data/heroes";
-    import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
-    import Tag from "@/vue/guides/tags/hero/Tag";
-    import ThematicTagInput from "@/vue/guides/ThematicTagInput";
-    import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
+    import OverwatchButton from "@/vue/OverwatchButton";
 
     const backend = new Backend(axios);
 
@@ -50,10 +37,7 @@
             };
         },
         components: {
-            Tag,
-            TagBuilder,
-            ThematicTagInput,
-            DescriptorBuilder,
+            OverwatchButton,
         },
     };
 

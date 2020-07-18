@@ -60,14 +60,16 @@
     import SuggestionRoster from "@/vue/training/SuggestionRoster.vue";
     import SelectionRoster from "@/vue/training/SelectionRoster.vue";
     import RoleSelection from "@/vue/training/RoleSelection.vue";
+    import SeededShuffler from "@/js/SeededShuffler";
 
     const backend = new Backend(axios);
-    let shuffleCounter = 0;
-    const generator = new PickContextGenerator();
+    const generator = new PickContextGenerator(
+        new SeededShuffler('asdf')
+    );
     export default {
         methods: {
             nextPick() {
-                this.context = generator.generateForRandomRole(this.roles, shuffleCounter++);
+                this.context = generator.generateForRandomRole(this.roles);
                 this.selectedHero = null;
                 this.suggestion = null;
             },
@@ -102,7 +104,7 @@
                     return;
                 }
                 this.roles = roles;
-                this.context = generator.generateForRandomRole(roles, shuffleCounter++);
+                this.context = generator.generateForRandomRole(roles);
             },
         },
         computed: {

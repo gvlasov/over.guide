@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/js-cookie": "^2.2.6",
-    "@voerro/vue-tagsinput": "github:gvlasov/vue-tagsinput#slot",
+    "@voerro/vue-tagsinput": "github:gvlasov/vue-tagsinput#master",
     "axios": "^0.19.2",
     "fast-shuffle": "^2.0.2",
     "grunt-env": "~1.0.1",
@@ -39,6 +39,7 @@
     "@types/vue2-hammer": "^2.1.1",
     "babel-core": "^6.22.1",
     "babel-loader": "^7.1.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-register": "^6.26.0",
     "babelify": "^8.0.0",

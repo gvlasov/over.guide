@@ -1,6 +1,6 @@
 @import "./fonts.css";
 
-.overwatch-main-button {
+.overwatch-button {
     background-color: orange;
     color: white;
     font-family: 'Futura Demi Bold', sans-serif;
@@ -21,4 +21,16 @@
 
 .overwatch-default-button {
     background-color: #2991de;
+}
+
+.overwatch-main-button {
+    background-color: orange;
+}
+
+.overwatch-button:disabled {
+    background-color: transparent;
+}
+
+.panel-bg {
+    background-color: rgba(108, 119, 148, 0.8);
 }

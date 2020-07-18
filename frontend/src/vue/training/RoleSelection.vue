@@ -8,18 +8,19 @@
                     v-model="roles"
             />
         </div>
-        <div
-                class="approve-button overwatch-main-button"
+        <OverwatchButton
+                type="main"
                 v-hammer:tap="approveRoles"
-                v-bind:class="{disabled: !canApprove}"
+                v-bind:disabled="!canApprove"
         >READY
-        </div>
+        </OverwatchButton>
     </div>
 </template>
 
 <script>
     import RoleCheckbox from "@/vue/training/RoleCheckbox.vue";
     import Role from "data/Role";
+    import OverwatchButton from "@/vue/OverwatchButton";
 
     export default {
         props: {},
@@ -39,7 +40,7 @@
                 roles: []
             }
         },
-        components: {RoleCheckbox},
+        components: {OverwatchButton, RoleCheckbox},
     };
 
 </script>
@@ -47,9 +48,6 @@
 <style scoped>
     @import '~@/assets/css/fonts.css';
     @import '~@/assets/css/overwatch-ui.css';
-
-    .approve-button {
-    }
 
     .checkboxes-wrap {
         margin-bottom: 2vw;

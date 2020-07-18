@@ -1,7 +1,5 @@
 <template>
-    <div
-            class="roster-fixedbox"
-    >
+    <div class="roster-fixedbox">
         <div class="roster-fixedbox-bg"/>
         <div class="select-wrap">
             <Roster
@@ -9,11 +7,11 @@
                     :selected-heroes="selectedHeroes"
                     class="roster"
             />
-            <button
-                    class="overwatch-main-button"
+            <OverwatchButton
+                    type="main"
                     v-hammer:tap="onTap"
             >Save
-            </button>
+            </OverwatchButton>
         </div>
     </div>
 </template>
@@ -24,6 +22,7 @@
     import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
     import Roster from "@/vue/Roster";
+    import OverwatchButton from "@/vue/OverwatchButton";
 
 
     export default {
@@ -52,6 +51,7 @@
         },
         computed: {},
         components: {
+            OverwatchButton,
             TagGroupInvite,
             TagGroupBackground,
             TagGroupFrame,
