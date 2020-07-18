@@ -337,6 +337,7 @@
     }
 
     .video {
+        max-width: 100%;
         margin-bottom: .4em;
     }
 </style>

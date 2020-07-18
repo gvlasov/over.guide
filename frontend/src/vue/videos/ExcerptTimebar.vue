@@ -181,7 +181,6 @@
         user-select: none;
         background-color: white;
         position: relative;
-        min-width: 400px;
         cursor: pointer;
         height: 2em;
         border-radius: .3em;

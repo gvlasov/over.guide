@@ -19,30 +19,8 @@
             >+ video
             </OverwatchButton>
         </div>
-        <draggable v-model="parts" draggable=".item" :disabled="isEditing()">
-            <div v-for="(widget, index) in parts" :key="index" class="item">
-                <div class="guide-part-buttons">
-                    <OverwatchButton
-                            v-if="!widget.editing"
-                            type="default"
-                            class="edit-button"
-                            v-hammer:tap="() => widget.editing = true"
-                    >Edit
-                    </OverwatchButton>
-                    <OverwatchButton
-                            v-if="widget.editing"
-                            type="default"
-                            class="view-button"
-                            v-hammer:tap="() => widget.editing = false"
-                    >Save
-                    </OverwatchButton>
-                    <OverwatchButton
-                            type="default"
-                            class=""
-                            v-hammer:tap="() => deletePart(index)"
-                    >Delete
-                    </OverwatchButton>
-                </div>
+        <draggable v-model="parts" draggable=".guide-part" :disabled="isEditing()">
+            <div v-for="(widget, index) in parts" :key="index" class="guide-part">
                 <div class="text-guide-part" v-if="widget.isText()">
                     <div
                             v-if="!widget.editing"
@@ -81,6 +59,28 @@
                                 v-bind:style="'width: 20em; height: 12.2em'"
                         />
                     </div>
+                </div>
+                <div class="guide-part-buttons">
+                    <OverwatchButton
+                            v-if="!widget.editing"
+                            type="default"
+                            class="edit-button"
+                            v-hammer:tap="() => widget.editing = true"
+                    >Edit
+                    </OverwatchButton>
+                    <OverwatchButton
+                            v-if="widget.editing"
+                            type="default"
+                            class="view-button"
+                            v-hammer:tap="() => widget.editing = false"
+                    >Save
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="default"
+                            class=""
+                            v-hammer:tap="() => deletePart(index)"
+                    >Delete
+                    </OverwatchButton>
                 </div>
             </div>
         </draggable>
@@ -227,27 +227,33 @@
     @import '~@/assets/css/fonts.css';
 
     .wrap {
-        min-width: 20em;
         display: inline-block;
+        max-width: 40em;
     }
 
-    .item {
+    .guide-part {
         padding: 1em;
         margin: .3em;
         cursor: pointer;
         background-color: rgba(43, 55, 83, 0.8);
         color: white;
         font-family: 'Futura Demi Bold', 'sans-serif';
+        position: relative;
     }
 
     .text-guide-part {
-        max-width: 20em;
+        max-width: 100%;
+    }
+
+    .text-guide-part >>> img {
+        max-width: 100%;
     }
 
     .text-guide-part-content {
         text-align: left;
         pointer-events: none;
         font-size: 1.5em;
+        word-break: break-word;
     }
 
     .guide-part-buttons > * {
@@ -261,10 +267,6 @@
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     }
 
-    .text-guide-part-content >>> img {
-        max-width: 100%;
-    }
-
     .create-buttons {
         display: flex;
         justify-content: space-evenly;
@@ -276,7 +278,8 @@
     }
 
     .video {
-        display: block;
+        max-width: 100%;
+        width: 100%;
     }
 
     .video-editor {
@@ -289,6 +292,13 @@
         /* For it to be positioned above everything else,
                which is important when the dropdown is displayed
                */
+    }
+
+    .guide-part > .guide-part-buttons {
+
+    }
+
+    .guide-part:hover > .guide-part-buttons {
     }
 
 </style>
