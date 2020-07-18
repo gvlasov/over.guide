@@ -54,8 +54,11 @@
             emitChange($event) {
                 this.$emit('selectedHeroesChange', $event);
             },
-            onTap() {
+            onSaveTap() {
                 this.$emit('save');
+            },
+            onClearTap() {
+                this.emitChange([]);
             },
         },
         computed: {},
