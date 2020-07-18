@@ -95,7 +95,7 @@
         z-index: 2;
         max-width: 100%;
         max-height: 100%;
-        overflow: auto;
+        overflow: hidden;
         margin: auto;
     }
 
