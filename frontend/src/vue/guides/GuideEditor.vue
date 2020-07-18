@@ -13,6 +13,11 @@
             >+ text
             </OverwatchButton>
             <OverwatchButton
+                    type="main"
+                    :disabled="parts.length === 0"
+            >Done
+            </OverwatchButton>
+            <OverwatchButton
                     :type="'default'"
                     class="create-new-part-button"
                     v-hammer:tap="() => createNewVideoPart('beginning')"
@@ -44,6 +49,8 @@
                                 @startSecondsChange="onStartSecondsChangeHacky(widget, $event)"
                                 @endSecondsChange="onEndSecondsChangeHacky(widget, $event)"
                                 class="video-editor"
+                                :video-css-width="'100%'"
+                                :video-css-height="'22rem'"
                         />
                     </div>
                     <div v-if="!widget.editing" key="video">
@@ -56,7 +63,7 @@
                                 :mute="true"
                                 :player-element-id="index +'-'+ widget.part.excerpt.youtubeVideoId"
                                 class="video"
-                                v-bind:style="'width: 20em; height: 12.2em'"
+                                v-bind:style="{width: '100%', height: '22rem'}"
                         />
                     </div>
                 </div>
@@ -84,12 +91,18 @@
                 </div>
             </div>
         </draggable>
-        <div class="create-buttons">
+        <div class="create-buttons"
+             v-if="parts.length > 0"
+        >
             <OverwatchButton
                     :type="'default'"
                     class="create-new-part-button"
                     v-hammer:tap="() => createNewTextPart('end')"
             >+ text
+            </OverwatchButton>
+            <OverwatchButton
+                    type="main"
+            >Done
             </OverwatchButton>
             <OverwatchButton
                     :type="'default'"
@@ -271,10 +284,7 @@
         display: flex;
         justify-content: space-evenly;
         z-index: 1;
-    }
-
-    .create-new-part-button {
-        font-size: 2.5em;
+        font-size: .8rem;
     }
 
     .video {
