@@ -17,9 +17,6 @@
                     @click.prevent="removeTag(index)"
             >
                 <span v-html="tag.value"></span>
-                <span
-                        class="tags-input-remove"
-                ><img src="/icons/clear-selection.svg"></span>
             </div>
         </template>
     </tags-input>

@@ -21,17 +21,29 @@
         </div>
         <draggable v-model="parts" draggable=".item" :disabled="isEditing()">
             <div v-for="(widget, index) in parts" :key="index" class="item">
-                <div class="text-guide-part" v-if="widget.isText()">
-                    <a
+                <div class="guide-part-buttons">
+                    <OverwatchButton
                             v-if="!widget.editing"
+                            type="default"
                             class="edit-button"
-                            @click="widget.editing = true"
-                    >Edit</a>
-                    <a
+                            v-hammer:tap="() => widget.editing = true"
+                    >Edit
+                    </OverwatchButton>
+                    <OverwatchButton
                             v-if="widget.editing"
+                            type="default"
                             class="view-button"
-                            @click="widget.editing = false"
-                    >Save</a>
+                            v-hammer:tap="() => widget.editing = false"
+                    >Save
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="default"
+                            class=""
+                            v-hammer:tap="() => deletePart(index)"
+                    >Delete
+                    </OverwatchButton>
+                </div>
+                <div class="text-guide-part" v-if="widget.isText()">
                     <div
                             v-if="!widget.editing"
                             class="text-guide-part-content"
@@ -45,16 +57,6 @@
                     ></textarea>
                 </div>
                 <div v-if="widget.isVideo()">
-                    <a
-                            class="edit-button"
-                            @click="widget.editing = true"
-                            v-if="!widget.editing"
-                    >Edit</a>
-                    <a
-                            class="view-button"
-                            @click="widget.editing = false"
-                            v-if="widget.editing"
-                    >Save</a>
                     <div v-if="widget.editing" key="editor">
                         <YoutubeExcerptEditor
                                 :video-id="widget.part.excerpt.youtubeVideoId"
@@ -118,6 +120,9 @@
                     where,
                     () => new GuidePartText('Pantenol')
                 );
+            },
+            deletePart(index) {
+                this.parts.splice(index, 1);
             },
             createNewVideoPart(where) {
                 this.createNewPart(
@@ -229,9 +234,10 @@
     .item {
         padding: 1em;
         margin: .3em;
-        border-radius: 1em;
-        border: 1px solid hsl(33, 100%, 88%);
         cursor: pointer;
+        background-color: rgba(43, 55, 83, 0.8);
+        color: white;
+        font-family: 'Futura Demi Bold', 'sans-serif';
     }
 
     .text-guide-part {
@@ -241,14 +247,18 @@
     .text-guide-part-content {
         text-align: left;
         pointer-events: none;
+        font-size: 1.5em;
     }
 
-    .edit-button {
-
+    .guide-part-buttons > * {
+        font-size: 2em;
     }
 
-    .guide-part-text-editor {
+    textarea.guide-part-text-editor {
         width: 100%;
+        max-width: 20em;
+        font-size: 1em;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     }
 
     .text-guide-part-content >>> img {
