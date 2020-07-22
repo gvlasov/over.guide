@@ -1,12 +1,12 @@
 import {Test, TestingModule} from "@nestjs/testing";
-import {FixtureService} from "src/services/fixture.service";
+import {Fixture, FixtureService} from "src/services/fixture.service";
 import {Provider} from "@nestjs/common/interfaces/modules/provider.interface";
 import {INestApplication, Type} from "@nestjs/common";
 import {databaseProviders} from "src/database/database.providers";
 
 class TestContext<T> {
     service: T
-    fixtures: (...fixtures: object[][]) => void
+    fixtures: (...fixtures: Fixture[]) => void
     app: INestApplication
 }
 

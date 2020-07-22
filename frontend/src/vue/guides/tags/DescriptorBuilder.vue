@@ -6,8 +6,8 @@
         />
         <ThematicTagInput
                 style="display: table-cell; width: 100%;"
-                v-model="descriptor.thematicTags"
-                :selected-tags="descriptor.thematicTags"
+                v-model="selectedTags"
+                :selected-tags="selectedTags"
         />
         <button
                 v-if="searchButtonEnabled"
@@ -22,6 +22,9 @@
     import SeededShuffler from "@/js/SeededShuffler";
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
+    import TagClass from "@/js/dto/TagClass";
+    import MapTag from "@/js/dto/MapTag";
+    import ThemeTag from "@/js/dto/ThemeTag";
 
     export default {
         name: "DescriptorBuilder",
@@ -37,14 +40,35 @@
             }
         },
         data() {
+            const selectedTags = this.descriptor.mapTags
+                .map(map => {
+                    return new MapTag(map)
+                })
+                .concat(
+                    this.descriptor.thematicTags
+                        .map(theme => {
+                            return new ThemeTag(theme)
+                        })
+                );
             return {
-                heroTag: {
-                    playerHeroes: [],
-                    allyHeroes: [],
-                    enemyHeroes: [],
-                },
-                thematicTags: [],
+                selectedTags: selectedTags
             };
+        },
+        watch: {
+            selectedTags: function (oldTags, newTags) {
+                console.log(newTags)
+                this.descriptor.mapTags.replaceAll(
+                    newTags
+                        .filter(tag => tag.class === TagClass.Map)
+                        .map(tag => Number.parseInt(tag.name, 10))
+                );
+                this.descriptor.thematicTags.replaceAll(
+                    newTags
+                        .filter(tag => tag.class === TagClass.Theme)
+                        .map(tag => Number.parseInt(tag.name, 10))
+                );
+                console.log(this.descriptor.mapTags)
+            }
         },
         computed: {
             /**

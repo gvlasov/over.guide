@@ -5,14 +5,14 @@ import {User} from "src/database/models/User";
 
 @Injectable({scope: Scope.REQUEST})
 export class AuthService {
-    private user: User
+    private user: User | null = undefined
 
     constructor(
         private readonly tokenService: TokenService,
     ) {
     }
 
-    async getUser(request: Request): Promise<User> {
+    async getUser(request: Request): Promise<User | null> {
         if (typeof this.user === 'undefined') {
             const authHeader = request.header('Authorization');
             if (
@@ -21,6 +21,8 @@ export class AuthService {
             ) {
                 const token = authHeader.substr('Bearer '.length)
                 this.user = await this.tokenService.getUser(token)
+            } else {
+                this.user = null;
             }
         }
         return this.user

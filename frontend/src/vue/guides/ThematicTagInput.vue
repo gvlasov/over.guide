@@ -10,6 +10,7 @@
             v-model="localSelectedTags"
             :sort-search-results="false"
             @tags-updated="onTagsUpdated"
+            :case-sensitive-tags="true"
     >
         <template v-slot:selected-tag="{tag, index, removeTag}">
             <div
@@ -28,6 +29,8 @@
     import SeededShuffler from "@/js/SeededShuffler";
     import Map from "data/Map";
     import GuideTheme from "data/GuideTheme";
+    import ThemeTag from "@/js/dto/ThemeTag";
+    import MapTag from "@/js/dto/MapTag";
 
     export default {
         model: {
@@ -85,28 +88,12 @@
             getExistingTags() {
                 return (
                     Object.values(GuideTheme)
-                        .filter(it => typeof it !== 'number')
-                        .map(
-                            value => {
-                                return {
-                                    key: value.toLowerCase().replace(/\s+/, '-'),
-                                    value: value,
-                                    class: 'theme',
-                                };
-                            }
-                        )
+                        .filter(it => typeof it === 'number')
+                        .map(theme => new ThemeTag(theme))
                         .concat(
                             Object.values(Map)
-                                .filter(it => typeof it !== 'number')
-                                .map(
-                                    value => {
-                                        return {
-                                            key: value.toLowerCase().replace(/\s+/, '-'),
-                                            value: value,
-                                            class: 'map',
-                                        };
-                                    }
-                                )
+                                .filter(it => typeof it === 'number')
+                                .map(map => new MapTag(map))
                         )
                 )
             },

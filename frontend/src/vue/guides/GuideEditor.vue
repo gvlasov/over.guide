@@ -1,7 +1,7 @@
 <template>
     <div class="wrap">
         <DescriptorBuilder
-                :descriptor="descriptor"
+                :descriptor="guide.descriptor"
                 :search-button-enabled="false"
                 class="descriptor-builder"
         />
@@ -14,7 +14,8 @@
             </OverwatchButton>
             <OverwatchButton
                     type="main"
-                    :disabled="parts.length === 0"
+                    :disabled="guide.parts.length === 0"
+                    v-hammer:tap="saveGuide"
             >Done
             </OverwatchButton>
             <OverwatchButton
@@ -24,18 +25,18 @@
             >+ video
             </OverwatchButton>
         </div>
-        <draggable v-model="parts" draggable=".guide-part" :disabled="isEditing()">
-            <div v-for="(widget, index) in parts" :key="index" class="guide-part">
+        <draggable v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
+            <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
                 <div class="text-guide-part" v-if="widget.isText()">
                     <div
                             v-if="!widget.editing"
                             class="text-guide-part-content"
-                            v-html="widget.part.render()"
+                            v-html="widget.render()"
                     ></div>
                     <textarea
                             v-if="widget.editing"
                             class="guide-part-text-editor"
-                            v-model="widget.part.text"
+                            v-model="widget.part.contentMd"
                             rows="10"
                     ></textarea>
                 </div>
@@ -92,7 +93,7 @@
             </div>
         </draggable>
         <div class="create-buttons"
-             v-if="parts.length > 0"
+             v-if="guide.parts.length > 0"
         >
             <OverwatchButton
                     :type="'default'"
@@ -102,6 +103,7 @@
             </OverwatchButton>
             <OverwatchButton
                     type="main"
+                    v-hammer:tap="saveGuide"
             >Done
             </OverwatchButton>
             <OverwatchButton
@@ -115,66 +117,96 @@
 </template>
 
 <script>
-    import GuidePartText from '@/js/GuidePartText';
-    import GuidePartVideo from '@/js/GuidePartVideo';
     import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
     import draggable from 'vuedraggable'
     import GuidePartWidget from "@/js/GuidePartWidget";
     import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
     import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
     import OverwatchButton from "@/vue/OverwatchButton";
+    import GuidePartTextWidget from "@/js/GuidePartTextWidget";
+    import GuidePartVideoWidget from "@/js/GuidePartVideoWidget";
+    import Backend from "@/js/Backend";
+    import axios from 'axios';
+    import GuidePartName from "data/dto/GuidePartName";
+    import heroes from "data/heroes";
+    import GuideTheme from "data/GuideTheme";
+    import Map from "data/Map";
+
+    const backend = new Backend(axios);
 
     export default {
         model: {},
         props: {},
         methods: {
+            async saveGuide() {
+                const guideId = await backend.saveGuide({
+                    guideId: this.guide.guideId,
+                    descriptor: {
+                        playerHeroes:
+                            this.guide.descriptor.heroTag.playerHeroes.map(hero => hero.id),
+                        allyHeroes:
+                            this.guide.descriptor.heroTag.allyHeroes.map(hero => hero.id),
+                        enemyHeroes:
+                            this.guide.descriptor.heroTag.enemyHeroes.map(hero => hero.id),
+                        mapTags: this.guide.descriptor.mapTags,
+                        thematicTags: this.guide.descriptor.thematicTags,
+                    },
+                    parts: this.guide.parts.map(widget => widget.part)
+                })
+                if (guideId !== null) {
+                    this.guide.guideId = guideId
+                }
+            },
             createNewTextPart(where) {
                 this.createNewPart(
                     where,
-                    () => new GuidePartText('Pantenol')
+                    () => new GuidePartTextWidget(
+                        {
+                            kind: GuidePartName.Text,
+                            contentMd: 'New part'
+                        },
+                        true
+                    )
                 );
             },
             deletePart(index) {
-                this.parts.splice(index, 1);
+                this.guide.parts.splice(index, 1);
             },
             createNewVideoPart(where) {
                 this.createNewPart(
                     where,
                     () =>
-                        new GuidePartVideo(
+                        new GuidePartVideoWidget(
                             {
-                                youtubeVideoId: 'h2rpFJhBMcs',
-                                startSeconds: 22.32,
-                                endSeconds: 30,
-                            }
+                                kind: GuidePartName.Video,
+                                excerpt:
+                                    {
+                                        youtubeVideoId: 'h2rpFJhBMcs',
+                                        startSeconds: 22.32,
+                                        endSeconds: 30,
+                                    }
+                            },
+                            true
                         )
                 );
             },
             /**
              * @param {string} where 'beninning' or 'end'
-             * @param {Function} how
+             * @callback how
              */
             createNewPart(where, how) {
                 (
                     (where === 'beginning')
-                        ? this.parts.unshift
-                        : this.parts.push
+                        ? this.guide.parts.unshift
+                        : this.guide.parts.push
                 )
-                    .apply(
-                        this.parts,
-                        [
-                            new GuidePartWidget(
-                                how(),
-                                true
-                            )
-                        ]
-                    );
+                    .apply(this.guide.parts, [how()]);
             },
             /**
              * @return {boolean}
              */
             isEditing() {
-                return this.parts.some(part => part.editing);
+                return this.guide.parts.some(part => part.editing);
             },
             /**
              * @param {GuidePartWidget} widget
@@ -193,46 +225,50 @@
         },
         data() {
             return {
-                descriptor: {
-                    heroTag: {
-                        playerHeroes: [],
-                        allyHeroes: [],
-                        enemyHeroes: []
+                guide: {
+                    id: undefined,
+                    guideId: undefined,
+                    descriptor: {
+                        heroTag: {
+                            playerHeroes: [heroes.get('pharah')],
+                            allyHeroes: [heroes.get('soldier')],
+                            enemyHeroes: [heroes.get('mei')]
+                        },
+                        thematicTags: [GuideTheme.Aim],
+                        mapTags: [Map.Havana],
                     },
-                    thematicTags: []
-                },
-                parts: [
-                    new GuidePartWidget(
-                        new GuidePartText('Pantelol')
-                    ),
-                    new GuidePartWidget(
-                        new GuidePartVideo(
-                            {
-                                youtubeVideoId: 'qhtQx9ZXrf8',
-                                startSeconds: 12.32,
-                                endSeconds: 30.3,
-                            }
-                        )
-                    ),
-                    new GuidePartWidget(
-                        new GuidePartText(
-                            `### Pantenol\n![](https://i.imgur.com/Eug7rxn.png) )`
+                    parts: [
+                        new GuidePartTextWidget(
+                            {kind: GuidePartName.Text, contentMd: 'Pantelol'}
                         ),
-                    ),
-                ]
+                        new GuidePartVideoWidget(
+                            {
+                                kind: GuidePartName.Video,
+                                excerpt: {
+                                    youtubeVideoId: 'qhtQx9ZXrf8',
+                                    startSeconds: 12.32,
+                                    endSeconds: 30.3,
+                                }
+                            }
+                        ),
+                        new GuidePartTextWidget(
+                            {
+                                kind: GuidePartName.Text,
+                                contentMd: `### Pantenol\n![](https://i.imgur.com/Eug7rxn.png) )`,
+                            }
+                        ),
+                    ]
+                },
             }
-        }
-        ,
+        },
         components: {
             OverwatchButton,
             DescriptorBuilder,
             YoutubeExcerptEditor,
             YoutubeVideo,
             draggable,
-        }
-        ,
-    }
-    ;
+        },
+    };
 
 </script>
 

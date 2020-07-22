@@ -1,5 +1,8 @@
-import {Body, Controller, Delete, Post} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Post} from '@nestjs/common';
 import {FixtureService} from "src/services/fixture.service";
+import heroesFixture from '@fixtures/heroes.json'
+import mapsFixture from '@fixtures/maps'
+import thematicTagsFixture from '@fixtures/thematicTags'
 
 @Controller('fixture')
 export class FixtureController {
@@ -17,6 +20,15 @@ export class FixtureController {
     @Delete()
     clear() {
         this.service.truncateTables()
+    }
+
+    @Get('load-default')
+    loadDefault() {
+        this.service.loadFixturesClear(
+            heroesFixture,
+            mapsFixture,
+            thematicTagsFixture
+        )
     }
 
 }

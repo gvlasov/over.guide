@@ -1,0 +1,56 @@
+[
+  {
+    "model": "GuideDescriptor",
+    "data": {
+      "id": 1
+    }
+  },
+  {
+    "model": "GuideDescriptor",
+    "data": {
+      "id": 2
+    }
+  },
+  {
+    "model": "GuideDescriptor2AllyHero",
+    "data": {
+      "guideDescriptorId": 1,
+      "heroId": 1
+    }
+  },
+  {
+    "model": "GuideDescriptor2AllyHero",
+    "data": {
+      "guideDescriptorId": 1,
+      "heroId": 2
+    }
+  },
+  {
+    "model": "GuideDescriptor2PlayerHero",
+    "data": {
+      "guideDescriptorId": 1,
+      "heroId": 2
+    }
+  },
+  {
+    "model": "GuideDescriptor2EnemyHero",
+    "data": {
+      "guideDescriptorId": 1,
+      "heroId": 2
+    }
+  },
+  {
+    "model": "GuideDescriptor2EnemyHero",
+    "data": {
+      "guideDescriptorId": 1,
+      "heroId": 3
+    }
+  },
+  {
+    "model": "GuideDescriptor2EnemyHero",
+    "data": {
+      "guideDescriptorId": 2,
+      "heroId": 5
+    }
+  }
+]

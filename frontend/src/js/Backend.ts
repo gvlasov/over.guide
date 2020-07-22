@@ -7,6 +7,7 @@ import Hero from "data/dto/Hero"
 import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
 import env from '../env/dev'
 import Cookies from 'js-cookie'
+import GuideHistoryEntry from "data/dto/GuideHistoryEntry";
 
 export default class Backend {
     private readonly axios: AxiosStatic;
@@ -95,5 +96,23 @@ export default class Backend {
             }
         )
     };
+
+    async saveGuide(guide: GuideHistoryEntry): Promise<number | null> {
+        console.log(guide)
+        return this.query(
+            'POST',
+            '/guide',
+            guide,
+            (response) => {
+                console.log(response);
+                if (response.status === 201) {
+                    return response.data.guideId;
+                } else {
+                    return null;
+                }
+            }
+        )
+    }
+
 }
 

@@ -15,4 +15,5 @@ export class User extends Model<User> {
     @Unique
     @Column({type: new DataTypes.STRING(15)})
     battleNetUserId: string
+
 }

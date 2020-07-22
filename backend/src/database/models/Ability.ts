@@ -1,4 +1,5 @@
 import {
+    AutoIncrement,
     BelongsTo,
     Column,
     ForeignKey,
@@ -15,6 +16,7 @@ import {Hero} from "./Hero";
 export class Ability extends Model<Ability> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column
     public id: number
 

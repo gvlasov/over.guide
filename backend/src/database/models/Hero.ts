@@ -1,16 +1,26 @@
-import {Column, Model, PrimaryKey, Table, Unique} from 'sequelize-typescript';
+import {
+    AutoIncrement,
+    Column,
+    Model,
+    PrimaryKey,
+    Table,
+    Unique
+} from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
-import Role from "../../data/Role"
+import Role from "data/Role"
 
 @Table({
     name: {
         singular: 'Hero',
         plural: 'Heroes',
-    }
+    },
+    createdAt: false,
+    updatedAt: false
 })
 export class Hero extends Model<Hero> {
 
     @PrimaryKey
+    @AutoIncrement
     @Column
     public id: number
 

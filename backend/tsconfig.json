@@ -16,6 +16,9 @@
       ],
       "@fixtures/*": [
         "src/database/fixtures/*"
+      ],
+      "data/*": [
+        "src/data/*"
       ]
     },
     "incremental": true,

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/learn-overwatch-counters.iml" filepath="$PROJECT_DIR$/learn-overwatch-counters.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../overwatch-ui/overwatch-ui.iml" filepath="$PROJECT_DIR$/../overwatch-ui/overwatch-ui.iml" />
     </modules>
   </component>
 </project>

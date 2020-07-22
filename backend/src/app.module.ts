@@ -15,6 +15,10 @@ import {TestController} from "src/controllers/test.controller";
 import {FixtureController} from "src/controllers/fixture.controller";
 import {FixtureService} from "src/services/fixture.service";
 import {AuthService} from "src/services/auth.service";
+import {GuideDescriptorService} from "src/services/guide-descriptor.service";
+import {ModerationService} from "src/services/moderation.service";
+import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
+import {GuideController} from "src/controllers/guide.controller";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -24,6 +28,7 @@ import {AuthService} from "src/services/auth.service";
         MatchupEvaluationController,
         YoutubeVideoExcerptController,
         BattlenetAuthController,
+        GuideController,
         TestController,
         FixtureController,
     ],
@@ -36,6 +41,9 @@ import {AuthService} from "src/services/auth.service";
         BattlenetService,
         TokenService,
         FixtureService,
+        GuideHistoryEntryService,
+        GuideDescriptorService,
+        ModerationService,
     ],
 })
 export class AppModule {

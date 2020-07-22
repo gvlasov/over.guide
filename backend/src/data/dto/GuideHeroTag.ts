@@ -1,7 +1,7 @@
-import Hero from "src/data/dto/Hero";
+import HeroIds from "data/HeroIds";
 
 export default interface GuideHeroTag {
-    readonly playerHeroes: Hero[];
-    readonly allyHeroes: Hero[];
-    readonly enemyHeroes: Hero[];
+    readonly playerHeroes: HeroIds[];
+    readonly allyHeroes: HeroIds[];
+    readonly enemyHeroes: HeroIds[];
 }

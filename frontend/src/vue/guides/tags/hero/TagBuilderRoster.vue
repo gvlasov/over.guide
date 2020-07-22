@@ -1,6 +1,8 @@
 <template>
     <div class="roster-fixedbox">
-        <div class="roster-fixedbox-bg"/>
+        <div class="roster-fixedbox-bg"
+             v-hammer:tap="onSaveTap"
+        />
         <div class="select-wrap">
             <Roster
                     @selectedHeroesChange="emitChange"

@@ -20,6 +20,14 @@ describe(
                     (await ctx.service.getUser(token)).battleNetUserId
                 ).toBe(user.battleNetUserId)
             });
+            it('returns null if there is no such user', async () => {
+                await ctx.fixtures(singleUserFixture)
+                const user = await User.findOne()
+                const token = ctx.service.getToken(user);
+                expect(
+                    (await ctx.service.getUser('asdf'))
+                ).toBe(null)
+            });
         }
     )
 )

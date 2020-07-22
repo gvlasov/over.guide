@@ -3,12 +3,16 @@ import {BattlenetService} from "src/services/battlenet.service";
 import {User} from "src/database/models/User";
 import {Request, Response} from 'express'
 import {FRONTEND_ROOT_URL} from "src/constants";
+import {TokenService} from "src/services/token.service";
 
 
 @Controller('battlenet-auth')
 export class BattlenetAuthController {
 
-    constructor(private readonly battlenet: BattlenetService) {
+    constructor(
+        private readonly battlenet: BattlenetService,
+        private readonly tokenService: TokenService
+    ) {
 
     }
 
@@ -36,7 +40,7 @@ export class BattlenetAuthController {
             });
         response.setHeader(
             'Set-Cookie',
-            'auth-token=' + user.name + '; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/'
+            'auth-token=' + this.tokenService.getToken(user) + '; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/'
         )
         response.redirect(FRONTEND_ROOT_URL)
     }

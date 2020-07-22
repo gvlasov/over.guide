@@ -3,6 +3,8 @@ import {loadFixtures} from "sequelize-fixtures";
 import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
 
+export type Fixture = object[] | (() => void)
+
 @Injectable()
 export class FixtureService {
     constructor(
@@ -10,25 +12,28 @@ export class FixtureService {
     ) {
     }
 
-    async loadFixture(fixture: object[]): Promise<any> {
-        // in sequelize-fixtures, a "fixture" is a single database record; here a "fixture" is a collection of database records, as in PHP world I used to work in
-        console.log('loading fixture')
-        return await loadFixtures(
-            fixture,
-            this.sequelize.models
-        )
+    async loadFixture(fixture: Fixture): Promise<any> {
+        if (fixture instanceof Array) {
+            // in sequelize-fixtures, a "fixture" is a single database record; here a "fixture" is a collection of database records, as in PHP world I used to work in
+            return await loadFixtures(
+                fixture,
+                this.sequelize.models
+            )
+        } else {
+            fixture()
+        }
     }
 
-    async loadFixtureClear(fixture: object[]) {
+    async loadFixtureClear(fixture: Fixture) {
         this.truncateTables()
         return await this.loadFixture(fixture)
     }
 
-    async loadFixturesClear(...fixtures: object[][]) {
+    async loadFixturesClear(...fixtures: Fixture[]) {
         this.truncateTables()
         // https://dev.to/afifsohaili/dealing-with-promises-in-an-array-with-async-await-5d7g Ctrl+F "Wait for all promises to complete one-by-one"
         return await (fixtures.map(
-                f => this.loadFixture(f).then(() => console.log('fixture loaded'))
+                f => this.loadFixture(f)
             )
                 .reduce(async (previousPromise, nextAsyncFunction) => {
                     await previousPromise;

@@ -1,22 +1,14 @@
-import GuidePartText from "@/js/GuidePartText";
-import GuidePart from "@/js/GuidePart";
-import GuidePartVideo from "@/js/GuidePartVideo";
+import GuidePart from "data/dto/GuidePart";
+import GuidePartTextWidget from "@/js/GuidePartTextWidget";
+import GuidePartVideoWidget from "@/js/GuidePartVideoWidget";
 
-export default class GuidePartWidget implements GuidePart {
+export default abstract class GuidePartWidget {
 
-    constructor(public part: GuidePart, public editing: boolean = false) {
+    protected constructor(public part: GuidePart, public editing: boolean = false) {
     }
 
-    id() {
-        return this.part.id()
-    };
+    abstract isText(): this is GuidePartTextWidget;
 
-    isText(): boolean {
-        return this.part instanceof GuidePartText;
-    }
-
-    isVideo(): boolean {
-        return this.part instanceof GuidePartVideo;
-    }
+    abstract isVideo(): this is GuidePartVideoWidget;
 
 }

@@ -10,6 +10,10 @@ export class AuthenticatedGuard implements CanActivate {
     }
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        return this.authService.getUser(context.switchToHttp().getRequest<Request>()) !== null
+        return this.authService
+            .getUser(context.switchToHttp().getRequest<Request>())
+            .then(user => {
+                return user !== null
+            })
     }
 }

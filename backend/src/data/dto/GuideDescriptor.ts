@@ -1,7 +1,12 @@
-import GuideHeroTag from "src/data/dto/GuideHeroTag";
-import GuideTheme from "src/data/GuideTheme";
+import GuideTheme from "data/GuideTheme";
+import Map from "data/Map"
+import GuideHeroTag from "data/dto/GuideHeroTag";
+import HeroIds from "data/HeroIds";
 
-export default interface GuideDescriptor {
-    heroTag: GuideHeroTag,
+export default interface GuideDescriptor extends GuideHeroTag {
+    playerHeroes: HeroIds[];
+    allyHeroes: HeroIds[];
+    enemyHeroes: HeroIds[];
     thematicTags: GuideTheme[]
+    mapTags: Map[]
 }
