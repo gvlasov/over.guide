@@ -81,4 +81,13 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
 
     @Column({type: new DataTypes.CHAR(32)})
     contentHash: string;
+
+    get partsOrdered(): (GuidePartText | GuidePartVideo)[] {
+        return [
+            ...this.guidePartTexts,
+            ...this.guidePartVideos
+        ].sort((a, b) => {
+            return a.pivot.order - b.pivot.order;
+        })
+    }
 }

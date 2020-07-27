@@ -6,6 +6,7 @@ import {
     Table
 } from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
+import GuidePartTextDto from "data/dto/GuidePartTextDto";
 
 @Table({
     name: {
@@ -22,5 +23,13 @@ export class GuidePartText extends Model<GuidePartText> {
 
     @Column({type: new DataTypes.TEXT})
     contentMd: string
+
+    toDto(): GuidePartTextDto {
+        return {
+            contentMd: this.contentMd,
+            id: this.id,
+            kind: "text"
+        } as GuidePartTextDto
+    }
 
 }

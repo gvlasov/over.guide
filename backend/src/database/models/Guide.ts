@@ -2,6 +2,7 @@ import {
     AllowNull,
     AutoIncrement,
     BelongsTo,
+    BelongsToMany,
     Column,
     ForeignKey,
     HasMany,
@@ -13,6 +14,7 @@ import {User} from "src/database/models/User";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {DataTypes} from "sequelize";
 import {utcDate} from "@hamroctopus/utc-date";
+import {GuideHead} from "src/database/models/GuideHead";
 
 @Table({
     name: {
@@ -51,6 +53,13 @@ export class Guide extends Model<Guide> {
 
     isActive(): boolean {
         return this.deactivatedById === null && this.deactivatedAt === null
+    }
+
+    @BelongsToMany(() => GuideHistoryEntry, () => GuideHead)
+    heads: Array<GuideHistoryEntry>
+
+    get head(): GuideHistoryEntry {
+        return this.heads[0]
     }
 
     deactivate(user: User): Promise<Guide> {

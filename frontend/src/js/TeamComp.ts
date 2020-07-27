@@ -1,15 +1,15 @@
 import uniq from "lodash/uniq";
 import Vue from 'vue';
 import heroes from "data/heroes";
-import Hero from "data/dto/Hero"
+import HeroDto from "data/dto/HeroDto"
 import Role from "data/Role"
 import _ from 'lodash'
 
 export default class TeamComp {
 
-    readonly heroes: (Hero | null)[];
+    readonly heroes: (HeroDto | null)[];
 
-    constructor(heroes: (Hero | null)[]) {
+    constructor(heroes: (HeroDto | null)[]) {
         if (heroes.length !== 6) {
             throw new Error(
                 "There must be exactly 6 positions, but there are " + heroes.length
@@ -17,7 +17,7 @@ export default class TeamComp {
         }
         const picks =
             heroes
-                .filter<Hero>((hero): hero is Hero => hero !== null)
+                .filter<HeroDto>((hero): hero is HeroDto => hero !== null)
                 .map(hero => hero.name);
         if (uniq(picks).length < picks.length) {
             throw new Error(
@@ -32,8 +32,8 @@ export default class TeamComp {
             supports = 0,
             damage = 0;
         let roles: Role[] = this.heroes
-            .filter<Hero>((it): it is Hero => it !== null)
-            .map<Role>((hero: Hero) => hero.role);
+            .filter<HeroDto>((it): it is HeroDto => it !== null)
+            .map<Role>((hero: HeroDto) => hero.role);
         for (let role of roles) {
             if (role === Role.Tank) {
                 tanks++;
@@ -71,7 +71,7 @@ export default class TeamComp {
         return remainingRoles[0];
     };
 
-    setNextAvailable(hero: Hero) {
+    setNextAvailable(hero: HeroDto) {
         const position = this.getNextVacancyForRole(hero.role);
         if (position === null) {
             throw new Error('No position at role ' + hero.role);
@@ -79,7 +79,7 @@ export default class TeamComp {
         this.setAtPosition(position, hero);
     };
 
-    setAtPosition(position: number, hero: Hero | null) {
+    setAtPosition(position: number, hero: HeroDto | null) {
         if (position < 0 || position > 5) {
             throw new Error("Position must be in 0..5");
         }
@@ -131,7 +131,7 @@ export default class TeamComp {
         return this.getNextVacancyForRole(role) !== null;
     };
 
-    canSelect(hero: Hero): boolean {
+    canSelect(hero: HeroDto): boolean {
         return this.hasVacancyForRole(hero.role)
             && typeof this.heroes.find(h => h !== null && h.dataName === hero.dataName) === 'undefined';
     };
@@ -145,7 +145,7 @@ export default class TeamComp {
         return true;
     };
 
-    heroesInPickedOutRoles(): Hero[] {
+    heroesInPickedOutRoles(): HeroDto[] {
         const result = [];
         for (let role of this.getCompletelyPickedCategories()) {
             for (let hero of heroes.values()) {
@@ -157,8 +157,8 @@ export default class TeamComp {
         return result;
     };
 
-    picks(): Hero[] {
-        return this.heroes.filter((h): h is Hero => h !== null);
+    picks(): HeroDto[] {
+        return this.heroes.filter((h): h is HeroDto => h !== null);
     };
 
     static empty(): TeamComp {

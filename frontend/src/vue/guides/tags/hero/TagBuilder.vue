@@ -108,9 +108,6 @@
     export default {
         props: {
             guideHeroTag: {
-                /**
-                 * @see {GuideHeroTag}
-                 */
                 type: Object,
                 required: true,
             }

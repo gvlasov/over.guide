@@ -1,6 +1,6 @@
 import {Body, Controller, Post} from '@nestjs/common';
 import {SuggestPickService} from "src/services/suggest-pick.service";
-import PickContext from "src/data/dto/PickContext";
+import PickContextDto from "data/dto/PickContextDto";
 
 @Controller('suggest-pick')
 export class SuggestPickController {
@@ -12,7 +12,7 @@ export class SuggestPickController {
     }
 
     @Post()
-    evaluate(@Body() context: PickContext) {
+    evaluate(@Body() context: PickContextDto) {
         return this.service.suggestPick(context)
     }
 }

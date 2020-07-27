@@ -1,5 +1,6 @@
-import MapDto from "data/dto/Map";
+import MapDto from "data/dto/MapDto";
 import MapType from "data/MapType";
+import MapName from "data/MapName";
 
 const data = [
     {
@@ -136,7 +137,7 @@ data.forEach(
             d.dataName,
             {
                 id: d.id,
-                name: d.name,
+                name: d.name as MapName,
                 dataName: d.dataName,
                 type: d.type
             }

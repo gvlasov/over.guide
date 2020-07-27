@@ -2,16 +2,17 @@ import {nestTest} from "src/test/nest-test";
 import heroesFixture from "@fixtures/heroes.json"
 import guideDescriptorsFixture from "@fixtures/guide-descriptor.json"
 import {GuideDescriptorService} from "src/services/guide-descriptor.service";
-import HeroIds from "data/HeroIds";
+import HeroId from "data/HeroId";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
-import Map from "data/Map";
+import MapId from "data/MapId";
 import GuideTheme from "data/GuideTheme";
 import mapsFixture from "@fixtures/maps"
 import thematicTagsFixture from "@fixtures/thematicTags"
+import {ContentHashService} from "src/services/content-hash.service";
 
 describe(
     GuideDescriptorService,
-    nestTest(GuideDescriptorService, [], [], (ctx) => {
+    nestTest(GuideDescriptorService, [], [ContentHashService], (ctx) => {
             it('finds by different hero categories', async () => {
                 await ctx.fixtures(
                     heroesFixture,
@@ -20,7 +21,7 @@ describe(
                 const descriptor = ctx.service.getExact({
                     mapTags: [],
                     allyHeroes: [],
-                    enemyHeroes: [HeroIds.Dva],
+                    enemyHeroes: [HeroId.Dva],
                     playerHeroes: [],
                     thematicTags: [],
                 })
@@ -33,9 +34,9 @@ describe(
                 )
                 await ctx.service.getExact({
                     mapTags: [],
-                    allyHeroes: [HeroIds.Ashe, HeroIds.Baptiste],
-                    enemyHeroes: [HeroIds.Baptiste, HeroIds.Bastion],
-                    playerHeroes: [HeroIds.Baptiste],
+                    allyHeroes: [HeroId.Ashe, HeroId.Baptiste],
+                    enemyHeroes: [HeroId.Baptiste, HeroId.Bastion],
+                    playerHeroes: [HeroId.Baptiste],
                     thematicTags: [],
                 })
                     .then(async descriptor => {
@@ -50,7 +51,7 @@ describe(
                 const descriptor = await ctx.service.getExact({
                     mapTags: [],
                     allyHeroes: [],
-                    enemyHeroes: [HeroIds.Zenyatta, HeroIds.Zarya],
+                    enemyHeroes: [HeroId.Zenyatta, HeroId.Zarya],
                     playerHeroes: [],
                     thematicTags: [],
                 })
@@ -64,9 +65,9 @@ describe(
                 const oldCount = (await GuideDescriptor.findAndCountAll()).count;
                 await ctx.service.obtainExact({
                     mapTags: [],
-                    allyHeroes: [HeroIds.Ashe, HeroIds.Baptiste],
-                    enemyHeroes: [HeroIds.Baptiste, HeroIds.Bastion],
-                    playerHeroes: [HeroIds.Baptiste],
+                    allyHeroes: [HeroId.Ashe, HeroId.Baptiste],
+                    enemyHeroes: [HeroId.Baptiste, HeroId.Bastion],
+                    playerHeroes: [HeroId.Baptiste],
                     thematicTags: [],
                 })
                     .then(async descriptor => {
@@ -83,9 +84,9 @@ describe(
                 const oldCount = (await GuideDescriptor.findAndCountAll()).count;
                 await ctx.service.getExact({
                     mapTags: [],
-                    allyHeroes: [HeroIds.Ashe, HeroIds.Baptiste],
-                    enemyHeroes: [HeroIds.Baptiste /* no bastion */],
-                    playerHeroes: [HeroIds.Baptiste],
+                    allyHeroes: [HeroId.Ashe, HeroId.Baptiste],
+                    enemyHeroes: [HeroId.Baptiste /* no bastion */],
+                    playerHeroes: [HeroId.Baptiste],
                     thematicTags: [],
                 })
                     .then(async descriptor => {
@@ -105,7 +106,7 @@ describe(
                     mapTags: [],
                     allyHeroes: [],
                     enemyHeroes: [],
-                    playerHeroes: [HeroIds.Zenyatta],
+                    playerHeroes: [HeroId.Zenyatta],
                     thematicTags: [],
                 })
                     .then(async descriptor => {
@@ -121,10 +122,10 @@ describe(
                     thematicTagsFixture
                 )
                 await ctx.service.obtainExact({
-                    mapTags: [Map.Eichenwalde, Map.Havana],
-                    allyHeroes: [HeroIds.McCree],
-                    enemyHeroes: [HeroIds.WreckingBall],
-                    playerHeroes: [HeroIds.Zenyatta],
+                    mapTags: [MapId.Eichenwalde, MapId.Havana],
+                    allyHeroes: [HeroId.McCree],
+                    enemyHeroes: [HeroId.WreckingBall],
+                    playerHeroes: [HeroId.Zenyatta],
                     thematicTags: [GuideTheme.Psychology],
                 })
                     .then(async descriptor => {
@@ -135,6 +136,99 @@ describe(
                         expect((await descriptor.$get('maps')).length).toBe(2)
                         expect((await descriptor.$get('thematicTags')).length).toBe(1)
                     })
+            });
+            it('finds descriptor that include given tags', async () => {
+                await ctx.fixtures(
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture
+                )
+                await ctx.service.obtainExact({
+                    mapTags: [MapId.Eichenwalde, MapId.Havana],
+                    allyHeroes: [HeroId.McCree],
+                    enemyHeroes: [HeroId.WreckingBall],
+                    playerHeroes: [HeroId.Zenyatta],
+                    thematicTags: [GuideTheme.Psychology],
+                })
+                await ctx.service.obtainExact({
+                    mapTags: [MapId.Eichenwalde],
+                    allyHeroes: [],
+                    enemyHeroes: [],
+                    playerHeroes: [],
+                    thematicTags: [GuideTheme.Psychology],
+                })
+                await ctx.service.obtainExact({
+                    mapTags: [MapId.Eichenwalde],
+                    allyHeroes: [],
+                    enemyHeroes: [HeroId.Soldier],
+                    playerHeroes: [],
+                    thematicTags: [GuideTheme.Psychology],
+                })
+                await ctx.service.obtainExact({
+                    mapTags: [],
+                    allyHeroes: [],
+                    enemyHeroes: [HeroId.Soldier],
+                    playerHeroes: [],
+                    thematicTags: [GuideTheme.Psychology],
+                })
+                await ctx.service.getIncluding({
+                    playerHeroes: [],
+                    mapTags: [MapId.Eichenwalde],
+                    allyHeroes: [],
+                    enemyHeroes: [],
+                    thematicTags: [GuideTheme.Psychology],
+                })
+                    .then(descriptors => {
+                        expect(descriptors.length).toBe(3)
+                    })
+                await ctx.service.getIncluding({
+                    playerHeroes: [],
+                    mapTags: [],
+                    allyHeroes: [],
+                    enemyHeroes: [HeroId.Soldier],
+                    thematicTags: [],
+                })
+                    .then(descriptors => {
+                        expect(descriptors.length).toBe(2)
+                    })
+                await ctx.service.getIncluding({
+                    playerHeroes: [],
+                    mapTags: [],
+                    allyHeroes: [],
+                    enemyHeroes: [HeroId.Soldier, HeroId.Dva],
+                    thematicTags: [],
+                })
+                    .then(descriptors => {
+                        expect(descriptors.length).toBe(0)
+                    })
+                await ctx.service.getIncluding({
+                    playerHeroes: [],
+                    mapTags: [],
+                    allyHeroes: [],
+                    enemyHeroes: [],
+                    thematicTags: [],
+                })
+                    .then(descriptors => {
+                        expect(descriptors.length).toBe(4)
+                    })
+            });
+            it('fails when trying to obtain descriptor with no tags', async () => {
+                await ctx.fixtures(
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture
+                )
+                expect(
+                    () => {
+                        return ctx.service.obtainExact({
+                            mapTags: [],
+                            allyHeroes: [],
+                            enemyHeroes: [],
+                            playerHeroes: [],
+                            thematicTags: [],
+                        })
+                    }
+                ).toThrow(`Can't obtain descriptor from empty DTO`)
             });
         }
     )

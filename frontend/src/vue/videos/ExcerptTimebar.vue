@@ -16,7 +16,6 @@
             <!--                    class="slider-label"-->
             <!--            >{{ formatTimeLabel(currentSeconds) }}-->
         </div>
-        </div>
     </div>
 </template>
 

@@ -2,7 +2,6 @@ import {HttpModule, Module} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {DatabaseModule} from './database/database.module';
-import {databaseProviders} from './database/database.providers';
 import {SuggestPickController} from './controllers/suggest-pick.controller';
 import {MatchupEvaluationController} from './controllers/matchup-evaluation.controller';
 import {YoutubeVideoExcerptController} from './controllers/youtube-video-excerpt.controller';
@@ -19,6 +18,8 @@ import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {ModerationService} from "src/services/moderation.service";
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
 import {GuideController} from "src/controllers/guide.controller";
+import {ContentHashService} from "src/services/content-hash.service";
+import {GuideSearchService} from "src/services/guide-search.service";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -33,7 +34,6 @@ import {GuideController} from "src/controllers/guide.controller";
         FixtureController,
     ],
     providers: [
-        ...databaseProviders,
         AppService,
         MatchupEvaluationService,
         AuthService,
@@ -44,6 +44,8 @@ import {GuideController} from "src/controllers/guide.controller";
         GuideHistoryEntryService,
         GuideDescriptorService,
         ModerationService,
+        ContentHashService,
+        GuideSearchService,
     ],
 })
 export class AppModule {

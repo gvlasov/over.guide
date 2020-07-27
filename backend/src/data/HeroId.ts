@@ -1,0 +1,37 @@
+const enum HeroId {
+    Ana = 0,
+    Ashe = 1,
+    Baptiste = 2,
+    Bastion = 3,
+    Brigitte = 4,
+    Dva = 5,
+    Doomfist = 6,
+    Echo = 7,
+    Genji = 8,
+    Hanzo = 9,
+    Junkrat = 10,
+    Lucio = 11,
+    McCree = 12,
+    Mercy = 13,
+    Mei = 14,
+    Moira = 15,
+    Orisa = 16,
+    Pharah = 17,
+    Reaper = 18,
+    Reinhardt = 19,
+    Roadhog = 20,
+    Sigma = 21,
+    Soldier = 22,
+    Sombra = 23,
+    Symmetra = 24,
+    Torbjorn = 25,
+    Tracer = 26,
+    Widowmaker = 27,
+    Winston = 28,
+    WreckingBall = 29,
+    Zarya = 30,
+    Zenyatta = 31
+}
+
+export default HeroId
+

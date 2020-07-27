@@ -12,7 +12,7 @@ import {
 import HeroDataNames from "src/data/HeroDataNames";
 import heroes from "src/data/heroes"
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
-import MatchupEvaluationDto from "src/data/dto/MatchupEvaluation";
+import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 import {Hero} from "src/database/models/Hero";
 import {Request, Response} from "express";
 import {AuthService} from "src/services/auth.service";

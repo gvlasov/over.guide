@@ -7,27 +7,30 @@ import {MatchupEvaluationService} from "src/services/matchup-evaluation.service"
 import heroesFixture from "@fixtures/heroes.json";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
-import {GuideController} from "src/controllers/guide.controller";
+import {
+    GuideController,
+    GuideSearchQuery
+} from "src/controllers/guide.controller";
 import request from "supertest";
 import {HttpStatus} from "@nestjs/common";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntry";
-import HeroIds from "data/HeroIds";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import HeroId from "data/HeroId";
 import GuidePartTextDto from "data/dto/GuidePartText";
-import GuidePartName from "data/dto/GuidePartName";
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
 import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Guide} from "src/database/models/Guide";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {ModerationService} from "src/services/moderation.service";
 import GuideTheme from "data/GuideTheme";
-import Map from "data/Map";
+import MapId from "data/MapId";
+import {ContentHashService} from "src/services/content-hash.service";
 
 describe(
     GuideController,
     nestTest(
         GuideController,
         [],
-        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService],
+        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService],
         (ctx) => {
             it('user can create new guide', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture)
@@ -39,15 +42,15 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: {
-                            allyHeroes: [HeroIds.Baptiste],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            allyHeroes: [HeroId.Baptiste],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
@@ -69,15 +72,15 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: {
-                            allyHeroes: [HeroIds.Baptiste],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            allyHeroes: [HeroId.Baptiste],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
@@ -93,14 +96,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             allyHeroes: [],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfm',
                             } as GuidePartTextDto
                         ]
@@ -125,15 +128,15 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: {
-                            allyHeroes: [HeroIds.Baptiste],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            allyHeroes: [HeroId.Baptiste],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [GuideTheme.Aim],
-                            mapTags: [Map.Eichenwalde]
+                            mapTags: [MapId.Eichenwalde]
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
@@ -148,15 +151,15 @@ describe(
                     .send({
                         guideId: guide.id,
                         descriptor: {
-                            allyHeroes: [HeroIds.Baptiste],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            allyHeroes: [HeroId.Baptiste],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [GuideTheme.Aim],
-                            mapTags: [Map.Eichenwalde]
+                            mapTags: [MapId.Eichenwalde]
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
@@ -180,15 +183,15 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: {
-                            allyHeroes: [HeroIds.Baptiste],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            allyHeroes: [HeroId.Baptiste],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
@@ -204,14 +207,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             allyHeroes: [],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfm',
                             } as GuidePartTextDto
                         ]
@@ -238,7 +241,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -257,14 +260,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             allyHeroes: [],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfm',
                             } as GuidePartTextDto
                         ]
@@ -291,7 +294,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -332,7 +335,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -368,7 +371,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -398,15 +401,15 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: {
-                            allyHeroes: [HeroIds.Baptiste],
-                            playerHeroes: [HeroIds.McCree],
-                            enemyHeroes: [HeroIds.Zarya],
+                            allyHeroes: [HeroId.Baptiste],
+                            playerHeroes: [HeroId.McCree],
+                            enemyHeroes: [HeroId.Zarya],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
@@ -422,7 +425,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -455,7 +458,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -508,7 +511,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -540,7 +543,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -582,7 +585,7 @@ describe(
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
@@ -607,6 +610,137 @@ describe(
                 expect(guide.deactivatedById).toBe(null)
                 expect(guide.deactivatedAt).toBe(null)
             })
+            it('searches for guides that have given tags', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture)
+                const user = await User.findOne();
+                const token = ctx.app.get(TokenService).getToken(user)
+                await ctx.app.get(GuideHistoryEntryService).save({
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdf'
+                        } as GuidePartTextDto
+                    ],
+                    descriptor: {
+                        mapTags: [MapId.Havana],
+                        thematicTags: [GuideTheme['Game sense']],
+                        enemyHeroes: [],
+                        allyHeroes: [],
+                        playerHeroes: [],
+                    },
+                }, user)
+                await ctx.app.get(GuideHistoryEntryService).save({
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdfman'
+                        } as GuidePartTextDto
+                    ],
+                    descriptor: {
+                        mapTags: [MapId.Havana],
+                        thematicTags: [GuideTheme.Positioning],
+                        enemyHeroes: [],
+                        allyHeroes: [],
+                        playerHeroes: [],
+                    },
+                }, user)
+                await ctx.app.get(GuideHistoryEntryService).save({
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdfman'
+                        } as GuidePartTextDto
+                    ],
+                    descriptor: {
+                        mapTags: [MapId.Havana, MapId.Hollywood],
+                        thematicTags: [GuideTheme.Positioning],
+                        enemyHeroes: [HeroId.Soldier],
+                        allyHeroes: [HeroId.Zarya, HeroId.Zenyatta],
+                        playerHeroes: [HeroId.Dva],
+                    },
+                }, user)
+                await request(ctx.app.getHttpServer())
+                    .get('/guide/search?mapTags=' + MapId.Havana)
+                    .send()
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.length).toBe(3)
+                    })
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/search?allyHeroes=${HeroId.Zarya},${HeroId.Zenyatta}&playerHeroes=${HeroId.Dva}`)
+                    .send()
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.length).toBe(1)
+                    })
+                await request(ctx.app.getHttpServer())
+                    .get('/guide/search')
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.length).toBe(3)
+                    })
+            })
+            it('doesn\'t find deactivated guides', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture)
+                const user = await User.findOne();
+                const token = ctx.app.get(TokenService).getToken(user)
+                await ctx.app.get(GuideHistoryEntryService).save({
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdf'
+                        } as GuidePartTextDto
+                    ],
+                    descriptor: {
+                        mapTags: [MapId.Havana],
+                        thematicTags: [GuideTheme['Game sense']],
+                        enemyHeroes: [],
+                        allyHeroes: [],
+                        playerHeroes: [],
+                    },
+                }, user)
+                await request(ctx.app.getHttpServer())
+                    .get('/guide/search')
+                    .send({
+                        mapTags: [MapId.Havana]
+                    } as SearchQuery)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.length).toBe(3)
+                    })
+            })
+            it('search returns only guide heads', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture)
+                const user = await User.findOne();
+                const token = ctx.app.get(TokenService).getToken(user)
+                await ctx.app.get(GuideHistoryEntryService).save({
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdf'
+                        } as GuidePartTextDto
+                    ],
+                    descriptor: {
+                        mapTags: [MapId.Havana],
+                        thematicTags: [GuideTheme['Game sense']],
+                        enemyHeroes: [],
+                        allyHeroes: [],
+                        playerHeroes: [],
+                    },
+                }, user)
+                await request(ctx.app.getHttpServer())
+                    .get('/guide/search')
+                    .send({
+                        mapTags: [MapId.Havana]
+                    } as SearchQuery)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.length).toBe(3)
+                    })
+            })
+
             afterAll(() => {
                 ctx.app.close()
             })

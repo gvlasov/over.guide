@@ -1,6 +1,6 @@
 import './Page'
 import Role from "../../../backend/src/data/Role";
-import Hero from "../../../backend/src/data/dto/Hero";
+import HeroDto from "@data/dto/HeroDto";
 import heroes from "../../../backend/src/data/heroes";
 import intersection from 'lodash.intersection'
 
@@ -17,7 +17,7 @@ export default class Roster {
         },
         heroesWithRole(role: Role) {
             return cy.get(
-                Array.from<Hero>(heroes.values())
+                Array.from<HeroDto>(heroes.values())
                     .filter(h => h.role === role)
                     .map(hero => `.roster-portrait[data-hero-data-name=${hero.dataName}]`)
                     .join(', ')
@@ -30,7 +30,7 @@ export default class Roster {
         cy.get('.roster-portrait')
             .should(
                 'have.length',
-                Array.from<Hero>(heroes.values())
+                Array.from<HeroDto>(heroes.values())
                     .filter((hero) => hero.role === role)
                     .length - 1 // assuming 1 hero is already picked
             )
@@ -41,7 +41,7 @@ export default class Roster {
         cy.get('.roster-portrait')
             .should(
                 'have.length',
-                Array.from<Hero>(heroes.values())
+                Array.from<HeroDto>(heroes.values())
                     .length
             )
     }

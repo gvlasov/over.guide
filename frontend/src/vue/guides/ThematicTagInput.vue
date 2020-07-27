@@ -27,10 +27,10 @@
     import VoerroTagsInput from '@voerro/vue-tagsinput';
     import Tag from "@/vue/guides/tags/hero/Tag";
     import SeededShuffler from "@/js/SeededShuffler";
-    import Map from "data/Map";
     import GuideTheme from "data/GuideTheme";
-    import ThemeTag from "@/js/dto/ThemeTag";
-    import MapTag from "@/js/dto/MapTag";
+    import ThemeTag from "@/js/vso/ThemeTag";
+    import MapTag from "@/js/vso/MapTag";
+    import maps from 'data/maps'
 
     export default {
         model: {
@@ -73,10 +73,10 @@
                         .concat(
                             shuffler
                                 .shuffle(
-                                    Object.values(Map)
-                                        .filter(it => typeof it !== 'number')
+                                    Array.from(maps.values())
                                 )
                                 .slice(0, 3)
+                                .map(map => map.name)
                         )
                         .join(', ') + '...';
                 } else {
@@ -91,8 +91,7 @@
                         .filter(it => typeof it === 'number')
                         .map(theme => new ThemeTag(theme))
                         .concat(
-                            Object.values(Map)
-                                .filter(it => typeof it === 'number')
+                            Array.from(maps.values())
                                 .map(map => new MapTag(map))
                         )
                 )

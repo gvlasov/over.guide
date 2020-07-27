@@ -1,7 +1,7 @@
 <template>
     <div class="searchbox">
         <TagBuilder
-                :guide-hero-tag="descriptor.heroTag"
+                :guide-hero-tag="descriptor"
                 style="display: table-cell;"
         />
         <ThematicTagInput
@@ -11,7 +11,7 @@
         />
         <button
                 v-if="searchButtonEnabled"
-                class="overwatch-main-button search-button"
+                class="overwatch-button overwatch-main-button search-button"
                 v-hammer:tap="onSearch"
         >Search
         </button>
@@ -22,16 +22,16 @@
     import SeededShuffler from "@/js/SeededShuffler";
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
-    import TagClass from "@/js/dto/TagClass";
-    import MapTag from "@/js/dto/MapTag";
-    import ThemeTag from "@/js/dto/ThemeTag";
+    import TagClass from "@/js/vso/TagClass";
+    import MapTag from "@/js/vso/MapTag";
+    import ThemeTag from "@/js/vso/ThemeTag";
+    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
     export default {
         name: "DescriptorBuilder",
         props: {
             descriptor: {
-                /** @see GuideDescriptor */
-                type: Object,
+                type: GuideDescriptorVso,
                 required: true,
             },
             searchButtonEnabled: {
@@ -40,15 +40,11 @@
             }
         },
         data() {
-            const selectedTags = this.descriptor.mapTags
-                .map(map => {
-                    return new MapTag(map)
-                })
+            const selectedTags = this.descriptor.maps
+                .map(map => new MapTag(map))
                 .concat(
                     this.descriptor.thematicTags
-                        .map(theme => {
-                            return new ThemeTag(theme)
-                        })
+                        .map(theme => new ThemeTag(theme))
                 );
             return {
                 selectedTags: selectedTags
@@ -56,8 +52,7 @@
         },
         watch: {
             selectedTags: function (oldTags, newTags) {
-                console.log(newTags)
-                this.descriptor.mapTags.replaceAll(
+                this.descriptor.maps.replaceAll(
                     newTags
                         .filter(tag => tag.class === TagClass.Map)
                         .map(tag => Number.parseInt(tag.name, 10))
@@ -67,7 +62,6 @@
                         .filter(tag => tag.class === TagClass.Theme)
                         .map(tag => Number.parseInt(tag.name, 10))
                 );
-                console.log(this.descriptor.mapTags)
             }
         },
         computed: {

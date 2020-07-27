@@ -1,4 +1,4 @@
-import ThematicTagDto from "data/dto/ThematicTag";
+import ThematicTagDto from "data/dto/ThematicTagDto";
 
 const data = [
     {

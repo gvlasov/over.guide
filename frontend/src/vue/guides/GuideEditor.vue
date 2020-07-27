@@ -119,18 +119,18 @@
 <script>
     import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
     import draggable from 'vuedraggable'
-    import GuidePartWidget from "@/js/GuidePartWidget";
+    import GuidePartWidget from "@/js/vso/GuidePartWidget";
     import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
     import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
     import OverwatchButton from "@/vue/OverwatchButton";
-    import GuidePartTextWidget from "@/js/GuidePartTextWidget";
-    import GuidePartVideoWidget from "@/js/GuidePartVideoWidget";
+    import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
+    import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
     import Backend from "@/js/Backend";
     import axios from 'axios';
-    import GuidePartName from "data/dto/GuidePartName";
-    import heroes from "data/heroes";
     import GuideTheme from "data/GuideTheme";
-    import Map from "data/Map";
+    import MapId from "data/MapId";
+    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+    import HeroId from "data/HeroId";
 
     const backend = new Backend(axios);
 
@@ -143,11 +143,11 @@
                     guideId: this.guide.guideId,
                     descriptor: {
                         playerHeroes:
-                            this.guide.descriptor.heroTag.playerHeroes.map(hero => hero.id),
+                            this.guide.descriptor.playerHeroes.map(hero => hero.id),
                         allyHeroes:
-                            this.guide.descriptor.heroTag.allyHeroes.map(hero => hero.id),
+                            this.guide.descriptor.allyHeroes.map(hero => hero.id),
                         enemyHeroes:
-                            this.guide.descriptor.heroTag.enemyHeroes.map(hero => hero.id),
+                            this.guide.descriptor.enemyHeroes.map(hero => hero.id),
                         mapTags: this.guide.descriptor.mapTags,
                         thematicTags: this.guide.descriptor.thematicTags,
                     },
@@ -162,7 +162,7 @@
                     where,
                     () => new GuidePartTextWidget(
                         {
-                            kind: GuidePartName.Text,
+                            kind: 'text',
                             contentMd: 'New part'
                         },
                         true
@@ -178,7 +178,7 @@
                     () =>
                         new GuidePartVideoWidget(
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt:
                                     {
                                         youtubeVideoId: 'h2rpFJhBMcs',
@@ -228,22 +228,20 @@
                 guide: {
                     id: undefined,
                     guideId: undefined,
-                    descriptor: {
-                        heroTag: {
-                            playerHeroes: [heroes.get('pharah')],
-                            allyHeroes: [heroes.get('soldier')],
-                            enemyHeroes: [heroes.get('mei')]
-                        },
+                    descriptor: new GuideDescriptorVso({
+                        playerHeroes: [HeroId.Pharah],
+                        allyHeroes: [HeroId.Soldier],
+                        enemyHeroes: [HeroId.Mei],
                         thematicTags: [GuideTheme.Aim],
-                        mapTags: [Map.Havana],
-                    },
+                        mapTags: [MapId.Havana],
+                    }),
                     parts: [
                         new GuidePartTextWidget(
-                            {kind: GuidePartName.Text, contentMd: 'Pantelol'}
+                            {kind: 'text', contentMd: 'Pantelol'}
                         ),
                         new GuidePartVideoWidget(
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'qhtQx9ZXrf8',
                                     startSeconds: 12.32,
@@ -253,7 +251,7 @@
                         ),
                         new GuidePartTextWidget(
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: `### Pantenol\n![](https://i.imgur.com/Eug7rxn.png) )`,
                             }
                         ),

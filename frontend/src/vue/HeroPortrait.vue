@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import Hero from "data/dto/Hero";
+    import HeroDto from "data/dto/HeroDto";
 
     export default {
         name: 'HeroPortrait',
@@ -21,7 +21,7 @@
         },
         methods: {
             /**
-             * @param {Hero|String} hero
+             * @param {HeroDto|String} hero
              */
             imgSrc(hero) {
                 if (hero === null) {

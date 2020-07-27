@@ -1,6 +1,6 @@
 import heroes from "data/heroes";
 import Role from "data/Role"
-import Hero from "data/dto/Hero"
+import HeroDto from "data/dto/HeroDto"
 import SeededShuffler from "@/js/SeededShuffler";
 
 export default class BansGenerator {
@@ -8,7 +8,7 @@ export default class BansGenerator {
     constructor(private readonly shuffler: SeededShuffler) {
     }
 
-    generate(): Hero[] {
+    generate(): HeroDto[] {
         const allHeroes = Array.from(heroes.values());
         const supports =
             this.shuffler.shuffle(

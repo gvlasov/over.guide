@@ -17,7 +17,7 @@
 <script>
     import heroes from "data/heroes";
     import RosterPortrait from "./RosterPortrait.vue";
-    import Hero from "data/dto/Hero";
+    import HeroDto from "data/dto/HeroDto";
 
     export default {
         props: {
@@ -51,27 +51,27 @@
                 this.selectedHeroes.splice(0, this.selectedHeroes.length)
             },
             /**
-             * @param {Hero} hero
+             * @param {HeroDto} hero
              * @return {boolean}
              */
             isHeroBanned(hero) {
                 return typeof this.bans.find(h => hero.dataName === h.dataName) !== 'undefined';
             },
             /**
-             * @param {Hero} hero
+             * @param {HeroDto} hero
              * @return {boolean}
              */
             isHeroSelected(hero) {
                 return this.selectedHeroes.find(h => h.dataName === hero.dataName) !== undefined;
             },
             /**
-             * @param {Hero} hero
+             * @param {HeroDto} hero
              */
             isHeroSelectedOut(hero) {
                 return typeof this.selectedOutHeroes.find(h => h.dataName === hero.dataName) !== 'undefined';
             },
             /**
-             * @param {Hero} hero
+             * @param {HeroDto} hero
              */
             onHeroTap(hero) {
                 if (!this.selectionOnTapEnabled) {

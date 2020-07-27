@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
-import Hero from "src/data/dto/Hero";
-import PickContext from "src/data/dto/PickContext";
-import Alternative from "src/data/dto/Alternative";
+import HeroDto from "data/dto/HeroDto";
+import PickContextDto from "data/dto/PickContextDto";
+import AlternativeDto from "data/dto/AlternativeDto";
 import heroes from "src/data/heroes"
 import Role from 'src/data/Role';
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
@@ -14,9 +14,9 @@ export class SuggestPickService {
     ) {
     }
 
-    suggestPick(context: PickContext): Alternative[] {
-        const allyHeroes: Hero[] = context.allyComp.map(h => heroes.get(h))
-        const enemyHeroes: Hero[] = context.enemyComp.map(h => heroes.get(h))
+    suggestPick(context: PickContextDto): AlternativeDto[] {
+        const allyHeroes: HeroDto[] = context.allyComp.map(h => heroes.get(h))
+        const enemyHeroes: HeroDto[] = context.enemyComp.map(h => heroes.get(h))
         const missingRole = SuggestPickService.getMissingRole(allyHeroes)
         return Array.from(heroes.values())
             .filter(
@@ -27,16 +27,16 @@ export class SuggestPickService {
                     )
             )
             .map(hero => [hero, this.pickScore(enemyHeroes, hero)])
-            .sort((a: [Hero, number], b: [Hero, number]) => a[1] - b[1])
+            .sort((a: [HeroDto, number], b: [HeroDto, number]) => a[1] - b[1])
             .map(
                 hero2Score => ({
-                    dataName: (hero2Score[0] as Hero).dataName,
+                    dataName: (hero2Score[0] as HeroDto).dataName,
                     score: hero2Score[1]
-                } as Alternative)
+                } as AlternativeDto)
             )
     }
 
-    private static getMissingRole(heroes: Hero[]): Role {
+    private static getMissingRole(heroes: HeroDto[]): Role {
         let tanks = 0
         let damage = 0
         let support = 0
@@ -71,7 +71,7 @@ export class SuggestPickService {
         throw new Error("Wrong team comp: " + JSON.stringify(heroes))
     }
 
-    pickScore(enemyHeroes: Hero[], hero: Hero): number {
+    pickScore(enemyHeroes: HeroDto[], hero: HeroDto): number {
         return sum(
             enemyHeroes
                 .map(enemy => this.evaluation.evaluate(hero, enemy))

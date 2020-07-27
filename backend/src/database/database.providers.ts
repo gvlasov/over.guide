@@ -22,6 +22,9 @@ import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {Map} from "src/database/models/Map";
 import {ThematicTag} from "src/database/models/ThematicTag";
 import cls from 'cls-hooked';
+import {GuideHead} from "src/database/models/GuideHead";
+
+const Umzug = require('umzug')
 
 export const databaseProviders = [
     {
@@ -42,8 +45,8 @@ export const databaseProviders = [
                 dialectOptions: {
                     multipleStatements: true,
                 },
-                logging: false,
-                // logging: console.log,
+                // logging: false,
+                logging: console.log,
             });
             Sequelize.useCLS(
                 cls.createNamespace('sequelize')
@@ -70,9 +73,22 @@ export const databaseProviders = [
                 GuidePartVideo,
                 Map,
                 ThematicTag,
+                GuideHead,
             ]);
+            const umzug = new Umzug({
+                migrations: {
+                    path: 'src/database/migrations',
+                    params: [
+                        sequelize.getQueryInterface()
+                    ]
+                },
+                storage: 'sequelize',
+                storageOptions: {
+                    sequelize: sequelize,
 
-            await sequelize.sync();
+                }
+            });
+            await sequelize.sync().then(() => umzug.up())
             return sequelize;
         },
     },

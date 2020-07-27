@@ -1,13 +1,17 @@
-import Alternative from "data/dto/Alternative";
+import AlternativeDto from "data/dto/AlternativeDto";
 import PickSuggestion from "./PickSuggestion";
-import MatchupEvaluation from "data/dto/MatchupEvaluation";
+import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 import {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
-import Hero from "data/dto/Hero"
-import YoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpt";
+import HeroDto from "data/dto/HeroDto"
+import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto";
 import env from '../env/dev'
 import Cookies from 'js-cookie'
-import GuideHistoryEntry from "data/dto/GuideHistoryEntry";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
+import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
+
+const querystring = require('query-string')
 
 export default class Backend {
     private readonly axios: AxiosStatic;
@@ -34,7 +38,17 @@ export default class Backend {
             : {'Authorization': 'Bearer ' + authToken};
         return await this.axios.request({
             url: this.rootUrl + url,
-            data: inDto,
+            ...(method === 'GET' ? {
+                params: inDto,
+                paramsSerializer: (params) => {
+                    return querystring.stringify(params, {
+                        arrayFormat: 'separator',
+                        arrayFormatSeparator: ','
+                    })
+                }
+            } : {
+                data: inDto
+            }),
             method: method,
             headers: headers
         })
@@ -49,14 +63,14 @@ export default class Backend {
             response => {
                 return new PickSuggestion(
                     response.data.map(
-                        (data: object) => data as Alternative
+                        (data: object) => data as AlternativeDto
                     )
                 );
             }
         )
     }
 
-    async getMatchupScore(subject: Hero, object: Hero): Promise<MatchupEvaluation> {
+    async getMatchupScore(subject: HeroDto, object: HeroDto): Promise<MatchupEvaluationDto> {
         return this.query(
             'GET',
             '/matchup-evaluation',
@@ -64,11 +78,11 @@ export default class Backend {
                 subject: subject.dataName,
                 object: object.dataName
             },
-            response => response.data as MatchupEvaluation
+            response => response.data as MatchupEvaluationDto
         )
     };
 
-    async evaluateMatchup(subject: Hero, object: Hero, score: number): Promise<MatchupEvaluation> {
+    async evaluateMatchup(subject: HeroDto, object: HeroDto, score: number): Promise<MatchupEvaluationDto> {
         return this.query(
             'PUT',
             '/matchup-evaluation',
@@ -77,11 +91,11 @@ export default class Backend {
                 object: object.dataName,
                 score: score
             },
-            response => response.data as MatchupEvaluation
+            response => response.data as MatchupEvaluationDto
         )
     };
 
-    async saveVideoExcerpt(excerpt: YoutubeVideoExcerpt): Promise<number | null> {
+    async saveVideoExcerpt(excerpt: YoutubeVideoExcerpsDto): Promise<number | null> {
         return this.query(
             'PUT',
             '/youtube-video-excerpt',
@@ -97,8 +111,7 @@ export default class Backend {
         )
     };
 
-    async saveGuide(guide: GuideHistoryEntry): Promise<number | null> {
-        console.log(guide)
+    async saveGuide(guide: GuideHistoryEntryDto): Promise<number | null> {
         return this.query(
             'POST',
             '/guide',
@@ -113,6 +126,20 @@ export default class Backend {
             }
         )
     }
+
+    async searchGuidesPaginated(
+        query: GuideSearchQueryDto
+    ): Promise<GuideSearchPageDto> {
+        return this.query(
+            'POST',
+            '/guide/search',
+            query,
+            (response) => {
+                return response.data;
+            }
+        )
+    }
+
 
 }
 

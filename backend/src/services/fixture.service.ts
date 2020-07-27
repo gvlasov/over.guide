@@ -1,14 +1,24 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {loadFixtures} from "sequelize-fixtures";
 import {SEQUELIZE} from "src/constants";
-import {Sequelize} from "sequelize-typescript";
+import {Model, Sequelize} from "sequelize-typescript";
+import {ModuleRef} from "@nestjs/core";
 
-export type Fixture = object[] | (() => void)
+export type Fixture = object[] | ((any: any) => void)
+
+export function ActuallyNotTableButView<T extends Model>(constructor: new() => T) {
+    (constructor as any).__onlyView = true;
+}
+
+function isOnlyView(model: any) {
+    return typeof (model as any).__onlyView !== 'undefined';
+}
 
 @Injectable()
 export class FixtureService {
     constructor(
-        @Inject(SEQUELIZE) private readonly sequelize: Sequelize
+        @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
+        private readonly moduleRef: ModuleRef
     ) {
     }
 
@@ -20,7 +30,9 @@ export class FixtureService {
                 this.sequelize.models
             )
         } else {
-            fixture()
+            await fixture(
+                this.moduleRef
+            )
         }
     }
 
@@ -44,6 +56,10 @@ export class FixtureService {
 
     truncateTables() {
         Object.values(this.sequelize.models)
+            .filter(
+                model => !isOnlyView(model)
+                    && model.name !== 'SequelizeMeta'
+            )
             .map(async model => {
                 await this.sequelize.transaction((t) => {
                     var options = {raw: true, transaction: t}

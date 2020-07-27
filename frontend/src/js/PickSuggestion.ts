@@ -1,22 +1,22 @@
 import './Pick'
-import Alternative from 'data/dto/Alternative'
+import AlternativeDto from 'data/dto/AlternativeDto'
 import heroes from "data/heroes";
 import sortBy from 'lodash/sortBy';
-import Hero from "data/dto/Hero";
+import HeroDto from "data/dto/HeroDto";
 
 class PickSuggestion {
-    private readonly alternatives: Alternative[];
+    private readonly alternatives: AlternativeDto[];
 
-    constructor(alternatives: Alternative[]) {
+    constructor(alternatives: AlternativeDto[]) {
         this.alternatives = alternatives;
     }
 
-    heroesSorted(sortFunction: (alternative: Alternative) => number): Hero[] {
+    heroesSorted(sortFunction: (alternative: AlternativeDto) => number): HeroDto[] {
         return sortBy(this.alternatives, sortFunction)
-            .map<Hero>(a => heroes.get(a.dataName) as Hero);
+            .map<HeroDto>(a => heroes.get(a.dataName) as HeroDto);
     }
 
-    score(hero: Hero): number {
+    score(hero: HeroDto): number {
         const bestAlternative =
             this.alternatives.find(
                 alternative => alternative.dataName === hero.dataName
@@ -27,7 +27,7 @@ class PickSuggestion {
         return bestAlternative.score;
     };
 
-    toMap(): Map<Hero, Number> {
+    toMap(): Map<HeroDto, Number> {
         const map = new Map();
         for (let hero of this.heroesSorted(h => (h.score))) {
             map.set(hero, this.score(hero))

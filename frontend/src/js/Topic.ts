@@ -1,9 +1,9 @@
-import Hero from "data/dto/Hero";
+import HeroDto from "data/dto/HeroDto";
 
 export default class Topic {
-    private readonly parts: Hero[];
+    private readonly parts: HeroDto[];
 
-    constructor(parts: Hero[]) {
+    constructor(parts: HeroDto[]) {
         this.parts = parts;
     }
 

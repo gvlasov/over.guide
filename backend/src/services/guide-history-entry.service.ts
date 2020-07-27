@@ -1,19 +1,19 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {User} from "src/database/models/User";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntry";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import {Guide} from "src/database/models/Guide";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
-import GuidePartName from "data/dto/GuidePartName";
 import {GuidePartText} from "src/database/models/GuidePartText";
 import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {GuideDescriptorService} from "src/services/guide-descriptor.service";
-import GuidePartTextDto from "data/dto/GuidePartText";
-import GuidePartVideoDto from "data/dto/GuidePartVideo";
+import GuidePartTextDto from "data/dto/GuidePartTextDto";
+import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
 import {GuideHistoryEntry2GuidePartText} from "src/database/models/GuideHistoryEntry2GuidePartText";
 import {GuideHistoryEntry2GuidePartVideo} from "src/database/models/GuideHistoryEntry2GuidePartVideo";
 import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
+import {ContentHashService} from "src/services/content-hash.service";
 
 export enum SaveResult {
     SavingDuplicateRejected
@@ -22,10 +22,9 @@ export enum SaveResult {
 @Injectable()
 export class GuideHistoryEntryService {
 
-    private crypto = require('crypto')
-
     constructor(
         private readonly guideDescriptorService: GuideDescriptorService,
+        private readonly contentHashService: ContentHashService,
         @Inject(SEQUELIZE) private readonly sequelize: Sequelize
     ) {
     }
@@ -50,7 +49,9 @@ export class GuideHistoryEntryService {
                 },
                 order: [['id', 'DESC']], // https://github.com/RobinBuschmann/sequelize-typescript/issues/82
             })
-            const contentHash = this.getContentHash(gheDto);
+            const contentHash = this.contentHashService.hash(gheDto, (dto) => {
+                delete dto.guideId
+            });
             if (oldEntry !== null && oldEntry.contentHash === contentHash) {
                 return SaveResult.SavingDuplicateRejected
             }
@@ -64,12 +65,12 @@ export class GuideHistoryEntryService {
             await Promise.all(
                 gheDto.parts.map(
                     async (partDto) => {
-                        if (partDto.kind === GuidePartName.Text) {
+                        if (partDto.kind === 'text') {
                             return GuideHistoryEntryService.obtainGuidePartText(
                                 oldEntry,
                                 partDto as GuidePartTextDto
                             )
-                        } else if (partDto.kind === GuidePartName.Video) {
+                        } else if (partDto.kind === 'video') {
                             return GuideHistoryEntryService.obtainGuidePartVideo(
                                 oldEntry,
                                 partDto as GuidePartVideoDto
@@ -102,12 +103,6 @@ export class GuideHistoryEntryService {
             )
             return newEntry
         })
-    }
-
-    private getContentHash(gheDto: GuideHistoryEntryDto): string {
-        const contentOnly = Object.assign({}, gheDto);
-        delete contentOnly.guideId
-        return this.crypto.createHash('sha1').update(JSON.stringify(contentOnly)).digest('base64');
     }
 
     private static async obtainGuidePartText(

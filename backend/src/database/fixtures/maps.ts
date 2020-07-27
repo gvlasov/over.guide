@@ -1,6 +1,6 @@
 import maps from 'data/maps'
 import {Map as MapModel} from "src/database/models/Map"
-import MapDto from 'data/dto/Map'
+import MapDto from 'data/dto/MapDto'
 
 export default async () => {
     await Promise.all(

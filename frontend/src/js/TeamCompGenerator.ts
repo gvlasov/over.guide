@@ -1,14 +1,14 @@
 import heroes from "data/heroes";
 import TeamComp from "./TeamComp";
 import RoleGenerator from "./RoleGenerator";
-import Hero from "data/dto/Hero";
+import HeroDto from "data/dto/HeroDto";
 import Role from "data/Role";
 import SeededShuffler from "@/js/SeededShuffler";
 
 export default class TeamCompGenerator {
 
     constructor(
-        private readonly bans: Hero[],
+        private readonly bans: HeroDto[],
         private readonly shuffler: SeededShuffler,
     ) {
     }
@@ -17,7 +17,7 @@ export default class TeamCompGenerator {
 
         const availableHeroes = Array.from(heroes.values())
             .filter(hero => !this.bans.includes(hero));
-        const supports: (Hero | null)[] =
+        const supports: (HeroDto | null)[] =
             this.shuffler.shuffle(
                 availableHeroes.filter(hero => hero.role === Role.Support),
             )
@@ -25,7 +25,7 @@ export default class TeamCompGenerator {
         if (yourRole === Role.Support) {
             supports.push(null);
         }
-        const tanks: (Hero | null)[] =
+        const tanks: (HeroDto | null)[] =
             this.shuffler.shuffle(
                 availableHeroes.filter(hero => hero.role === Role.Tank),
             )
@@ -33,7 +33,7 @@ export default class TeamCompGenerator {
         if (yourRole === Role.Tank) {
             tanks.push(null);
         }
-        const damage: (Hero | null)[] =
+        const damage: (HeroDto | null)[] =
             this.shuffler.shuffle(
                 availableHeroes.filter(hero => hero.role === Role.Damage),
             )

@@ -1,8 +1,7 @@
 <template>
     <div class="wrap">
-        asd;lfkjasd;lfkjasd;flkajsd;flkasjdf;lkasdjf
-        <OverwatchButton :type="'main'" style="position: relative; left: -200px;">hello</OverwatchButton>
-        <OverwatchButton :type="'default'" disabled="disabled">hello</OverwatchButton>
+        <GuideBrowser
+        />
     </div>
 </template>
 
@@ -12,6 +11,7 @@
     import Topic from "@/js/Topic";
     import heroes from "data/heroes";
     import OverwatchButton from "@/vue/OverwatchButton";
+    import GuideBrowser from "@/vue/guides/GuideBrowser";
 
     const backend = new Backend(axios);
 
@@ -38,6 +38,7 @@
         },
         components: {
             OverwatchButton,
+            GuideBrowser,
         },
     };
 

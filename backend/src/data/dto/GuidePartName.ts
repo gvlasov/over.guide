@@ -1,6 +1,3 @@
-enum GuidePartName {
-    Video = 'video',
-    Text = 'text'
-}
+type GuidePartName = 'video' | 'text'
 
 export default GuidePartName

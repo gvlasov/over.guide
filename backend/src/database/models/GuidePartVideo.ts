@@ -8,6 +8,7 @@ import {
     Table
 } from 'sequelize-typescript';
 import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
+import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 
 @Table({
     name: {
@@ -28,5 +29,13 @@ export class GuidePartVideo extends Model<GuidePartVideo> {
 
     @BelongsTo(() => YoutubeVideoExcerpt)
     excerpt: YoutubeVideoExcerpt
+
+    toDto(): GuidePartVideoDto {
+        return {
+            id: this.id,
+            kind: 'video',
+            excerpt: this.excerpt.toDto(),
+        } as GuidePartVideoDto
+    }
 
 }

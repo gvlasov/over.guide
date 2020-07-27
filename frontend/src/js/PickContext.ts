@@ -1,18 +1,18 @@
 import TeamComp from "./TeamComp";
-import Hero from "data/dto/Hero"
+import HeroDto from "data/dto/HeroDto"
 import heroes from "data/heroes"
-import PickContextDto from "data/dto/PickContext";
+import PickContextDto from "data/dto/PickContextDto";
 
 export default class PickContext {
     private readonly allyComp: TeamComp;
     private readonly enemyComp: TeamComp | null;
-    private readonly bans: Hero[];
+    private readonly bans: HeroDto[];
     private readonly map: string | null;
 
     constructor(
         allyComp: TeamComp,
         enemyComp: TeamComp | null,
-        bans: Hero[],
+        bans: HeroDto[],
         map: string | null
     ) {
         this.allyComp = allyComp;
@@ -21,7 +21,7 @@ export default class PickContext {
         this.map = map;
     }
 
-    heroesLeftForRoster(): Hero[] {
+    heroesLeftForRoster(): HeroDto[] {
         const remainingRoles = this.allyComp.remainingRoles();
         return Array.from(heroes.values()).filter(
             hero =>
@@ -36,7 +36,7 @@ export default class PickContext {
         return this.enemyComp !== null;
     };
 
-    selectedOutHeroes(): Hero[] {
+    selectedOutHeroes(): HeroDto[] {
         if (this.enemyComp !== null && !this.enemyComp.isFull()) {
             return [
                 ...this.enemyComp.picks(),
@@ -55,8 +55,8 @@ export default class PickContext {
     forRequest(): PickContextDto {
         const allyComp: string[] =
             this.allyComp.heroes
-                .filter((h): h is Hero => h !== null)
-                .map((hero: Hero): string => hero.dataName);
+                .filter((h): h is HeroDto => h !== null)
+                .map((hero: HeroDto): string => hero.dataName);
         return {
             allyComp: allyComp,
             enemyComp:
@@ -65,7 +65,7 @@ export default class PickContext {
                         ? [...(this.enemyComp as TeamComp).heroes]
                         : TeamComp.empty().heroes
                 )
-                    .filter((h): h is Hero => h !== null)
+                    .filter((h): h is HeroDto => h !== null)
                     .map<string>(hero => hero.dataName),
             bans: this.bans.map(hero => hero.dataName),
             map: this.map

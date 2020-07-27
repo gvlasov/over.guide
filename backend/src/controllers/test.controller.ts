@@ -1,5 +1,5 @@
 import {Body, Controller, Get} from '@nestjs/common';
-import PickContext from "src/data/dto/PickContext";
+import PickContextDto from "data/dto/PickContextDto";
 import {TokenService} from "src/services/token.service";
 
 @Controller('test')
@@ -12,7 +12,7 @@ export class TestController {
     }
 
     @Get()
-    test(@Body() context: PickContext) {
+    test(@Body() context: PickContextDto) {
         return 'hello'
     }
 }

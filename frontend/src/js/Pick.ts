@@ -1,12 +1,12 @@
-import Hero from 'data/dto/Hero'
+import HeroDto from 'data/dto/HeroDto'
 import TeamComp from "@/js/TeamComp";
 
 export default class Pick {
     constructor(
-        hero: Hero,
+        hero: HeroDto,
         allyComp: TeamComp,
         enemyComp: TeamComp,
-        bans: Hero[],
+        bans: HeroDto[],
         map: string
     ) {
     }

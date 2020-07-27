@@ -1,36 +1,40 @@
 import {nestTest} from "src/test/nest-test";
 import heroesFixture from "@fixtures/heroes.json"
+import mapsFixture from "@fixtures/maps"
+import thematicTagsFixture from "@fixtures/thematicTags"
 import singleUserFixture from "@fixtures/single-user.json"
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
 import {Guide} from "src/database/models/Guide";
 import {User} from "src/database/models/User";
-import GuidePartName from "data/dto/GuidePartName";
 import GuidePartTextDto from "data/dto/GuidePartText";
 import {GuideDescriptorService} from "src/services/guide-descriptor.service";
-import HeroIds from "data/HeroIds";
+import HeroId from "data/HeroId";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {GuidePartText} from "src/database/models/GuidePartText";
-import GuidePartVideoDto from "src/data/dto/GuidePartVideo";
+import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import {GuidePartVideo} from "src/database/models/GuidePartVideo";
+import {ContentHashService} from "src/services/content-hash.service";
+import GuideTheme from "data/GuideTheme";
+import MapId from "data/MapId";
 
 describe(
     GuideHistoryEntryService,
-    nestTest(GuideHistoryEntryService, [], [GuideDescriptorService], (ctx) => {
-            it('saves first history entry in existing guide', async () => {
-                await ctx.fixtures(
-                    singleUserFixture,
-                    heroesFixture
-                )
-                const user = await User.findOne()
-                const guide = await Guide.create({
-                    creatorId: user.id
-                })
-                const entry = <GuideHistoryEntry>await ctx.service.save(
+    nestTest(GuideHistoryEntryService, [], [GuideDescriptorService, ContentHashService], (ctx) => {
+        it('saves first history entry in existing guide', async () => {
+            await ctx.fixtures(
+                singleUserFixture,
+                heroesFixture
+            )
+            const user = await User.findOne()
+            const guide = await Guide.create({
+                creatorId: user.id
+            })
+            const entry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: guide.id,
                         descriptor: {
-                            playerHeroes: [HeroIds.Zenyatta],
+                            playerHeroes: [HeroId.Zenyatta],
                             allyHeroes: [],
                             enemyHeroes: [],
                             thematicTags: [],
@@ -38,41 +42,82 @@ describe(
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
                     },
                     user
-                )
-                expect(entry.guideId).toBe(guide.id)
-                expect((await entry.$get('guidePartTexts')).length).toBe(1)
-                expect((await entry.$get('guidePartVideos')).length).toBe(0)
-                expect((await entry.$get('descriptor').then(d => d.$get('maps'))).length).toBe(0)
-                expect((await entry.$get('descriptor').then(d => d.$get('thematicTags'))).length).toBe(0)
-                expect((await entry.$get('descriptor').then(d => d.$get('players'))).length).toBe(1)
-                expect((await entry.$get('descriptor').then(d => d.$get('allies'))).length).toBe(0)
-                expect((await entry.$get('descriptor').then(d => d.$get('enemies'))).length).toBe(0)
-            });
-            it('initializes non-existent guide with first history entry', async () => {
-                await ctx.fixtures(
-                    heroesFixture,
-                    singleUserFixture
-                )
-                const user = await User.findOne()
-                expect(await Guide.findOne()).toBe(null)
-                const entry = <GuideHistoryEntry>await ctx.service.save(
-                    {
-                        descriptor: {
-                            playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+            )
+            expect(entry.guideId).toBe(guide.id)
+            expect((await entry.$get('guidePartTexts')).length).toBe(1)
+            expect((await entry.$get('guidePartVideos')).length).toBe(0)
+            expect((await entry.$get('descriptor').then(d => d.$get('maps'))).length).toBe(0)
+            expect((await entry.$get('descriptor').then(d => d.$get('thematicTags'))).length).toBe(0)
+            expect((await entry.$get('descriptor').then(d => d.$get('players'))).length).toBe(1)
+            expect((await entry.$get('descriptor').then(d => d.$get('allies'))).length).toBe(0)
+            expect((await entry.$get('descriptor').then(d => d.$get('enemies'))).length).toBe(0)
+        });
+        it('links descriptors with their given parts', async () => {
+            await ctx.fixtures(
+                singleUserFixture,
+                heroesFixture,
+                mapsFixture,
+                thematicTagsFixture
+            )
+            const user = await User.findOne()
+            const guide = await Guide.create({
+                creatorId: user.id
+            })
+            await ctx.service.save(
+                {
+                    guideId: guide.id,
+                    descriptor: {
+                        playerHeroes: [HeroId.Zenyatta, HeroId.Soldier],
+                        allyHeroes: [HeroId.Dva],
+                        enemyHeroes: [HeroId.Winston],
+                        thematicTags: [GuideTheme.Communication],
+                        mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani]
+                    },
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdfasdf'
+                        } as GuidePartTextDto
+                    ]
+                },
+                user
+            )
+            const descriptor = (await GuideDescriptor.findOne({
+                include: [
+                    {all: true}
+                ]
+            }))
+            expect(descriptor.players.length).toBe(2)
+            expect(descriptor.allies.length).toBe(1)
+            expect(descriptor.enemies.length).toBe(1)
+            expect(descriptor.thematicTags.length).toBe(1)
+            expect(descriptor.maps.length).toBe(3)
+        });
+        it('initializes non-existent guide with first history entry', async () => {
+            await ctx.fixtures(
+                heroesFixture,
+                singleUserFixture
+            )
+            const user = await User.findOne()
+            expect(await Guide.findOne()).toBe(null)
+            const entry = <GuideHistoryEntry>await ctx.service.save(
+                {
+                    descriptor: {
+                        playerHeroes: [],
+                        allyHeroes: [HeroId.WreckingBall],
+                        enemyHeroes: [],
+                        thematicTags: [],
+                        mapTags: []
+                    },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
@@ -112,14 +157,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
@@ -158,14 +203,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
@@ -190,18 +235,18 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'mouse'
                             } as GuidePartTextDto,
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'house'
                             } as GuidePartTextDto,
                         ]
@@ -219,18 +264,18 @@ describe(
                         guideId: firstEntry.guideId,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'house'
                             } as GuidePartTextDto,
                             {
-                                kind: GuidePartName.Text,
+                                kind: 'text',
                                 contentMd: 'mouse'
                             } as GuidePartTextDto,
                         ]
@@ -261,14 +306,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 10.0,
@@ -276,7 +321,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 20.0,
@@ -298,14 +343,14 @@ describe(
                         guideId: firstEntry.guideId,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 20.0,
@@ -313,7 +358,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 10.0,
@@ -347,14 +392,14 @@ describe(
                         guideId: guide.id,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 10.0,
@@ -362,7 +407,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 20.0,
@@ -387,14 +432,14 @@ describe(
                         guideId: firstEntry.guideId,
                         descriptor: {
                             playerHeroes: [],
-                            allyHeroes: [HeroIds.WreckingBall],
+                            allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
                             mapTags: []
                         },
                         parts: [
                             {
-                                kind: GuidePartName.Video,
+                                kind: 'video',
                                 excerpt: {
                                     youtubeVideoId: 'asdf',
                                     startSeconds: 20.0,

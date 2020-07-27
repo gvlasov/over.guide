@@ -1,12 +1,12 @@
 import {Injectable} from '@nestjs/common';
-import Hero from "src/data/dto/Hero";
+import HeroDto from "data/dto/HeroDto";
 
 import countersData from "src/data/counters.json"
 
 @Injectable()
 export class MatchupEvaluationService {
 
-    evaluate(subject: Hero, object: Hero): number {
+    evaluate(subject: HeroDto, object: HeroDto): number {
         const find = countersData.find(record => record[0] === subject.dataName && record[1] === object.dataName);
         return (find === undefined) ? 0 : this.extractScore(find[2])
     }

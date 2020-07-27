@@ -1,13 +1,16 @@
 import {
     Body,
     Controller,
+    Get,
     HttpStatus,
     Post,
+    Query,
     Req,
     Res,
-    UseGuards
+    UseGuards,
+    ValidationPipe
 } from '@nestjs/common';
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntry";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import {AuthService} from "src/services/auth.service";
 import {Request, Response} from "express";
 import {AuthenticatedGuard} from "src/services/authenticated.guard";
@@ -17,6 +20,11 @@ import {
 } from "src/services/guide-history-entry.service";
 import {Guide} from "src/database/models/Guide";
 import {ModerationService} from "src/services/moderation.service";
+import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
+import {
+    GuideSearchQuery,
+    GuideSearchService
+} from "src/services/guide-search.service";
 
 @Controller('guide')
 export class GuideController {
@@ -24,7 +32,8 @@ export class GuideController {
     constructor(
         private readonly authService: AuthService,
         private readonly guideHistoryEntryService: GuideHistoryEntryService,
-        private readonly moderationService: ModerationService
+        private readonly moderationService: ModerationService,
+        private readonly guideSearchService: GuideSearchService
     ) {
 
     }
@@ -124,6 +133,21 @@ export class GuideController {
             }
         }
         response.send()
+    }
+
+    @Get('search')
+    async search(
+        @Query(new ValidationPipe({transform: true})) query: GuideSearchQuery
+    ): Promise<GuideSearchPageDto> {
+        console.log(query)
+        return this.guideSearchService.search(query)
+    }
+
+    @Post('search')
+    async searchPost(
+        @Body() query: GuideSearchQuery
+    ): Promise<GuideSearchPageDto> {
+        return this.guideSearchService.search(query)
     }
 
 }
