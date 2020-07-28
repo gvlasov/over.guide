@@ -36,6 +36,11 @@ const data = [
         name: 'Aim',
         dataName: 'aim',
     },
+    {
+        id: 8,
+        name: 'Learning',
+        dataName: 'learning',
+    },
 ]
 const map = new Map<string, ThematicTagDto>()
 data.forEach(
