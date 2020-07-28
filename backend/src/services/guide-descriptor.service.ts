@@ -75,7 +75,7 @@ export class GuideDescriptorService {
                     from GuideDescriptor
                     where id in (
                         (
-                        ${parts.join(`) ${exact ? 'intersect' : 'union all'} (`)}
+                        ${parts.join(`) intersect (`)}
                     )
                 )
             `,
@@ -113,56 +113,46 @@ export class GuideDescriptorService {
                     const newDescriptor = await GuideDescriptor.create({
                         contentHash: this.contentHashService.hash(guideDescriptorDto)
                     })
-                    guideDescriptorDto.playerHeroes.forEach(
-                        heroId => {
-                            GuideDescriptor2PlayerHero.create(
-                                {
-                                    guideDescriptorId: newDescriptor.id,
-                                    heroId: heroId,
-                                }
-                            )
-                        }
-                    )
-                    guideDescriptorDto.allyHeroes.forEach(
-                        heroId => {
-                            GuideDescriptor2AllyHero.create(
-                                {
-                                    guideDescriptorId: newDescriptor.id,
-                                    heroId: heroId,
-                                }
-                            )
-                        }
-                    )
-                    guideDescriptorDto.enemyHeroes.forEach(
-                        heroId => {
-                            GuideDescriptor2EnemyHero.create(
-                                {
-                                    guideDescriptorId: newDescriptor.id,
-                                    heroId: heroId,
-                                }
-                            )
-                        }
-                    )
-                    guideDescriptorDto.thematicTags.forEach(
-                        tagId => {
-                            GuideDescriptor2ThematicTag.create(
-                                {
-                                    guideDescriptorId: newDescriptor.id,
-                                    thematicTagId: tagId,
-                                }
-                            )
-                        }
-                    )
-                    guideDescriptorDto.mapTags.forEach(
-                        mapId => {
-                            GuideDescriptor2Map.create(
-                                {
-                                    guideDescriptorId: newDescriptor.id,
-                                    mapId: mapId,
-                                }
-                            )
-                        }
-                    )
+                    for (const heroId of guideDescriptorDto.playerHeroes) {
+                        await GuideDescriptor2PlayerHero.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                heroId: heroId,
+                            }
+                        )
+                    }
+                    for (const heroId of guideDescriptorDto.allyHeroes) {
+                        await GuideDescriptor2AllyHero.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                heroId: heroId,
+                            }
+                        )
+                    }
+                    for (const heroId of guideDescriptorDto.enemyHeroes) {
+                        await GuideDescriptor2EnemyHero.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                heroId: heroId,
+                            }
+                        )
+                    }
+                    for (const tagId of guideDescriptorDto.thematicTags) {
+                        await GuideDescriptor2ThematicTag.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                thematicTagId: tagId,
+                            }
+                        )
+                    }
+                    for (const mapId of guideDescriptorDto.mapTags) {
+                        await GuideDescriptor2Map.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                mapId: mapId,
+                            }
+                        )
+                    }
                     result = newDescriptor
                 } else {
                     result = oldDescriptor

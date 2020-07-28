@@ -1,30 +1,30 @@
 import {User} from "src/database/models/User";
 import {nestTest} from "src/test/nest-test";
-import singleUserFixture from "@fixtures/single-user.json"
-import devFixture from "@fixtures/dev.json"
+import singleUserFixture from "@fixtures/single-user"
+import mapsFixture from "@fixtures/maps"
 import {FixtureService} from "src/services/fixture.service";
-import {Ability} from "src/database/models/Ability";
+import {Map} from "src/database/models/Map"
 
 describe(
     FixtureService,
     nestTest(FixtureService, [], [], (ctx) => {
-            it('loads single fixture', async () => {
-                await ctx.service.loadFixtureClear(singleUserFixture)
-                expect(
-                    (await User.findOne()).name
+        it('loads single fixture', async () => {
+            await ctx.service.loadFixtureClear(singleUserFixture)
+            expect(
+                (await User.findOne()).name
                 )
                     .toBe('testuser#123')
             });
             it('loads multiple fixtures', async () => {
-                await ctx.service.loadFixturesClear(singleUserFixture, devFixture)
+                await ctx.service.loadFixturesClear(singleUserFixture, mapsFixture)
                 expect(
                     (await User.findOne()).name
                 )
                     .toBe('testuser#123')
                 expect(
-                    (await Ability.findOne()).dataName
+                    (await Map.findAndCountAll()).count
                 )
-                    .toBe('sleepdart')
+                    .not.toBe(0)
             });
         }
     )

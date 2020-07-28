@@ -1,5 +1,5 @@
 import {Body, Controller, Delete, Get, Post} from '@nestjs/common';
-import {FixtureService} from "src/services/fixture.service";
+import {Fixture, FixtureService} from "src/services/fixture.service";
 import heroesFixture from '@fixtures/heroes'
 import mapsFixture from '@fixtures/maps'
 import thematicTagsFixture from '@fixtures/thematicTags'
@@ -14,7 +14,7 @@ export class FixtureController {
     }
 
     @Post()
-    load(@Body() json: object[]) {
+    load(@Body() json: Fixture) {
         this.service.loadFixture(json)
     }
 

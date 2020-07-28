@@ -1,6 +1,6 @@
 import {Sequelize} from 'sequelize-typescript';
 
-import {SEQUELIZE} from '../constants';
+import {SEQUELIZE, SQL_LOG} from '../constants';
 import {Hero} from "./models/Hero";
 import {Patch} from "./models/Patch";
 import {Ability} from "./models/Ability";
@@ -45,8 +45,7 @@ export const databaseProviders = [
                 dialectOptions: {
                     multipleStatements: true,
                 },
-                // logging: false,
-                logging: console.log,
+                logging: SQL_LOG ? (...msg) => console.log(msg) : false,
             });
             Sequelize.useCLS(
                 cls.createNamespace('sequelize')

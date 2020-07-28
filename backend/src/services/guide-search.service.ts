@@ -13,6 +13,7 @@ import HeroId from "data/HeroId";
 import MapId from "data/MapId";
 import GuideTheme from "data/GuideTheme";
 import {Op} from "sequelize";
+import {GuideHead} from "src/database/models/GuideHead";
 
 export class GuideSearchQuery implements GuideSearchQueryDto {
 
@@ -58,14 +59,26 @@ export class GuideSearchService {
         const nextGuides =
             await GuideHistoryEntry.findAll({
                 include: [
-                    {model: Guide, as: 'guide'},
+                    {
+                        model: Guide,
+                        as: 'guide',
+                        where: {
+                            deactivatedById: null,
+                            deactivatedAt: null,
+                        },
+                    },
                     {model: GuidePartText, as: 'guidePartTexts'},
                     {model: GuidePartVideo, as: 'guidePartVideos'},
                     {
                         model: GuideDescriptor,
                         as: 'descriptor',
-                        include: [{all: true}]
+                        include: [{all: true}],
                     },
+                    {
+                        model: GuideHead,
+                        as: 'headRecord',
+                        required: true,
+                    }
                 ],
                 where: {
                     guideId: {
@@ -74,7 +87,7 @@ export class GuideSearchService {
                     descriptorId:
                         (await this.guideDescriptorService
                             .getIncluding(query))
-                            .map(descriptor => descriptor.id)
+                            .map(descriptor => descriptor.id),
                 },
                 limit: GuideSearchService.pageSize + 1,
                 order: [['id', 'DESC']]

@@ -1,21 +1,18 @@
 import {User} from "src/database/models/User";
 import {nestTest} from "src/test/nest-test";
-import singleUserFixture from "@fixtures/single-user.json"
+import singleUserFixture from "@fixtures/single-user"
 import {TokenService} from "src/services/token.service";
 import {AuthService} from "src/services/auth.service";
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
-import heroesFixture from "@fixtures/heroes.json";
+import heroesFixture from "@fixtures/heroes";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
-import {
-    GuideController,
-    GuideSearchQuery
-} from "src/controllers/guide.controller";
+import {GuideController,} from "src/controllers/guide.controller";
 import request from "supertest";
 import {HttpStatus} from "@nestjs/common";
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import HeroId from "data/HeroId";
-import GuidePartTextDto from "data/dto/GuidePartText";
+import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
 import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Guide} from "src/database/models/Guide";
@@ -24,13 +21,17 @@ import {ModerationService} from "src/services/moderation.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import {ContentHashService} from "src/services/content-hash.service";
+import {
+    GuideSearchQuery,
+    GuideSearchService
+} from "src/services/guide-search.service";
 
 describe(
     GuideController,
     nestTest(
         GuideController,
         [],
-        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService],
+        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService, GuideSearchService],
         (ctx) => {
             it('user can create new guide', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture)
@@ -225,7 +226,7 @@ describe(
                 expect((await GuideHistoryEntry.findAll()).length).toBe(1)
             });
             it('moderator can edit other users guides', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const regularUser = await User.findOne();
                 const moderationService = ctx.app.get<ModerationService>(ModerationService);
                 jest.spyOn(moderationService, 'isModerator')
@@ -246,7 +247,7 @@ describe(
                         } as GuidePartTextDto
                     ],
                     descriptor: {
-                        mapTags: [],
+                        mapTags: [MapId.Dorado],
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
@@ -302,7 +303,7 @@ describe(
                         mapTags: [],
                         thematicTags: [],
                         enemyHeroes: [],
-                        allyHeroes: [],
+                        allyHeroes: [HeroId.Mei],
                         playerHeroes: [],
                     },
                 }, user)
@@ -343,7 +344,7 @@ describe(
                         mapTags: [],
                         thematicTags: [],
                         enemyHeroes: [],
-                        allyHeroes: [],
+                        allyHeroes: [HeroId.Ashe],
                         playerHeroes: [],
                     },
                 }, user)
@@ -360,7 +361,7 @@ describe(
                 expect(guide.deactivatedAt).not.toBe(null)
             });
             it('users can\'t deactivate each other\'s guides', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user1 = await User.findOne();
                 const user2 = await User.create({
                     name: 'another dude',
@@ -377,7 +378,7 @@ describe(
                     ],
                     descriptor: {
                         mapTags: [],
-                        thematicTags: [],
+                        thematicTags: [GuideTheme.Psychology],
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
@@ -418,7 +419,7 @@ describe(
                 expect((await Guide.findAll()).length).toBe(0)
             });
             it('deactivating non-existent guide does nothing', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -430,7 +431,7 @@ describe(
                         } as GuidePartTextDto
                     ],
                     descriptor: {
-                        mapTags: [],
+                        mapTags: [MapId.Hanamura],
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
@@ -451,7 +452,7 @@ describe(
                 expect((await Guide.findAll()).length).toBe(1)
             })
             it('user can reactivate guide if he deactivated it himself', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -463,7 +464,7 @@ describe(
                         } as GuidePartTextDto
                     ],
                     descriptor: {
-                        mapTags: [],
+                        mapTags: [MapId.Eichenwalde],
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
@@ -504,7 +505,7 @@ describe(
                 expect((await Guide.findAndCountAll()).count).toBe(0)
             })
             it('activating active guide does nothing', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -520,7 +521,7 @@ describe(
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
-                        playerHeroes: [],
+                        playerHeroes: [HeroId.Ana]
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -536,7 +537,7 @@ describe(
                 expect(guide.deactivatedAt).toBe(null)
             })
             it('deactivating inactive guide does nothing', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -552,7 +553,7 @@ describe(
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
-                        playerHeroes: [],
+                        playerHeroes: [HeroId.Ana],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -569,7 +570,7 @@ describe(
                 expect(guide.deactivatedAt).not.toBe(null)
             })
             it('moderator can reactivate guide even if user deactivated it', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const moderationService = ctx.app.get<ModerationService>(ModerationService);
                 jest.spyOn(moderationService, 'isModerator')
@@ -594,7 +595,7 @@ describe(
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
-                        playerHeroes: [],
+                        playerHeroes: [HeroId.Ana],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -611,9 +612,8 @@ describe(
                 expect(guide.deactivatedAt).toBe(null)
             })
             it('searches for guides that have given tags', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
-                const token = ctx.app.get(TokenService).getToken(user)
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
@@ -664,27 +664,27 @@ describe(
                     .send()
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.length).toBe(3)
+                        expect(response.body.guides.length).toBe(3)
                     })
                 await request(ctx.app.getHttpServer())
                     .get(`/guide/search?allyHeroes=${HeroId.Zarya},${HeroId.Zenyatta}&playerHeroes=${HeroId.Dva}`)
                     .send()
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.length).toBe(1)
+                        expect(response.body.guides.length).toBe(1)
                     })
                 await request(ctx.app.getHttpServer())
                     .get('/guide/search')
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.length).toBe(3)
+                        expect(response.body.guides.length).toBe(3)
                     })
             })
             it('doesn\'t find deactivated guides', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                const entry = await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
                         {
                             kind: 'text',
@@ -698,32 +698,61 @@ describe(
                         allyHeroes: [],
                         playerHeroes: [],
                     },
-                }, user)
+                }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .get('/guide/search')
                     .send({
                         mapTags: [MapId.Havana]
-                    } as SearchQuery)
+                    } as GuideSearchQuery)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.length).toBe(3)
+                        expect(response.body.guides.length).toBe(1)
+                    });
+                (await entry.$get('guide')).deactivate(user)
+                await request(ctx.app.getHttpServer())
+                    .get('/guide/search')
+                    .send({
+                        mapTags: [MapId.Havana]
+                    } as GuideSearchQuery)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.guides.length).toBe(0)
                     })
             })
             it('search returns only guide heads', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
-                    parts: [
-                        {
-                            kind: 'text',
-                            contentMd: 'asdf'
-                        } as GuidePartTextDto
-                    ],
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const entry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'not head'}],
                     descriptor: {
                         mapTags: [MapId.Havana],
-                        thematicTags: [GuideTheme['Game sense']],
+                        thematicTags: [],
+                        enemyHeroes: [],
+                        allyHeroes: [],
+                        playerHeroes: [],
+                    },
+                }, user) as GuideHistoryEntry
+                const guide = await entry.$get('guide');
+                await service.save({
+                    parts: [{kind: 'text', contentMd: 'HEAD'}],
+                    guideId: guide.id,
+                    descriptor: {
+                        mapTags: [MapId.Havana],
+                        thematicTags: [],
+                        enemyHeroes: [],
+                        allyHeroes: [],
+                        playerHeroes: [],
+                    },
+                }, user)
+                await service.save({
+                    parts: [{kind: 'text', contentMd: 'HEAD'}],
+                    descriptor: {
+                        mapTags: [MapId.Eichenwalde],
+                        thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
@@ -733,11 +762,15 @@ describe(
                     .get('/guide/search')
                     .send({
                         mapTags: [MapId.Havana]
-                    } as SearchQuery)
+                    } as GuideSearchQuery)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.length).toBe(3)
+                        expect(response.body.guides.length).toBe(2)
+                        expect(
+                            response.body.guides.map((guide: GuideHistoryEntryDto) => (guide.parts[0] as GuidePartTextDto).contentMd)
+                                .filter(it => it === 'HEAD')
+                        ).toHaveLength(2)
                     })
             })
 

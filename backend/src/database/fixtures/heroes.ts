@@ -5,8 +5,8 @@ import HeroDto from "data/dto/HeroDto";
 export default async () => {
     await Promise.all(
         Array.from<HeroDto>(heroes.values()).map(
-            hero => {
-                HeroModel.create(hero)
+            async hero => {
+                await HeroModel.create(hero)
             }
         )
     )

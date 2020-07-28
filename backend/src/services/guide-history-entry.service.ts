@@ -31,6 +31,8 @@ export class GuideHistoryEntryService {
 
     async save(gheDto: GuideHistoryEntryDto, saver: User): Promise<GuideHistoryEntry | SaveResult> {
         return this.sequelize.transaction(async (t) => {
+            const descriptor = await
+                this.guideDescriptorService.obtainExact(gheDto.descriptor);
             const guide =
                 await (
                     typeof gheDto.guideId === 'undefined'
@@ -41,8 +43,6 @@ export class GuideHistoryEntryService {
                             where: {id: gheDto.guideId},
                         })
                 )
-            const descriptor = await
-                this.guideDescriptorService.obtainExact(gheDto.descriptor);
             const oldEntry = await GuideHistoryEntry.findOne({
                 where: {
                     guideId: guide.id

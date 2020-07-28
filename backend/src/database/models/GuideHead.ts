@@ -14,7 +14,6 @@ import {ActuallyNotTableButView} from "src/services/fixture.service";
     {
         createdAt: false,
         updatedAt: false,
-
     },
 )
 @ActuallyNotTableButView
@@ -24,7 +23,7 @@ export class GuideHead extends Model<GuideHead> {
     @Column({type: new DataTypes.INTEGER()})
     guideHistoryEntryId: number
 
-    @BelongsTo(() => Guide, 'guideHistoryEntryId')
+    @BelongsTo(() => GuideHistoryEntry, 'guideHistoryEntryId')
     guideHistoryEntry: GuideHistoryEntry
 
 

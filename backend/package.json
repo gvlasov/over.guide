@@ -36,7 +36,6 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "sequelize": "~5.22.2",
-    "sequelize-fixtures": "^1.2.0",
     "sequelize-typescript": "^1.1.0",
     "umzug": "^2.3.0"
   },

@@ -1,10 +1,9 @@
 import {Inject, Injectable} from '@nestjs/common';
-import {loadFixtures} from "sequelize-fixtures";
 import {SEQUELIZE} from "src/constants";
 import {Model, Sequelize} from "sequelize-typescript";
 import {ModuleRef} from "@nestjs/core";
 
-export type Fixture = object[] | ((any: any) => void)
+export type Fixture = ((any: any) => void)
 
 export function ActuallyNotTableButView<T extends Model>(constructor: new() => T) {
     (constructor as any).__onlyView = true;
@@ -23,16 +22,13 @@ export class FixtureService {
     }
 
     async loadFixture(fixture: Fixture): Promise<any> {
-        if (fixture instanceof Array) {
+        if (fixture instanceof Function) {
             // in sequelize-fixtures, a "fixture" is a single database record; here a "fixture" is a collection of database records, as in PHP world I used to work in
-            return await loadFixtures(
-                fixture,
-                this.sequelize.models
-            )
-        } else {
             await fixture(
                 this.moduleRef
             )
+        } else {
+            throw new Error('Fixture must be function')
         }
     }
 

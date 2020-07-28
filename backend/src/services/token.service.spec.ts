@@ -1,7 +1,7 @@
 import {TokenService} from "src/services/token.service";
 import {User} from "src/database/models/User";
 import {nestTest} from "src/test/nest-test";
-import singleUserFixture from "@fixtures/single-user.json"
+import singleUserFixture from "@fixtures/single-user"
 
 describe(
     TokenService,

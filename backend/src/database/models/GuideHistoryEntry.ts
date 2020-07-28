@@ -1,9 +1,11 @@
 import {
+    AllowNull,
     AutoIncrement,
     BelongsTo,
     BelongsToMany,
     Column,
     ForeignKey,
+    HasOne,
     Model,
     PrimaryKey,
     Table,
@@ -18,6 +20,7 @@ import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {GuideHistoryEntry2GuidePartVideo} from "src/database/models/GuideHistoryEntry2GuidePartVideo";
 import {DataTypes} from "sequelize";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
+import {GuideHead} from "src/database/models/GuideHead";
 
 @Table({
     name: {
@@ -39,6 +42,15 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
 
     @BelongsTo(() => Guide, 'guideId')
     guide: Guide
+
+    @AllowNull
+    @ForeignKey(() => GuideHead)
+    @Column
+    headRecordId: number;
+
+    @HasOne(() => GuideHead, 'guideHistoryEntryId')
+    headRecord: GuideHead | null
+
 
     @ForeignKey(() => User)
     @Column
