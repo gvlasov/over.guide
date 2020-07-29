@@ -9,7 +9,6 @@ import {
     Res,
     UnauthorizedException
 } from '@nestjs/common';
-import HeroDataNames from "src/data/HeroDataNames";
 import heroes from "src/data/heroes"
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
 import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
@@ -18,6 +17,7 @@ import {Request, Response} from "express";
 import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
+import HeroId from "data/HeroId";
 
 @Controller('matchup-evaluation')
 
@@ -30,7 +30,7 @@ export class MatchupEvaluationController {
     }
 
     @Get()
-    evaluate(subject: HeroDataNames, object: HeroDataNames) {
+    evaluate(subject: HeroId, object: HeroId) {
         return this.service.evaluate(
             heroes.get(subject),
             heroes.get(object)

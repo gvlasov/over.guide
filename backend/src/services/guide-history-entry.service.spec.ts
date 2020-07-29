@@ -38,7 +38,8 @@ describe(
                             allyHeroes: [],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -77,7 +78,8 @@ describe(
                         allyHeroes: [HeroId.Dva],
                         enemyHeroes: [HeroId.Winston],
                         thematicTags: [GuideTheme.Communication],
-                        mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani]
+                        mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani],
+                        abilities: [],
                     },
                     parts: [
                         {
@@ -113,7 +115,8 @@ describe(
                         allyHeroes: [HeroId.WreckingBall],
                         enemyHeroes: [],
                         thematicTags: [],
-                        mapTags: []
+                        mapTags: [],
+                        abilities: [],
                     },
                         parts: [
                             {
@@ -160,7 +163,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -206,7 +210,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -238,7 +243,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -267,7 +273,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -309,7 +316,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -346,7 +354,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -395,7 +404,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {
@@ -435,7 +445,8 @@ describe(
                             allyHeroes: [HeroId.WreckingBall],
                             enemyHeroes: [],
                             thematicTags: [],
-                            mapTags: []
+                            mapTags: [],
+                            abilities: [],
                         },
                         parts: [
                             {

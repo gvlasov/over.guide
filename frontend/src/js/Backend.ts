@@ -75,8 +75,8 @@ export default class Backend {
             'GET',
             '/matchup-evaluation',
             {
-                subject: subject.dataName,
-                object: object.dataName
+                subject: subject.id,
+                object: object.id,
             },
             response => response.data as MatchupEvaluationDto
         )
@@ -87,8 +87,8 @@ export default class Backend {
             'PUT',
             '/matchup-evaluation',
             {
-                subject: subject.dataName,
-                object: object.dataName,
+                subject: subject.id,
+                object: object.id,
                 score: score
             },
             response => response.data as MatchupEvaluationDto

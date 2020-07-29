@@ -5,6 +5,7 @@ import RoleGenerator from "./RoleGenerator";
 import TeamComp from "./TeamComp";
 import Role from "data/Role";
 import SeededShuffler from "@/js/SeededShuffler";
+import MapId from "data/MapId";
 
 export default class PickContextGenerator {
 
@@ -20,7 +21,7 @@ export default class PickContextGenerator {
             teamCompGenerator.generateForRole(yourRole),
             teamCompGenerator.generateComplete(),
             bans,
-            "Hanamura"
+            MapId.Hanamura
         );
     };
 
@@ -35,7 +36,7 @@ export default class PickContextGenerator {
             new TeamComp([null, null, null, null, null, null]),
             null,
             new BansGenerator(this.shuffler).generate(),
-            "Hanamura"
+            MapId.Hanamura
         );
     };
 
@@ -44,7 +45,7 @@ export default class PickContextGenerator {
             new TeamComp([null, null, null, null, null, null]),
             new TeamComp([null, null, null, null, null, null]),
             new BansGenerator(this.shuffler).generate(),
-            "Hanamura"
+            MapId.Hanamura
         );
     };
 }

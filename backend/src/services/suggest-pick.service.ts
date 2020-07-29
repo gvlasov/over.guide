@@ -30,7 +30,7 @@ export class SuggestPickService {
             .sort((a: [HeroDto, number], b: [HeroDto, number]) => a[1] - b[1])
             .map(
                 hero2Score => ({
-                    dataName: (hero2Score[0] as HeroDto).dataName,
+                    heroId: (hero2Score[0] as HeroDto).id,
                     score: hero2Score[1]
                 } as AlternativeDto)
             )

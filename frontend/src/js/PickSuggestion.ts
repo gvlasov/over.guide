@@ -13,13 +13,13 @@ class PickSuggestion {
 
     heroesSorted(sortFunction: (alternative: AlternativeDto) => number): HeroDto[] {
         return sortBy(this.alternatives, sortFunction)
-            .map<HeroDto>(a => heroes.get(a.dataName) as HeroDto);
+            .map<HeroDto>(a => heroes.get(a.heroId) as HeroDto);
     }
 
     score(hero: HeroDto): number {
         const bestAlternative =
             this.alternatives.find(
-                alternative => alternative.dataName === hero.dataName
+                alternative => alternative.heroId === hero.id
             );
         if (typeof bestAlternative === 'undefined') {
             throw new Error(hero.name + " is not in suggestion");

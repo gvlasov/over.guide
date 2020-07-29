@@ -229,7 +229,7 @@ const data = [
         dataName: HeroDataNames.Zenyatta,
     }
 ]
-const map = new Map<string, HeroDto>()
+const map = new Map<HeroId, HeroDto>()
 data.forEach(
     d => {
         const hero: HeroDto = {
@@ -238,7 +238,7 @@ data.forEach(
             role: d.role,
             id: d.id
         }
-        map.set(d.dataName, hero)
+        map.set(d.id, hero)
     }
 )
 export default map

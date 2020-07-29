@@ -1,8 +1,11 @@
+import MapId from "data/MapId";
+import HeroId from "data/HeroId";
+
 interface PickContextDto {
-    allyComp: (string | null)[]
-    enemyComp: (string | null)[]
-    bans: string[]
-    map: string | null
+    allyComp: (HeroId | null)[]
+    enemyComp: (HeroId | null)[]
+    bans: HeroId[]
+    map: MapId | null
 }
 
 export default PickContextDto;

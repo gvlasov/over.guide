@@ -24,6 +24,7 @@ export default async (moduleRef: ModuleRef) => {
                 playerHeroes: [HeroId.Dva],
                 allyHeroes: [],
                 enemyHeroes: [],
+                abilities: [],
                 mapTags: [],
                 thematicTags: []
             }

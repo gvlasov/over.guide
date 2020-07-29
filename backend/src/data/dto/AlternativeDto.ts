@@ -1,5 +1,7 @@
+import HeroId from "data/HeroId";
+
 interface AlternativeDto {
-    readonly dataName: string
+    readonly heroId: HeroId
     readonly score: number
 }
 

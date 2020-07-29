@@ -14,6 +14,7 @@ import MapId from "data/MapId";
 import GuideTheme from "data/GuideTheme";
 import {Op} from "sequelize";
 import {GuideHead} from "src/database/models/GuideHead";
+import AbilityId from "data/AbilityId";
 
 export class GuideSearchQuery implements GuideSearchQueryDto {
 
@@ -31,6 +32,10 @@ export class GuideSearchQuery implements GuideSearchQueryDto {
 
     @Type(() => String)
     @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
+    abilities: AbilityId[];
+
+    @Type(() => String)
+    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     mapTags: MapId[] = []
 
     @Type(() => String)
@@ -44,6 +49,7 @@ export class GuideSearchQuery implements GuideSearchQueryDto {
     @Type(() => String)
     @Transform((value: string) => atob(value).split(',').map(it => Number.parseInt(it)))
     clientAlreadyHasGuideIds: number[] = []
+
 }
 
 @Injectable()
@@ -106,6 +112,5 @@ export class GuideSearchService {
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         }
     }
-
 
 }

@@ -252,6 +252,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, regularUser)
                 const guide = await Guide.findOne()
@@ -305,6 +306,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [HeroId.Mei],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -346,6 +348,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [HeroId.Ashe],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -382,6 +385,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user1)
                 const guide = await Guide.findOne()
@@ -436,6 +440,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 const existingGuide = await Guide.findOne()
@@ -469,6 +474,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -521,7 +527,8 @@ describe(
                         thematicTags: [],
                         enemyHeroes: [],
                         allyHeroes: [],
-                        playerHeroes: [HeroId.Ana]
+                        playerHeroes: [HeroId.Ana],
+                        abilities: [],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -554,6 +561,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [HeroId.Ana],
+                        abilities: [],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -596,6 +604,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [HeroId.Ana],
+                        abilities: [],
                     },
                 }, user)
                 const guide = await Guide.findOne()
@@ -627,6 +636,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 await ctx.app.get(GuideHistoryEntryService).save({
@@ -642,6 +652,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 await ctx.app.get(GuideHistoryEntryService).save({
@@ -657,6 +668,7 @@ describe(
                         enemyHeroes: [HeroId.Soldier],
                         allyHeroes: [HeroId.Zarya, HeroId.Zenyatta],
                         playerHeroes: [HeroId.Dva],
+                        abilities: [],
                     },
                 }, user)
                 await request(ctx.app.getHttpServer())
@@ -697,6 +709,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
@@ -734,6 +747,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user) as GuideHistoryEntry
                 const guide = await entry.$get('guide');
@@ -746,6 +760,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 await service.save({
@@ -756,6 +771,7 @@ describe(
                         enemyHeroes: [],
                         allyHeroes: [],
                         playerHeroes: [],
+                        abilities: [],
                     },
                 }, user)
                 await request(ctx.app.getHttpServer())

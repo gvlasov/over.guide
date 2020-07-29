@@ -24,6 +24,7 @@ describe(
                     enemyHeroes: [HeroId.Dva],
                     playerHeroes: [],
                     thematicTags: [],
+                    abilities: [],
                 })
                 expect(descriptor).not.toBe(null)
             });
@@ -38,6 +39,7 @@ describe(
                     enemyHeroes: [HeroId.Baptiste, HeroId.Bastion],
                     playerHeroes: [HeroId.Baptiste],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(async descriptor => {
                         expect(descriptor).not.toBe(null)
@@ -54,6 +56,7 @@ describe(
                     enemyHeroes: [HeroId.Zenyatta, HeroId.Zarya],
                     playerHeroes: [],
                     thematicTags: [],
+                    abilities: [],
                 })
                 expect(descriptor).toBe(null)
             });
@@ -69,6 +72,7 @@ describe(
                     enemyHeroes: [HeroId.Baptiste, HeroId.Bastion],
                     playerHeroes: [HeroId.Baptiste],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(async descriptor => {
                         expect(
@@ -88,6 +92,7 @@ describe(
                     enemyHeroes: [HeroId.Baptiste /* no bastion */],
                     playerHeroes: [HeroId.Baptiste],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(async descriptor => {
                         expect(descriptor).toBe(null)
@@ -108,6 +113,7 @@ describe(
                     enemyHeroes: [],
                     playerHeroes: [HeroId.Zenyatta],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(async descriptor => {
                         expect(
@@ -127,6 +133,7 @@ describe(
                     enemyHeroes: [HeroId.WreckingBall],
                     playerHeroes: [HeroId.Zenyatta],
                     thematicTags: [GuideTheme.Psychology],
+                    abilities: [],
                 })
                     .then(async descriptor => {
                         await descriptor.reload()
@@ -149,6 +156,7 @@ describe(
                     enemyHeroes: [HeroId.WreckingBall],
                     playerHeroes: [HeroId.Zenyatta],
                     thematicTags: [GuideTheme.Psychology],
+                    abilities: [],
                 })
                 await ctx.service.obtainExact({
                     mapTags: [MapId.Eichenwalde],
@@ -156,6 +164,7 @@ describe(
                     enemyHeroes: [],
                     playerHeroes: [],
                     thematicTags: [GuideTheme.Psychology],
+                    abilities: [],
                 })
                 await ctx.service.obtainExact({
                     mapTags: [MapId.Eichenwalde],
@@ -163,6 +172,7 @@ describe(
                     enemyHeroes: [HeroId.Soldier],
                     playerHeroes: [],
                     thematicTags: [GuideTheme.Psychology],
+                    abilities: [],
                 })
                 await ctx.service.obtainExact({
                     mapTags: [],
@@ -170,6 +180,7 @@ describe(
                     enemyHeroes: [HeroId.Soldier],
                     playerHeroes: [],
                     thematicTags: [GuideTheme.Psychology],
+                    abilities: [],
                 })
                 await ctx.service.getIncluding({
                     playerHeroes: [],
@@ -177,6 +188,7 @@ describe(
                     allyHeroes: [],
                     enemyHeroes: [],
                     thematicTags: [GuideTheme.Psychology],
+                    abilities: [],
                 })
                     .then(descriptors => {
                         expect(descriptors.length).toBe(3)
@@ -187,6 +199,7 @@ describe(
                     allyHeroes: [],
                     enemyHeroes: [HeroId.Soldier],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(descriptors => {
                         expect(descriptors.length).toBe(2)
@@ -197,6 +210,7 @@ describe(
                     allyHeroes: [],
                     enemyHeroes: [HeroId.Soldier, HeroId.Dva],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(descriptors => {
                         expect(descriptors.length).toBe(0)
@@ -207,6 +221,7 @@ describe(
                     allyHeroes: [],
                     enemyHeroes: [],
                     thematicTags: [],
+                    abilities: [],
                 })
                     .then(descriptors => {
                         expect(descriptors.length).toBe(4)
@@ -226,6 +241,7 @@ describe(
                             enemyHeroes: [],
                             playerHeroes: [],
                             thematicTags: [],
+                            abilities: [],
                         })
                     }
                 ).toThrow(`Can't obtain descriptor from empty DTO`)

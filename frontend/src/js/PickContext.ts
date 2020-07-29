@@ -2,18 +2,20 @@ import TeamComp from "./TeamComp";
 import HeroDto from "data/dto/HeroDto"
 import heroes from "data/heroes"
 import PickContextDto from "data/dto/PickContextDto";
+import MapId from "data/MapId";
+import HeroId from "data/HeroId";
 
 export default class PickContext {
     private readonly allyComp: TeamComp;
     private readonly enemyComp: TeamComp | null;
     private readonly bans: HeroDto[];
-    private readonly map: string | null;
+    private readonly map: MapId | null;
 
     constructor(
         allyComp: TeamComp,
         enemyComp: TeamComp | null,
         bans: HeroDto[],
-        map: string | null
+        map: MapId | null
     ) {
         this.allyComp = allyComp;
         this.enemyComp = enemyComp;
@@ -53,10 +55,10 @@ export default class PickContext {
     };
 
     forRequest(): PickContextDto {
-        const allyComp: string[] =
+        const allyComp: HeroId[] =
             this.allyComp.heroes
                 .filter((h): h is HeroDto => h !== null)
-                .map((hero: HeroDto): string => hero.dataName);
+                .map((hero: HeroDto): HeroId => hero.id);
         return {
             allyComp: allyComp,
             enemyComp:
@@ -66,8 +68,8 @@ export default class PickContext {
                         : TeamComp.empty().heroes
                 )
                     .filter((h): h is HeroDto => h !== null)
-                    .map<string>(hero => hero.dataName),
-            bans: this.bans.map(hero => hero.dataName),
+                    .map<HeroId>(hero => hero.id),
+            bans: this.bans.map(hero => hero.id),
             map: this.map
         }
     };
