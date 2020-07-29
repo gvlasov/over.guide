@@ -17,6 +17,7 @@ import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {ContentHashService} from "src/services/content-hash.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
+import Descriptor from "data/dto/GuideDescriptorQuickie";
 
 describe(
     GuideHistoryEntryService,
@@ -31,24 +32,19 @@ describe(
                 creatorId: user.id
             })
             const entry = <GuideHistoryEntry>await ctx.service.save(
-                    {
-                        guideId: guide.id,
-                        descriptor: {
-                            playerHeroes: [HeroId.Zenyatta],
-                            allyHeroes: [],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
-                        parts: [
-                            {
-                                kind: 'text',
-                                contentMd: 'asdfasdf'
-                            } as GuidePartTextDto
-                        ]
-                    },
-                    user
+                {
+                    guideId: guide.id,
+                    descriptor: new Descriptor({
+                        playerHeroes: [HeroId.Zenyatta],
+                    }),
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdfasdf'
+                        } as GuidePartTextDto
+                    ]
+                },
+                user
             )
             expect(entry.guideId).toBe(guide.id)
             expect((await entry.$get('guidePartTexts')).length).toBe(1)
@@ -73,14 +69,13 @@ describe(
             await ctx.service.save(
                 {
                     guideId: guide.id,
-                    descriptor: {
+                    descriptor: new Descriptor({
                         playerHeroes: [HeroId.Zenyatta, HeroId.Soldier],
                         allyHeroes: [HeroId.Dva],
                         enemyHeroes: [HeroId.Winston],
                         thematicTags: [GuideTheme.Communication],
                         mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani],
-                        abilities: [],
-                    },
+                    }),
                     parts: [
                         {
                             kind: 'text',
@@ -110,24 +105,19 @@ describe(
             expect(await Guide.findOne()).toBe(null)
             const entry = <GuideHistoryEntry>await ctx.service.save(
                 {
-                    descriptor: {
-                        playerHeroes: [],
+                    descriptor: new Descriptor({
                         allyHeroes: [HeroId.WreckingBall],
-                        enemyHeroes: [],
-                        thematicTags: [],
-                        mapTags: [],
-                        abilities: [],
-                    },
-                        parts: [
-                            {
-                                kind: 'text',
-                                contentMd: 'asdfasdf'
-                            } as GuidePartTextDto
-                        ]
-                    },
-                    user
-                )
-                expect(await Guide.findOne()).not.toBe(null)
+                    }),
+                    parts: [
+                        {
+                            kind: 'text',
+                            contentMd: 'asdfasdf'
+                        } as GuidePartTextDto
+                    ]
+                },
+                user
+            )
+            expect(await Guide.findOne()).not.toBe(null)
                 expect(entry.guideId).toBe(1)
                 expect((await entry.$get('guidePartTexts')).length).toBe(1)
                 expect((await entry.$get('guidePartVideos')).length).toBe(0)
@@ -158,14 +148,9 @@ describe(
                 const newEntry = await ctx.service.save(
                     {
                         guideId: guide.id,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -205,14 +190,9 @@ describe(
                 const newEntry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: guide.id,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -238,14 +218,9 @@ describe(
                 const firstEntry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: guide.id,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -268,14 +243,9 @@ describe(
                 const secondEntry = await ctx.service.save(
                     {
                         guideId: firstEntry.guideId,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -311,14 +281,9 @@ describe(
                 const firstEntry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: guide.id,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'video',
@@ -349,14 +314,9 @@ describe(
                 const secondEntry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: firstEntry.guideId,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'video',
@@ -399,14 +359,9 @@ describe(
                 const firstEntry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: guide.id,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'video',
@@ -440,14 +395,9 @@ describe(
                 const secondEntry = <GuideHistoryEntry>await ctx.service.save(
                     {
                         guideId: firstEntry.guideId,
-                        descriptor: {
-                            playerHeroes: [],
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.WreckingBall],
-                            enemyHeroes: [],
-                            thematicTags: [],
-                            mapTags: [],
-                            abilities: [],
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'video',

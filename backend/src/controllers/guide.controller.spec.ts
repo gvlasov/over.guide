@@ -25,6 +25,7 @@ import {
     GuideSearchQuery,
     GuideSearchService
 } from "src/services/guide-search.service";
+import Descriptor from "data/dto/GuideDescriptorQuickie";
 
 describe(
     GuideController,
@@ -42,13 +43,11 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post('/guide')
                     .send({
-                        descriptor: {
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -72,13 +71,11 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post('/guide')
                     .send({
-                        descriptor: {
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -95,13 +92,10 @@ describe(
                     .post('/guide')
                     .send({
                         guideId: guide.id,
-                        descriptor: {
-                            allyHeroes: [],
+                        descriptor: new Descriptor({
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -128,13 +122,13 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post('/guide')
                     .send({
-                        descriptor: {
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                             thematicTags: [GuideTheme.Aim],
                             mapTags: [MapId.Eichenwalde]
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -151,13 +145,13 @@ describe(
                     .post('/guide')
                     .send({
                         guideId: guide.id,
-                        descriptor: {
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                             thematicTags: [GuideTheme.Aim],
                             mapTags: [MapId.Eichenwalde]
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -183,13 +177,12 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post('/guide')
                     .send({
-                        descriptor: {
-                            allyHeroes: [HeroId.Baptiste],
-                            playerHeroes: [HeroId.McCree],
-                            enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        descriptor:
+                            new Descriptor({
+                                allyHeroes: [HeroId.Baptiste],
+                                playerHeroes: [HeroId.McCree],
+                                enemyHeroes: [HeroId.Zarya],
+                            }),
                         parts: [
                             {
                                 kind: 'text',
@@ -206,13 +199,10 @@ describe(
                     .post('/guide')
                     .send({
                         guideId: guide.id,
-                        descriptor: {
-                            allyHeroes: [],
+                        descriptor: new Descriptor({
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -246,27 +236,19 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Dorado],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, regularUser)
                 const guide = await Guide.findOne()
                 await request(ctx.app.getHttpServer())
                     .post('/guide')
                     .send({
                         guideId: guide.id,
-                        descriptor: {
-                            allyHeroes: [],
+                        descriptor: new Descriptor({
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -300,14 +282,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
-                        mapTags: [],
-                        thematicTags: [],
-                        enemyHeroes: [],
+                    descriptor: new Descriptor({
                         allyHeroes: [HeroId.Mei],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
@@ -342,14 +319,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
-                        mapTags: [],
-                        thematicTags: [],
-                        enemyHeroes: [],
+                    descriptor: new Descriptor({
                         allyHeroes: [HeroId.Ashe],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
@@ -379,14 +351,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
-                        mapTags: [],
+                    descriptor: new Descriptor({
                         thematicTags: [GuideTheme.Psychology],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user1)
                 const guide = await Guide.findOne()
                 await request(ctx.app.getHttpServer())
@@ -405,13 +372,11 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post('/guide')
                     .send({
-                        descriptor: {
+                        descriptor: new Descriptor({
                             allyHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
-                            thematicTags: [],
-                            mapTags: []
-                        },
+                        }),
                         parts: [
                             {
                                 kind: 'text',
@@ -434,14 +399,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Hanamura],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const existingGuide = await Guide.findOne()
                 expect(existingGuide.deactivatedById).toBe(null)
@@ -468,14 +428,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Eichenwalde],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
@@ -522,14 +477,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
-                        mapTags: [],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
+                    descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
@@ -555,14 +505,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
-                        mapTags: [],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
+                    descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const guide = await Guide.findOne()
                 await guide.deactivate(user)
@@ -598,14 +543,9 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
-                        mapTags: [],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
+                    descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 const guide = await Guide.findOne()
                 await guide.deactivate(user)
@@ -630,14 +570,10 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
                         thematicTags: [GuideTheme['Game sense']],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
@@ -646,14 +582,10 @@ describe(
                             contentMd: 'asdfman'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
                         thematicTags: [GuideTheme.Positioning],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 await ctx.app.get(GuideHistoryEntryService).save({
                     parts: [
@@ -662,14 +594,13 @@ describe(
                             contentMd: 'asdfman'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Havana, MapId.Hollywood],
                         thematicTags: [GuideTheme.Positioning],
                         enemyHeroes: [HeroId.Soldier],
                         allyHeroes: [HeroId.Zarya, HeroId.Zenyatta],
                         playerHeroes: [HeroId.Dva],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 await request(ctx.app.getHttpServer())
                     .get('/guide/search?mapTags=' + MapId.Havana)
@@ -703,14 +634,10 @@ describe(
                             contentMd: 'asdf'
                         } as GuidePartTextDto
                     ],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
                         thematicTags: [GuideTheme['Game sense']],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .get('/guide/search')
@@ -741,38 +668,23 @@ describe(
                 const service = ctx.app.get(GuideHistoryEntryService);
                 const entry = await service.save({
                     parts: [{kind: 'text', contentMd: 'not head'}],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user) as GuideHistoryEntry
                 const guide = await entry.$get('guide');
                 await service.save({
                     parts: [{kind: 'text', contentMd: 'HEAD'}],
                     guideId: guide.id,
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 await service.save({
                     parts: [{kind: 'text', contentMd: 'HEAD'}],
-                    descriptor: {
+                    descriptor: new Descriptor({
                         mapTags: [MapId.Eichenwalde],
-                        thematicTags: [],
-                        enemyHeroes: [],
-                        allyHeroes: [],
-                        playerHeroes: [],
-                        abilities: [],
-                    },
+                    }),
                 }, user)
                 await request(ctx.app.getHttpServer())
                     .get('/guide/search')
