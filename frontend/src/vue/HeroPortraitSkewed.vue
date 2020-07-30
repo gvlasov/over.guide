@@ -41,7 +41,6 @@
         },
         methods: {
             onPortraitTap() {
-                console.log('tap')
                 this.$emit('portraitTap', this.hero)
             }
         },
