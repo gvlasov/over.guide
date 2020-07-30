@@ -6,9 +6,16 @@
             :selected-out="selectedOut"
             v-bind:style="{ 'border-color': borderColor }"
             v-flex-touch="(e) => e.preventDefault()"
-            v-hammer:tap="onPortraitTap"
+            @portraitTap="onPortraitTap"
             v-bind:data-hero-data-name="hero.dataName"
-    />
+    >
+        <template v-slot:top>
+            <slot name="top"/>
+        </template>
+        <template v-slot:bottom>
+            <slot name="bottom"/>
+        </template>
+    </HeroPortraitSkewed>
 </template>
 
 <script>

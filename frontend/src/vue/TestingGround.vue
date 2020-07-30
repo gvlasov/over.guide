@@ -1,13 +1,15 @@
 <template>
     <div class="wrap" style="text-align: center;">
-        <div style="text-align: right;width: 22em; display: inline-block;">
-            <!--        <GuideBrowser />-->
-            <div v-for="ability in abilities" :key="ability.dataName">
-                {{heroes.find(h => h.id === ability.heroId).name}} - {{ability.name}}
-                <AbilityIcon :ability="ability" style="height: 2rem; width: auto;"/>
-            </div>
-        </div>
+        <GuideBrowser/>
     </div>
+    <!--    <div class="wrap" style="text-align: center;">-->
+    <!--        <div style="text-align: right;width: 22em; display: inline-block;">-->
+    <!--            <div v-for="ability in abilities" :key="ability.dataName">-->
+    <!--                {{heroes.find(h => h.id === ability.heroId).name}} - {{ability.name}}-->
+    <!--                <AbilityIcon :ability="ability" style="height: 2rem; width: auto;"/>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
 </template>
 
 <script>

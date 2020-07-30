@@ -1,6 +1,7 @@
 <template>
     <div class="root">
-        <RosterPortrait
+        <component
+                :is="itemComponent"
                 v-for="hero in heroes"
                 v-bind:key="hero.dataName"
                 ref="portraits"
@@ -8,6 +9,7 @@
                 :banned="isHeroBanned(hero)"
                 :pick-score="pickScore(hero)"
                 :selected-out="isHeroSelectedOut(hero)"
+                :selected="isHeroSelected(hero)"
                 v-bind:class="{ selected: isHeroSelected(hero) }"
                 @heroSelect="onHeroTap"
         />
@@ -24,6 +26,10 @@
             selectionOnTapEnabled: {
                 type: Boolean,
                 default: true
+            },
+            itemComponent: {
+                required: false,
+                default: () => RosterPortrait,
             },
             heroes: {
                 type: Array,

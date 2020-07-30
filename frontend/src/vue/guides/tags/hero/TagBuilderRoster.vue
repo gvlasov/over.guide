@@ -8,6 +8,7 @@
                     @selectedHeroesChange="emitChange"
                     :selected-heroes="selectedHeroes"
                     class="roster"
+                    :item-component="tagBuilderRosterPortraitComponent"
             />
             <div class="button-wrap">
                 <OverwatchButton
@@ -34,6 +35,8 @@
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
     import Roster from "@/vue/Roster";
     import OverwatchButton from "@/vue/OverwatchButton";
+    import TagBuilderRosterPortrait
+        from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
 
 
     export default {
@@ -50,6 +53,7 @@
         data() {
             return {
                 selecting: null,
+                tagBuilderRosterPortraitComponent: TagBuilderRosterPortrait,
             };
         },
         methods: {
@@ -65,6 +69,7 @@
         },
         computed: {},
         components: {
+            TagBuilderRosterPortrait,
             OverwatchButton,
             TagGroupInvite,
             TagGroupBackground,
