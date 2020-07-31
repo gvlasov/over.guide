@@ -1,20 +1,35 @@
 <template>
-    <Roster
-            ref="roster"
-            :bans="context.bans"
-            :heroes="heroes"
-            :selected-out-heroes="context.selectedOutHeroes()"
-            @selectedHeroesChange="onHeroSelect"
-            :selection-on-tap-enabled="true"
-    />
+    <RosterFrame>
+        <RosterPortrait
+                v-for="hero in heroes"
+                v-bind:key="hero.dataName"
+                :hero="hero"
+                :banned="isHeroBanned(hero)"
+                :selected-out="isHeroSelectedOut(hero)"
+                :selected="isHeroSelected(hero)"
+                v-bind:class="{ selected: isHeroSelected(hero) }"
+                @heroSelect="onHeroSelect"
+        />
+    </RosterFrame>
 </template>
 
 <script>
     import PickContext from "@/js/PickContext";
-    import Roster from "@/vue/Roster.vue";
     import heroes from "data/heroes";
+    import RosterFrame from '@/vue/roster/RosterFrame.vue'
+    import Roster_SelectedHeroesMixin
+        from "@/vue/roster/Roster_SelectedHeroesMixin";
+    import Roster_SelectedOutHeroesMixin
+        from "@/vue/roster/Roster_SelectedOutHeroesMixin";
+    import RosterPortrait from "@/vue/RosterPortrait";
+    import Roster_BansMixin from "@/vue/roster/Roster_BansMixin";
 
     export default {
+        mixins: [
+            Roster_SelectedHeroesMixin,
+            Roster_SelectedOutHeroesMixin,
+            Roster_BansMixin,
+        ],
         props: {
             context: {
                 type: PickContext
@@ -22,6 +37,10 @@
             showOnlyAvailableRoles: {
                 type: Boolean,
                 default: false
+            },
+            selectedHeroes: {
+                type: Array,
+                default: () => [],
             },
         },
         computed: {
@@ -32,18 +51,25 @@
                     return Array.from(heroes.values());
                 }
             },
+            /**
+             * @return {HeroDto[]}
+             */
+            selectedOutHeroes() {
+                return this.context.selectedOutHeroes();
+            },
         },
         methods: {
-            onHeroSelect(heroes) {
-                this.$emit('selectedHeroesChange', heroes)
-                this.$refs.roster.clearSelection();
+            onHeroSelect(hero) {
+                this.$emit('heroSelect', hero)
+                this.clearSelection();
             }
         },
         data() {
             return {}
         },
         components: {
-            Roster: Roster,
+            RosterPortrait,
+            RosterFrame,
         },
     };
 

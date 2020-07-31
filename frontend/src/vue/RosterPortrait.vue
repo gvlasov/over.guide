@@ -8,6 +8,8 @@
             v-flex-touch="(e) => e.preventDefault()"
             @portraitTap="onPortraitTap"
             v-bind:data-hero-data-name="hero.dataName"
+            :selected="selected"
+            v-bind:class="{ 'selected': selected }"
     >
         <template v-slot:top>
             <slot name="top"/>
@@ -35,6 +37,10 @@
                 type: Boolean,
                 default: false
             },
+            selected: {
+                type: Boolean,
+                default: false,
+            }
         },
         methods: {
             /**
@@ -77,5 +83,11 @@
         width: 5vw;
         height: 7vw;
         margin: 0.4vw;
+    }
+
+    .selected {
+        transform: skew(-25deg, 0deg) scale(1.4) !important;
+        z-index: 9000;
+        box-shadow: black 1vw 1vw 1vw;
     }
 </style>

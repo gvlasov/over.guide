@@ -1,6 +1,6 @@
 import AbilityId from "data/AbilityId";
 
-export default interface MapDto {
+export default interface AbilityDto {
     readonly id: AbilityId;
     readonly group?: string;
     readonly name: string;

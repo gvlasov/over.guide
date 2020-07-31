@@ -4,9 +4,11 @@
             :hero="hero"
             :banned="false"
             :selected-out="false"
+            :selected="selected"
             v-flex-touch="(e) => e.preventDefault()"
             @heroSelect="bubbleHeroSelect"
             v-bind:data-hero-data-name="hero.dataName"
+            v-bind:class="{ 'selected': selected }"
     >
         <template v-slot:bottom>
             <OverwatchButton
@@ -14,7 +16,7 @@
                     v-hammer:tap="onSkillsButtonTap"
                     type="default"
                     class="skills-button"
-            >skills
+            >{{abilities.length > 0 ? abilities.length : 'skills'}}
             </OverwatchButton>
         </template>
     </RosterPortrait>
@@ -31,6 +33,17 @@
             selected: {
                 type: Boolean,
                 default: false,
+            },
+            abilities: {
+                type: Array,
+                required: true,
+            },
+        },
+        watch: {
+            selected(value) {
+                if (value === false) {
+                    this.abilities.clear();
+                }
             }
         },
         methods: {
@@ -38,7 +51,7 @@
                 this.$emit('heroSelect', this.hero)
             },
             onSkillsButtonTap() {
-                this.$emit('skillsButtonTap', this.hero)
+                this.$emit('skillSelectionStart', this.hero)
             }
         },
         computed: {},
@@ -64,7 +77,8 @@
     .skills-button {
         position: absolute;
         bottom: 0;
-        left: 0;
+        left: .1em;
         font-size: 2em;
+        width: 4em;
     }
 </style>

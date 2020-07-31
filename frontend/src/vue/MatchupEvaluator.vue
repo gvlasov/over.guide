@@ -73,10 +73,7 @@
                         this.subject,
                         this.object,
                         power
-                    )
-                    .then(result => {
-                        console.log('evaluated')
-                    });
+                    );
             }
         },
         data() {

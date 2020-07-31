@@ -33,7 +33,7 @@
                 ref="picksRoster"
                 :context="context"
                 :show-only-available-roles="false"
-                @selectedHeroesChange="onHeroSelect"
+                @heroSelect="onHeroSelect"
                 v-if="suggestion === null"
         />
         <SuggestionRoster
@@ -48,7 +48,6 @@
 <script>
     import Picks from '@/vue/training/Picks.vue';
     import Backend from '@/js/Backend';
-    import Roster from '@/vue/Roster.vue';
     import axios from "axios";
     import SuggestionRoster from "./SuggestionRoster.vue";
     import SelectionRoster from "./SelectionRoster.vue";
@@ -91,13 +90,9 @@
                 this.suggestion = null;
             },
             /**
-             * @param {Hero[]} heroes
+             * @param {HeroDto} hero
              */
-            onHeroSelect(heroes) {
-                if (heroes.length > 1) {
-                    throw new Error(`${heroes.length} heroes selected`)
-                }
-                const hero = heroes[0];
+            onHeroSelect(hero) {
                 if (this.context.isAllPick() && !this.context.enemyComp.isFull()) {
                     if (this.context.enemyComp.canSelect(hero)) {
                         this.context.enemyComp.setNextAvailable(hero);
@@ -142,7 +137,6 @@
             SelectionRoster,
             SuggestionRoster: SuggestionRoster,
             Picks: Picks,
-            Roster: Roster,
         },
     };
 

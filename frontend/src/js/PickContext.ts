@@ -6,10 +6,10 @@ import MapId from "data/MapId";
 import HeroId from "data/HeroId";
 
 export default class PickContext {
-    private readonly allyComp: TeamComp;
-    private readonly enemyComp: TeamComp | null;
-    private readonly bans: HeroDto[];
-    private readonly map: MapId | null;
+    public readonly allyComp: TeamComp;
+    public readonly enemyComp: TeamComp | null;
+    public readonly bans: HeroDto[];
+    public readonly map: MapId | null;
 
     constructor(
         allyComp: TeamComp,

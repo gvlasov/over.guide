@@ -4,24 +4,48 @@
              v-hammer:tap="onSaveTap"
         />
         <div class="select-wrap">
-            <Roster
-                    @selectedHeroesChange="emitChange"
-                    :selected-heroes="selectedHeroes"
+            <div
                     class="roster"
-                    :item-component="tagBuilderRosterPortraitComponent"
+                    v-if="skillSelectionHero === null"
+            >
+                <TagBuilderRosterPortrait
+                        v-for="hero in heroes"
+                        v-bind:key="hero.dataName"
+                        ref="portraits"
+                        :hero="hero"
+                        :selected="isHeroSelected(hero)"
+                        @heroSelect="onHeroTap"
+                        @skillSelectionStart="onSkillSelectionStart"
+                        :abilities="selectedHeroAbilities(hero)"
+                />
+            </div>
+            <AbilitySelect
+                    v-if="skillSelectionHero !== null"
+                    :hero="skillSelectionHero"
+                    v-model="tagGroup.abilities"
+                    class="ability-select"
             />
             <div class="button-wrap">
                 <OverwatchButton
+                        v-if="skillSelectionHero === null"
                         type="main"
                         v-hammer:tap="onSaveTap"
                         class="hanging-button"
                 >Save
                 </OverwatchButton>
                 <OverwatchButton
+                        v-if="skillSelectionHero === null"
                         type="default"
                         v-hammer:tap="onClearTap"
                         class="hanging-button"
                 >Clear
+                </OverwatchButton>
+                <OverwatchButton
+                        v-if="skillSelectionHero !== null"
+                        type="default"
+                        v-hammer:tap="() => {skillSelectionHero = null}"
+                        class="hanging-button"
+                >Heroes
                 </OverwatchButton>
             </div>
         </div>
@@ -33,49 +57,67 @@
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
     import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-    import Roster from "@/vue/Roster";
     import OverwatchButton from "@/vue/OverwatchButton";
     import TagBuilderRosterPortrait
         from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
+    import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
+    import TagGroupVso from "@/js/vso/TagGroupVso";
+    import heroes from "data/heroes";
+    import Roster_SelectedHeroesMixin
+        from "@/vue/roster/Roster_SelectedHeroesMixin";
 
 
     export default {
+        mixins: [
+            Roster_SelectedHeroesMixin,
+        ],
         model: {
-            prop: 'selectedHeroes',
-            event: 'selectedHeroesChange',
+            prop: 'tagGroup',
+            event: 'tagGroupChange',
         },
         props: {
-            selectedHeroes: {
-                type: Array,
+            tagGroup: {
+                type: TagGroupVso,
                 required: true,
             },
         },
         data() {
             return {
-                selecting: null,
-                tagBuilderRosterPortraitComponent: TagBuilderRosterPortrait,
+                skillSelectionHero: null,
+                heroes: Array.from(heroes.values())
             };
         },
         methods: {
-            emitChange($event) {
-                this.$emit('selectedHeroesChange', $event);
+            onClearTap() {
+                this.tagGroup.heroes.clear();
+                this.tagGroup.abilities.clear();
+            },
+            onSkillSelectionStart($event) {
+                this.skillSelectionHero = $event;
             },
             onSaveTap() {
                 this.$emit('save');
             },
-            onClearTap() {
-                this.emitChange([]);
-            },
+            /**
+             * @param {HeroDto} hero
+             */
+            selectedHeroAbilities(hero) {
+                return this.tagGroup.abilities.filter(ability => ability.heroId === hero.id)
+            }
         },
-        computed: {},
+        computed: {
+            selectedHeroes() {
+                return this.tagGroup.heroes;
+            }
+        },
         components: {
+            AbilitySelect,
             TagBuilderRosterPortrait,
             OverwatchButton,
             TagGroupInvite,
             TagGroupBackground,
             TagGroupFrame,
             TagPortrait,
-            Roster,
         },
     };
 
@@ -91,6 +133,11 @@
 
     .roster {
         margin-bottom: 2rem;
+    }
+
+    .ability-select {
+        z-index: 2;
+        position: relative;
     }
 
     .tag-type-links-wrap > a {
@@ -148,7 +195,7 @@
         left: 50%;
         padding-top: 4rem;
         transform: translate(-50%);
-        z-index: 1000;
+        z-index: 1;
     }
 
 </style>

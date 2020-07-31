@@ -5,13 +5,13 @@
                 <template slot="infix"></template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="guideHeroTag.playerHeroes.length > 0"
+                            v-if="guideHeroTag.players.heroes.length > 0"
                             class="tag-type-links-wrap-player tappable-background"
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
                     >
                         <TagPortrait
-                                v-for="hero in guideHeroTag.playerHeroes"
+                                v-for="hero in guideHeroTag.players.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
                         />
@@ -32,13 +32,13 @@
                 </template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="guideHeroTag.allyHeroes.length > 0"
+                            v-if="guideHeroTag.allies.heroes.length > 0"
                             class="tag-type-links-wrap-ally tappable-background"
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
                     >
                         <TagPortrait
-                                v-for="hero in guideHeroTag.allyHeroes"
+                                v-for="hero in guideHeroTag.allies.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
                         />
@@ -57,13 +57,13 @@
                 </template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="guideHeroTag.enemyHeroes.length > 0"
+                            v-if="guideHeroTag.enemies.heroes.length > 0"
                             class="tag-type-links-wrap-enemy tappable-background"
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
                     >
                         <TagPortrait
-                                v-for="hero in guideHeroTag.enemyHeroes"
+                                v-for="hero in guideHeroTag.enemies.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
                         />
@@ -80,17 +80,17 @@
         </div>
         <TagBuilderRoster
                 v-if="selecting === 'player'"
-                v-model="guideHeroTag.playerHeroes"
+                :tag-group="guideHeroTag.players"
                 @save="selecting = null"
         />
         <TagBuilderRoster
                 v-if="selecting === 'ally'"
-                v-model="guideHeroTag.allyHeroes"
+                :tag-group="guideHeroTag.allies"
                 @save="selecting = null"
         />
         <TagBuilderRoster
-                v-model="guideHeroTag.enemyHeroes"
                 v-if="selecting === 'enemy'"
+                :tag-group="guideHeroTag.enemies"
                 @save="selecting = null"
         />
     </div>
@@ -101,14 +101,14 @@
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
     import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-    import Roster from "@/vue/Roster";
     import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
+    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
 
     export default {
         props: {
             guideHeroTag: {
-                type: Object,
+                type: GuideDescriptorVso,
                 required: true,
             }
         },
@@ -126,7 +126,6 @@
             TagGroupBackground,
             TagGroupFrame,
             TagPortrait,
-            Roster,
             TagBuilderRoster,
         },
     };

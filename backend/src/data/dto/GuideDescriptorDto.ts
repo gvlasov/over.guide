@@ -8,7 +8,9 @@ export default interface GuideDescriptorDto extends GuideHeroTagDto {
     playerHeroes: HeroId[];
     allyHeroes: HeroId[];
     enemyHeroes: HeroId[];
-    abilities: AbilityId[];
+    playerAbilities: AbilityId[];
+    allyAbilities: AbilityId[];
+    enemyAbilities: AbilityId[];
     thematicTags: GuideTheme[]
     mapTags: MapId[]
 }

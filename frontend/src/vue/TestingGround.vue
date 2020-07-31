@@ -28,7 +28,6 @@
         props: {},
         methods: {
             onSearch($event) {
-                console.log($event);
             }
         },
         data() {

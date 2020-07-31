@@ -230,8 +230,11 @@
                     guideId: undefined,
                     descriptor: new GuideDescriptorVso({
                         playerHeroes: [HeroId.Pharah],
+                        playerAbilities: [],
                         allyHeroes: [HeroId.Soldier],
+                        allyAbilities: [],
                         enemyHeroes: [HeroId.Mei],
+                        enemyAbilities: [],
                         thematicTags: [GuideTheme.Aim],
                         mapTags: [MapId.Havana],
                     }),

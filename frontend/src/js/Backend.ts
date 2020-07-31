@@ -101,7 +101,6 @@ export default class Backend {
             '/youtube-video-excerpt',
             excerpt,
             (response) => {
-                console.log(response);
                 if (response.status === 201) {
                     return response.data.id;
                 } else {
@@ -117,7 +116,6 @@ export default class Backend {
             '/guide',
             guide,
             (response) => {
-                console.log(response);
                 if (response.status === 201) {
                     return response.data.guideId;
                 } else {

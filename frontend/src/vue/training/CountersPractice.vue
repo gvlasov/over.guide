@@ -34,7 +34,7 @@
                     ref="roster"
                     :context="context"
                     :show-only-available-roles="true"
-                    @selectedHeroesChange="onHeroSelect"
+                    @heroSelect="onHeroSelect"
                     v-if="suggestion === null"
             />
             <SuggestionRoster
@@ -52,7 +52,6 @@
 <script>
     import Picks from '@/vue/training/Picks.vue';
     import Backend from '@/js/Backend';
-    import Roster from '@/vue/Roster.vue';
     import PickContextGenerator from "@/js/PickContextGenerator";
     import axios from "axios";
     import Keypress from 'vue-keypress'
@@ -61,6 +60,7 @@
     import SelectionRoster from "@/vue/training/SelectionRoster.vue";
     import RoleSelection from "@/vue/training/RoleSelection.vue";
     import SeededShuffler from "@/js/SeededShuffler";
+    import MapId from "data/MapId";
 
     const backend = new Backend(axios);
     const generator = new PickContextGenerator(
@@ -74,13 +74,9 @@
                 this.suggestion = null;
             },
             /**
-             * @param {Hero[]} heroes
+             * @param {Hero} hero
              */
-            onHeroSelect: function (heroes) {
-                if (heroes.length > 1) {
-                    throw new Error(`${heroes.length} heroes selected`)
-                }
-                const hero = heroes[0];
+            onHeroSelect: function (hero) {
                 if (this.pickMade) {
                     return;
                 }
@@ -90,14 +86,13 @@
                             this.context.allyComp,
                             this.context.enemyComp,
                             this.context.bans,
-                            "Hanamura"
+                            MapId.Hanamura
                         )
                     )
                     .then(suggestion => {
                         this.suggestion = suggestion;
                         this.selectedHero = hero;
-                    })
-                    .catch(reason => console.log(reason));
+                    });
             },
             onRolesApproved(roles) {
                 if (roles === []) {
@@ -138,7 +133,6 @@
             SelectionRoster: SelectionRoster,
             SuggestionRoster: SuggestionRoster,
             Picks: Picks,
-            Roster: Roster,
             Keypress: Keypress,
         },
 

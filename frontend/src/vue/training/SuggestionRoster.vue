@@ -1,42 +1,53 @@
 <template>
-    <Roster
-            :bans="bans"
-            :heroes="suggestion.heroesSorted(h => -h.score)"
-            :selected-heroes="selectedHeroes"
-            :pick-score="pickScore"
-            :selection-on-tap-enabled="false"
-    />
+    <RosterFrame>
+        <RosterPortrait
+                v-for="hero in heroes"
+                v-bind:key="hero.dataName"
+                :hero="hero"
+                :banned="isHeroBanned(hero)"
+                :selected="isHeroSelected(hero)"
+                :pickScore="pickScore(hero)"
+                v-bind:class="{ selected: isHeroSelected(hero) }"
+        />
+    </RosterFrame>
 </template>
 
 <script>
     import PickSuggestion from "@/js/PickSuggestion";
-    import Roster from "@/vue/Roster.vue";
+    import RosterFrame from "@/vue/roster/RosterFrame";
+    import Roster_BansMixin from "@/vue/roster/Roster_BansMixin";
+    import Roster_SelectedHeroesMixin
+        from "@/vue/roster/Roster_SelectedHeroesMixin";
+    import RosterPortrait from "@/vue/RosterPortrait";
 
     export default {
+        mixins: [
+            Roster_BansMixin,
+            Roster_SelectedHeroesMixin,
+        ],
         props: {
-            bans: {
-                type: Array,
-                default: () => []
-            },
             suggestion: {
                 type: PickSuggestion,
                 default: () => null
             },
             selectedHeroes: {
                 type: Array,
-                default: () => []
-            }
+                default: () => [],
+            },
+        },
+        computed: {
+            heroes() {
+                return this.suggestion.heroesSorted((alternative => -alternative.score));
+            },
         },
         methods: {
-            pickScore: function (hero) {
+            pickScore(hero) {
                 return this.suggestion.score(hero);
             }
         },
-        data() {
-            return {}
-        },
         components: {
-            Roster: Roster,
+            RosterPortrait,
+            RosterFrame,
         },
     };
 
