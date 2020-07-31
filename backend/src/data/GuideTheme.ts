@@ -6,6 +6,7 @@ enum GuideTheme {
     'Communication' = 5,
     'Target priority' = 6,
     'Aim' = 7,
+    'Mistake' = 8,
 }
 
 export default GuideTheme

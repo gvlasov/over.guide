@@ -37,6 +37,16 @@ const data = [
         name: 'RMB',
         dataName: 'rmb'
     },
+    {
+        id: KeyId.One,
+        name: '1',
+        dataName: 'one'
+    },
+    {
+        id: KeyId.Two,
+        name: '2',
+        dataName: 'two'
+    },
 ]
 const map = new Map<KeyId, KeyDto>()
 data.forEach(

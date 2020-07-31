@@ -5,7 +5,9 @@ enum KeyId {
     Q = 4,
     Shift = 5,
     LMB = 6,
-    RMB = 7
+    RMB = 7,
+    One = 8,
+    Two = 9,
 }
 
 export default KeyId

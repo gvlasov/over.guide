@@ -1,7 +1,7 @@
 import AbilityDto from "data/dto/AbilityDto";
-import MapType from "data/MapType";
 import HeroId from "data/HeroId";
 import AbilityId from "data/AbilityId";
+import KeyId from "data/KeyId";
 
 const data = [
     {
@@ -10,6 +10,7 @@ const data = [
         heroId: HeroId.Ana,
         name: 'Biotic Rifle',
         dataName: 'biotic-rifle',
+        keyIds: [KeyId.LMB],
         description: 'Ana’s rifle shoots darts that can restore health to her allies or deal ongoing damage to her enemies.'
     },
     {
@@ -18,6 +19,7 @@ const data = [
         heroId: HeroId.Ana,
         name: 'Biotic Rifle Scoped',
         dataName: 'biotic-rifle-scoped',
+        keyIds: [KeyId.RMB, KeyId.LMB],
         description: 'Ana can use the rifle’s scope to zoom in on targets and make highly accurate shots.'
     },
     {
@@ -25,6 +27,7 @@ const data = [
         heroId: HeroId.Ana,
         name: 'Sleep Dart',
         dataName: 'sleep-dart',
+        keyIds: [KeyId.Shift],
         description: 'Ana fires a dart from her sidearm, rendering an enemy unconscious (though any damage will rouse them).'
     },
     {
@@ -32,6 +35,7 @@ const data = [
         heroId: HeroId.Ana,
         name: 'Biotic Grenade',
         dataName: 'biotic-grenade',
+        keyIds: [KeyId.E],
         description: 'Ana tosses a biotic bomb that deals damage to enemies and heals allies in a small area of effect. Affected allies briefly receive increased healing from all sources, while enemies caught in the blast cannot be healed for a few moments.'
     },
     {
@@ -39,20 +43,33 @@ const data = [
         heroId: HeroId.Ana,
         name: 'Nano Boost',
         dataName: 'nano-boost',
+        keyIds: [KeyId.Q],
         description: 'After Ana hits one of her allies with a combat boost, they deal more damage, and take less damage from enemies’ attacks.'
     },
     {
         id: AbilityId.TheViper,
+        group: 'the-viper',
         heroId: HeroId.Ashe,
         name: 'The Viper',
         dataName: 'the-viper',
-        description: 'Ashe\'s semi-automatic rifle fires quick shots, or she can use her aim-down sights for a more damaging, precise shot.'
+        keyIds: [KeyId.LMB],
+        description: 'Ashe\'s semi-automatic rifle fires quick shots'
+    },
+    {
+        id: AbilityId.TheViperScoped,
+        group: 'the-viper',
+        heroId: HeroId.Ashe,
+        name: 'The Viper',
+        dataName: 'the-viper',
+        keyIds: [KeyId.RMB, KeyId.LMB],
+        description: 'Ashe can use her aim-down sights for a more damaging, precise shot.'
     },
     {
         id: AbilityId.Dynamite,
         heroId: HeroId.Ashe,
         name: 'Dynamite',
         dataName: 'dynamite',
+        keyIds: [KeyId.E],
         description: 'Ashe throws an explosive that detonates after a short delay or immediately when shot. The explosion from Dynamite also lights enemies on fire, dealing damage over time.'
     },
     {
@@ -60,7 +77,7 @@ const data = [
         heroId: HeroId.Ashe,
         name: 'Coach Gun',
         dataName: 'coach-gun',
-        type: MapType.Assault,
+        keyIds: [KeyId.Shift],
         description: 'Ashe blasts enemies in front of her, knocking them away and propelling herself backward for added mobility.',
     },
     {
@@ -68,7 +85,7 @@ const data = [
         heroId: HeroId.Ashe,
         name: 'B.O.B',
         dataName: 'bob',
-        type: MapType.Assault,
+        keyIds: [KeyId.Q],
         description: 'Ashe summons her trusted omnic sidekick, Bob, who charges forward and knocks enemies into the air, then lays down suppressing fire with his arm cannons.',
     },
     {
@@ -77,6 +94,7 @@ const data = [
         heroId: HeroId.Baptiste,
         name: 'Biotic Launcher',
         dataName: 'biotic-launcher',
+        keyIds: [KeyId.LMB],
         description: 'Baptiste’s three-round-burst Biotic Launcher rewards accuracy and recoil control with significant damage output.',
     },
     {
@@ -85,6 +103,7 @@ const data = [
         heroId: HeroId.Baptiste,
         name: 'Biotic Launcher Heal',
         dataName: 'biotic-launcher-heal',
+        keyIds: [KeyId.RMB],
         description: 'Biotic Launcher doubles as a healing device, lobbing projectiles that heal allies near the point of impact.',
     },
     {
@@ -92,6 +111,7 @@ const data = [
         heroId: HeroId.Baptiste,
         name: 'Regenerative Burst',
         dataName: 'regenerative-burst',
+        keyIds: [KeyId.Shift],
         description: 'Baptiste activates an intense regenerative burst that heals himself and nearby allies over time.',
     },
     {
@@ -99,6 +119,7 @@ const data = [
         heroId: HeroId.Baptiste,
         name: 'Immortality Field',
         dataName: 'immortality-field',
+        keyIds: [KeyId.E],
         description: 'Baptiste uses a device to create a field that prevents allies from dying. The generator can be destroyed.',
     },
     {
@@ -106,6 +127,7 @@ const data = [
         heroId: HeroId.Baptiste,
         name: 'Amplification Matrix',
         dataName: 'amplification-matrix',
+        keyIds: [KeyId.Q],
         description: 'Baptiste creates a matrix that doubles the damage and healing effects of friendly projectiles that pass through it.',
     },
     {
@@ -113,6 +135,7 @@ const data = [
         heroId: HeroId.Baptiste,
         name: 'Exo Boots',
         dataName: 'exo-boots',
+        keyIds: [KeyId.Ctrl, KeyId.Space],
         description: 'By first crouching, Baptiste can jump higher.',
     },
     {
@@ -120,6 +143,7 @@ const data = [
         heroId: HeroId.Bastion,
         name: 'Configuration: Recon',
         dataName: 'configuration-recon',
+        keyIds: [KeyId.LMB],
         description: 'In Recon mode, Bastion is fully mobile, outfitted with a submachine gun that fires steady bursts of bullets at medium range.',
     },
     {
@@ -127,6 +151,7 @@ const data = [
         heroId: HeroId.Bastion,
         name: 'Configuration: Sentry',
         dataName: 'configuration-sentry',
+        keyIds: [KeyId.LMB],
         description: 'In Sentry mode, Bastion is a stationary powerhouse equipped with a gatling gun capable of unleashing a hail of bullets. The gun\'s aim can be "walked" across multiple targets, dealing devastating damage at short to medium range.',
     },
     {
@@ -134,6 +159,7 @@ const data = [
         heroId: HeroId.Bastion,
         name: 'Reconfigure',
         dataName: 'reconfigure',
+        keyIds: [KeyId.Shift],
         description: 'Bastion transforms between its two primary combat modes to adapt to battlefield conditions.',
     },
     {
@@ -141,6 +167,7 @@ const data = [
         heroId: HeroId.Bastion,
         name: 'Self-Repair',
         dataName: 'self-repair',
+        keyIds: [KeyId.RMB],
         description: 'Bastion restores its health; it cannot fire weapons while the repair process is in effect.',
     },
     {
@@ -148,6 +175,7 @@ const data = [
         heroId: HeroId.Bastion,
         name: 'Configuration: Tank',
         dataName: 'configuration-tank',
+        keyIds: [KeyId.Q],
         description: 'In Tank mode, Bastion extends wheeled treads and a powerful long-range cannon. The cannon’s explosive shells demolish targets in a wide blast radius, but Bastion can only remain in this mode for a limited time.',
     },
     {
@@ -155,6 +183,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Rocket Flail',
         dataName: 'rocket-flail',
+        keyIds: [KeyId.LMB],
         description: 'Brigitte\'s melee weapon has an extended range, enabling her to strike multiple enemies with a single swing.',
     },
     {
@@ -162,6 +191,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Inspire',
         dataName: 'inspire',
+        keyIds: [],
         description: 'Striking enemies with your flail heals nearby allies and her',
     },
     {
@@ -169,6 +199,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Repair Pack',
         dataName: 'repair-pack',
+        keyIds: [KeyId.E],
         description: 'Brigitte throws a Repair Pack that can heal an ally. Any healing over that ally’s maximum health provides them with armor instead.',
     },
     {
@@ -176,6 +207,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Whip Shot',
         dataName: 'whip-shot',
+        keyIds: [KeyId.Shift],
         description: 'Brigitte throws her flail a long distance, dealing damage and knocking an enemy away from her.',
     },
     {
@@ -183,6 +215,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Barrier Shield',
         dataName: 'barrier-shield',
+        keyIds: [KeyId.RMB],
         description: 'Brigitte deploys a frontal energy barrier to absorb a limited amount of damage.',
     },
     {
@@ -190,6 +223,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Shield Bash',
         dataName: 'shield-bash',
+        keyIds: [KeyId.RMB],
         description: 'Once her Barrier Shield is deployed, Brigitte can dash forward to stun an enemy.',
     },
     {
@@ -197,6 +231,7 @@ const data = [
         heroId: HeroId.Brigitte,
         name: 'Rally',
         dataName: 'rally',
+        keyIds: [KeyId.Q],
         description: 'Brigitte moves faster and provides all nearby allies with armor that lasts until it’s removed by damage.',
     },
     {
@@ -204,6 +239,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Eject',
         dataName: 'eject',
+        keyIds: [],
         description: 'D.Va\'s ejects out of her mech when it\'s destroyed.',
     },
     {
@@ -211,6 +247,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Fusion Cannons',
         dataName: 'fusion-cannons',
+        keyIds: [KeyId.LMB],
         description: 'D.Va\'s mech is equipped with twin short-range rotating cannons. They lay down continuous, high-damage fire without needing to reload, but slow D.Va’s movement while they’re active.',
     },
     {
@@ -218,6 +255,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Light Gun',
         dataName: 'light-gun',
+        keyIds: [KeyId.LMB],
         description: 'While outside of her mech, D.Va can continue the fight with a mid-range automatic blaster.',
     },
     {
@@ -225,6 +263,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Boosters',
         dataName: 'boosters',
+        keyIds: [KeyId.Shift],
         description: 'D.Va’s mech launches into the air, her momentum carrying her forward. She can turn and change directions or barrel through her enemies, knocking them back.',
     },
     {
@@ -232,6 +271,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Defense Matrix',
         dataName: 'defense-matrix',
+        keyIds: [KeyId.RMB],
         description: 'D.Va can maintain this forward-facing targeting array for a short period of time; while active, it\'ll stop incoming projectiles.',
     },
     {
@@ -239,6 +279,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Micro Missiles',
         dataName: 'micro-missiles',
+        keyIds: [KeyId.E],
         description: 'D.Va launches a volley of explosive rockets.',
     },
     {
@@ -246,6 +287,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Self-Destruct',
         dataName: 'self-destruct',
+        keyIds: [KeyId.Q],
         description: 'D.Va ejects from her mech and sets its reactor to explode, dealing massive damage to nearby opponents.',
     },
     {
@@ -253,6 +295,7 @@ const data = [
         heroId: HeroId.Dva,
         name: 'Call Mech',
         dataName: 'call-mech',
+        keyIds: [KeyId.Q],
         description: 'If her armored battle suit is destroyed, D.Va can call down a fresh mech and return to the fray.',
     },
     {
@@ -260,6 +303,7 @@ const data = [
         heroId: HeroId.Doomfist,
         name: 'Hand Cannon',
         dataName: 'hand-cannon',
+        keyIds: [KeyId.LMB],
         description: 'Doomfist fires a short-range burst from the knuckles of his fist. Its ammunition is automatically regenerated over a short time.',
     },
     {
@@ -267,6 +311,7 @@ const data = [
         heroId: HeroId.Doomfist,
         name: 'The Best Defense...',
         dataName: 'the-best-defense',
+        keyIds: [],
         description: 'Doomfist gains temporary personal shield from dealing damage with his abilities',
     },
     {
@@ -274,6 +319,7 @@ const data = [
         heroId: HeroId.Doomfist,
         name: 'Seismic Slam',
         dataName: 'seismic-slam',
+        keyIds: [KeyId.E],
         description: 'Doomfist leaps forward and smashes into the ground, knocking nearby enemies toward him.',
     },
     {
@@ -281,6 +327,7 @@ const data = [
         heroId: HeroId.Doomfist,
         name: 'Rising Uppercut',
         dataName: 'rising-uppercut',
+        keyIds: [KeyId.Shift],
         description: 'Doomfist uppercuts enemies in front of him into the air.',
     },
     {
@@ -288,6 +335,7 @@ const data = [
         heroId: HeroId.Doomfist,
         name: 'Rocket Punch',
         dataName: 'rocket-punch',
+        keyIds: [KeyId.RMB],
         description: 'After charging up, Doomfist lunges forward and knocks an enemy back, dealing additional damage if they impact a wall.',
     },
     {
@@ -295,6 +343,7 @@ const data = [
         heroId: HeroId.Doomfist,
         name: 'Meteor Strike',
         dataName: 'meteor-strike',
+        keyIds: [KeyId.Q],
         description: 'Doomfist leaps into the sky, then crashes to the ground, dealing significant damage.',
     },
     {
@@ -302,6 +351,7 @@ const data = [
         heroId: HeroId.Echo,
         name: 'Tri-Shot',
         dataName: 'tri-shot',
+        keyIds: [KeyId.LMB],
         description: 'Echo fires 7 shots at once, in a triangle pattern.',
     },
     {
@@ -309,6 +359,7 @@ const data = [
         heroId: HeroId.Echo,
         name: 'Sticky Bombs',
         dataName: 'sticky-bombs',
+        keyIds: [KeyId.RMB],
         description: 'Echo fires a volley of sticky bombs that detonates after a delay.',
     },
     {
@@ -316,6 +367,7 @@ const data = [
         heroId: HeroId.Echo,
         name: 'Flight',
         dataName: 'flight',
+        keyIds: [KeyId.Shift],
         description: 'Echo surges forward quickly, then can fly freely.',
     },
     {
@@ -323,6 +375,7 @@ const data = [
         heroId: HeroId.Echo,
         name: 'Focusing Beam',
         dataName: 'focusing-beam',
+        keyIds: [KeyId.E],
         description: 'Echo channels a beam for a few seconds, dealing very high damage to targets with less than half health.',
     },
     {
@@ -330,6 +383,7 @@ const data = [
         heroId: HeroId.Echo,
         name: 'Glide',
         dataName: 'glide',
+        keyIds: [KeyId.Space],
         description: 'Echo can glide while falling.',
     },
     {
@@ -337,6 +391,7 @@ const data = [
         heroId: HeroId.Echo,
         name: 'Duplicate',
         dataName: 'duplicate',
+        keyIds: [KeyId.Q],
         description: 'Echo duplicates a targeted enemy hero and gains use of their abilities.',
     },
     {
@@ -345,6 +400,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Wall Climb',
         dataName: 'wall-climb',
+        keyIds: [KeyId.Space],
         description: 'Genji can climb up walls',
     },
     {
@@ -353,6 +409,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Double Jump',
         dataName: 'double-jump',
+        keyIds: [KeyId.Space],
         description: 'Genji can double jump',
     },
     {
@@ -360,6 +417,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Shuriken',
         dataName: 'shuriken',
+        keyIds: [KeyId.LMB],
         description: 'Genji looses three deadly throwing stars in quick succession.',
     },
     {
@@ -367,6 +425,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Shuriken',
         dataName: 'shuriken',
+        keyIds: [KeyId.LMB],
         description: 'Genji throws three shuriken in a wider spread.',
     },
     {
@@ -374,6 +433,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Deflect',
         dataName: 'deflect',
+        keyIds: [KeyId.E],
         description: 'With lightning-quick swipes of his sword, Genji reflects an oncoming projectile and sends it rebounding towards his opponent.',
     },
     {
@@ -381,6 +441,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Swift Strike',
         dataName: 'swift-strike',
+        keyIds: [KeyId.Shift],
         description: 'Genji darts forward, slashing with his katana and passing through foes in his path. If Genji eliminates a target, he can instantly use this ability again.',
     },
     {
@@ -388,6 +449,7 @@ const data = [
         heroId: HeroId.Genji,
         name: 'Dragonblade',
         dataName: 'dragonblade',
+        keyIds: [KeyId.Q],
         description: 'Genji brandishes his katana for a brief period of time. Until he sheathes his sword, Genji can deliver killing strikes to any targets within his reach.',
     },
     {
@@ -395,6 +457,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Wall Climb',
         dataName: 'wall-climb',
+        keyIds: [KeyId.Q],
         description: 'Hanzo can climb up walls',
     },
     {
@@ -402,6 +465,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Storm Bow',
         dataName: 'storm-bow',
+        keyIds: [KeyId.LMB],
         description: 'Hanzo nocks and fires an arrow at his target.',
     },
     {
@@ -409,6 +473,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Sonic Arrow',
         dataName: 'sonic-arrow',
+        keyIds: [KeyId.Shift],
         description: 'Hanzo launches an arrow that contains a sonar tracking device. Any enemy within its detection radius is visibly marked, making them easier for Hanzo and his allies to hunt down.',
     },
     {
@@ -416,6 +481,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Storm Arrows',
         dataName: 'storm-arrows',
+        keyIds: [KeyId.E],
         description: 'Hanzo’s next several arrows fire instantly, but at reduced damage.',
     },
     {
@@ -423,6 +489,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Lunge',
         dataName: 'lunge',
+        keyIds: [KeyId.Space],
         description: 'Hanzo can double jump, allowing him to change direction mid-jump.',
     },
     {
@@ -430,6 +497,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Dragonstrike',
         dataName: 'dragonstrike',
+        keyIds: [KeyId.Q],
         description: 'Hanzo summons a Spirit Dragon which travels through the air in a line. It passes through walls in its way, devouring any enemies it encounters.',
     },
     {
@@ -437,6 +505,7 @@ const data = [
         heroId: HeroId.Junkrat,
         name: 'Frag Launcher',
         dataName: 'frag-launcher',
+        keyIds: [KeyId.LMB],
         description: 'Junkrat\'s Frag Launcher lobs grenades a significant distance. They bounce to reach their destination, and blow up when they strike an enemy.',
     },
     {
@@ -444,6 +513,7 @@ const data = [
         heroId: HeroId.Junkrat,
         name: 'Concussion Mine',
         dataName: 'concussion-mine',
+        keyIds: [KeyId.E],
         description: 'After placing one of his homemade Concussion Mines, Junkrat can trigger it to damage enemies and send them flying... or propel himself through the air.',
     },
     {
@@ -451,6 +521,7 @@ const data = [
         heroId: HeroId.Junkrat,
         name: 'Steel Trap',
         dataName: 'steel-trap',
+        keyIds: [KeyId.Shift],
         description: 'Junkrat tosses out a giant, metal-toothed trap. Should an enemy wander too close to the trap, it clamps on, injuring and immobilizing them.',
     },
     {
@@ -458,6 +529,7 @@ const data = [
         heroId: HeroId.Junkrat,
         name: 'Total Mayhem',
         dataName: 'total-mayhem',
+        keyIds: [],
         description: 'Junkrat\'s deranged sense of humor persists past his death. If killed, he drops several live grenades.',
     },
     {
@@ -465,6 +537,7 @@ const data = [
         heroId: HeroId.Junkrat,
         name: 'RIP-Tire',
         dataName: 'rip-tire',
+        keyIds: [KeyId.Q],
         description: 'Junkrat revs up a motorized tire bomb and sends it rolling across the battlefield, climbing over walls and obstacles. He can remotely detonate the RIP-Tire to deal serious damage to enemies caught in the blast, or just wait for it to explode on its own.',
     },
     {
@@ -472,20 +545,33 @@ const data = [
         heroId: HeroId.Lucio,
         name: 'Wall Ride',
         dataName: 'wall-ride',
+        keyIds: [KeyId.Space],
         description: 'Lúcio can jump onto a wall to ride along it.',
     },
     {
         id: AbilityId.SonicAmplifier,
+        group: 'sonic-amplifier',
         heroId: HeroId.Lucio,
         name: 'Sonic Amplifier',
         dataName: 'sonic-amplifier',
-        description: 'Lúcio can hit his enemies with sonic projectiles or knock them back with a blast of sound.',
+        keyIds: [KeyId.LMB],
+        description: 'Lúcio can hit his enemies with sonic projectiles',
+    },
+    {
+        id: AbilityId.SonicAmplifierBoop,
+        group: 'sonic-amplifier',
+        heroId: HeroId.Lucio,
+        name: 'Sonic Amplifier',
+        dataName: 'sonic-amplifier',
+        keyIds: [KeyId.RMB],
+        description: 'Lúcio can knock enemies back with a blast of sound.',
     },
     {
         id: AbilityId.Crossfade,
         heroId: HeroId.Lucio,
         name: 'Crossfade',
         dataName: 'crossfade',
+        keyIds: [KeyId.Shift],
         description: 'Lúcio continuously energizes himself—and nearby teammates—with music. He can switch between two songs: one amplifies movement speed, while the other regenerates health.',
     },
     {
@@ -493,6 +579,7 @@ const data = [
         heroId: HeroId.Lucio,
         name: 'Amp It Up',
         dataName: 'amp-it-up',
+        keyIds: [KeyId.E],
         description: 'Lúcio increases the volume on his speakers, boosting the effects of his songs.',
     },
     {
@@ -500,6 +587,7 @@ const data = [
         heroId: HeroId.Lucio,
         name: 'Sound Barrier',
         dataName: 'sound-barrier',
+        keyIds: [KeyId.Q],
         description: 'Protective waves radiate out from Lúcio’s Sonic Amplifier, briefly providing him and nearby allies with personal shields.',
     },
     {
@@ -508,6 +596,7 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Peacekeeper',
         dataName: 'peacekeeper',
+        keyIds: [KeyId.Space],
         description: 'McCree fires off a round from his trusty six-shooter.',
     },
     {
@@ -516,6 +605,7 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Fan the Hammer',
         dataName: 'fan-the-hammer',
+        keyIds: [KeyId.LMB],
         description: 'McCree can fan the Peacekeeper’s hammer to swiftly unload the entire cylinder.',
     },
     {
@@ -523,6 +613,7 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Combat Roll',
         dataName: 'combat-roll',
+        keyIds: [KeyId.Shift],
         description: 'McCree dives in the direction he’s moving, effortlessly reloading his Peacekeeper in the process.',
     },
     {
@@ -530,6 +621,7 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Flashbang',
         dataName: 'flashbang',
+        keyIds: [KeyId.E],
         description: 'McCree heaves a blinding grenade that explodes shortly after it leaves his hand. The blast staggers enemies in a small radius.',
     },
     {
@@ -537,13 +629,16 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Deadeye',
         dataName: 'deadeye',
+        keyIds: [KeyId.Q],
         description: 'Focus. Mark. Draw. McCree takes a few precious moments to aim; when he’s ready to fire, he shoots every enemy in his line of sight. The weaker his targets are, the faster he’ll line up a killshot.',
     },
     {
         id: AbilityId.EndothermicBlaster,
+        group: 'endothermic-blaster',
         heroId: HeroId.Mei,
         name: 'Endothermic Blaster',
         dataName: 'endothermic-blaster',
+        keyIds: [KeyId.Space],
         description: 'Mei’s blaster unleashes a concentrated, short-range stream of frost that damages, slows, and ultimately freezes enemies in place.',
     },
     {
@@ -552,6 +647,7 @@ const data = [
         heroId: HeroId.Mei,
         name: 'Icicle',
         dataName: 'endothermic-blaster-icicle',
+        keyIds: [KeyId.RMB],
         description: 'Mei can use her blaster to shoot icicle-like projectiles at medium range.',
     },
     {
@@ -559,6 +655,7 @@ const data = [
         heroId: HeroId.Mei,
         name: 'Cryo-Freeze',
         dataName: 'cryo-freeze',
+        keyIds: [KeyId.Shift],
         description: 'Mei instantly surrounds herself with a block of thick ice. She heals and ignores damage while encased, but cannot move or use abilities.',
     },
     {
@@ -566,6 +663,7 @@ const data = [
         heroId: HeroId.Mei,
         name: 'Ice Wall',
         dataName: 'ice-wall',
+        keyIds: [KeyId.E],
         description: 'Mei generates an enormous ice wall that obstructs lines of sight, stops movement, and blocks attacks.',
     },
     {
@@ -573,20 +671,33 @@ const data = [
         heroId: HeroId.Mei,
         name: 'Blizzard',
         dataName: 'blizzard',
+        keyIds: [KeyId.Q],
         description: 'Mei deploys a weather-modification drone that emits gusts of wind and snow in a wide area. Enemies caught in the blizzard are slowed and take damage; those who linger too long are frozen solid.',
     },
     {
-        id: AbilityId.CaduceusStaff,
+        id: AbilityId.CaduceusStaffHeal,
+        group: 'caduceus-staff',
         heroId: HeroId.Mercy,
         name: 'Caduceus Staff',
         dataName: 'caduceus-staff',
-        description: 'Mercy engages one of two beams that connect to an ally. By maintaining the beams, she can either restore that ally’s health or increase the amount of damage they deal.',
+        keyIds: [KeyId.One, KeyId.LMB],
+        description: 'By maintaining beam connection, Mercy can restore that ally’s health or increase the amount of damage they deal.',
+    },
+    {
+        id: AbilityId.CaduceusStaffBoost,
+        group: 'caduceus-staff',
+        heroId: HeroId.Mercy,
+        name: 'Caduceus Staff',
+        dataName: 'caduceus-staff',
+        keyIds: [KeyId.One, KeyId.RMB],
+        description: 'By maintaining beam connection, Mercy can increase the amount of damage her ally deal.',
     },
     {
         id: AbilityId.CaduceusBlaster,
         heroId: HeroId.Mercy,
         name: 'Caduceus Blaster',
         dataName: 'caduceus-blaster',
+        keyIds: [KeyId.Two, KeyId.LMB],
         description: 'Mercy shoots a round from her sidearm.',
     },
     {
@@ -594,6 +705,7 @@ const data = [
         heroId: HeroId.Mercy,
         name: 'Guardian Angel',
         dataName: 'guardian-angel',
+        keyIds: [KeyId.Shift],
         description: 'Mercy flies towards a targeted ally, allowing her to reach them quickly and provide assistance in crucial moments.',
     },
     {
@@ -601,6 +713,7 @@ const data = [
         heroId: HeroId.Mercy,
         name: 'Resurrect',
         dataName: 'resurrect',
+        keyIds: [KeyId.E],
         description: 'Mercy brings a dead ally back into the fight with full health.',
     },
     {
@@ -608,6 +721,7 @@ const data = [
         heroId: HeroId.Mercy,
         name: 'Regeneration',
         dataName: 'regeneration',
+        keyIds: [],
         description: 'Mercy restores her health over time when not taking damage',
     },
     {
@@ -615,6 +729,7 @@ const data = [
         heroId: HeroId.Mercy,
         name: 'Angelic Descent',
         dataName: 'angelic-descent',
+        keyIds: [KeyId.Space],
         description: 'Propelled by her Valkyrie suit, Mercy slows the speed of her descent from great heights.',
     },
     {
@@ -622,6 +737,7 @@ const data = [
         heroId: HeroId.Mercy,
         name: 'Valkyrie',
         dataName: 'valkyrie',
+        keyIds: [KeyId.Q],
         description: 'Gain the ability to fly. Mercy’s abilities are enhanced.',
     },
     {
@@ -630,6 +746,7 @@ const data = [
         heroId: HeroId.Moira,
         name: 'Biotic Grasp Heal',
         dataName: 'biotic-grasp-heal',
+        keyIds: [KeyId.LMB],
         description: 'Using her left hand, Moira expends biotic energy to heal allies in front of her.',
     },
     {
@@ -638,6 +755,7 @@ const data = [
         heroId: HeroId.Moira,
         name: 'Biotic Grasp Damage',
         dataName: 'biotic-grasp-damage',
+        keyIds: [KeyId.RMB],
         description: 'Moira\'s right hand fires a long-range beam weapon that saps enemies’ health, healing Moira and replenishing her biotic energy.',
     },
     {
@@ -646,6 +764,7 @@ const data = [
         heroId: HeroId.Moira,
         name: 'Biotic Orb',
         dataName: 'biotic-orb-heal',
+        keyIds: [KeyId.E, KeyId.LMB],
         description: 'Moira launches a rebounding biotic sphere; she can choose between a regeneration effect that heals the allies it passes through, or a decay effect that deals damage to enemies.',
     },
     {
@@ -654,6 +773,7 @@ const data = [
         heroId: HeroId.Moira,
         name: 'Biotic Orb',
         dataName: 'biotic-orb',
+        keyIds: [KeyId.E, KeyId.RMB],
         description: 'Moira launches a rebounding biotic sphere; she can choose between a regeneration effect that heals the allies it passes through, or a decay effect that deals damage to enemies.',
     },
     {
@@ -661,13 +781,23 @@ const data = [
         heroId: HeroId.Moira,
         name: 'Fade',
         dataName: 'fade',
+        keyIds: [KeyId.Shift],
         description: 'Moira quickly teleports a short distance.',
+    },
+    {
+        id: AbilityId.Coalescense,
+        heroId: HeroId.Moira,
+        name: 'Coalescense',
+        dataName: 'coalescense',
+        keyIds: [KeyId.Q],
+        description: 'Moira channels a long-range beam that both heals allies and bypasses barriers to damage her enemies.',
     },
     {
         id: AbilityId.FusionDriver,
         heroId: HeroId.Orisa,
         name: 'Fusion Driver',
         dataName: 'fusion-driver',
+        keyIds: [KeyId.LMB],
         description: 'Orisa’s automatic projectile cannon delivers sustained damage, but slows her movement while she fires it.',
     },
     {
@@ -675,6 +805,7 @@ const data = [
         heroId: HeroId.Orisa,
         name: 'Fortify',
         dataName: 'fortify',
+        keyIds: [KeyId.Shift],
         description: 'Orisa temporarily reduces damage she takes, and cannot be affected by action-impairing effects.',
     },
     {
@@ -682,6 +813,7 @@ const data = [
         heroId: HeroId.Orisa,
         name: 'Halt!',
         dataName: 'halt',
+        keyIds: [KeyId.RMB, KeyId.LMB],
         description: 'Orisa launches a graviton charge which she can detonate, slowing nearby enemies and pulling them towards the explosion.',
     },
     {
@@ -689,6 +821,7 @@ const data = [
         heroId: HeroId.Orisa,
         name: 'Protective Barrier',
         dataName: 'protective-barrier',
+        keyIds: [KeyId.E],
         description: 'Orisa throws out a stationary barrier that can protect her and her allies from enemy fire.',
     },
     {
@@ -696,6 +829,7 @@ const data = [
         heroId: HeroId.Orisa,
         name: 'Supercharger',
         dataName: 'supercharger',
+        keyIds: [KeyId.Q],
         description: 'Orisa deploys a device to increase damage inflicted by allies within her line of sight.',
     },
     {
@@ -703,13 +837,15 @@ const data = [
         heroId: HeroId.Pharah,
         name: 'Hover Jets',
         dataName: 'hover-jets',
-        description: 'Pharah’s primary weapon launches rockets that deal significant damage in a wide blast radius.',
+        keyIds: [KeyId.Space],
+        description: 'Hold to hover.',
     },
     {
         id: AbilityId.RocketLauncher,
         heroId: HeroId.Pharah,
         name: 'Rocket Launcher',
         dataName: 'rocket-launcher',
+        keyIds: [KeyId.LMB],
         description: 'Pharah’s primary weapon launches rockets that deal significant damage in a wide blast radius.',
     },
     {
@@ -717,6 +853,7 @@ const data = [
         heroId: HeroId.Pharah,
         name: 'Jump Jet',
         dataName: 'jump-jet',
+        keyIds: [KeyId.Shift],
         description: 'Propelled by her suit’s thrusters, Pharah soars high into the air.',
     },
     {
@@ -724,6 +861,7 @@ const data = [
         heroId: HeroId.Pharah,
         name: 'Concussive Blast',
         dataName: 'concussive-blast',
+        keyIds: [KeyId.E],
         description: 'Pharah looses a wrist rocket that knocks back any enemies it strikes.',
     },
     {
@@ -731,6 +869,7 @@ const data = [
         heroId: HeroId.Pharah,
         name: 'Barrage',
         dataName: 'barrage',
+        keyIds: [KeyId.Q],
         description: 'Pharah directs a continuous salvo of mini-rockets to destroy groups of enemies.',
     },
     {
@@ -738,6 +877,7 @@ const data = [
         heroId: HeroId.Reaper,
         name: 'The Reaping',
         dataName: 'the-reaping',
+        keyIds: [],
         description: 'Reaper restores health from dealing damage',
     },
     {
@@ -745,6 +885,7 @@ const data = [
         heroId: HeroId.Reaper,
         name: 'Hellfire Shotguns',
         dataName: 'hellfire-shotguns',
+        keyIds: [KeyId.LMB],
         description: 'Reaper tears enemies apart with twin shotguns.',
     },
     {
@@ -752,6 +893,7 @@ const data = [
         heroId: HeroId.Reaper,
         name: 'Wraith Form',
         dataName: 'wraith-form',
+        keyIds: [KeyId.Shift],
         description: 'Reaper becomes a shadow for a short period of time. While in this form, he takes no damage and is able to pass through enemies, but cannot fire his weapons or use other abilities.',
     },
     {
@@ -759,6 +901,7 @@ const data = [
         heroId: HeroId.Reaper,
         name: 'Shadow Step',
         dataName: 'shadow-step',
+        keyIds: [KeyId.E],
         description: 'After marking a destination, Reaper disappears and reappears at that location.',
     },
     {
@@ -766,6 +909,7 @@ const data = [
         heroId: HeroId.Reaper,
         name: 'Death Blossom',
         dataName: 'death-blossom',
+        keyIds: [KeyId.Q],
         description: 'In a blur of motion, Reaper empties both Hellfire Shotguns at breakneck speed, dealing massive damage to all nearby enemies.',
     },
     {
@@ -773,6 +917,7 @@ const data = [
         heroId: HeroId.Reinhardt,
         name: 'Steadfast',
         dataName: 'steadfast',
+        keyIds: [],
         description: 'Reinhardt is resistant to knock back effects.',
     },
     {
@@ -780,6 +925,7 @@ const data = [
         heroId: HeroId.Reinhardt,
         name: 'Rocket Hammer',
         dataName: 'rocket-hammer',
+        keyIds: [KeyId.LMB],
         description: 'Reinhardt’s Rocket Hammer is an exemplary melee weapon, able to deal punishing damage in a wide arc with every swing.',
     },
     {
@@ -787,6 +933,7 @@ const data = [
         heroId: HeroId.Reinhardt,
         name: 'Barrier Field',
         dataName: 'barrier-field',
+        keyIds: [KeyId.LMB],
         description: 'Reinhardt projects a broad, forward-facing energy barrier, which can absorb substantial damage before it is destroyed. Though Reinhardt can protect himself and his companions behind the barrier, he cannot attack while sustaining it.',
     },
     {
@@ -794,6 +941,7 @@ const data = [
         heroId: HeroId.Reinhardt,
         name: 'Charge',
         dataName: 'charge',
+        keyIds: [KeyId.Shift],
         description: 'Reinhardt charges forth in a straight line, pinning the first enemy in his path and knocking others aside. If he collides with a wall, the foe he’s carrying suffers extreme damage.',
     },
     {
@@ -801,6 +949,7 @@ const data = [
         heroId: HeroId.Reinhardt,
         name: 'Fire Strike',
         dataName: 'fire-strike',
+        keyIds: [KeyId.E],
         description: 'By whipping his Rocket Hammer forward, Reinhardt slings a flaming projectile which pierces and damages any enemies it touches.',
     },
     {
@@ -808,6 +957,7 @@ const data = [
         heroId: HeroId.Reinhardt,
         name: 'Earthshatter',
         dataName: 'earthshatter',
+        keyIds: [KeyId.Q],
         description: 'Reinhardt forcefully slams his Rocket Hammer into the ground, knocking down and damaging all enemies in front of him.',
     },
     {
@@ -816,6 +966,7 @@ const data = [
         heroId: HeroId.Roadhog,
         name: 'Scrap Gun',
         dataName: 'scrap-gun',
+        keyIds: [KeyId.LMB],
         description: 'Roadhog\'s Scrap Gun fires short-range blasts of shrapnel with a wide spread.',
     },
     {
@@ -824,6 +975,7 @@ const data = [
         heroId: HeroId.Roadhog,
         name: 'Scrap Gun Alt Fire',
         dataName: 'scrap-gun-alt-fire',
+        keyIds: [KeyId.LMB],
         description: 'Roadhog\'s Scrap Gun can shoot a shrapnel ball that detonates farther away, scattering metal fragments from the point of impact.',
     },
     {
@@ -831,6 +983,7 @@ const data = [
         heroId: HeroId.Roadhog,
         name: 'Take a Breather',
         dataName: 'take-a-breather',
+        keyIds: [KeyId.E],
         description: 'Roadhog restores a chunk of his health over a brief period of time.',
     },
     {
@@ -838,6 +991,7 @@ const data = [
         heroId: HeroId.Roadhog,
         name: 'Chain Hook',
         dataName: 'chain-hook',
+        keyIds: [KeyId.Shift],
         description: 'Roadhog hurls his chain at a target; if it catches, he yanks them into close range.',
     },
     {
@@ -845,6 +999,7 @@ const data = [
         heroId: HeroId.Roadhog,
         name: 'Whole Hog',
         dataName: 'whole-hog',
+        keyIds: [KeyId.Q],
         description: 'After cramming a top-loader onto his Scrap Gun, Roadhog pours in ammo. For a short time, he can crank out a stream of shrapnel that knocks back enemies.',
     },
     {
@@ -852,6 +1007,7 @@ const data = [
         heroId: HeroId.Sigma,
         name: 'Hyperspheres',
         dataName: 'hyperspheres',
+        keyIds: [KeyId.LMB],
         description: 'Sigma launches two gravitic charges, which bounce off walls and implode after a short duration, damaging enemies within a sizable radius.',
     },
     {
@@ -859,6 +1015,7 @@ const data = [
         heroId: HeroId.Sigma,
         name: 'Experimental Barrier',
         dataName: 'experimental-barrier',
+        keyIds: [KeyId.LMB],
         description: 'Sigma propels a floating barrier to a location of his choosing. He can dismiss the barrier at any time.',
     },
     {
@@ -866,6 +1023,7 @@ const data = [
         heroId: HeroId.Sigma,
         name: 'Kinetic Grasp',
         dataName: 'kinetic-grasp',
+        keyIds: [KeyId.Shift],
         description: 'Sigma freezes incoming projectiles in midair, converting them into shields.',
     },
     {
@@ -873,6 +1031,7 @@ const data = [
         heroId: HeroId.Sigma,
         name: 'Accretion',
         dataName: 'accretion',
+        keyIds: [KeyId.E],
         description: 'Sigma gathers a mass of debris and flings it at an enemy to knock them down.',
     },
     {
@@ -880,6 +1039,7 @@ const data = [
         heroId: HeroId.Sigma,
         name: 'Gravitic Flux',
         dataName: 'gravitic-flux',
+        keyIds: [KeyId.Q],
         description: 'Unleashing his full powers, Sigma takes flight, lifts enemies in a targeted area, and launches them into the sky before slamming them back down.',
     },
     {
@@ -887,6 +1047,7 @@ const data = [
         heroId: HeroId.Soldier,
         name: 'Heavy Pulse Rifle',
         dataName: 'heavy-pulse-rifle',
+        keyIds: [KeyId.LMB],
         description: 'Soldier: 80’s rifle remains particularly steady while unloading fully-automatic pulse fire.',
     },
     {
@@ -894,6 +1055,7 @@ const data = [
         heroId: HeroId.Soldier,
         name: 'Helix Rockets',
         dataName: 'helix-rockets',
+        keyIds: [KeyId.LMB],
         description: 'Tiny rockets spiral out of Soldier: 80’s Pulse Rifle in a single burst. The rockets’ explosion damages enemies in a small radius.',
     },
     {
@@ -901,6 +1063,7 @@ const data = [
         heroId: HeroId.Soldier,
         name: 'Sprint',
         dataName: 'sprint',
+        keyIds: [KeyId.Shift],
         description: 'Whether he needs to evade a firefight or get back into one, Soldier: 80 can rush ahead in a burst of speed. His sprint ends if he takes an action other than charging forward.',
     },
     {
@@ -908,6 +1071,7 @@ const data = [
         heroId: HeroId.Soldier,
         name: 'Biotic Field',
         dataName: 'biotic-field',
+        keyIds: [KeyId.E],
         description: 'Soldier: 80 plants a biotic emitter on the ground. Its energy projection restores health to 76 and any of his squadmates within the field.',
     },
     {
@@ -915,6 +1079,7 @@ const data = [
         heroId: HeroId.Soldier,
         name: 'Tactical Visor',
         dataName: 'tactical-visor',
+        keyIds: [KeyId.Q],
         description: 'Soldier: 80’s pinpoint targeting visor “locks” his aim on the threat closest to his crosshairs. If an enemy leaves his line of sight, Soldier: 76 can quickly switch to another target.',
     },
     {
@@ -922,6 +1087,7 @@ const data = [
         heroId: HeroId.Sombra,
         name: 'Opportunist',
         dataName: 'opportunist',
+        keyIds: [],
         description: 'Sombra detects critically injured enemies through walls.',
     },
     {
@@ -929,6 +1095,7 @@ const data = [
         heroId: HeroId.Sombra,
         name: 'Machine Pistol',
         dataName: 'machine-pistol',
+        keyIds: [KeyId.LMB],
         description: 'Sombra’s fully-automatic machine pistol fires in a short-range spread.',
     },
     {
@@ -936,6 +1103,7 @@ const data = [
         heroId: HeroId.Sombra,
         name: 'Hack',
         dataName: 'hack',
+        keyIds: [KeyId.LMB],
         description: 'Sombra hacks enemies to temporarily stop them from using their abilities, or hacks first aid kits to make them useless to her opponents.',
     },
     {
@@ -943,6 +1111,7 @@ const data = [
         heroId: HeroId.Sombra,
         name: 'Stealth',
         dataName: 'stealth',
+        keyIds: [KeyId.Shift],
         description: 'Sombra becomes invisible, during which her speed is boosted considerably. Attacking, using offensive abilities, or taking damage disables her camouflage. Sombra cannot capture objectives while invisible.',
     },
     {
@@ -950,6 +1119,7 @@ const data = [
         heroId: HeroId.Sombra,
         name: 'Translocator',
         dataName: 'translocator',
+        keyIds: [KeyId.E],
         description: 'Sombra tosses out a translocator beacon. She can instantly return to the beacon’s location while it is active (including when it’s in mid-flight).',
     },
     {
@@ -957,6 +1127,7 @@ const data = [
         heroId: HeroId.Sombra,
         name: 'EMP',
         dataName: 'emp',
+        keyIds: [KeyId.Q],
         description: 'Sombra discharges electromagnetic energy in a wide radius, destroying enemy barriers and shields and hacking all opponents caught in the blast.',
     },
     {
@@ -965,6 +1136,7 @@ const data = [
         heroId: HeroId.Symmetra,
         name: 'Photon Projector',
         dataName: 'photon-projector',
+        keyIds: [KeyId.LMB],
         description: 'Symmetra’s weapon emits a ranged beam. It deals continuous damage that increases the longer it is connected. The projector can also release an explosive energy ball that deals high damage on contact.',
     },
     {
@@ -973,6 +1145,7 @@ const data = [
         heroId: HeroId.Symmetra,
         name: 'Photon Projector Alt Fire',
         dataName: 'photon-projector-alt-fire',
+        keyIds: [KeyId.RMB],
         description: 'Symmetra’s weapon releases an explosive energy ball that deals high damage on contact.',
     },
     {
@@ -980,6 +1153,7 @@ const data = [
         heroId: HeroId.Symmetra,
         name: 'Sentry Turret',
         dataName: 'sentry-turret',
+        keyIds: [KeyId.Shift],
         description: 'Symmetra launches a small turret that automatically fires speed-reducing blasts at the nearest enemy within range. Up to three turrets can be built on the battlefield at once.',
     },
     {
@@ -987,6 +1161,7 @@ const data = [
         heroId: HeroId.Symmetra,
         name: 'Teleporter',
         dataName: 'teleporter',
+        keyIds: [KeyId.E],
         description: 'Symmetra places a temporary teleporter exit pad at a distance and connects it to a teleporter entry pad at her current location. Allies (and some of their abilities, such as Junkrat’s RIP-Tire) can travel from the entry pad to the exit pad instantly.',
     },
     {
@@ -994,6 +1169,7 @@ const data = [
         heroId: HeroId.Symmetra,
         name: 'Photon Barrier',
         dataName: 'photon-barrier',
+        keyIds: [KeyId.Q],
         description: 'Symmetra deploys a massive energy barrier which prevents ranged attacks and is big enough to cut through the entire map.',
     },
     {
@@ -1002,6 +1178,7 @@ const data = [
         heroId: HeroId.Torbjorn,
         name: 'Rivet Gun',
         dataName: 'rivet-gun',
+        keyIds: [KeyId.LMB],
         description: 'Torbjörn fires rivets at long range',
     },
     {
@@ -1010,6 +1187,7 @@ const data = [
         heroId: HeroId.Torbjorn,
         name: 'Rivet Gun Alt Fire',
         dataName: 'rivet-gun-alt-fire',
+        keyIds: [KeyId.RMB],
         description: 'Torbjörn ejects molten metal from his gun in a short, close-range burst.',
     },
     {
@@ -1017,6 +1195,7 @@ const data = [
         heroId: HeroId.Torbjorn,
         name: 'Forge Hammer',
         dataName: 'forge-hammer',
+        keyIds: [KeyId.Two, KeyId.LMB],
         description: 'This multipurpose hammer repairs turrets and, in a pinch, can also be used as a weapon.',
     },
     {
@@ -1024,6 +1203,7 @@ const data = [
         heroId: HeroId.Torbjorn,
         name: 'Deploy Turret',
         dataName: 'deploy-turret',
+        keyIds: [KeyId.Shift],
         description: 'Torbjörn deploys a self-building turret which automatically tracks and attacks enemies.',
     },
     {
@@ -1031,6 +1211,7 @@ const data = [
         heroId: HeroId.Torbjorn,
         name: 'Overload',
         dataName: 'overload',
+        keyIds: [KeyId.E],
         description: 'Torbjörn gains additional armor as well as improved attack, movement, and reload speed for a brief period.',
     },
     {
@@ -1038,6 +1219,7 @@ const data = [
         heroId: HeroId.Torbjorn,
         name: 'Molten Core',
         dataName: 'molten-core',
+        keyIds: [KeyId.Q],
         description: 'Torbjörn creates pools of molten slag that deal massive, sustained damage (plus bonus damage to armor), and can prevent enemies from moving through key locations.',
     },
     {
@@ -1045,6 +1227,7 @@ const data = [
         heroId: HeroId.Tracer,
         name: 'Pulse Pistols',
         dataName: 'pulse-pistols',
+        keyIds: [KeyId.LMB],
         description: 'Tracer rapid-fires both of her pistols.',
     },
     {
@@ -1052,6 +1235,7 @@ const data = [
         heroId: HeroId.Tracer,
         name: 'Blink',
         dataName: 'blink',
+        keyIds: [KeyId.Shift],
         description: 'Tracer zips horizontally through space in the direction she’s moving, and reappears several yards away. She stores up to three charges of the blink ability and generates more every few seconds.',
     },
     {
@@ -1059,6 +1243,7 @@ const data = [
         heroId: HeroId.Tracer,
         name: 'Recall',
         dataName: 'recall',
+        keyIds: [KeyId.E],
         description: 'Tracer bounds backward in time, returning her health, ammo and position on the map to precisely where they were a few seconds before.',
     },
     {
@@ -1066,6 +1251,7 @@ const data = [
         heroId: HeroId.Tracer,
         name: 'Pulse Bomb',
         dataName: 'pulse-bomb',
+        keyIds: [KeyId.Q],
         description: 'Tracer lobs a large bomb that adheres to any surface or unfortunate opponent it lands on. After a brief delay, the bomb explodes, dealing high damage to all enemies within its blast radius.',
     },
     {
@@ -1074,6 +1260,7 @@ const data = [
         heroId: HeroId.Widowmaker,
         name: 'Widow\'s Kiss',
         dataName: 'widows-kiss',
+        keyIds: [KeyId.RMB, KeyId.LMB],
         description: 'Widowmaker’s versatile sniper rifle is ideal for scope-aimed shots at distant targets.',
     },
     {
@@ -1082,6 +1269,7 @@ const data = [
         heroId: HeroId.Widowmaker,
         name: 'Widow\'s Kiss Unscoped',
         dataName: 'widows-kiss',
+        keyIds: [KeyId.LMB],
         description: 'Widowmaker’s rifle can also be fired in fully-automatic mode.',
     },
     {
@@ -1089,6 +1277,7 @@ const data = [
         heroId: HeroId.Widowmaker,
         name: 'Grappling Hook',
         dataName: 'grappling-hook',
+        keyIds: [KeyId.Shift],
         description: 'Widowmaker launches a grappling hook towards the location she’s aiming at – when the hook connects with a scalable surface, she’s quickly drawn towards it, allowing her to expand her view of the battlefield and evade or flank targets.',
     },
     {
@@ -1096,6 +1285,7 @@ const data = [
         heroId: HeroId.Widowmaker,
         name: 'Venom Mine',
         dataName: 'venom-mine',
+        keyIds: [KeyId.E],
         description: 'Widowmaker adheres a swiftly-arming venom mine to nearly any surface. When a target wanders within range of the mine’s motion trigger, it explodes, delivering poison gas to any enemies in the vicinity.',
     },
     {
@@ -1103,6 +1293,7 @@ const data = [
         heroId: HeroId.Widowmaker,
         name: 'Infra-Sight',
         dataName: 'infra-sight',
+        keyIds: [KeyId.Q],
         description: 'Widowmaker’s recon visor allows her to see the heat signatures of her targets through walls and objects for a moderate amount of time. This enhanced vision is shared with her allies.',
     },
     {
@@ -1110,6 +1301,7 @@ const data = [
         heroId: HeroId.Winston,
         name: 'Tesla Cannon',
         dataName: 'tesla-cannon',
+        keyIds: [KeyId.LMB],
         description: 'Winston’s weapon fires a short-range electric barrage for as long as he holds down the trigger.',
     },
     {
@@ -1117,6 +1309,7 @@ const data = [
         heroId: HeroId.Winston,
         name: 'Jump Pack',
         dataName: 'jump-pack',
+        keyIds: [KeyId.Shift],
         description: 'Assisted by his energy pack, Winston lunges through the air, dealing significant damage and staggering nearby enemies when he lands.',
     },
     {
@@ -1124,13 +1317,23 @@ const data = [
         heroId: HeroId.Winston,
         name: 'Barrier Projector',
         dataName: 'barrier-projector',
+        keyIds: [KeyId.E],
         description: 'Winston’s barrier projector extends a bubble-shaped field that absorbs damage until it\'s destroyed. Allies protected by the barrier can return fire from within it.',
+    },
+    {
+        id: AbilityId.PrimalRage,
+        heroId: HeroId.Winston,
+        name: 'Primal Rage',
+        dataName: 'primal-rage',
+        keyIds: [KeyId.Q],
+        description: 'Winston embraces his animal nature, significantly boosting his health and making him very difficult to kill, strengthening his melee attack, and allowing him to use his Jump Pack ability more frequently. While raging, Winston can only make melee and Jump Pack attacks.',
     },
     {
         id: AbilityId.QuadCannons,
         heroId: HeroId.WreckingBall,
         name: 'Quad Cannons',
         dataName: 'quad-cannons',
+        keyIds: [KeyId.LMB],
         description: 'Wrecking Ball’s automatic assault cannons tear apart threats at medium range.',
     },
     {
@@ -1138,6 +1341,7 @@ const data = [
         heroId: HeroId.WreckingBall,
         name: 'Roll',
         dataName: 'roll',
+        keyIds: [KeyId.Shift],
         description: 'Wrecking Ball transforms into a ball, increasing his maximum movement speed.',
     },
     {
@@ -1145,6 +1349,7 @@ const data = [
         heroId: HeroId.WreckingBall,
         name: 'Grappling Claw',
         dataName: 'grappling-claw',
+        keyIds: [KeyId.RMB],
         description: 'Wrecking Ball launches a grappling claw, enabling him to anchor to an area and swing from it. If he strikes an enemy with a powered-up swing, they’re damaged and knocked back.',
     },
     {
@@ -1152,6 +1357,7 @@ const data = [
         heroId: HeroId.WreckingBall,
         name: 'Adaptive Shield',
         dataName: 'adaptive-shield',
+        keyIds: [KeyId.E],
         description: 'Wrecking Ball’s temporary personal shields absorb damage, providing stronger defenses if more opponents are nearby.',
     },
     {
@@ -1159,6 +1365,7 @@ const data = [
         heroId: HeroId.WreckingBall,
         name: 'Piledriver',
         dataName: 'piledriver',
+        keyIds: [KeyId.Ctrl],
         description: 'Wrecking Ball slams onto the ground below, damaging enemies and launching them upward.',
     },
     {
@@ -1166,6 +1373,7 @@ const data = [
         heroId: HeroId.WreckingBall,
         name: 'Minefield',
         dataName: 'minefield',
+        keyIds: [KeyId.Q],
         description: 'Wrecking Ball deploys a field of long-lasting proximity mines which explode on contact with enemies.',
     },
     {
@@ -1173,6 +1381,7 @@ const data = [
         heroId: HeroId.Zarya,
         name: 'Energy',
         dataName: 'energy',
+        keyIds: [],
         description: 'Damage blocked by barriers increases Particle Cannon damage.',
     },
     {
@@ -1181,6 +1390,7 @@ const data = [
         heroId: HeroId.Zarya,
         name: 'Particle Cannon',
         dataName: 'particle-cannon',
+        keyIds: [KeyId.LMB],
         description: 'Zarya’s mighty Particle Cannon unleashes a short-range beam of destructive energy.',
     },
     {
@@ -1189,6 +1399,7 @@ const data = [
         heroId: HeroId.Zarya,
         name: 'Particle Cannon Alt Fire',
         dataName: 'particle-cannon-alt-fire',
+        keyIds: [KeyId.RMB],
         description: 'Zarya can lob an explosive charge to strike multiple opponents.',
     },
     {
@@ -1196,6 +1407,7 @@ const data = [
         heroId: HeroId.Zarya,
         name: 'Particle Barrier',
         dataName: 'particle-barrier',
+        keyIds: [KeyId.Shift],
         description: 'The Particle Cannon can emit a personal barrier that shields Zarya against incoming attacks, redirecting their energy to enhance her weapon’s damage and the width of its beam.',
     },
     {
@@ -1203,6 +1415,7 @@ const data = [
         heroId: HeroId.Zarya,
         name: 'Projected Barrier',
         dataName: 'projected-barrier',
+        keyIds: [KeyId.E],
         description: 'Zarya surrounds one of her teammates with an energy barrier that simultaneously absorbs fire and boosts the power of her Particle Cannon.',
     },
     {
@@ -1210,6 +1423,7 @@ const data = [
         heroId: HeroId.Zarya,
         name: 'Graviton Surge',
         dataName: 'graviton-surge',
+        keyIds: [KeyId.Q],
         description: 'Zarya launches a gravity bomb that draws in enemy combatants and deals damage while they’re trapped.',
     },
     {
@@ -1218,6 +1432,7 @@ const data = [
         heroId: HeroId.Zenyatta,
         name: 'Orb of Destruction',
         dataName: 'org-of-destruction',
+        keyIds: [KeyId.LMB],
         description: 'Zenyatta projects his destructive energy orbs individually',
     },
     {
@@ -1226,6 +1441,7 @@ const data = [
         heroId: HeroId.Zenyatta,
         name: 'Orb of Destruction Volley',
         dataName: 'org-of-destruction-volley',
+        keyIds: [KeyId.RMB, KeyId.LMB],
         description: 'Zenyatta projects his destructive energy orbs in a rapid-fire volley after a few seconds spent gathering power.',
     },
     {
@@ -1233,6 +1449,7 @@ const data = [
         heroId: HeroId.Zenyatta,
         name: 'Orb of Harmony',
         dataName: 'orb-of-harmony',
+        keyIds: [KeyId.Shift],
         description: 'Zenyatta casts an orb over the shoulder of a targeted ally. So long as Zenyatta maintains line of sight, the orb slowly restores health to his ally. Only one ally can receive the orb\'s benefit at a time.',
     },
     {
@@ -1240,6 +1457,7 @@ const data = [
         heroId: HeroId.Zenyatta,
         name: 'Orb of Discord',
         dataName: 'orb-of-discord',
+        keyIds: [KeyId.E],
         description: 'Attaching the orb of discord to an opponent amplifies the amount of damage they receive for as long as Zenyatta maintains line of sight. Only one opponent can suffer the orb\'s effects at a time.',
     },
     {
@@ -1247,6 +1465,7 @@ const data = [
         heroId: HeroId.Zenyatta,
         name: 'Transcendence',
         dataName: 'transcendence',
+        keyIds: [KeyId.Q],
         description: 'Zenyatta enters a state of heightened existence for a short period of time. While transcendent, Zenyatta cannot use abilities or weapons, but is immune to damage and automatically restores his health and that of nearby allies.',
     },
 ]
