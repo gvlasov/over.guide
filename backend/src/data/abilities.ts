@@ -6,10 +6,19 @@ import AbilityId from "data/AbilityId";
 const data = [
     {
         id: AbilityId.BioticRifle,
+        group: 'biotic-rifle',
         heroId: HeroId.Ana,
         name: 'Biotic Rifle',
         dataName: 'biotic-rifle',
-        description: 'Ana’s rifle shoots darts that can restore health to her allies or deal ongoing damage to her enemies. She can use the rifle’s scope to zoom in on targets and make highly accurate shots.'
+        description: 'Ana’s rifle shoots darts that can restore health to her allies or deal ongoing damage to her enemies.'
+    },
+    {
+        id: AbilityId.BioticRifleScoped,
+        group: 'biotic-rifle',
+        heroId: HeroId.Ana,
+        name: 'Biotic Rifle Scoped',
+        dataName: 'biotic-rifle-scoped',
+        description: 'Ana can use the rifle’s scope to zoom in on targets and make highly accurate shots.'
     },
     {
         id: AbilityId.SleepDart,
