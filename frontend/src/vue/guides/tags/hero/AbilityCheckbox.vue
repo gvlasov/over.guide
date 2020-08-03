@@ -1,10 +1,10 @@
 <template>
-    <tr
+    <div
             v-hammer:tap="updateInput"
             v-bind:class="{ checked: shouldBeChecked }"
             class="ability"
     >
-        <td>
+        <div class="icon-row">
             <input
                     type="checkbox"
                     ref="checkbox"
@@ -17,13 +17,22 @@
                     :ability="value"
                     class="ability-icon"
             />
-        </td>
-        <td class="ability-name">{{value.name}}</td>
-    </tr>
+            <KeyIcon
+                    v-for="key in value.keys"
+                    :keyVso="key"
+                    :key="key.dataName"
+                    class="key-icon"
+            />
+        </div>
+        <div class="ability-name">
+            <div class="ability-name-align">{{value.name}}</div>
+        </div>
+    </div>
 </template>
 
 <script>
     import AbilityIcon from "@/vue/AbilityIcon";
+    import KeyIcon from "@/vue/KeyIcon";
 
     export default {
         model: {
@@ -48,22 +57,26 @@
                 if (isChecked) {
                     newValue.push(this.value)
                 } else {
-                    newValue.splice(newValue.indexOf(this.value), 1)
+                    const index = newValue.findIndex(elem => elem.id === this.value.id);
+                    if (index === -1) {
+                        throw new Error('Element not found');
+                    }
+                    newValue.splice(index, 1)
                 }
                 this.$refs.checkbox.checked = !this.$refs.checkbox.checked;
-
                 this.$emit('change', newValue);
             }
         },
         computed: {
             shouldBeChecked() {
-                return this.modelValue.includes(this.value);
-            }
+                return this.modelValue.find(elem => elem.id === this.value.id);
+            },
         },
         data() {
             return {}
         },
         components: {
+            KeyIcon,
             AbilityIcon,
         },
     };
@@ -74,45 +87,56 @@
     @import '~@/assets/css/fonts.css';
 
     .ability-name {
+        display: block;
         color: white;
         font-family: 'Futura Demi Bold', 'sans-serif';
-        font-size: 2.0em;
-        line-height: .4em;
+        font-size: 1.4em;
         font-variant: all-small-caps;
-        width: 11em;
+        min-width: 3em;
+    }
+
+    .ability-name-align {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
     }
 
     .ability {
         cursor: pointer;
         background-color: hsl(200, 40%, 25%);
-    }
-
-    .ability:hover {
-        width: 110%;
-        min-width: 110%;
-    }
-
-    .ability-passive {
-
-    }
-
-    .ability > td {
-        padding: .36em .36em .36em .36em;
-        height: 1.7em;
+        min-width: 5em;
+        justify-content: space-around;
+        gap: .2em;
+        padding: .4em;
     }
 
     .ability-icon {
         max-height: 3em;
         width: auto;
+        height: auto;
+        object-fit: contain;
         max-width: 6em;
+        vertical-align: middle;
+    }
+
+    .key-icon {
+        vertical-align: middle;
     }
 
     .checked {
         background-color: hsl(200, 80%, 35%);
-        box-shadow: 0 0 .1em .1em white;
+        box-shadow: 0 0 .11em .11em white;
     }
 
     .hidden-checkbox {
         display: none;
     }
+
+    .icon-row {
+        display: flex;
+        width: 100%;
+        gap: .3em;
+        justify-content: space-evenly;
+    }
+
 </style>

@@ -1,10 +1,10 @@
 import HeroDto from "data/dto/HeroDto";
-import AbilityDto from "data/dto/AbilityDto";
+import AbilityVso from "@/js/vso/AbilityVso";
 
 export default class TagGroupVso {
     constructor(
         public readonly heroes: HeroDto[],
-        public readonly abilities: AbilityDto[]
+        public readonly abilities: AbilityVso[]
     ) {
     }
 }

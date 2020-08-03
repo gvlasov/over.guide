@@ -8,23 +8,33 @@
                     class="roster"
                     v-if="skillSelectionHero === null"
             >
-                <TagBuilderRosterPortrait
-                        v-for="hero in heroes"
-                        v-bind:key="hero.dataName"
-                        ref="portraits"
-                        :hero="hero"
-                        :selected="isHeroSelected(hero)"
-                        @heroSelect="onHeroTap"
-                        @skillSelectionStart="onSkillSelectionStart"
-                        :abilities="selectedHeroAbilities(hero)"
+                <div
+                        v-for="group in heroGroups.groups"
+                        class="role-group"
+                >
+                    <TagBuilderRosterPortrait
+                            v-for="hero in group"
+                            v-bind:key="hero.dataName"
+                            ref="portraits"
+                            :hero="hero"
+                            :selected="isHeroSelected(hero)"
+                            @heroSelect="onHeroTap"
+                            @skillSelectionStart="onSkillSelectionStart"
+                            :abilities="selectedHeroAbilities(hero)"
+                            :tag-group-abilities="tagGroup.abilities"
+                    />
+                </div>
+            </div>
+            <div
+                    v-if="skillSelectionHero !== null"
+                    class="ability-select-wrap"
+            >
+                <AbilitySelect
+                        :hero="skillSelectionHero"
+                        v-model="tagGroup.abilities"
+                        class="ability-select"
                 />
             </div>
-            <AbilitySelect
-                    v-if="skillSelectionHero !== null"
-                    :hero="skillSelectionHero"
-                    v-model="tagGroup.abilities"
-                    class="ability-select"
-            />
             <div class="button-wrap">
                 <OverwatchButton
                         v-if="skillSelectionHero === null"
@@ -45,7 +55,7 @@
                         type="default"
                         v-hammer:tap="() => {skillSelectionHero = null}"
                         class="hanging-button"
-                >Heroes
+                >Back
                 </OverwatchButton>
             </div>
         </div>
@@ -62,9 +72,9 @@
         from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
     import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
     import TagGroupVso from "@/js/vso/TagGroupVso";
-    import heroes from "data/heroes";
     import Roster_SelectedHeroesMixin
         from "@/vue/roster/Roster_SelectedHeroesMixin";
+    import HeroGroupsByRole from "@/js/HeroGroupsByRole";
 
 
     export default {
@@ -84,7 +94,7 @@
         data() {
             return {
                 skillSelectionHero: null,
-                heroes: Array.from(heroes.values())
+                heroGroups: HeroGroupsByRole.ALL
             };
         },
         methods: {
@@ -102,7 +112,7 @@
              * @param {HeroDto} hero
              */
             selectedHeroAbilities(hero) {
-                return this.tagGroup.abilities.filter(ability => ability.heroId === hero.id)
+                return this.tagGroup.abilities.filter(ability => ability.hero.id === hero.id)
             }
         },
         computed: {
@@ -126,18 +136,27 @@
 <style scoped>
 
     .select-wrap {
+        display: flex;
+        flex-flow: column;
+        max-height: 100vh;
         position: relative;
         top: 50%;
         transform: translate(0, -50%);
     }
 
     .roster {
-        margin-bottom: 2rem;
     }
 
     .ability-select {
         z-index: 2;
         position: relative;
+    }
+
+    .ability-select-wrap {
+        flex: 1;
+        max-height: 100vh;
+        width: 100%;
+        padding-top: 2rem;
     }
 
     .tag-type-links-wrap > a {
@@ -169,7 +188,7 @@
     .roster-fixedbox-bg {
         opacity: .9;
         background-color: black;
-        position: absolute;
+        position: fixed;
         width: 100%;
         height: 100%;
         cursor: pointer;
@@ -190,12 +209,9 @@
     }
 
     .button-wrap {
-        position: absolute;
-        bottom: -5rem;
-        left: 50%;
-        padding-top: 4rem;
-        transform: translate(-50%);
+        padding-top: 2rem;
         z-index: 1;
+        padding-bottom: 2rem;
     }
 
 </style>

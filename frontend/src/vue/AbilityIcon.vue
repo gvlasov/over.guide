@@ -1,27 +1,24 @@
 <template>
     <img
-            :src="imgSrc(ability)"
+            :src="imgSrc"
             v-bind:data-ability-data-name="ability.dataName"
     />
 </template>
 
 <script>
-    import AbilityDto from "data/dto/AbilityDto";
-    import heroes from 'data/heroes'
+    import AbilityVso from "@/js/vso/AbilityVso";
 
     export default {
         name: 'AbilityIcon',
         props: {
-            'ability': {
-                type: Object,
+            ability: {
+                type: AbilityVso,
+                required: true,
             },
         },
-        methods: {
-            /**
-             * @param {AbilityDto} ability
-             */
-            imgSrc(ability) {
-                return '/images/abilities/' + heroes.get(ability.heroId).dataName + '/' + ability.dataName + '.png';
+        computed: {
+            imgSrc() {
+                return '/images/abilities/' + this.ability.hero.dataName + '/' + this.ability.dataName + '.png';
             },
         },
         data() {

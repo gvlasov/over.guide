@@ -6,6 +6,7 @@ import abilities from 'data/abilities'
 import MapDto from "data/dto/MapDto";
 import ThematicTagDto from "data/dto/ThematicTagDto";
 import TagGroupVso from "@/js/vso/TagGroupVso";
+import AbilityVso from "@/js/vso/AbilityVso";
 
 export default class GuideDescriptorVso {
 
@@ -22,15 +23,22 @@ export default class GuideDescriptorVso {
         const allAbilities = Array.from(abilities.values())
         this.players = new TagGroupVso(
             allHeroes.filter(hero => descriptor.playerHeroes.includes(hero.id)),
-            allAbilities.filter(ability => descriptor.playerAbilities.includes(ability.id)),
+            allAbilities
+                .filter(ability => descriptor.playerAbilities.includes(ability.id))
+                .map(it => new AbilityVso(it)),
         );
         this.allies = new TagGroupVso(
             allHeroes.filter(hero => descriptor.allyHeroes.includes(hero.id)),
-            allAbilities.filter(ability => descriptor.allyAbilities.includes(ability.id)),
+            allAbilities
+                .filter(ability => descriptor.allyAbilities.includes(ability.id))
+                .map(it => new AbilityVso(it)),
         );
         this.enemies = new TagGroupVso(
-            allHeroes.filter(hero => descriptor.enemyHeroes.includes(hero.id)),
-            allAbilities.filter(ability => descriptor.enemyAbilities.includes(ability.id)),
+            allHeroes
+                .filter(hero => descriptor.enemyHeroes.includes(hero.id)),
+            allAbilities
+                .filter(ability => descriptor.enemyAbilities.includes(ability.id))
+                .map(it => new AbilityVso(it)),
         );
         this.maps = allMaps.filter(map => descriptor.mapTags.includes(map.id))
         this.thematicTags = allThematicTags.filter(tag => descriptor.thematicTags.includes(tag.id))

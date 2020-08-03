@@ -26,13 +26,10 @@
 
 <style scoped>
     .invite {
-        display: inline-block;
-        line-height: 2.707rem;
+        line-height: 2.707em;
         font-family: 'Futura Demi Bold', 'sans-serif';
         vertical-align: middle;
-        width: 3rem;
-        padding: .3rem;
-        height: 2.707rem;
+        width: 3.5em;
         background-color: #5f7589;
         color: #32323b;
         cursor: pointer;

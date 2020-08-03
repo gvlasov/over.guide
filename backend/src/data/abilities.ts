@@ -457,7 +457,7 @@ const data = [
         heroId: HeroId.Hanzo,
         name: 'Wall Climb',
         dataName: 'wall-climb',
-        keyIds: [KeyId.Q],
+        keyIds: [KeyId.Space],
         description: 'Hanzo can climb up walls',
     },
     {
@@ -596,7 +596,7 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Peacekeeper',
         dataName: 'peacekeeper',
-        keyIds: [KeyId.Space],
+        keyIds: [KeyId.LMB],
         description: 'McCree fires off a round from his trusty six-shooter.',
     },
     {
@@ -678,7 +678,7 @@ const data = [
         id: AbilityId.CaduceusStaffHeal,
         group: 'caduceus-staff',
         heroId: HeroId.Mercy,
-        name: 'Caduceus Staff',
+        name: 'Caduceus Staff (Heal)',
         dataName: 'caduceus-staff',
         keyIds: [KeyId.One, KeyId.LMB],
         description: 'By maintaining beam connection, Mercy can restore that ally’s health or increase the amount of damage they deal.',
@@ -687,7 +687,7 @@ const data = [
         id: AbilityId.CaduceusStaffBoost,
         group: 'caduceus-staff',
         heroId: HeroId.Mercy,
-        name: 'Caduceus Staff',
+        name: 'Caduceus Staff (Boost)',
         dataName: 'caduceus-staff',
         keyIds: [KeyId.One, KeyId.RMB],
         description: 'By maintaining beam connection, Mercy can increase the amount of damage her ally deal.',
@@ -1480,6 +1480,7 @@ data.forEach(
                 heroId: d.heroId,
                 name: d.name,
                 dataName: d.dataName,
+                keyIds: d.keyIds,
                 description: d.description
             } as AbilityDto
         )

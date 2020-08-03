@@ -38,11 +38,19 @@
                 type: Array,
                 required: true,
             },
+            tagGroupAbilities: {
+                type: Array,
+                required: true,
+            },
         },
         watch: {
             selected(value) {
                 if (value === false) {
-                    this.abilities.clear();
+                    this.tagGroupAbilities.replaceAll(
+                        [...this.tagGroupAbilities].filter(
+                            ability => ability.hero.id !== this.hero.id
+                        )
+                    );
                 }
             }
         },
@@ -69,16 +77,15 @@
 
 <style scoped>
     .roster-portrait {
-        width: 5vw;
+        width: 7vw;
         height: 7vw;
-        margin: 0.4vw;
+        margin: 0.2vw;
     }
 
     .skills-button {
         position: absolute;
         bottom: 0;
-        left: .1em;
-        font-size: 2em;
-        width: 4em;
+        left: 1.3em;
+        font-size: 1.17em;
     }
 </style>

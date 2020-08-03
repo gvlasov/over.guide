@@ -25,7 +25,7 @@
     .tag-type-background {
         display: inline-table;
         vertical-align: middle;
-        border-spacing: .3em;
-        border-radius: .5em;
+        border-spacing: .3rem;
+        border-radius: .5rem;
     }
 </style>

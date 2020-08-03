@@ -1,13 +1,14 @@
 <template>
-    <table>
+    <div class="grid">
         <AbilityCheckbox
                 v-for="ability in abilities"
                 :model-value="selectedAbilities"
                 @change="($event)=>$emit('selectedAbilitiesChange', $event)"
                 :value="ability"
                 :key="ability.id"
+                class="ability"
         />
-    </table>
+    </div>
 </template>
 
 <script>
@@ -21,6 +22,7 @@
     import abilities from 'data/abilities';
     import AbilityIcon from "@/vue/AbilityIcon";
     import AbilityCheckbox from "@/vue/guides/tags/hero/AbilityCheckbox";
+    import AbilityVso from "@/js/vso/AbilityVso";
 
 
     export default {
@@ -62,7 +64,8 @@
         computed: {
             abilities() {
                 return Array.from(abilities.values())
-                    .filter(ability => ability.heroId === this.hero.id);
+                    .filter(ability => ability.heroId === this.hero.id)
+                    .map(it => new AbilityVso(it));
             }
         },
         components: {
@@ -82,10 +85,18 @@
 <style scoped>
     @import "~@/assets/css/fonts.css";
 
-    table {
-        display: inline-table;
-        border-spacing: 0 .9em;
-        border: 0;
+    /*.grid {*/
+    /*    display: grid;*/
+    /*    grid-template-columns: repeat(4, max-content);*/
+    /*}*/
+    .grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .ability {
+        margin: .2rem;
     }
 
 </style>
