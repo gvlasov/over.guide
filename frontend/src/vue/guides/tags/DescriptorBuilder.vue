@@ -1,7 +1,7 @@
 <template>
     <div class="searchbox">
         <TagBuilder
-                :guide-hero-tag="descriptor"
+                :descriptor="descriptor"
                 style="display: table-cell;"
         />
         <ThematicTagInput

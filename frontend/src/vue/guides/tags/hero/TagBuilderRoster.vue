@@ -1,113 +1,65 @@
 <template>
-    <div class="roster-fixedbox">
+    <div class="roster-fixedbox" style="">
         <div class="roster-fixedbox-bg"/>
-        <div class="select-wrap">
-            <div
-                    class="change-roster-cell"
-                    v-bind:style="{visibility: hasPreviousGroup ? 'visible' : 'hidden'}"
-            >
+        <div class="tag-builder-roster-wrap">
+            <div class="tag-builder-roster">
                 <div
-                        v-if="hasPreviousGroup"
-                        class="go-prev"
-                        v-hammer:tap="()=>$emit('tagGroupSelect', previousGroup)"
+                        class="aside-button aside-button-mode"
+                        v-bind:style="{visibility: tagGroup.heroes.length > 0 ? 'visible' : 'hidden'}"
+                        v-hammer:tap="() => selectingSkills = !selectingSkills"
                 >
-                    <div class="arrow-text-wrap">
-                        <div class="arrow-text">{{previousGroup.plural}}</div>
-                    </div>
-                    <img src="/icons/arrow-left-white.svg" class="navigation-arrow"/>
+                    <div>{{selectingSkills ? 'Heroes' : 'Skills'}}</div>
                 </div>
-            </div>
-            <div
-                    v-if="!selectingSkills"
-                    class="roster"
-            >
                 <div
-                        v-for="group in heroGroups.groups"
-                        class="role-group"
-                >
-                    <TagBuilderRosterPortrait
-                            v-for="hero in group"
-                            v-bind:key="hero.dataName"
-                            ref="portraits"
-                            :hero="hero"
-                            :selected="isHeroSelected(hero)"
-                            @heroSelect="onHeroTap"
-                            @skillSelectionStart="() => {selectingSkills = true}"
-                            :abilities="selectedHeroAbilities(hero)"
-                            :tag-group-abilities="tagGroup.abilities"
-                    />
-                </div>
-            </div>
-            <div
-                    v-if="selectingSkills"
-                    class="ability-select-wrap"
-            >
-                <AbilitySelect
-                        :heroes="selectedHeroes"
-                        v-model="tagGroup.abilities"
-                        class="ability-select"
-                />
-            </div>
-            <div class="button-wrap">
-                <OverwatchButton
-                        type="main"
-                        v-hammer:tap="() => {$emit('save')}"
-                        class="hanging-button"
-                >Done
-                </OverwatchButton>
-                <OverwatchButton
-                        v-if="!selectingSkills && selectedHeroes.length > 0"
-                        type="default"
-                        v-hammer:tap="() => {selectingSkills = true}"
-                        class="hanging-button"
+                        v-if="!selectingSkills"
+                        class="roster"
                 >
                     <div
-                            v-if="selectedHeroes.length > 0 && tagGroup.abilities.length > 0"
-                            class="button-icon-group-holder"
+                            v-for="group in heroGroups.groups"
+                            class="role-group"
                     >
-                        <div class="ability-icon-table">
-                            <AbilityIcon
-                                    v-for="ability in tagGroup.abilities"
-                                    :ability="ability"
-                                    :key="ability.dataName"
-                                    class="button-group-ability-icon"
-                            />
-                        </div>
-                    </div>
-                    <template v-else>Skills</template>
-                </OverwatchButton>
-                <OverwatchButton
-                        v-if="selectingSkills"
-                        type="default"
-                        v-hammer:tap="() => {selectingSkills = false}"
-                >
-                    <div
-                            class="button-icon-group-holder"
-                            v-if="selectedHeroes.length > 0"
-                    >
-                        <TagPortrait
-                                v-for="hero in selectedHeroes"
-                                :key="hero.dataName"
+                        <TagBuilderRosterPortrait
+                                v-for="hero in group"
+                                v-bind:key="hero.dataName"
+                                ref="portraits"
                                 :hero="hero"
-                                class="tag-portrait"
+                                :selected="isHeroSelected(hero)"
+                                @heroSelect="onHeroTap"
+                                @skillSelectionStart="() => {selectingSkills = true}"
+                                :abilities="selectedHeroAbilities(hero)"
+                                :tag-group-abilities="tagGroup.abilities"
                         />
                     </div>
-                    <template v-else>Heroes</template>
-                </OverwatchButton>
-            </div>
-            <div
-                    class="change-roster-cell"
-                    v-bind:style="{visibility: hasNextGroup ? 'visible' : 'hidden'}"
-            >
+                </div>
                 <div
-                        v-if="hasNextGroup"
-                        class="go-next"
-                        v-hammer:tap="()=>$emit('tagGroupSelect', nextGroup)"
+                        v-if="selectingSkills"
+                        class="ability-select-wrap"
                 >
-                    <div class="arrow-text-wrap">
-                        <div class="arrow-text">{{nextGroup.plural}}</div>
+                    <AbilitySelect
+                            :heroes="selectedHeroes"
+                            v-model="tagGroup.abilities"
+                            class="ability-select"
+                    />
+                </div>
+                <div class="button-wrap">
+                    <TagBuilderRosterTag
+                            :descriptor="descriptor"
+                            class="descriptor-mirror"
+                            :selected-position="tagGroup.gamerPosition"
+                            @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
+                            @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
+                            @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
+                    />
+                </div>
+                <div
+                        class="aside-button aside-button-done"
+                >
+                    <div v-hammer:tap="()=>$emit('save')">
+                        <div class="arrow-text-wrap">
+                            <div class="arrow-text">Done</div>
+                        </div>
+                        <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
                     </div>
-                    <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
         </div>
@@ -129,6 +81,8 @@
     import HeroGroupsByRole from "@/js/HeroGroupsByRole";
     import Tag from "@/vue/guides/tags/hero/Tag";
     import AbilityIcon from "@/vue/AbilityIcon";
+    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+    import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
 
 
     export default {
@@ -144,6 +98,10 @@
                 type: TagGroupVso,
                 required: true,
             },
+            descriptor: {
+                type: GuideDescriptorVso,
+                required: true,
+            }
         },
         data() {
             return {
@@ -186,6 +144,7 @@
             TagGroupBackground,
             TagGroupFrame,
             TagPortrait,
+            TagBuilderRosterTag,
         },
     };
 
@@ -193,17 +152,37 @@
 
 <style scoped>
 
-    .select-wrap {
-        display: flex;
+    .roster-fixedbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .tag-builder-roster {
+        display: inline-flex;
         justify-content: center;
         flex-direction: column;
         flex-wrap: wrap;
-        width: 100vh;
-        min-width: 100%;
-        max-width: 100%;
-        height: 100vh;
-        min-height: 100vh;
+        width: 100vw;
+        height: 100%;
         position: relative;
+        max-width: 73em;
+        max-height: 35em;
+        line-height: 1em;
+    }
+
+    .tag-builder-roster-wrap {
+        text-align: center;
+        width: 100vw;
+        height: 100vh;
+        line-height: 100vh;
+        vertical-align: middle;
     }
 
     .roster {
@@ -211,9 +190,8 @@
         flex-shrink: 1;
         flex-basis: 0;
         overflow-y: auto;
-        width: calc(100vw - 18rem);
-        max-width: calc(100vw - 18rem);
-        min-width: fit-content;
+        width: calc(100% - 18rem);
+        max-width: calc(100% - 18rem);
         padding-top: 2rem;
         display: flex;
         flex-direction: column;
@@ -226,41 +204,41 @@
         flex-basis: 0;
         overflow-y: auto;
         overscroll-behavior: none contain;
-        width: calc(100vw - 18rem);
-        max-width: calc(100vw - 18rem);
+        width: calc(100% - 18rem);
+        max-width: calc(100% - 18rem);
         padding-top: 2rem;
     }
 
     .button-wrap {
-        flex-shrink: 1;
-        flex-basis: 0;
+        flex-shrink: 0;
+        flex-basis: content;
         z-index: 1;
         padding-top: 1rem;
-        padding-bottom: 14vh;
+        padding-bottom: 4vh;
+        max-width: initial;
     }
 
-    .change-roster-cell {
-        display: block;
+    .aside-button {
+        display: flex;
         flex-basis: 100%;
+        justify-content: center;
+        flex-direction: column;
         width: 9rem;
         color: white;
         font-family: 'Futura Demi Bold', 'sans-serif';
         font-variant: all-small-caps;
         cursor: pointer;
-    }
-
-    .go-prev, .go-next {
-        display: flex;
-        flex-flow: column;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        min-height: 100%;
         font-size: 2em;
     }
 
-    .change-roster-cell:hover > * {
-        text-shadow: 0 0 .3em white;
+    .aside-button-mode {
+        background-color: #2991de;
+        opacity: .80;
+    }
+
+    .aside-button-done {
+        background-color: orange;
+        opacity: .80;
     }
 
     .ability-select {
@@ -272,19 +250,6 @@
         display: table-cell;
         overflow: hidden;
         border-radius: .3em;
-    }
-
-    .roster-fixedbox {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 2;
-        max-width: 100vw;
-        max-height: 100vh;
     }
 
     .roster-fixedbox-bg {
@@ -333,6 +298,18 @@
         line-height: 0;
         width: 100%;
         position: relative;
+    }
+
+    .descriptor-mirror {
+        display: inline-block;
+    }
+
+    .descriptor-mirror >>> .tag-type-infix {
+        color: white;
+    }
+
+    .descriptor-mirror >>> .portrait {
+        height: 3em;
     }
 
 </style>

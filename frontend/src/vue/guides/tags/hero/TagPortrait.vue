@@ -38,6 +38,6 @@
         width: auto;
         vertical-align: middle;
         background-color: #28253a;
-        border-radius: 10%;
+        border-radius: .4em;
     }
 </style>

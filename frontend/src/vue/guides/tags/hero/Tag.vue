@@ -1,11 +1,14 @@
 <template>
     <div class="wrap">
-        <TagGroupFrame v-if="guideHeroTag.playerHeroes.length > 0">
+        <TagGroupFrame v-if="descriptor.players.heroes.length > 0">
             <template slot="infix"></template>
             <template slot="frame-content">
-                <TagGroupBackground class="tag-type-links-wrap-player">
+                <TagGroupBackground
+                        :type="'player'"
+                        class="tag-type-links-wrap-player"
+                >
                     <TagPortraitLinked
-                            v-for="hero in guideHeroTag.playerHeroes"
+                            v-for="hero in descriptor.players.heroes"
                             :key="hero.dataName"
                             :hero="hero"
                             :create-title="(hero) => 'More guides about playing as ' + hero.name"
@@ -14,12 +17,15 @@
             </template>
         </TagGroupFrame><!--
         -->
-        <TagGroupFrame v-if="guideHeroTag.allyHeroes.length > 0">
+        <TagGroupFrame v-if="descriptor.allies.heroes.length > 0">
             <template slot="infix">+</template>
             <template slot="frame-content">
-                <TagGroupBackground class="tag-type-links-wrap-ally">
+                <TagGroupBackground
+                        class="tag-type-links-wrap-ally"
+                        :type="'ally'"
+                >
                     <TagPortraitLinked
-                            v-for="hero in guideHeroTag.allyHeroes"
+                            v-for="hero in descriptor.allies.heroes"
                             :key="hero.dataName"
                             :hero="hero"
                             :create-title="(hero) => 'More guides about synergizing with ' + hero.name"
@@ -28,12 +34,15 @@
             </template>
         </TagGroupFrame><!--
         -->
-        <TagGroupFrame v-if="guideHeroTag.enemyHeroes.length > 0">
+        <TagGroupFrame v-if="descriptor.enemies.heroes.length > 0">
             <template slot="infix">VS</template>
             <template slot="frame-content">
-                <TagGroupBackground class="tag-type-links-wrap-enemy">
+                <TagGroupBackground
+                        class="tag-type-links-wrap-enemy"
+                        :type="'enemy'"
+                >
                     <TagPortraitLinked
-                            v-for="hero in guideHeroTag.enemyHeroes"
+                            v-for="hero in descriptor.enemies.heroes"
                             :key="hero.dataName"
                             :hero="hero"
                             :create-title="(hero) => 'More guides about countering ' + hero.name"
@@ -48,14 +57,12 @@
     import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
     import TagPortraitLinked from "@/vue/guides/tags/hero/TagPortraitLinked";
+    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
     export default {
         props: {
-            guideHeroTag: {
-                /**
-                 * @see {GuideHeroTag}
-                 */
-                type: Object,
+            descriptor: {
+                type: GuideDescriptorVso,
                 required: true,
             }
         },
@@ -76,22 +83,6 @@
 </script>
 
 <style scoped>
-    .wrap {
-        display: inline-flex;
-    }
-
-    .tag-type-links-wrap-player {
-        background-color: rgba(75, 125, 217, 0.9);
-    }
-
-    .tag-type-links-wrap-ally {
-        background-color: rgba(15, 213, 71, 0.9);
-    }
-
-    .tag-type-links-wrap-enemy {
-        background-color: rgba(229, 34, 34, 0.9);
-    }
-
     .tag-type-links-wrap > a {
         display: table-cell;
         overflow: hidden;

@@ -5,14 +5,14 @@
                 <template slot="infix"></template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="guideHeroTag.players.heroes.length > 0"
+                            v-if="descriptor.players.heroes.length > 0"
                             :type="'player'"
                             class="tag-type-links-wrap-player tappable-background"
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
                     >
                         <TagPortrait
-                                v-for="hero in guideHeroTag.players.heroes"
+                                v-for="hero in descriptor.players.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
                                 class="tag-portrait"
@@ -22,6 +22,7 @@
                             v-else
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
+                            class="invite"
                     >
                         <div class="invite-text">any<br/>player</div>
                     </TagGroupInvite>
@@ -34,14 +35,14 @@
                 </template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="guideHeroTag.allies.heroes.length > 0"
+                            v-if="descriptor.allies.heroes.length > 0"
                             :type="'ally'"
                             class="tag-type-links-wrap-ally tappable-background"
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
                     >
                         <TagPortrait
-                                v-for="hero in guideHeroTag.allies.heroes"
+                                v-for="hero in descriptor.allies.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
                                 class="tag-portrait"
@@ -51,6 +52,7 @@
                             v-else
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
+                            class="invite"
                     >
                         <div class="invite-text">any<br/>ally</div>
                     </TagGroupInvite>
@@ -62,7 +64,7 @@
                 </template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="guideHeroTag.enemies.heroes.length > 0"
+                            v-if="descriptor.enemies.heroes.length > 0"
                             :type="'enemy'"
                             class="tag-type-links-wrap-enemy tappable-background"
                             v-hammer:tap="() => (selecting = 'enemy')"
@@ -70,7 +72,7 @@
                             style="max-height: 30px;height:30px;"
                     >
                         <TagPortrait
-                                v-for="hero in guideHeroTag.enemies.heroes"
+                                v-for="hero in descriptor.enemies.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
                                 class="tag-portrait"
@@ -80,6 +82,7 @@
                             v-else
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
+                            class="invite"
                     >
                         <div class="invite-text">any<br/>enemy</div>
                     </TagGroupInvite>
@@ -88,22 +91,25 @@
         </div>
         <TagBuilderRoster
                 v-if="selecting === 'player'"
-                :tag-group="guideHeroTag.players"
+                :tag-group="descriptor.players"
                 :tag-group-type="'player'"
+                :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event.dataName;}"
         />
         <TagBuilderRoster
                 v-if="selecting === 'ally'"
-                :tag-group="guideHeroTag.allies"
+                :tag-group="descriptor.allies"
                 :tag-group-type="'ally'"
+                :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event.dataName;}"
         />
         <TagBuilderRoster
                 v-if="selecting === 'enemy'"
-                :tag-group="guideHeroTag.enemies"
+                :tag-group="descriptor.enemies"
                 :tag-group-type="'enemy'"
+                :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event.dataName;}"
         />
@@ -121,7 +127,7 @@
 
     export default {
         props: {
-            guideHeroTag: {
+            descriptor: {
                 type: GuideDescriptorVso,
                 required: true,
             }
@@ -165,6 +171,10 @@
         cursor: pointer;
     }
 
+    .tag-portrait >>> .portrait {
+        max-height: 3em;
+    }
+
     .invite-text {
         display: inline-block;
         line-height: 70%;
@@ -182,7 +192,8 @@
         font-size: 1.3em;
     }
 
-    .tag-portrait {
-        height: 2.707rem;
+
+    .invite >>> .zoomer:hover {
+        transform: scale(1.2);
     }
 </style>

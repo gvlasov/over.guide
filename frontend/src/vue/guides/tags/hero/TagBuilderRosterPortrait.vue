@@ -1,22 +1,22 @@
 <template>
-    <RosterPortrait
-            class="roster-portrait"
-            :hero="hero"
-            :banned="false"
-            :selected-out="false"
-            :selected="selected"
-            v-flex-touch="(e) => e.preventDefault()"
-            @heroSelect="bubbleHeroSelect"
-            v-bind:data-hero-data-name="hero.dataName"
-            v-bind:class="{ 'selected': selected }"
-    >
-    </RosterPortrait>
+    <div class="proportional-height-wrap">
+        <RosterPortrait
+                class="roster-portrait"
+                :hero="hero"
+                :banned="false"
+                :selected-out="false"
+                :selected="selected"
+                v-flex-touch="(e) => e.preventDefault()"
+                @heroSelect="bubbleHeroSelect"
+                v-bind:data-hero-data-name="hero.dataName"
+                v-bind:class="{ 'selected': selected }"
+        >
+        </RosterPortrait>
+    </div>
 </template>
 
 <script>
-    import HeroPortraitSkewed from "@/vue/HeroPortraitSkewed.vue";
     import RosterPortrait from "@/vue/RosterPortrait";
-    import OverwatchButton from "@/vue/OverwatchButton";
 
     export default {
         props: {
@@ -49,34 +49,36 @@
             bubbleHeroSelect() {
                 this.$emit('heroSelect', this.hero)
             },
-            onSkillsButtonTap() {
-                this.$emit('skillSelectionStart', this.hero)
-            }
         },
         computed: {},
         data() {
             return {}
         },
         components: {
-            OverwatchButton,
             RosterPortrait,
-            HeroPortraitSkewed,
         },
     };
 
 </script>
 
 <style scoped>
-    .roster-portrait {
-        width: 5vw;
-        height: 6vw;
-        margin: 0.2vw;
+    .proportional-height-wrap {
+        /* https://stackoverflow.com/a/14896313/1542343 */
+        position: relative;
+        width: 9.4%;
+        padding-bottom: 10.6%;
+        display: inline-block;
+        margin: .34%;
+        transform: skew(-25deg);
     }
 
-    .skills-button {
+    .roster-portrait {
         position: absolute;
-        bottom: 0;
-        left: 1.3em;
-        font-size: 1.17em;
+        width: 100%;
+        height: 100%;
+        border-width: 0;
+        border-radius: .2em;
+        margin: 0;
+        transform: skew(0deg);
     }
 </style>
