@@ -11,7 +11,9 @@
                         class="go-prev"
                         v-hammer:tap="()=>$emit('tagGroupSelect', previousGroup)"
                 >
-                    <div class="arrow-text">{{previousGroup.plural}}</div>
+                    <div class="arrow-text-wrap">
+                        <div class="arrow-text">{{previousGroup.plural}}</div>
+                    </div>
                     <img src="/icons/arrow-left-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
@@ -102,7 +104,9 @@
                         class="go-next"
                         v-hammer:tap="()=>$emit('tagGroupSelect', nextGroup)"
                 >
-                    <div class="arrow-text">{{nextGroup.plural}}</div>
+                    <div class="arrow-text-wrap">
+                        <div class="arrow-text">{{nextGroup.plural}}</div>
+                    </div>
                     <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
@@ -321,6 +325,18 @@
 
     .navigation-arrow {
         width: 3em;
+    }
+
+    .arrow-text {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, -1em);
+    }
+
+    .arrow-text-wrap {
+        line-height: 0;
+        width: 100%;
+        position: relative;
     }
 
 </style>
