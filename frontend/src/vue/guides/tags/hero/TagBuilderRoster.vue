@@ -2,13 +2,16 @@
     <div class="roster-fixedbox">
         <div class="roster-fixedbox-bg"/>
         <div class="select-wrap">
-            <div class="change-roster-cell">
+            <div
+                    class="change-roster-cell"
+                    v-bind:style="{visibility: hasPreviousGroup ? 'visible' : 'hidden'}"
+            >
                 <div
-                        v-if="tagGroup.gamerPosition.getPrevious(false) !== null"
+                        v-if="hasPreviousGroup"
                         class="go-prev"
-                        v-hammer:tap="()=>$emit('tagGroupSelect', tagGroup.gamerPosition.getPrevious(false))"
+                        v-hammer:tap="()=>$emit('tagGroupSelect', previousGroup)"
                 >
-                    <div class="arrow-text">{{tagGroup.gamerPosition.getPrevious(false).plural}}</div>
+                    <div class="arrow-text">{{previousGroup.plural}}</div>
                     <img src="/icons/arrow-left-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
@@ -90,13 +93,16 @@
                     <template v-else>Heroes</template>
                 </OverwatchButton>
             </div>
-            <div class="change-roster-cell">
+            <div
+                    class="change-roster-cell"
+                    v-bind:style="{visibility: hasNextGroup ? 'visible' : 'hidden'}"
+            >
                 <div
-                        v-if="tagGroup.gamerPosition.getNext(false) !== null"
+                        v-if="hasNextGroup"
                         class="go-next"
-                        v-hammer:tap="()=>$emit('tagGroupSelect', tagGroup.gamerPosition.getNext(false))"
+                        v-hammer:tap="()=>$emit('tagGroupSelect', nextGroup)"
                 >
-                    <div class="arrow-text">{{tagGroup.gamerPosition.getNext(false).plural}}</div>
+                    <div class="arrow-text">{{nextGroup.plural}}</div>
                     <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
@@ -152,6 +158,18 @@
         computed: {
             selectedHeroes() {
                 return this.tagGroup.heroes;
+            },
+            previousGroup() {
+                return this.tagGroup.gamerPosition.getPrevious(false)
+            },
+            nextGroup() {
+                return this.tagGroup.gamerPosition.getNext(false)
+            },
+            hasPreviousGroup() {
+                return this.previousGroup !== null
+            },
+            hasNextGroup() {
+                return this.nextGroup !== null
             },
         },
         components: {
