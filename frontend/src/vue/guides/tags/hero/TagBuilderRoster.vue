@@ -249,10 +249,6 @@
         cursor: pointer;
     }
 
-    .change-roster-cell:hover {
-        background-color: #222;
-    }
-
     .go-prev, .go-next {
         display: flex;
         flex-flow: column;
