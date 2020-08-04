@@ -57,6 +57,7 @@
 <style scoped>
     .skew {
         position: relative;
+        display: inline-block;
         -ms-transform: skew(-25deg, 0deg);
         -webkit-transform: skew(-25deg, 0deg);
         transform: skew(-25deg, 0deg);

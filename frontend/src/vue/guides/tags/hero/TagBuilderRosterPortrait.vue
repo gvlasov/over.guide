@@ -71,7 +71,6 @@
         margin: .34%;
         transform: skew(-25deg);
     }
-
     .roster-portrait {
         position: absolute;
         width: 100%;
@@ -79,6 +78,6 @@
         border-width: 0;
         border-radius: .2em;
         margin: 0;
-        transform: skew(0deg);
+        transform: translateX(-50%) skew(0deg);
     }
 </style>
