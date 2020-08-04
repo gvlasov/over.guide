@@ -121,18 +121,18 @@
 </script>
 
 <style scoped>
+    .wrap {
+        font-size: 0;
+    }
+
+    .wrap > * {
+        font-size: 1rem;
+    }
+
     .tag-type-links-wrap > a {
         display: table-cell;
         overflow: hidden;
         border-radius: .3em;
-    }
-
-    .tag-type-links-wrap > a:hover > .portrait {
-        transform: scale(1.4);
-    }
-
-    .wrap >>> .tag-type-infix {
-        z-index: 32;
     }
 
     .selected {
