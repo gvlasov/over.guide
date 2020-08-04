@@ -6,6 +6,7 @@
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="guideHeroTag.players.heroes.length > 0"
+                            :type="'player'"
                             class="tag-type-links-wrap-player tappable-background"
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
@@ -14,6 +15,7 @@
                                 v-for="hero in guideHeroTag.players.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
+                                class="tag-portrait"
                         />
                     </TagGroupBackground>
                     <TagGroupInvite
@@ -33,6 +35,7 @@
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="guideHeroTag.allies.heroes.length > 0"
+                            :type="'ally'"
                             class="tag-type-links-wrap-ally tappable-background"
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
@@ -41,6 +44,7 @@
                                 v-for="hero in guideHeroTag.allies.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
+                                class="tag-portrait"
                         />
                     </TagGroupBackground>
                     <TagGroupInvite
@@ -52,20 +56,24 @@
                     </TagGroupInvite>
                 </template>
             </TagGroupFrame>
-            <TagGroupFrame>
+            <TagGroupFrame
+            >
                 <template slot="infix"><span class="infix-content">VS</span>
                 </template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="guideHeroTag.enemies.heroes.length > 0"
+                            :type="'enemy'"
                             class="tag-type-links-wrap-enemy tappable-background"
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
+                            style="max-height: 30px;height:30px;"
                     >
                         <TagPortrait
                                 v-for="hero in guideHeroTag.enemies.heroes"
                                 :key="hero.dataName"
                                 :hero="hero"
+                                class="tag-portrait"
                         />
                     </TagGroupBackground>
                     <TagGroupInvite
@@ -81,16 +89,19 @@
         <TagBuilderRoster
                 v-if="selecting === 'player'"
                 :tag-group="guideHeroTag.players"
+                :tag-group-type="'player'"
                 @save="selecting = null"
         />
         <TagBuilderRoster
                 v-if="selecting === 'ally'"
                 :tag-group="guideHeroTag.allies"
+                :tag-group-type="'ally'"
                 @save="selecting = null"
         />
         <TagBuilderRoster
                 v-if="selecting === 'enemy'"
                 :tag-group="guideHeroTag.enemies"
+                :tag-group-type="'enemy'"
                 @save="selecting = null"
         />
     </div>
@@ -141,34 +152,14 @@
         padding: 0 .4rem 0 0;
     }
 
-    .tag-type-links-wrap-player {
-        background-color: rgba(75, 125, 217, 0.9);
-    }
-
-    .tag-type-links-wrap-ally {
-        background-color: rgba(15, 213, 71, 0.9);
-    }
-
-    .tag-type-links-wrap-enemy {
-        background-color: rgba(229, 34, 34, 0.9);
-    }
-
     .tag-type-links-wrap > a {
         display: table-cell;
         overflow: hidden;
         border-radius: .3em;
     }
 
-    .tag-type-links-wrap > a:hover > .portrait {
-        transform: scale(1.4);
-    }
-
     .tappable-background {
         cursor: pointer;
-    }
-
-    .selected-group {
-        box-shadow: 0 0 3pt 2pt orange;
     }
 
     .invite-text {
@@ -186,5 +177,9 @@
 
     .infix-content-ally {
         font-size: 1.3em;
+    }
+
+    .tag-portrait {
+        height: 2.707rem;
     }
 </style>

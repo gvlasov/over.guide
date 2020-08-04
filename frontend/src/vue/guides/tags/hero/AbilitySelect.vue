@@ -12,15 +12,7 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
-    import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-    import OverwatchButton from "@/vue/OverwatchButton";
-    import TagBuilderRosterPortrait
-        from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
     import abilities from 'data/abilities';
-    import AbilityIcon from "@/vue/AbilityIcon";
     import AbilityCheckbox from "@/vue/guides/tags/hero/AbilityCheckbox";
     import AbilityVso from "@/js/vso/AbilityVso";
 
@@ -35,8 +27,8 @@
                 type: Array,
                 required: true,
             },
-            hero: {
-                type: Object,
+            heroes: {
+                type: Array,
                 required: true,
             }
         },
@@ -44,39 +36,21 @@
             return {};
         },
         methods: {
-            /**
-             * @param {AbilityDto} ability
-             */
-            onAbilityTap(ability) {
-                if (typeof this.selectedAbilities.find(a => a.id === ability.id) !== 'undefined') {
-                    this.$emit(
-                        'selectedAbilitiesChange',
-                        this.selectedAbilities.filter(a => a.id !== ability.id)
-                    )
-                } else {
-                    this.$emit(
-                        'selectedAbilitiesChange',
-                        [...this.selectedAbilities, ability]
-                    )
-                }
-            }
         },
         computed: {
+            /**
+             * @return {AbilityVso[]}
+             */
             abilities() {
-                return Array.from(abilities.values())
-                    .filter(ability => ability.heroId === this.hero.id)
-                    .map(it => new AbilityVso(it));
+                const allAbilities = Array.from(abilities.values());
+                return this.heroes.flatMap(
+                    hero => allAbilities.filter(ability => ability.heroId === hero.id)
+                )
+                    .map(it => new AbilityVso(it))
             }
         },
         components: {
             AbilityCheckbox,
-            AbilityIcon,
-            TagBuilderRosterPortrait,
-            OverwatchButton,
-            TagGroupInvite,
-            TagGroupBackground,
-            TagGroupFrame,
-            TagPortrait,
         },
     };
 

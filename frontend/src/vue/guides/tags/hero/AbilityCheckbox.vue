@@ -4,6 +4,11 @@
             v-bind:class="{ checked: shouldBeChecked }"
             class="ability"
     >
+        <HeroPortrait
+                :hero="value.hero"
+                class="hero-portrait"
+                :base-url="'/images/roster-portraits/'"
+        />
         <div class="icon-row">
             <input
                     type="checkbox"
@@ -33,6 +38,7 @@
 <script>
     import AbilityIcon from "@/vue/AbilityIcon";
     import KeyIcon from "@/vue/KeyIcon";
+    import HeroPortrait from "@/vue/HeroPortrait";
 
     export default {
         model: {
@@ -76,6 +82,7 @@
             return {}
         },
         components: {
+            HeroPortrait,
             KeyIcon,
             AbilityIcon,
         },
@@ -99,6 +106,9 @@
         display: inline-block;
         height: 100%;
         vertical-align: middle;
+        z-index: 2;
+        position: relative;
+        margin-right: 1.1em;
     }
 
     .ability {
@@ -108,6 +118,7 @@
         justify-content: space-around;
         gap: .2em;
         padding: .4em;
+        position: relative;
     }
 
     .ability-icon {
@@ -117,10 +128,12 @@
         object-fit: contain;
         max-width: 6em;
         vertical-align: middle;
+        z-index: 2;
     }
 
     .key-icon {
         vertical-align: middle;
+        z-index: 2;
     }
 
     .checked {
@@ -137,6 +150,15 @@
         width: 100%;
         gap: .3em;
         justify-content: space-evenly;
+    }
+
+    .hero-portrait {
+        height: 30%;
+        width: auto;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
     }
 
 </style>

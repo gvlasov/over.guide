@@ -1,12 +1,16 @@
 <template>
     <div class="roster-fixedbox">
-        <div class="roster-fixedbox-bg"
-             v-hammer:tap="onSaveTap"
-        />
+        <div class="roster-fixedbox-bg"/>
         <div class="select-wrap">
+            <div class="change-roster-cell">
+                <div class="go-prev">
+                    <div class="arrow-text">prev</div>
+                    <img src="/icons/arrow-left-white.svg" class="navigation-arrow"/>
+                </div>
+            </div>
             <div
+                    v-if="!selectingSkills"
                     class="roster"
-                    v-if="skillSelectionHero === null"
             >
                 <div
                         v-for="group in heroGroups.groups"
@@ -19,44 +23,74 @@
                             :hero="hero"
                             :selected="isHeroSelected(hero)"
                             @heroSelect="onHeroTap"
-                            @skillSelectionStart="onSkillSelectionStart"
+                            @skillSelectionStart="() => {selectingSkills = true}"
                             :abilities="selectedHeroAbilities(hero)"
                             :tag-group-abilities="tagGroup.abilities"
                     />
                 </div>
             </div>
             <div
-                    v-if="skillSelectionHero !== null"
+                    v-if="selectingSkills"
                     class="ability-select-wrap"
             >
                 <AbilitySelect
-                        :hero="skillSelectionHero"
+                        :heroes="selectedHeroes"
                         v-model="tagGroup.abilities"
                         class="ability-select"
                 />
             </div>
             <div class="button-wrap">
                 <OverwatchButton
-                        v-if="skillSelectionHero === null"
                         type="main"
-                        v-hammer:tap="onSaveTap"
+                        v-hammer:tap="() => {$emit('save')}"
                         class="hanging-button"
-                >Save
+                >Done
                 </OverwatchButton>
                 <OverwatchButton
-                        v-if="skillSelectionHero === null"
+                        v-if="!selectingSkills && selectedHeroes.length > 0"
                         type="default"
-                        v-hammer:tap="onClearTap"
+                        v-hammer:tap="() => {selectingSkills = true}"
                         class="hanging-button"
-                >Clear
+                >
+                    <div
+                            v-if="selectedHeroes.length > 0 && tagGroup.abilities.length > 0"
+                            class="button-icon-group-holder"
+                    >
+                        <div class="ability-icon-table">
+                            <AbilityIcon
+                                    v-for="ability in tagGroup.abilities"
+                                    :ability="ability"
+                                    :key="ability.dataName"
+                                    class="button-group-ability-icon"
+                            />
+                        </div>
+                    </div>
+                    <template v-else>Skills</template>
                 </OverwatchButton>
                 <OverwatchButton
-                        v-if="skillSelectionHero !== null"
+                        v-if="selectingSkills"
                         type="default"
-                        v-hammer:tap="() => {skillSelectionHero = null}"
-                        class="hanging-button"
-                >Back
+                        v-hammer:tap="() => {selectingSkills = false}"
+                >
+                    <div
+                            class="button-icon-group-holder"
+                            v-if="selectedHeroes.length > 0"
+                    >
+                        <TagPortrait
+                                v-for="hero in selectedHeroes"
+                                :key="hero.dataName"
+                                :hero="hero"
+                                class="tag-portrait"
+                        />
+                    </div>
+                    <template v-else>Heroes</template>
                 </OverwatchButton>
+            </div>
+            <div class="change-roster-cell">
+                <div class="go-next">
+                    <div class="arrow-text">next</div>
+                    <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
+                </div>
             </div>
         </div>
     </div>
@@ -75,6 +109,8 @@
     import Roster_SelectedHeroesMixin
         from "@/vue/roster/Roster_SelectedHeroesMixin";
     import HeroGroupsByRole from "@/js/HeroGroupsByRole";
+    import Tag from "@/vue/guides/tags/hero/Tag";
+    import AbilityIcon from "@/vue/AbilityIcon";
 
 
     export default {
@@ -90,24 +126,18 @@
                 type: TagGroupVso,
                 required: true,
             },
+            tagGroupType: {
+                type: String,
+                required: true,
+            },
         },
         data() {
             return {
-                skillSelectionHero: null,
+                selectingSkills: false,
                 heroGroups: HeroGroupsByRole.ALL
             };
         },
         methods: {
-            onClearTap() {
-                this.tagGroup.heroes.clear();
-                this.tagGroup.abilities.clear();
-            },
-            onSkillSelectionStart($event) {
-                this.skillSelectionHero = $event;
-            },
-            onSaveTap() {
-                this.$emit('save');
-            },
             /**
              * @param {HeroDto} hero
              */
@@ -121,6 +151,8 @@
             }
         },
         components: {
+            AbilityIcon,
+            Tag,
             AbilitySelect,
             TagBuilderRosterPortrait,
             OverwatchButton,
@@ -137,14 +169,50 @@
 
     .select-wrap {
         display: flex;
-        flex-flow: column;
-        max-height: 100vh;
+        justify-content: center;
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 100vh;
+        min-width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        min-height: 100vh;
         position: relative;
-        top: 50%;
-        transform: translate(0, -50%);
     }
 
     .roster {
+        display: block;
+        flex: 0 1 content;
+        width: calc(100vw - 22rem);
+        max-width: calc(100vw - 22rem);
+    }
+
+    .change-roster-cell {
+        display: block;
+        flex-basis: 100%;
+        width: 11rem;
+        color: white;
+        font-family: 'Futura Demi Bold', 'sans-serif';
+        font-variant: all-small-caps;
+        cursor: pointer;
+    }
+
+    .change-roster-cell:hover {
+        background-color: #222;
+    }
+
+    .go-prev, .go-next {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        min-height: 100%;
+        font-size: 2em;
+    }
+
+    .change-roster-cell:hover > * {
+        text-shadow: 0 0 .3em white;
     }
 
     .ability-select {
@@ -153,10 +221,14 @@
     }
 
     .ability-select-wrap {
-        flex: 1;
-        max-height: 100vh;
+        flex-grow: 0;
+        flex-shrink: 1;
+        flex-basis: content;
+        overflow-y: auto;
+        overscroll-behavior: none contain;
         width: 100%;
         padding-top: 2rem;
+        max-width: calc(100vw - 22rem);
     }
 
     .tag-type-links-wrap > a {
@@ -165,12 +237,7 @@
         border-radius: .3em;
     }
 
-    .tag-type-links-wrap > a:hover > .portrait {
-        transform: scale(1.4);
-    }
-
     .roster-fixedbox {
-        text-align: center;
         position: fixed;
         top: 0;
         left: 0;
@@ -179,10 +246,8 @@
         width: 100vw;
         height: 100vh;
         z-index: 2;
-        max-width: 100%;
-        max-height: 100%;
-        overflow: hidden;
-        margin: auto;
+        max-width: 100vw;
+        max-height: 100vh;
     }
 
     .roster-fixedbox-bg {
@@ -194,24 +259,37 @@
         cursor: pointer;
     }
 
-    .roster-fixedbox-bg:hover {
-        opacity: .82;
-        animation: bgopacity .25s;
-    }
-
-    @keyframes bgopacity {
-        0% {
-            opacity: .9
-        }
-        100% {
-            opacity: .82
-        }
-    }
-
     .button-wrap {
         padding-top: 2rem;
         z-index: 1;
         padding-bottom: 2rem;
+    }
+
+    .tag-portrait {
+        display: inline-block;
+        height: 1em;
+        max-height: 1em;
+        vertical-align: top;
+    }
+
+    .button-group-ability-icon {
+        height: .9em;
+        width: auto;
+    }
+
+    .button-icon-group-holder {
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    .ability-icon-table {
+        display: flex;
+        justify-content: center;
+        gap: .5rem;
+    }
+
+    .navigation-arrow {
+        width: 3em;
     }
 
 </style>

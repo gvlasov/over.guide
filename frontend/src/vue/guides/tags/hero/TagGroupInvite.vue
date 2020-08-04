@@ -1,5 +1,8 @@
 <template>
-    <TagGroupBackground class="invite">
+    <TagGroupBackground
+            class="invite"
+            :type="'invite'"
+    >
         <div class="zoomer">
             <slot/>
         </div>

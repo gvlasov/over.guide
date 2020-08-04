@@ -34,9 +34,10 @@
 <style scoped>
     .portrait {
         display: table-cell;
-        width: 3em;
+        height: 100%;
+        width: auto;
         vertical-align: middle;
         background-color: #28253a;
-        border-radius: .3em;
+        border-radius: 10%;
     }
 </style>

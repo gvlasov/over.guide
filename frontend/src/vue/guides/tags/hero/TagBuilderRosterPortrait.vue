@@ -10,15 +10,6 @@
             v-bind:data-hero-data-name="hero.dataName"
             v-bind:class="{ 'selected': selected }"
     >
-        <template v-slot:bottom>
-            <OverwatchButton
-                    v-if="selected"
-                    v-hammer:tap="onSkillsButtonTap"
-                    type="default"
-                    class="skills-button"
-            >{{abilities.length > 0 ? abilities.length : 'skills'}}
-            </OverwatchButton>
-        </template>
     </RosterPortrait>
 </template>
 
@@ -77,8 +68,8 @@
 
 <style scoped>
     .roster-portrait {
-        width: 7vw;
-        height: 7vw;
+        width: 5vw;
+        height: 6vw;
         margin: 0.2vw;
     }
 
