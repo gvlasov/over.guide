@@ -42,14 +42,18 @@
                     />
                 </div>
                 <div class="button-wrap">
-                    <TagBuilderRosterTag
-                            :descriptor="descriptor"
-                            class="descriptor-mirror"
-                            :selected-position="tagGroup.gamerPosition"
-                            @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
-                            @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
-                            @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
-                    />
+                    <div
+                            class="tag-builder-roster-tag-wrap"
+                            style="">
+                        <TagBuilderRosterTag
+                                :descriptor="descriptor"
+                                class="descriptor-mirror"
+                                :selected-position="tagGroup.gamerPosition"
+                                @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
+                                @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
+                                @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
+                        />
+                    </div>
                 </div>
                 <div
                         class="aside-button aside-button-done"
@@ -216,6 +220,7 @@
         padding-top: 1rem;
         padding-bottom: 4vh;
         max-width: initial;
+        text-align: center;
     }
 
     .aside-button {
@@ -239,6 +244,7 @@
     .aside-button-done {
         background-color: orange;
         opacity: .80;
+        z-index: 2;
     }
 
     .ability-select {
@@ -302,6 +308,7 @@
 
     .descriptor-mirror {
         display: inline-block;
+        transform: translateX(-50%);
     }
 
     .descriptor-mirror >>> .tag-type-infix {
@@ -310,6 +317,14 @@
 
     .descriptor-mirror >>> .portrait {
         height: 3em;
+    }
+
+    .tag-builder-roster-tag-wrap {
+        display: inline-block;
+        max-height: 100%;
+        max-width: 0;
+        position: relative;
+        white-space: nowrap
     }
 
 </style>
