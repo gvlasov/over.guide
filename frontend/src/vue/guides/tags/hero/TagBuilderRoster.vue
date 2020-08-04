@@ -203,10 +203,36 @@
     }
 
     .roster {
-        display: block;
-        flex: 0 1 content;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0;
+        overflow-y: auto;
         width: calc(100vw - 18rem);
         max-width: calc(100vw - 18rem);
+        min-width: fit-content;
+        padding-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
+
+    .ability-select-wrap {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0;
+        overflow-y: auto;
+        overscroll-behavior: none contain;
+        width: calc(100vw - 18rem);
+        max-width: calc(100vw - 18rem);
+        padding-top: 2rem;
+    }
+
+    .button-wrap {
+        flex-shrink: 1;
+        flex-basis: 0;
+        z-index: 1;
+        padding-top: 1rem;
+        padding-bottom: 14vh;
     }
 
     .change-roster-cell {
@@ -242,17 +268,6 @@
         position: relative;
     }
 
-    .ability-select-wrap {
-        flex-grow: 0;
-        flex-shrink: 1;
-        flex-basis: content;
-        overflow-y: auto;
-        overscroll-behavior: none contain;
-        width: 100%;
-        padding-top: 2rem;
-        max-width: calc(100vw - 18rem);
-    }
-
     .tag-type-links-wrap > a {
         display: table-cell;
         overflow: hidden;
@@ -279,12 +294,6 @@
         width: 100%;
         height: 100%;
         cursor: pointer;
-    }
-
-    .button-wrap {
-        padding-top: 2rem;
-        z-index: 1;
-        padding-bottom: 2rem;
     }
 
     .tag-portrait {
