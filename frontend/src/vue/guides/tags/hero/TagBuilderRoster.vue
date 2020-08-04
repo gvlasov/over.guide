@@ -3,8 +3,12 @@
         <div class="roster-fixedbox-bg"/>
         <div class="select-wrap">
             <div class="change-roster-cell">
-                <div class="go-prev">
-                    <div class="arrow-text">prev</div>
+                <div
+                        v-if="tagGroup.gamerPosition.getPrevious(false) !== null"
+                        class="go-prev"
+                        v-hammer:tap="()=>$emit('tagGroupSelect', tagGroup.gamerPosition.getPrevious(false))"
+                >
+                    <div class="arrow-text">{{tagGroup.gamerPosition.getPrevious(false).plural}}</div>
                     <img src="/icons/arrow-left-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
@@ -87,8 +91,12 @@
                 </OverwatchButton>
             </div>
             <div class="change-roster-cell">
-                <div class="go-next">
-                    <div class="arrow-text">next</div>
+                <div
+                        v-if="tagGroup.gamerPosition.getNext(false) !== null"
+                        class="go-next"
+                        v-hammer:tap="()=>$emit('tagGroupSelect', tagGroup.gamerPosition.getNext(false))"
+                >
+                    <div class="arrow-text">{{tagGroup.gamerPosition.getNext(false).plural}}</div>
                     <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
                 </div>
             </div>
@@ -126,10 +134,6 @@
                 type: TagGroupVso,
                 required: true,
             },
-            tagGroupType: {
-                type: String,
-                required: true,
-            },
         },
         data() {
             return {
@@ -148,7 +152,7 @@
         computed: {
             selectedHeroes() {
                 return this.tagGroup.heroes;
-            }
+            },
         },
         components: {
             AbilityIcon,
@@ -183,14 +187,14 @@
     .roster {
         display: block;
         flex: 0 1 content;
-        width: calc(100vw - 22rem);
-        max-width: calc(100vw - 22rem);
+        width: calc(100vw - 18rem);
+        max-width: calc(100vw - 18rem);
     }
 
     .change-roster-cell {
         display: block;
         flex-basis: 100%;
-        width: 11rem;
+        width: 9rem;
         color: white;
         font-family: 'Futura Demi Bold', 'sans-serif';
         font-variant: all-small-caps;
@@ -228,7 +232,7 @@
         overscroll-behavior: none contain;
         width: 100%;
         padding-top: 2rem;
-        max-width: calc(100vw - 22rem);
+        max-width: calc(100vw - 18rem);
     }
 
     .tag-type-links-wrap > a {

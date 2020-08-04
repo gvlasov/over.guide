@@ -91,18 +91,21 @@
                 :tag-group="guideHeroTag.players"
                 :tag-group-type="'player'"
                 @save="selecting = null"
+                @tagGroupSelect="($event) => {selecting = $event.dataName;}"
         />
         <TagBuilderRoster
                 v-if="selecting === 'ally'"
                 :tag-group="guideHeroTag.allies"
                 :tag-group-type="'ally'"
                 @save="selecting = null"
+                @tagGroupSelect="($event) => {selecting = $event.dataName;}"
         />
         <TagBuilderRoster
                 v-if="selecting === 'enemy'"
                 :tag-group="guideHeroTag.enemies"
                 :tag-group-type="'enemy'"
                 @save="selecting = null"
+                @tagGroupSelect="($event) => {selecting = $event.dataName;}"
         />
     </div>
 </template>

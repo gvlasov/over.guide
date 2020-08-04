@@ -7,6 +7,7 @@ import MapDto from "data/dto/MapDto";
 import ThematicTagDto from "data/dto/ThematicTagDto";
 import TagGroupVso from "@/js/vso/TagGroupVso";
 import AbilityVso from "@/js/vso/AbilityVso";
+import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
 export default class GuideDescriptorVso {
 
@@ -26,12 +27,14 @@ export default class GuideDescriptorVso {
             allAbilities
                 .filter(ability => descriptor.playerAbilities.includes(ability.id))
                 .map(it => new AbilityVso(it)),
+            GamerPositionVso.Players,
         );
         this.allies = new TagGroupVso(
             allHeroes.filter(hero => descriptor.allyHeroes.includes(hero.id)),
             allAbilities
                 .filter(ability => descriptor.allyAbilities.includes(ability.id))
                 .map(it => new AbilityVso(it)),
+            GamerPositionVso.Allies,
         );
         this.enemies = new TagGroupVso(
             allHeroes
@@ -39,6 +42,7 @@ export default class GuideDescriptorVso {
             allAbilities
                 .filter(ability => descriptor.enemyAbilities.includes(ability.id))
                 .map(it => new AbilityVso(it)),
+            GamerPositionVso.Enemies,
         );
         this.maps = allMaps.filter(map => descriptor.mapTags.includes(map.id))
         this.thematicTags = allThematicTags.filter(tag => descriptor.thematicTags.includes(tag.id))
