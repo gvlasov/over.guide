@@ -33,7 +33,7 @@
         height: 3em;
         font-family: 'Futura Demi Bold', 'sans-serif';
         vertical-align: middle;
-        width: 3.5em;
+        width: 3.9em;
         background-color: #5f7589;
         color: #32323b;
         cursor: pointer;

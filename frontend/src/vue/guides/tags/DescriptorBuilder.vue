@@ -9,12 +9,13 @@
                 v-model="selectedTags"
                 :selected-tags="selectedTags"
         />
-        <button
+        <OverwatchButton
                 v-if="searchButtonEnabled"
-                class="overwatch-button overwatch-main-button search-button"
+                :type="'main'"
                 v-hammer:tap="onSearch"
+                class="search-button"
         >Search
-        </button>
+        </OverwatchButton>
     </div>
 </template>
 
@@ -26,6 +27,7 @@
     import MapTag from "@/js/vso/MapTag";
     import ThemeTag from "@/js/vso/ThemeTag";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+    import OverwatchButton from "@/vue/OverwatchButton";
 
     export default {
         name: "DescriptorBuilder",
@@ -89,6 +91,7 @@
             },
         },
         components: {
+            OverwatchButton,
             TagBuilder,
             ThematicTagInput,
         }
@@ -97,7 +100,7 @@
 
 <style scoped>
     .search-button {
-        font-size: 2em;
+        font-size: 2.8em;
     }
 
     .searchbox {

@@ -9,9 +9,10 @@
             />
         </div>
         <OverwatchButton
-                type="main"
+                :type="'main'"
                 v-hammer:tap="approveRoles"
                 v-bind:disabled="!canApprove"
+                class="ready-button"
         >READY
         </OverwatchButton>
     </div>
@@ -45,12 +46,16 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
-    @import '~@/assets/css/overwatch-ui.css';
+    @import '~@/assets/css/overwatch-ui.scss';
 
     .checkboxes-wrap {
         margin-bottom: 2vw;
         margin-top: 1vw;
+    }
+
+    .ready-button {
+        font-size: 3em;
     }
 </style>

@@ -8,7 +8,8 @@
                         v-bind:style="{visibility: tagGroup.heroes.length > 0 ? 'visible' : 'hidden'}"
                         v-hammer:tap="() => selectingSkills = !selectingSkills"
                 >
-                    <div>{{selectingSkills ? 'Heroes' : 'Skills'}}</div>
+                    <div class="aside-content">{{selectingSkills ? 'Heroes' : 'Skills'}}</div>
+                    <div class="background"></div>
                 </div>
                 <div
                         v-if="!selectingSkills"
@@ -57,13 +58,15 @@
                 </div>
                 <div
                         class="aside-button aside-button-done"
+                        v-hammer:tap="()=>$emit('save')"
                 >
-                    <div v-hammer:tap="()=>$emit('save')">
+                    <div class="aside-content">
                         <div class="arrow-text-wrap">
                             <div class="arrow-text">Done</div>
                         </div>
                         <img src="/icons/arrow-right-white.svg" class="navigation-arrow"/>
                     </div>
+                    <div class="background"></div>
                 </div>
             </div>
         </div>
@@ -155,6 +158,8 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "~@/assets/css/overwatch-ui.scss";
+
     .roster-fixedbox {
         position: fixed;
         top: 0;
@@ -163,7 +168,7 @@
         right: 0;
         width: 100vw;
         height: 100vh;
-        z-index: 2;
+        z-index: 3;
         text-align: center;
     }
 
@@ -223,27 +228,26 @@
     }
 
     .aside-button {
+        @include overwatch-button;
         display: flex;
         flex-basis: 100%;
         justify-content: center;
         flex-direction: column;
         width: 9rem;
-        color: white;
-        font-family: 'Futura Demi Bold', 'sans-serif';
-        font-variant: all-small-caps;
-        cursor: pointer;
         font-size: 2em;
-    }
-
-    .aside-button-mode {
-        background-color: #2991de;
-        opacity: .80;
-    }
-
-    .aside-button-done {
-        background-color: orange;
-        opacity: .80;
         z-index: 2;
+    }
+
+    .aside-button-mode > .background {
+        @include overwatch-button-bg-default;
+    }
+
+    .aside-button-done > .background {
+        @include overwatch-button-bg-main;
+    }
+
+    .aside-button:hover {
+        box-shadow: 0 0 .05em .05em white inset, 0 0 .05em .05em white inset !important;
     }
 
     .ability-select {

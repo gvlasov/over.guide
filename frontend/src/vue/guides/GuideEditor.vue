@@ -28,10 +28,8 @@
         <draggable v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
             <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
                 <div class="text-guide-part" v-if="widget.isText()">
-                    <div
-                            v-if="!widget.editing"
-                            class="text-guide-part-content"
-                            v-html="widget.render()"
+                    <div v-if="!widget.editing" class="text-guide-part-content"
+                         v-html="widget.render()"
                     ></div>
                     <textarea
                             v-if="widget.editing"
@@ -273,81 +271,77 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
 
     .wrap {
         display: inline-block;
         max-width: 40em;
-    }
 
-    .guide-part {
-        padding: 1em;
-        margin: .3em;
-        cursor: pointer;
-        background-color: rgba(43, 55, 83, 0.8);
-        color: white;
-        font-family: 'Futura Demi Bold', 'sans-serif';
-        position: relative;
-    }
+        .guide-part {
+            padding: 1em;
+            margin: .3em;
+            cursor: pointer;
+            background-color: rgba(43, 55, 83, 0.8);
+            color: white;
+            font-family: 'Futura Demi Bold', 'sans-serif';
+            position: relative;
+        }
 
-    .text-guide-part {
-        max-width: 100%;
-    }
+        .text-guide-part {
+            max-width: 100%;
+        }
 
-    .text-guide-part ::v-deep img {
-        max-width: 100%;
-    }
+        .text-guide-part ::v-deep img {
+            max-width: 100%;
+        }
 
-    .text-guide-part-content {
-        text-align: left;
-        pointer-events: none;
-        font-size: 1.5em;
-        word-break: break-word;
-    }
+        .text-guide-part-content {
+            text-align: left;
+            pointer-events: none;
+            font-size: 1.5em;
+            word-break: break-word;
+        }
 
-    .guide-part-buttons > * {
-        font-size: 2em;
-    }
+        .guide-part-buttons > * {
+            font-size: 2em;
+        }
 
-    textarea.guide-part-text-editor {
-        width: 100%;
-        max-width: 20em;
-        font-size: 1em;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-    }
+        textarea.guide-part-text-editor {
+            width: 100%;
+            max-width: 20em;
+            font-size: 1em;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+        }
 
-    .create-buttons {
-        display: flex;
-        justify-content: space-evenly;
-        z-index: 1;
-        font-size: .8rem;
-    }
+        .create-buttons {
+            display: flex;
+            justify-content: space-evenly;
+            z-index: 1;
 
-    .video {
-        max-width: 100%;
-        width: 100%;
-    }
+            & > * {
+                font-size: 2rem;
+            }
+        }
 
-    .video-editor {
-        display: block;
-    }
+        .video {
+            max-width: 100%;
+            width: 100%;
+        }
 
-    .descriptor-builder {
-        z-index: 1;
-        position: relative;
-        width: 100%;
-        margin-bottom: 1rem;
-        /* For it to be positioned above everything else,
-               which is important when the dropdown is displayed
-               */
-    }
+        .video-editor {
+            display: block;
+        }
 
-    .guide-part > .guide-part-buttons {
-
-    }
-
-    .guide-part:hover > .guide-part-buttons {
+        .descriptor-builder {
+            z-index: 1;
+            position: relative;
+            width: 100%;
+            margin-bottom: 1rem;
+            /* For it to be positioned above everything else,
+                   which is important when the dropdown is displayed
+                   */
+        }
     }
 
 </style>

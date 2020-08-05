@@ -1,0 +1,85 @@
+@import "~@/assets/css/fonts.css";
+
+@mixin overwatch-futura {
+  @include overwatch-futura-no-smallcaps;
+  font-variant-caps: all-small-caps;
+}
+
+@mixin overwatch-futura-no-smallcaps {
+  font-family: 'Futura Demi Bold', sans-serif;
+}
+
+@mixin overwatch-inline-button {
+  @include overwatch-button;
+  line-height: 1em;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  //padding: .03em 1.07em .19em 1.07em;
+  border-radius: .06em;
+}
+
+@mixin overwatch-button {
+  @include overwatch-futura;
+  user-select: none;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  color: white;
+  &:active {
+    .background {
+      opacity: 1;
+    }
+  }
+  &:hover {
+    box-shadow: 0 0 .05em .05em white;
+  }
+  & > .background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  & > *:not(.background) {
+    z-index: 2;
+  }
+
+  &:disabled > .background {
+    background-color: transparent;
+    box-shadow: 0 0 1pt 1pt darkgray inset;
+    color: lightgrey;
+  }
+
+  &:disabled:hover > .background {
+    background-color: transparent;
+    box-shadow: 0 0 1pt 1pt darkgray inset;
+    color: lightgrey;
+  }
+}
+
+@mixin overwatch-button-bg {
+  opacity: .6;
+  letter-spacing: 0.03em;
+  border-radius: .06em;
+  :disabled {
+    background-color: transparent;
+  }
+  :active {
+    opacity: .88;
+  }
+}
+
+@mixin overwatch-button-bg-default {
+  @include overwatch-button-bg;
+  background-color: #2991de;
+}
+
+@mixin overwatch-button-bg-main {
+  @include overwatch-button-bg;
+  background-color: orange;
+}
+
+.panel-bg {
+  background-color: rgba(108, 119, 148, 0.8);
+}

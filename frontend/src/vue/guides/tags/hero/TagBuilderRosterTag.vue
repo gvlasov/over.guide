@@ -8,7 +8,7 @@
                 <TagGroupBackground
                         v-if="descriptor.players.heroes.length > 0"
                         :type="'player'"
-                        v-bind:class="{ selected : selectedPosition.dataName === 'player' }"
+                        v-bind:class="{ selected : selectedPosition.dataName === 'player', 'not-selected': selectedPosition.dataName !== 'player' }"
                 >
                     <TagPortrait
                             v-for="hero in descriptor.players.heroes"
@@ -19,7 +19,7 @@
                 <TagGroupInvite
                         v-else
                         v-hammer:tap="() => (selecting = 'player')"
-                        v-bind:class="{ selected : selectedPosition.dataName === 'player' }"
+                        v-bind:class="{ selected : selectedPosition.dataName === 'player', 'not-selected': selectedPosition.dataName !== 'player' }"
                 >
                     <div class="invite-text">any<br/>player</div>
                 </TagGroupInvite>
@@ -36,7 +36,7 @@
                 <TagGroupBackground
                         v-if="descriptor.allies.heroes.length > 0"
                         :type="'ally'"
-                        v-bind:class="{ selected : selectedPosition.dataName === 'ally' }"
+                        v-bind:class="{ selected : selectedPosition.dataName === 'ally', 'not-selected': selectedPosition.dataName !== 'ally' }"
                 >
                     <TagPortrait
                             v-for="hero in descriptor.allies.heroes"
@@ -47,7 +47,7 @@
                 <TagGroupInvite
                         v-else
                         v-hammer:tap="() => (selecting = 'ally')"
-                        v-bind:class="{ selected : selectedPosition.dataName === 'ally' }"
+                        v-bind:class="{ selected : selectedPosition.dataName === 'ally', 'not-selected': selectedPosition.dataName !== 'ally' }"
                 >
                     <div class="invite-text">any<br/>ally</div>
                 </TagGroupInvite>
@@ -64,7 +64,7 @@
                 <TagGroupBackground
                         v-if="descriptor.enemies.heroes.length > 0"
                         :type="'enemy'"
-                        v-bind:class="{ selected : selectedPosition.dataName === 'enemy' }"
+                        v-bind:class="{ selected : selectedPosition.dataName === 'enemy', 'not-selected': selectedPosition.dataName !== 'enemy' }"
                 >
                     <TagPortrait
                             v-for="hero in descriptor.enemies.heroes"
@@ -75,7 +75,7 @@
                 <TagGroupInvite
                         v-else
                         v-hammer:tap="() => (selecting = 'enemy')"
-                        v-bind:class="{ selected : selectedPosition.dataName === 'enemy' }"
+                        v-bind:class="{ selected : selectedPosition.dataName === 'enemy', 'not-selected': selectedPosition.dataName !== 'enemy' }"
                 >
                     <div class="invite-text">any<br/>enemy</div>
                 </TagGroupInvite>

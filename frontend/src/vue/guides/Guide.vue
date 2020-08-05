@@ -1,7 +1,7 @@
 <template>
     <div class="wrap">
         <Tag
-                :guide-hero-tag="guide.descriptor"
+                :descriptor="guide.descriptor"
         />
         <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
             <div class="text-guide-part" v-if="part.part.kind === 'text'">
@@ -113,7 +113,7 @@
         display: flex;
         justify-content: space-evenly;
         z-index: 1;
-        font-size: .8rem;
+        font-size: 2rem;
     }
 
     .video {

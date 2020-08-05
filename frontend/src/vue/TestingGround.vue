@@ -1,5 +1,10 @@
 <template>
     <div class="wrap" style="text-align: center;">
+        <OverwatchButton
+                :type="'main'"
+                style="font-size: 3em;"
+        >Hello
+        </OverwatchButton>
         <GuideBrowser/>
     </div>
     <!--    <div class="wrap" style="text-align: center;">-->
