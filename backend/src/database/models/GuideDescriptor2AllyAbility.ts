@@ -4,13 +4,13 @@ import {Ability} from "src/database/models/Ability";
 
 @Table({
     name: {
-        singular: 'GuideDescriptor2Ability',
-        plural: 'GuideDescriptor2Abilities',
+        singular: 'GuideDescriptor2AllyAbility',
+        plural: 'GuideDescriptor2AllyAbilities',
     },
     createdAt: false,
     updatedAt: false,
 })
-export class GuideDescriptor2Ability extends Model<GuideDescriptor2Ability> {
+export class GuideDescriptor2AllyAbility extends Model<GuideDescriptor2AllyAbility> {
 
     @ForeignKey(() => GuideDescriptor)
     guideDescriptorId: number

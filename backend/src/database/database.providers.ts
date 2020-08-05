@@ -23,6 +23,9 @@ import {Map} from "src/database/models/Map";
 import {ThematicTag} from "src/database/models/ThematicTag";
 import cls from 'cls-hooked';
 import {GuideHead} from "src/database/models/GuideHead";
+import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
+import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
+import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 
 const Umzug = require('umzug')
 
@@ -60,10 +63,13 @@ export const databaseProviders = [
                 User,
                 Guide,
                 GuideDescriptor,
+                GuideDescriptor2PlayerHero,
                 GuideDescriptor2AllyHero,
                 GuideDescriptor2EnemyHero,
+                GuideDescriptor2PlayerAbility,
+                GuideDescriptor2AllyAbility,
+                GuideDescriptor2EnemyAbility,
                 GuideDescriptor2Map,
-                GuideDescriptor2PlayerHero,
                 GuideDescriptor2ThematicTag,
                 GuideHistoryEntry,
                 GuideHistoryEntry2GuidePartText,

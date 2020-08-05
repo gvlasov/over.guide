@@ -17,6 +17,10 @@ import {ThematicTag} from "src/database/models/ThematicTag";
 import {GuideDescriptor2ThematicTag} from "src/database/models/GuideDescriptor2ThematicTag";
 import {DataTypes} from "sequelize";
 import GuideDescriptorDto from "data/dto/GuideDescriptorDto";
+import {Ability} from "src/database/models/Ability";
+import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
+import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
+import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 
 @Table({
     name: {
@@ -35,11 +39,20 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
     @BelongsToMany(() => Hero, () => GuideDescriptor2PlayerHero)
     players: Hero[]
 
+    @BelongsToMany(() => Ability, () => GuideDescriptor2PlayerAbility)
+    playerAbilities: Ability[]
+
     @BelongsToMany(() => Hero, () => GuideDescriptor2AllyHero)
     allies: Hero[]
 
+    @BelongsToMany(() => Ability, () => GuideDescriptor2AllyAbility)
+    allyAbilities: Ability[]
+
     @BelongsToMany(() => Hero, () => GuideDescriptor2EnemyHero)
     enemies: Hero[]
+
+    @BelongsToMany(() => Ability, () => GuideDescriptor2EnemyAbility)
+    enemyAbilities: Ability[]
 
     @BelongsToMany(
         () => Map,
@@ -59,6 +72,7 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
             }
         }
     )
+
     thematicTags: ThematicTag[]
 
     @Unique
@@ -68,8 +82,11 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
     toDto(): GuideDescriptorDto {
         return {
             playerHeroes: this.players.map(hero => hero.id),
+            playerAbilities: this.playerAbilities.map(ability => ability.id),
             allyHeroes: this.allies.map(hero => hero.id),
+            allyAbilities: this.allyAbilities.map(ability => ability.id),
             enemyHeroes: this.enemies.map(hero => hero.id),
+            enemyAbilities: this.enemyAbilities.map(ability => ability.id),
             mapTags: this.maps.map(map => map.id),
             thematicTags: this.thematicTags.map(tag => tag.id),
         } as GuideDescriptorDto
