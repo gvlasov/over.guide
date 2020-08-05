@@ -12,13 +12,13 @@
             </div>
             <div v-if="part.part.kind === 'video'">
                 <YoutubeVideo
-                        :video-id="part.excerpt.youtubeVideoId"
-                        :start="part.excerpt.startSeconds"
-                        :end="part.excerpt.endSeconds"
+                        :video-id="part.part.excerpt.youtubeVideoId"
+                        :start="part.part.excerpt.startSeconds"
+                        :end="part.part.excerpt.endSeconds"
                         :loop="true"
                         :autoplay="true"
                         :mute="true"
-                        :player-element-id="index +'-'+ part.excerpt.youtubeVideoId"
+                        :player-element-id="index +'-'+ part.part.excerpt.youtubeVideoId"
                         class="video"
                         v-bind:style="{width: '100%', height: '22rem'}"
                 />

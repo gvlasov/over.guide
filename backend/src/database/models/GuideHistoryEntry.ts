@@ -99,7 +99,18 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
             ...this.guidePartTexts,
             ...this.guidePartVideos
         ].sort((a, b) => {
-            return a.pivot.order - b.pivot.order;
+            let aOrder, bOrder
+            if (a instanceof GuidePartText) {
+                aOrder = (a as any).GuideHistoryEntry2GuidePartText.dataValues.order
+            } else {
+                aOrder = (a as any).GuideHistoryEntry2GuidePartVideo.dataValues.order
+            }
+            if (b instanceof GuidePartText) {
+                bOrder = (b as any).GuideHistoryEntry2GuidePartText.dataValues.order
+            } else {
+                bOrder = (b as any).GuideHistoryEntry2GuidePartVideo.dataValues.order
+            }
+            return aOrder - bOrder;
         })
     }
 }

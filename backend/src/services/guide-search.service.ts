@@ -86,7 +86,10 @@ export class GuideSearchService {
                         },
                     },
                     {model: GuidePartText, as: 'guidePartTexts'},
-                    {model: GuidePartVideo, as: 'guidePartVideos'},
+                    {
+                        model: GuidePartVideo, as: 'guidePartVideos',
+                        include: [{all: true}]
+                    },
                     {
                         model: GuideDescriptor,
                         as: 'descriptor',
