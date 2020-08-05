@@ -25,6 +25,7 @@
     import GuideVso from "@/js/vso/GuideVso";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
     import HeroId from "data/HeroId";
+    import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 
     const backend = new Backend(axios);
     export default {
@@ -64,16 +65,13 @@
         data() {
             return {
                 guides: [],
-                descriptor: new GuideDescriptorVso({
-                    playerHeroes: [HeroId.Dva],
-                    playerAbilities: [],
-                    allyHeroes: [],
-                    allyAbilities: [],
-                    enemyHeroes: [],
-                    enemyAbilities: [],
-                    thematicTags: [],
-                    mapTags: [],
-                }),
+                descriptor: new GuideDescriptorVso(
+                    new GuideDescriptorQuickie(
+                        {
+                            playerHeroes: [HeroId.Dva],
+                        }
+                    )
+                ),
                 pageNumber: 0,
                 alreadyLoadedGuideIds: []
             }
