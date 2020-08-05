@@ -98,9 +98,13 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .search-button {
         font-size: 2.8em;
+
+        & ::v-deep .background {
+            opacity: .8;
+        }
     }
 
     .searchbox {
