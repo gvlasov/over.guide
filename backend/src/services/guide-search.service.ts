@@ -24,11 +24,23 @@ export class GuideSearchQuery implements GuideSearchQueryDto {
 
     @Type(() => String)
     @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
+    playerAbilities: AbilityId[] = []
+
+    @Type(() => String)
+    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     allyHeroes: HeroId[] = []
 
     @Type(() => String)
     @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
+    allyAbilities: AbilityId[] = []
+
+    @Type(() => String)
+    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     enemyHeroes: HeroId[] = []
+
+    @Type(() => String)
+    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
+    enemyAbilities: AbilityId[] = []
 
     @Type(() => String)
     @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))

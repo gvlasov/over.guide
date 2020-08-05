@@ -4,6 +4,7 @@ import {GuideHistoryEntryService} from "src/services/guide-history-entry.service
 import {Guide} from "src/database/models/Guide";
 import {User} from "src/database/models/User";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
+import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 
 export default async (moduleRef: ModuleRef) => {
     const entryService = moduleRef.get(GuideHistoryEntryService)
@@ -20,14 +21,9 @@ export default async (moduleRef: ModuleRef) => {
             parts: [
                 {contentMd: 'asdf ' + i, kind: 'text'} as GuidePartTextDto
             ],
-            descriptor: {
+            descriptor: new GuideDescriptorQuickie({
                 playerHeroes: [HeroId.Dva],
-                allyHeroes: [],
-                enemyHeroes: [],
-                abilities: [],
-                mapTags: [],
-                thematicTags: []
-            }
+            }),
         }, user)
     }
 }
