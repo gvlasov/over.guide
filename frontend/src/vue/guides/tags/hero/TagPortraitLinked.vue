@@ -43,7 +43,7 @@
         border-spacing: 0;
     }
 
-    a:hover >>> .portrait {
+    a:hover ::v-deep .portrait {
         transform: scale(1.4);
     }
 </style>

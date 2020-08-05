@@ -87,7 +87,7 @@
         max-width: 100%;
     }
 
-    .text-guide-part >>> img {
+    .text-guide-part ::v-deep img {
         max-width: 100%;
     }
 

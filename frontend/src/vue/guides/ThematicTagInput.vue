@@ -111,7 +111,7 @@
     @import "~@/assets/css/fonts.css";
     @import "~@voerro/vue-tagsinput/dist/style.css";
 
-    .root >>> .tags-input-badge {
+    .root ::v-deep .tags-input-badge {
         font-family: 'Futura Demi Bold', sans-serif;
         font-variant: all-small-caps;
         padding: 0;
@@ -122,7 +122,7 @@
         vertical-align: middle !important;
     }
 
-    .root >>> .tags-input-remove {
+    .root ::v-deep .tags-input-remove {
         display: none;
         cursor: pointer;
         position: static;
@@ -134,16 +134,16 @@
         height: 100%;
     }
 
-    .root >>> .tags-input-remove > img {
+    .root ::v-deep .tags-input-remove > img {
         width: 0.5em;
         height: 0.5em;
     }
 
-    .root >>> .tags-input > .tags-input-badge:hover {
+    .root ::v-deep .tags-input > .tags-input-badge:hover {
         opacity: .3;
     }
 
-    .root >>> .tags-input-remove:before, .root >>> .tags-input-remove:after {
+    .root ::v-deep .tags-input-remove:before, .root ::v-deep .tags-input-remove:after {
         content: none;
     }
 
@@ -160,7 +160,7 @@
         cursor: pointer;
     }
 
-    .root >>> .typeahead-badges {
+    .root ::v-deep .typeahead-badges {
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
@@ -179,8 +179,8 @@
         border-right: 0;
     }
 
-    .root >>> .typeahead-badges > .tags-input-typeahead-item-default,
-    .root >>> .typeahead-badges > .tags-input-typeahead-item-highlighted-default {
+    .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
+    .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-highlighted-default {
         font-size: 1.5em;
         padding: .3em;
         border-radius: .2em;
@@ -190,7 +190,7 @@
         margin: 0 .2em .2em 0;
     }
 
-    .root >>> .tags-input-wrapper-default {
+    .root ::v-deep .tags-input-wrapper-default {
         background: none;
         border: none;
         box-shadow: none;
@@ -199,17 +199,17 @@
         height: 100%;
     }
 
-    .root >>> .tags-input input[type=text] {
+    .root ::v-deep .tags-input input[type=text] {
         display: inline-block;
         width: 2em;
         padding-right: .5rem;
     }
 
-    .root >>> .tags-input-badge.map {
+    .root ::v-deep .tags-input-badge.map {
         background-color: #b0d4a1 !important;
     }
 
-    .root >>> .tags-input-badge.theme {
+    .root ::v-deep .tags-input-badge.theme {
         background-color: #fedd8b !important;
     }
 

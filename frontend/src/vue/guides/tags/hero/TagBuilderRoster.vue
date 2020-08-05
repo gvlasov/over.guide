@@ -154,8 +154,7 @@
 
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
     .roster-fixedbox {
         position: fixed;
         top: 0;
@@ -311,12 +310,12 @@
         transform: translateX(-50%);
     }
 
-    .descriptor-mirror >>> .tag-type-infix {
+    .descriptor-mirror ::v-deep .tag-type-infix {
         color: white;
     }
 
-    .descriptor-mirror >>> .portrait {
-        height: 3em;
+    .descriptor-mirror ::v-deep .portrait {
+        height: 3em !important;
     }
 
     .tag-builder-roster-tag-wrap {

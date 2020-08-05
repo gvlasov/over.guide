@@ -171,7 +171,7 @@
         cursor: pointer;
     }
 
-    .tag-portrait >>> .portrait {
+    .tag-portrait ::v-deep .portrait {
         max-height: 3em;
     }
 
@@ -193,7 +193,7 @@
     }
 
 
-    .invite >>> .zoomer:hover {
+    .invite ::v-deep .zoomer:hover {
         transform: scale(1.2);
     }
 </style>
