@@ -1,52 +1,44 @@
 <template>
     <div class="wrap">
-        <TagGroupFrame v-if="descriptor.players.heroes.length > 0">
+        <TagGroupFrame
+                v-if="descriptor.players.heroes.length > 0"
+                :tag-group="descriptor.players"
+        >
             <template slot="infix"></template>
             <template slot="frame-content">
                 <TagGroupBackground
-                        :type="'player'"
-                        class="tag-type-links-wrap-player"
+                        v-if="descriptor.players.heroes.length > 0"
+                        :tag-group="descriptor.players"
                 >
-                    <TagPortraitLinked
-                            v-for="hero in descriptor.players.heroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                            :create-title="(hero) => 'More guides about playing as ' + hero.name"
-                    />
+                    <TagGroupHeroes :tag-group="descriptor.players"/>
                 </TagGroupBackground>
             </template>
-        </TagGroupFrame><!--
-        -->
-        <TagGroupFrame v-if="descriptor.allies.heroes.length > 0">
+        </TagGroupFrame>
+        <TagGroupFrame
+                v-if="descriptor.allies.heroes.length > 0"
+                :tag-group="descriptor.allies"
+        >
             <template slot="infix">+</template>
             <template slot="frame-content">
                 <TagGroupBackground
-                        class="tag-type-links-wrap-ally"
-                        :type="'ally'"
+                        v-if="descriptor.allies.heroes.length > 0"
+                        :tag-group="descriptor.allies"
                 >
-                    <TagPortraitLinked
-                            v-for="hero in descriptor.allies.heroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                            :create-title="(hero) => 'More guides about synergizing with ' + hero.name"
-                    />
+                    <TagGroupHeroes :tag-group="descriptor.allies"/>
                 </TagGroupBackground>
             </template>
-        </TagGroupFrame><!--
-        -->
-        <TagGroupFrame v-if="descriptor.enemies.heroes.length > 0">
+        </TagGroupFrame>
+        <TagGroupFrame
+                v-if="descriptor.enemies.heroes.length > 0"
+                :tag-group="descriptor.enemies"
+        >
             <template slot="infix">VS</template>
             <template slot="frame-content">
                 <TagGroupBackground
-                        class="tag-type-links-wrap-enemy"
-                        :type="'enemy'"
+                        v-if="descriptor.enemies.heroes.length > 0"
+                        :tag-group="descriptor.enemies"
                 >
-                    <TagPortraitLinked
-                            v-for="hero in descriptor.enemies.heroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                            :create-title="(hero) => 'More guides about countering ' + hero.name"
-                    />
+                    <TagGroupHeroes :tag-group="descriptor.enemies"/>
                 </TagGroupBackground>
             </template>
         </TagGroupFrame>
@@ -56,15 +48,15 @@
 <script>
     import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import TagPortraitLinked from "@/vue/guides/tags/hero/TagPortraitLinked";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+    import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 
     export default {
         props: {
             descriptor: {
                 type: GuideDescriptorVso,
                 required: true,
-            }
+            },
         },
         data() {
             return {};
@@ -76,21 +68,22 @@
         components: {
             TagGroupBackground,
             TagGroupFrame,
-            TagPortraitLinked
+            TagGroupHeroes,
         },
     };
 
 </script>
 
-<style scoped>
-    .tag-type-links-wrap > a {
-        display: table-cell;
-        overflow: hidden;
-        border-radius: .3em;
+<style lang="scss" scoped>
+    .wrap {
+        font-size: 0;
+
+        & > * {
+            font-size: 1rem;
+        }
     }
 
-    .tag-type-links-wrap > a:hover > .portrait {
-        transform: scale(1.4);
+    ::v-deep .tag-type-infix {
+        color: white;
     }
-
 </style>
