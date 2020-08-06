@@ -113,14 +113,17 @@
             };
         },
         methods: {
-            /**
-             * @param {HeroDto} hero
-             */
             selectedHeroAbilities(hero) {
                 return this.tagGroup.abilities.filter(ability => ability.hero.id === hero.id)
             }
         },
         computed: {
+            /**
+             * @see Roster_SelectedHeroesMixin
+             */
+            selectedHeroes() {
+                return this.tagGroup.heroes;
+            },
         },
         components: {
             AbilityIcon,
