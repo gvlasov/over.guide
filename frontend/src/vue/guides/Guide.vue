@@ -1,17 +1,26 @@
 <template>
     <div class="wrap">
-        <div class="descriptor">
-            <Tag :descriptor="guide.descriptor"/>
-            <ThematicTagBadge
-                    v-for="thematicTag in guide.descriptor.thematicTags"
-                    :tag="thematicTag"
-                    :key="thematicTag.dataName"
-            />
+        <div class="meta">
+            <div class="tags">
+                <Tag class="hero-tag" :descriptor="guide.descriptor"/>
+                <ThematicTagBadge
+                        v-for="thematicTag in guide.descriptor.thematicTags"
+                        :tag="thematicTag"
+                        :key="thematicTag.dataName"
+                />
+                <ThematicTagBadge
+                        v-for="map in guide.descriptor.maps"
+                        :tag="map"
+                        :key="map.dataName"
+                />
+            </div>
+            <div>
+                <div class="creation-date" v-bind:title="absoluteDateText()">{{creationTimeRelative()}} ago</div>
+                <div class="author">by
+                    <a v-bind:href="`/#/user/${guide.author.id}`">{{guide.author.name}}</a>
+                </div>
+            </div>
         </div>
-        <div class="author">by
-            <a v-bind:href="`/#/user/${guide.author.id}`">{{guide.author.name}}</a>
-        </div>
-        <div class="creation-date" v-bind:title="absoluteDateText()">{{creationTimeRelative()}}</div>
 
         <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
             <div class="text-guide-part" v-if="part.part.kind === 'text'">
@@ -47,7 +56,7 @@
     import GuideVso from "@/js/vso/GuideVso";
     import Tag from "@/vue/guides/tags/hero/Tag";
     import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
-    import formatRelative from 'date-fns/formatRelative'
+    import formatDistance from 'date-fns/formatDistance'
 
     const backend = new Backend(axios);
 
@@ -64,7 +73,7 @@
                 return new GuidePartTextWidget(part).render()
             },
             creationTimeRelative() {
-                return formatRelative(new Date(this.guide.createdAt), new Date());
+                return formatDistance(new Date(this.guide.createdAt), new Date());
             },
             absoluteDateText() {
                 return new Date(this.guide.createdAt).toLocaleString();
@@ -84,14 +93,30 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/overwatch-ui.scss';
 
     .wrap {
         display: inline-block;
         max-width: 40em;
         min-width: 40em;
         background-color: rgba(43, 55, 83, 0.8);
+        @include overwatch-futura-no-smallcaps;
+        color: white;
+    }
+
+    .meta {
+        display: flex;
+        color: white;
+        justify-content: space-between;
+        padding: 1em;
+        margin: .3em;
+    }
+
+    a {
+        font-family: 'BigNoodleTooOblique', 'sans-serif';
+        color: #2991de;
     }
 
     .guide-part {
@@ -156,11 +181,9 @@
                */
     }
 
-    .guide-part > .guide-part-buttons {
-
-    }
-
-    .guide-part:hover > .guide-part-buttons {
+    .hero-tag {
+        display: inline-block;
+        margin-right: .5em;
     }
 
 </style>

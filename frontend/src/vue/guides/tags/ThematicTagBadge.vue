@@ -34,10 +34,10 @@
         display: inline-block;
         padding: .3em;
         border-radius: .3em;
-        height: 100%;
         font-weight: bold;
         margin: 0 .2em .2em 0;
         vertical-align: middle !important;
+        color: black;
     }
 
     .theme {

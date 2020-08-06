@@ -1,6 +1,5 @@
 <template>
     <div class="wrap" style="text-align: center;">
-        <ThematicTagBadge :tag="tag"/>
         <GuideBrowser/>
     </div>
     <!--    <div class="wrap" style="text-align: center;">-->
