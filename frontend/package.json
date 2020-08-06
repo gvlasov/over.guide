@@ -14,6 +14,7 @@
     "@types/js-cookie": "^2.2.6",
     "@voerro/vue-tagsinput": "github:gvlasov/vue-tagsinput#master",
     "axios": "^0.19.2",
+    "date-fns": "^2.15.0",
     "fast-shuffle": "^2.0.2",
     "grunt-env": "~1.0.1",
     "js-cookie": "^2.2.1",

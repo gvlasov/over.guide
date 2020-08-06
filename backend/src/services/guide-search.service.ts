@@ -15,6 +15,8 @@ import GuideTheme from "data/GuideTheme";
 import {Op} from "sequelize";
 import {GuideHead} from "src/database/models/GuideHead";
 import AbilityId from "data/AbilityId";
+import {User} from "src/database/models/User";
+import UserDto from "data/dto/UserDto";
 
 export class GuideSearchQuery implements GuideSearchQueryDto {
 
@@ -84,6 +86,7 @@ export class GuideSearchService {
                             deactivatedById: null,
                             deactivatedAt: null,
                         },
+                        include: [{model: User, as: 'creator'}]
                     },
                     {model: GuidePartText, as: 'guidePartTexts'},
                     {
@@ -118,6 +121,11 @@ export class GuideSearchService {
                 .slice(0, GuideSearchService.pageSize)
                 .map(entry => {
                     return {
+                        author: {
+                            id: entry.guide.creator.id,
+                            name: entry.guide.creator.name,
+                        } as UserDto,
+                        createdAt: entry.guide.createdAt,
                         descriptor: entry.descriptor.toDto(),
                         guideId: entry.guideId,
                         parts: entry.partsOrdered.map(part => part.toDto()),

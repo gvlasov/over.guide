@@ -5,8 +5,13 @@
             <ThematicTagBadge
                     v-for="thematicTag in guide.descriptor.thematicTags"
                     :tag="thematicTag"
+                    :key="thematicTag.dataName"
             />
         </div>
+        <div class="author">by
+            <a v-bind:href="`/#/user/${guide.author.id}`">{{guide.author.name}}</a>
+        </div>
+        <div class="creation-date" v-bind:title="absoluteDateText()">{{creationTimeRelative()}}</div>
 
         <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
             <div class="text-guide-part" v-if="part.part.kind === 'text'">
@@ -42,6 +47,7 @@
     import GuideVso from "@/js/vso/GuideVso";
     import Tag from "@/vue/guides/tags/hero/Tag";
     import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
+    import formatRelative from 'date-fns/formatRelative'
 
     const backend = new Backend(axios);
 
@@ -56,6 +62,12 @@
         methods: {
             renderTextPart(part) {
                 return new GuidePartTextWidget(part).render()
+            },
+            creationTimeRelative() {
+                return formatRelative(new Date(this.guide.createdAt), new Date());
+            },
+            absoluteDateText() {
+                return new Date(this.guide.createdAt).toLocaleString();
             },
         },
         data() {
@@ -78,13 +90,15 @@
     .wrap {
         display: inline-block;
         max-width: 40em;
+        min-width: 40em;
+        background-color: rgba(43, 55, 83, 0.8);
     }
 
     .guide-part {
         padding: 1em;
         margin: .3em;
         cursor: pointer;
-        background-color: rgba(43, 55, 83, 0.8);
+        /*background-color: rgba(43, 55, 83, 0.8);*/
         color: white;
         font-family: 'Futura Demi Bold', 'sans-serif';
         position: relative;

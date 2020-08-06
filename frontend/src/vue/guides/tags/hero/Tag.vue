@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div>
         <TagGroupFrame
                 v-if="descriptor.players.heroes.length > 0"
                 :tag-group="descriptor.players"
@@ -75,9 +75,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .wrap {
-    }
-
     ::v-deep .tag-type-infix {
         color: white;
     }

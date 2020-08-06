@@ -5,8 +5,10 @@
                 :descriptor="descriptor"
                 @search="onSearch"
         />
-        <div v-for="guide in guides">
-            <Guide :guide="guide"/>
+        <div class="guide-feed">
+            <div v-for="guide in guides">
+                <Guide :guide="guide"/>
+            </div>
         </div>
         <InfiniteLoading
                 ref="infiniteLoading"
@@ -88,4 +90,10 @@
 <style scoped>
     @import '~@/assets/css/fonts.css';
 
+    .guide-feed {
+        display: flex;
+        justify-content: start;
+        flex-direction: column;
+        gap: 2em;
+    }
 </style>
