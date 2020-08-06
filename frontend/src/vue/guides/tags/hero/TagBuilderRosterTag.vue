@@ -10,11 +10,7 @@
                         :type="'player'"
                         v-bind:class="{ selected : selectedPosition.dataName === 'player', 'not-selected': selectedPosition.dataName !== 'player' }"
                 >
-                    <TagPortrait
-                            v-for="hero in descriptor.players.heroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                    />
+                    <TagGroupHeroes :tag-group="descriptor.players"/>
                 </TagGroupBackground>
                 <TagGroupInvite
                         v-else
@@ -38,11 +34,7 @@
                         :type="'ally'"
                         v-bind:class="{ selected : selectedPosition.dataName === 'ally', 'not-selected': selectedPosition.dataName !== 'ally' }"
                 >
-                    <TagPortrait
-                            v-for="hero in descriptor.allies.heroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                    />
+                    <TagGroupHeroes :tag-group="descriptor.allies"/>
                 </TagGroupBackground>
                 <TagGroupInvite
                         v-else
@@ -66,11 +58,7 @@
                         :type="'enemy'"
                         v-bind:class="{ selected : selectedPosition.dataName === 'enemy', 'not-selected': selectedPosition.dataName !== 'enemy' }"
                 >
-                    <TagPortrait
-                            v-for="hero in descriptor.enemies.heroes"
-                            :key="hero.dataName"
-                            :hero="hero"
-                    />
+                    <TagGroupHeroes :tag-group="descriptor.enemies"/>
                 </TagGroupBackground>
                 <TagGroupInvite
                         v-else
@@ -91,6 +79,8 @@
     import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
     import GamerPositionVso from "@/js/vso/GamerPositionVso";
+    import AbilityIcon from "@/vue/AbilityIcon";
+    import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 
     export default {
         props: {
@@ -111,10 +101,12 @@
         methods: {},
         computed: {},
         components: {
+            AbilityIcon,
             TagGroupBackground,
             TagGroupFrame,
             TagPortrait,
             TagGroupInvite,
+            TagGroupHeroes,
         },
     };
 

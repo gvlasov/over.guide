@@ -11,12 +11,7 @@
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
                     >
-                        <TagPortrait
-                                v-for="hero in descriptor.players.heroes"
-                                :key="hero.dataName"
-                                :hero="hero"
-                                class="tag-portrait"
-                        />
+                        <TagGroupHeroes :tag-group="descriptor.players"/>
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
@@ -41,12 +36,7 @@
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
                     >
-                        <TagPortrait
-                                v-for="hero in descriptor.allies.heroes"
-                                :key="hero.dataName"
-                                :hero="hero"
-                                class="tag-portrait"
-                        />
+                        <TagGroupHeroes :tag-group="descriptor.allies"/>
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
@@ -71,12 +61,7 @@
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
                             style="max-height: 30px;height:30px;"
                     >
-                        <TagPortrait
-                                v-for="hero in descriptor.enemies.heroes"
-                                :key="hero.dataName"
-                                :hero="hero"
-                                class="tag-portrait"
-                        />
+                        <TagGroupHeroes :tag-group="descriptor.enemies"/>
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
@@ -123,7 +108,7 @@
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
     import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-
+    import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 
     export default {
         props: {
@@ -147,6 +132,7 @@
             TagGroupFrame,
             TagPortrait,
             TagBuilderRoster,
+            TagGroupHeroes,
         },
     };
 
@@ -169,10 +155,6 @@
 
     .tappable-background {
         cursor: pointer;
-    }
-
-    .tag-portrait ::v-deep .portrait {
-        max-height: 3em;
     }
 
     .invite-text {
