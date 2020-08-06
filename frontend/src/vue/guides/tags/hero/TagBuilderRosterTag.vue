@@ -2,6 +2,7 @@
     <div class="wrap">
         <TagGroupFrame
                 v-hammer:tap="() => $emit('playerTap')"
+                :gamer-position="descriptor.players.gamerPosition"
         >
             <template slot="infix"></template>
             <template slot="frame-content">
@@ -23,10 +24,9 @@
         -->
         <TagGroupFrame
                 v-hammer:tap="() => $emit('allyTap')"
+                :gamer-position="descriptor.allies.gamerPosition"
         >
-            <template slot="infix">
-                <div class="infix-ally">+</div>
-            </template>
+            <template slot="infix">+</template>
             <template slot="frame-content">
                 <TagGroupBackground
                         v-if="descriptor.allies.heroes.length > 0"
@@ -46,10 +46,9 @@
         -->
         <TagGroupFrame
                 v-hammer:tap="() => $emit('enemyTap')"
+                :gamer-position="descriptor.enemies.gamerPosition"
         >
-            <template slot="infix">
-                <div class="infix-enemy">VS</div>
-            </template>
+            <template slot="infix">VS</template>
             <template slot="frame-content">
                 <TagGroupBackground
                         v-if="descriptor.enemies.heroes.length > 0"
@@ -128,7 +127,4 @@
         box-shadow: 0 0 .5em orange, 0 0 .5em orange, 0 0 .5em orange;
     }
 
-    .infix-ally, .infix-enemy {
-        width: 1.5em;
-    }
 </style>

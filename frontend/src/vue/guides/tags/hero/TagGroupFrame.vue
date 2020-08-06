@@ -1,6 +1,8 @@
 <template>
     <span class="tag-type-group-wrap">
-        <span class="tag-type-infix">
+        <span class="tag-type-infix"
+              v-bind:class="{'infix-ally': gamerPosition.isAlly, 'infix-enemy' : gamerPosition.isEnemy}"
+        >
             <slot name="infix"/>
         </span>
         <slot name="frame-content"/>
@@ -8,8 +10,15 @@
 </template>
 
 <script>
+    import GamerPositionVso from "@/js/vso/GamerPositionVso";
+
     export default {
-        props: {},
+        props: {
+            gamerPosition: {
+                type: GamerPositionVso,
+                required: true,
+            }
+        },
         data() {
             return {};
         },
@@ -33,5 +42,9 @@
         font-family: 'Futura Demi Bold', sans-serif;
         color: black;
         padding: 0 0 0 0;
+    }
+
+    .infix-ally, .infix-enemy {
+        width: 1.5em;
     }
 </style>

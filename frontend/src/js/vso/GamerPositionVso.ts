@@ -53,4 +53,16 @@ export default class GamerPositionVso {
         }
     }
 
+    get isPlayer(): boolean {
+        return this.id === GamerPositionVso.Players.id;
+    }
+
+    get isAlly(): boolean {
+        return this.id === GamerPositionVso.Allies.id;
+    }
+
+    get isEnemy(): boolean {
+        return this.id === GamerPositionVso.Enemies.id;
+    }
+
 }

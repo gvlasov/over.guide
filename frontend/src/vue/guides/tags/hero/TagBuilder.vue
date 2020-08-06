@@ -1,7 +1,9 @@
 <template>
     <div class="root">
         <div class="wrap">
-            <TagGroupFrame>
+            <TagGroupFrame
+                    :gamer-position="descriptor.players.gamerPosition"
+            >
                 <template slot="infix"></template>
                 <template slot="frame-content">
                     <TagGroupBackground
@@ -24,7 +26,9 @@
                 </template>
             </TagGroupFrame><!--
         -->
-            <TagGroupFrame>
+            <TagGroupFrame
+                    :gamer-position="descriptor.allies.gamerPosition"
+            >
                 <template slot="infix">
                     <span class="infix-content infix-content-ally">+</span>
                 </template>
@@ -49,6 +53,7 @@
                 </template>
             </TagGroupFrame>
             <TagGroupFrame
+                    :gamer-position="descriptor.enemies.gamerPosition"
             >
                 <template slot="infix"><span class="infix-content">VS</span>
                 </template>
