@@ -1,14 +1,12 @@
 <template>
     <div class="root">
         <div class="wrap">
-            <TagGroupFrame
-                    :gamer-position="descriptor.players.gamerPosition"
-            >
+            <TagGroupFrame :tag-group="descriptor.players">
                 <template slot="infix"></template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="descriptor.players.heroes.length > 0"
-                            :type="'player'"
+                            :tag-group="descriptor.players"
                             class="tag-type-links-wrap-player tappable-background"
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
@@ -17,16 +15,15 @@
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
+                            :tag-group="descriptor.players"
                             v-hammer:tap="() => (selecting = 'player')"
                             v-bind:class="selecting === 'player' ? 'selected-group' : ''"
                             class="invite"
-                    >
-                        <div class="invite-text">any<br/>player</div>
-                    </TagGroupInvite>
+                    />
                 </template>
             </TagGroupFrame>
             <TagGroupFrame
-                    :gamer-position="descriptor.allies.gamerPosition"
+                    :tag-group="descriptor.allies"
             >
                 <template slot="infix">
                     <span class="infix-content infix-content-ally">+</span>
@@ -34,7 +31,7 @@
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="descriptor.allies.heroes.length > 0"
-                            :type="'ally'"
+                            :tag-group="descriptor.allies"
                             class="tag-type-links-wrap-ally tappable-background"
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
@@ -43,23 +40,22 @@
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
+                            :tag-group="descriptor.allies"
                             v-hammer:tap="() => (selecting = 'ally')"
                             v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
                             class="invite"
-                    >
-                        <div class="invite-text">any<br/>ally</div>
-                    </TagGroupInvite>
+                    />
                 </template>
             </TagGroupFrame>
             <TagGroupFrame
-                    :gamer-position="descriptor.enemies.gamerPosition"
+                    :tag-group="descriptor.enemies"
             >
                 <template slot="infix"><span class="infix-content">VS</span>
                 </template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="descriptor.enemies.heroes.length > 0"
-                            :type="'enemy'"
+                            :tag-group="descriptor.enemies"
                             class="tag-type-links-wrap-enemy tappable-background"
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
@@ -69,12 +65,11 @@
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
+                            :tag-group="descriptor.enemies"
                             v-hammer:tap="() => (selecting = 'enemy')"
                             v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
                             class="invite"
-                    >
-                        <div class="invite-text">any<br/>enemy</div>
-                    </TagGroupInvite>
+                    />
                 </template>
             </TagGroupFrame>
         </div>

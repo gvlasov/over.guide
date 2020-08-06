@@ -1,7 +1,7 @@
 <template>
     <span
             class="tag-type-background"
-            v-bind:class="'tag-type-' + type"
+            v-bind:class="cssClass"
     >
         <slot/>
     </span>
@@ -9,11 +9,12 @@
 
 <script>
     import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+    import TagGroupVso from "@/js/vso/TagGroupVso";
 
     export default {
         props: {
-            type: {
-                type: String,
+            tagGroup: {
+                type: TagGroupVso,
                 required: true,
             }
         },
@@ -21,7 +22,15 @@
             return {};
         },
         methods: {},
-        computed: {},
+        computed: {
+            cssClass() {
+                if (this.tagGroup.heroes.length > 0) {
+                    return 'tag-type-' + this.tagGroup.gamerPosition.dataName;
+                } else {
+                    return 'tag-type-invite';
+                }
+            }
+        },
         components: {
             TagGroupFrame,
         },

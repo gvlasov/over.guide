@@ -1,10 +1,9 @@
 <template>
     <TagGroupBackground
             class="invite"
-            :type="'invite'"
+            :tag-group="tagGroup"
     >
-        <div class="invite-text">
-            <slot/>
+        <div class="invite-text">any<br/>{{tagGroup.gamerPosition.dataName}}
         </div>
     </TagGroupBackground>
 </template>
@@ -12,9 +11,15 @@
 <script>
 
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+    import TagGroupVso from "@/js/vso/TagGroupVso";
 
     export default {
-        props: {},
+        props: {
+            tagGroup: {
+                type: TagGroupVso,
+                required: true,
+            },
+        },
         data() {
             return {};
         },
@@ -27,11 +32,13 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import "~@/assets/css/overwatch-ui.scss";
+
     .invite {
+        @include overwatch-futura;
         line-height: 3em;
         height: 3em;
-        font-family: 'Futura Demi Bold', 'sans-serif';
         vertical-align: middle;
         width: 3.9em;
         background-color: #5f7589;

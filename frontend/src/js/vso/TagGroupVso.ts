@@ -11,7 +11,6 @@ export default class TagGroupVso {
     }
 
     selectedAbilities(hero: HeroDto): AbilityVso[] {
-        console.log(this.abilities)
         return this.abilities.filter(a => a.hero.id === hero.id)
     }
 }

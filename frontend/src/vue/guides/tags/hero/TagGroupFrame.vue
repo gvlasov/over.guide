@@ -1,7 +1,7 @@
 <template>
     <span class="tag-type-group-wrap">
         <span class="tag-type-infix"
-              v-bind:class="{'infix-ally': gamerPosition.isAlly, 'infix-enemy' : gamerPosition.isEnemy}"
+              v-bind:class="{'infix-ally': tagGroup.gamerPosition.isAlly, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
         >
             <slot name="infix"/>
         </span>
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-    import GamerPositionVso from "@/js/vso/GamerPositionVso";
+    import TagGroupVso from "@/js/vso/TagGroupVso";
 
     export default {
         props: {
-            gamerPosition: {
-                type: GamerPositionVso,
+            tagGroup: {
+                type: TagGroupVso,
                 required: true,
             }
         },
