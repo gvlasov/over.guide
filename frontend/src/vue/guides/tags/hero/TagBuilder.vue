@@ -76,7 +76,6 @@
         <TagBuilderRoster
                 v-if="selecting === 'player'"
                 :tag-group="descriptor.players"
-                :tag-group-type="'player'"
                 :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event.dataName;}"
@@ -84,7 +83,6 @@
         <TagBuilderRoster
                 v-if="selecting === 'ally'"
                 :tag-group="descriptor.allies"
-                :tag-group-type="'ally'"
                 :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event.dataName;}"
@@ -92,7 +90,6 @@
         <TagBuilderRoster
                 v-if="selecting === 'enemy'"
                 :tag-group="descriptor.enemies"
-                :tag-group-type="'enemy'"
                 :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event.dataName;}"
