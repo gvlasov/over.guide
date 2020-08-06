@@ -102,13 +102,13 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .wrap {
         font-size: 0;
-    }
 
-    .wrap > * {
-        font-size: 1rem;
+        & > * {
+            font-size: 1rem;
+        }
     }
 
     .selected {
