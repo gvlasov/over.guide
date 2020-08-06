@@ -291,10 +291,6 @@
         transform: translateX(-50%);
     }
 
-    .descriptor-mirror ::v-deep .portrait {
-        height: 3em !important;
-    }
-
     .tag-builder-roster-tag-wrap {
         display: inline-block;
         max-height: 100%;
