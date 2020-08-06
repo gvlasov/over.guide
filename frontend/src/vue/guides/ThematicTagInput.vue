@@ -177,6 +177,7 @@
         border-top: 0;
         border-left: 0;
         border-right: 0;
+        z-index: 2;
     }
 
     .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
