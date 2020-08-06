@@ -157,14 +157,6 @@
         cursor: pointer;
     }
 
-    .invite-text {
-        display: inline-block;
-        line-height: 70%;
-        padding-bottom: .33em;
-        vertical-align: middle;
-        font-variant: all-small-caps;
-    }
-
     .infix-content {
         width: 1.5rem;
         display: inline-block;
@@ -174,8 +166,7 @@
         font-size: 1.3em;
     }
 
-
-    .invite ::v-deep .zoomer:hover {
-        transform: scale(1.2);
+    .invite ::v-deep .invite-text:hover {
+        transform: scale(1.1);
     }
 </style>

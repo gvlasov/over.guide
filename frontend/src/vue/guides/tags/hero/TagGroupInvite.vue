@@ -3,7 +3,7 @@
             class="invite"
             :type="'invite'"
     >
-        <div class="zoomer">
+        <div class="invite-text">
             <slot/>
         </div>
     </TagGroupBackground>
@@ -37,5 +37,13 @@
         background-color: #5f7589;
         color: #32323b;
         cursor: pointer;
+    }
+
+    .invite-text {
+        display: inline-block;
+        line-height: 70%;
+        padding-bottom: .33em;
+        vertical-align: middle;
+        font-variant: all-small-caps;
     }
 </style>

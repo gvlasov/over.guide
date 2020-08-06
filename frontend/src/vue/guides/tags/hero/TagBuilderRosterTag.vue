@@ -16,8 +16,7 @@
                         v-else
                         v-hammer:tap="() => (selecting = 'player')"
                         v-bind:class="{ selected : selectedPosition.dataName === 'player', 'not-selected': selectedPosition.dataName !== 'player' }"
-                >
-                    <div class="invite-text">any<br/>player</div>
+                >any<br/>player
                 </TagGroupInvite>
             </template>
         </TagGroupFrame><!--
@@ -40,8 +39,7 @@
                         v-else
                         v-hammer:tap="() => (selecting = 'ally')"
                         v-bind:class="{ selected : selectedPosition.dataName === 'ally', 'not-selected': selectedPosition.dataName !== 'ally' }"
-                >
-                    <div class="invite-text">any<br/>ally</div>
+                >any<br/>ally
                 </TagGroupInvite>
             </template>
         </TagGroupFrame><!--
@@ -64,8 +62,7 @@
                         v-else
                         v-hammer:tap="() => (selecting = 'enemy')"
                         v-bind:class="{ selected : selectedPosition.dataName === 'enemy', 'not-selected': selectedPosition.dataName !== 'enemy' }"
-                >
-                    <div class="invite-text">any<br/>enemy</div>
+                >any<br/>enemy
                 </TagGroupInvite>
             </template>
         </TagGroupFrame>
@@ -129,14 +126,6 @@
 
     .selected {
         box-shadow: 0 0 .5em orange, 0 0 .5em orange, 0 0 .5em orange;
-    }
-
-    .invite-text {
-        display: inline-block;
-        line-height: 70%;
-        padding-bottom: .33em;
-        vertical-align: middle;
-        font-variant: all-small-caps;
     }
 
     .infix-ally, .infix-enemy {
