@@ -1,8 +1,13 @@
 <template>
     <div class="wrap">
-        <Tag
-                :descriptor="guide.descriptor"
-        />
+        <div class="descriptor">
+            <Tag :descriptor="guide.descriptor"/>
+            <ThematicTagBadge
+                    v-for="thematicTag in guide.descriptor.thematicTags"
+                    :tag="thematicTag"
+            />
+        </div>
+
         <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
             <div class="text-guide-part" v-if="part.part.kind === 'text'">
                 <div
@@ -36,6 +41,7 @@
     import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
     import GuideVso from "@/js/vso/GuideVso";
     import Tag from "@/vue/guides/tags/hero/Tag";
+    import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
 
     const backend = new Backend(axios);
 
@@ -56,6 +62,7 @@
             return {}
         },
         components: {
+            ThematicTagBadge,
             Tag,
             DescriptorBuilder,
             OverwatchButton,

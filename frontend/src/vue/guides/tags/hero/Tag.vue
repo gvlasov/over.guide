@@ -76,11 +76,6 @@
 
 <style lang="scss" scoped>
     .wrap {
-        font-size: 0;
-
-        & > * {
-            font-size: 1rem;
-        }
     }
 
     ::v-deep .tag-type-infix {
