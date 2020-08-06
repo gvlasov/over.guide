@@ -132,22 +132,9 @@
 </script>
 
 <style scoped>
-    .root {
-    }
-
     .wrap {
         display: inline-flex;
         padding: 0 .4rem 0 0;
-    }
-
-    .tag-type-links-wrap > a {
-        display: table-cell;
-        overflow: hidden;
-        border-radius: .3em;
-    }
-
-    .tappable-background {
-        cursor: pointer;
     }
 
     .invite ::v-deep .invite-text:hover {

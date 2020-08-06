@@ -115,14 +115,7 @@
         font-size: 1rem;
     }
 
-    .tag-type-links-wrap > a {
-        display: table-cell;
-        overflow: hidden;
-        border-radius: .3em;
-    }
-
     .selected {
         box-shadow: 0 0 .5em orange, 0 0 .5em orange, 0 0 .5em orange;
     }
-
 </style>
