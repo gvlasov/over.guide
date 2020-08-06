@@ -13,12 +13,10 @@
             :case-sensitive-tags="true"
     >
         <template v-slot:selected-tag="{tag, index, removeTag}">
-            <div
-                    class="tag-custom-badge"
-                    @click.prevent="removeTag(index)"
-            >
-                <span v-html="tag.value"></span>
-            </div>
+            <ThematicTagBadge
+                    :tag="tag"
+                    v-hammer:tap="() => removeTag(index)"
+            />
         </template>
     </tags-input>
 </template>
@@ -28,9 +26,10 @@
     import Tag from "@/vue/guides/tags/hero/Tag";
     import SeededShuffler from "@/js/SeededShuffler";
     import GuideTheme from "data/GuideTheme";
-    import ThemeTag from "@/js/vso/ThemeTag";
-    import MapTag from "@/js/vso/MapTag";
+    import ThematicTagVso from "@/js/vso/ThematicTagVso";
+    import MapTagVso from "@/js/vso/MapTagVso";
     import maps from 'data/maps'
+    import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
 
     export default {
         model: {
@@ -89,10 +88,10 @@
                 return (
                     Object.values(GuideTheme)
                         .filter(it => typeof it === 'number')
-                        .map(theme => new ThemeTag(theme))
+                        .map(theme => new ThematicTagVso(theme))
                         .concat(
                             Array.from(maps.values())
-                                .map(map => new MapTag(map))
+                                .map(map => new MapTagVso(map))
                         )
                 )
             },
@@ -103,65 +102,42 @@
         components: {
             Tag,
             'tags-input': VoerroTagsInput,
+            ThematicTagBadge,
         }
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     @import "~@/assets/css/fonts.css";
     @import "~@voerro/vue-tagsinput/dist/style.css";
+    @import "~@/assets/css/tags.scss";
+    @import "~@/assets/css/overwatch-ui.scss";
 
     .root ::v-deep .tags-input-badge {
-        font-family: 'Futura Demi Bold', sans-serif;
-        font-variant: all-small-caps;
         padding: 0;
-        font-size: 1.3em;
-        border-radius: .3em;
-        height: 100%;
-        margin: 0 .2em .2em 0;
-        vertical-align: middle !important;
-    }
-
-    .root ::v-deep .tags-input-remove {
-        display: none;
+        margin: 0;
+        font-size: 1em;
+        border-radius: 0;
+        background-color: transparent;
+        line-height: 1em;
         cursor: pointer;
-        position: static;
-        right: auto;
-        top: auto;
-        padding: 0;
-        overflow: hidden;
-        vertical-align: top;
-        height: 100%;
-    }
-
-    .root ::v-deep .tags-input-remove > img {
-        width: 0.5em;
-        height: 0.5em;
     }
 
     .root ::v-deep .tags-input > .tags-input-badge:hover {
         opacity: .3;
     }
 
-    .root ::v-deep .tags-input-remove:before, .root ::v-deep .tags-input-remove:after {
-        content: none;
+    ::v-deep .theme > *, ::v-deep .typeahead-badges .theme {
+        @include tag-bg-theme;
     }
 
-    .theme {
-        background-color: #9fbed7 !important;
-    }
-
-    .map {
-        background-color: #d4a1bb !important;
-    }
-
-    .tag-custom-badge {
-        padding: .3em;
-        cursor: pointer;
+    ::v-deep .map > *, ::v-deep .typeahead-badges .map {
+        @include tag-bg-map;
     }
 
     .root ::v-deep .typeahead-badges {
         display: flex;
+        gap: .2em;
         flex-wrap: wrap;
         justify-content: flex-start;
         padding: .3em;
@@ -170,7 +146,6 @@
         overflow-y: auto;
         position: absolute;
         background-color: white;
-        border: 1px solid transparent;
         border-radius: .25em;
         border-color: #dbdbdb;
         margin-top: 0;
@@ -185,10 +160,8 @@
         font-size: 1.5em;
         padding: .3em;
         border-radius: .2em;
-        font-family: 'Futura Demi Bold', sans-serif;
-        font-variant: all-small-caps;
+        @include overwatch-futura;
         color: #32323b;
-        margin: 0 .2em .2em 0;
     }
 
     .root ::v-deep .tags-input-wrapper-default {
@@ -203,15 +176,7 @@
     .root ::v-deep .tags-input input[type=text] {
         display: inline-block;
         width: 2em;
-        padding-right: .5rem;
-    }
-
-    .root ::v-deep .tags-input-badge.map {
-        background-color: #b0d4a1 !important;
-    }
-
-    .root ::v-deep .tags-input-badge.theme {
-        background-color: #fedd8b !important;
+        padding-right: .5em;
     }
 
     .root {

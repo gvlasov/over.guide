@@ -1,6 +1,7 @@
 import MapDto from "data/dto/MapDto";
 import MapType from "data/MapType";
 import MapName from "data/MapName";
+import MapId from "data/MapId";
 
 const data = [
     {
@@ -130,11 +131,11 @@ const data = [
         type: MapType.Hybrid,
     },
 ]
-const map = new Map<string, MapDto>()
+const map = new Map<MapId, MapDto>()
 data.forEach(
     d => {
         map.set(
-            d.dataName,
+            d.id,
             {
                 id: d.id,
                 name: d.name as MapName,

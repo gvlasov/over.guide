@@ -1,5 +1,6 @@
 <template>
     <div class="wrap" style="text-align: center;">
+        <ThematicTagBadge :tag="tag"/>
         <GuideBrowser/>
     </div>
     <!--    <div class="wrap" style="text-align: center;">-->
@@ -21,6 +22,10 @@
     import OverwatchButton from "@/vue/OverwatchButton";
     import GuideBrowser from "@/vue/guides/GuideBrowser";
     import AbilityIcon from "@/vue/AbilityIcon";
+    import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
+    import MapTagVso from "@/js/vso/MapTagVso";
+    import maps from "data/maps";
+    import MapId from "data/MapId";
 
     const backend = new Backend(axios);
 
@@ -39,17 +44,16 @@
                 subject: subject,
                 object: object,
                 topic: new Topic([subject, object]),
-                tag: {
-                    playerHeroes: [heroes.get('pharah')],
-                    allyHeroes: [heroes.get('lucio'), heroes.get('ana')],
-                    enemyHeroes: [heroes.get('doomfist'), heroes.get('mei')],
-                },
+                tag: new MapTagVso(
+                    maps.get(MapId.HorizonLunarColony)
+                ),
             };
         },
         components: {
             AbilityIcon,
             OverwatchButton,
             GuideBrowser,
+            ThematicTagBadge,
         },
     };
 
