@@ -114,4 +114,8 @@
     .selected {
         box-shadow: 0 0 .5em orange, 0 0 .5em orange, 0 0 .5em orange;
     }
+
+    ::v-deep .tag-type-infix {
+        color: white;
+    }
 </style>
