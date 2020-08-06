@@ -25,9 +25,7 @@
             <TagGroupFrame
                     :tag-group="descriptor.allies"
             >
-                <template slot="infix">
-                    <span class="infix-content infix-content-ally">+</span>
-                </template>
+                <template slot="infix">+</template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="descriptor.allies.heroes.length > 0"
@@ -50,8 +48,7 @@
             <TagGroupFrame
                     :tag-group="descriptor.enemies"
             >
-                <template slot="infix"><span class="infix-content">VS</span>
-                </template>
+                <template slot="infix">VS</template>
                 <template slot="frame-content">
                     <TagGroupBackground
                             v-if="descriptor.enemies.heroes.length > 0"
@@ -151,15 +148,6 @@
 
     .tappable-background {
         cursor: pointer;
-    }
-
-    .infix-content {
-        width: 1.5rem;
-        display: inline-block;
-    }
-
-    .infix-content-ally {
-        font-size: 1.3em;
     }
 
     .invite ::v-deep .invite-text:hover {

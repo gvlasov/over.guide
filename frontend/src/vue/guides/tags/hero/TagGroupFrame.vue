@@ -1,10 +1,10 @@
 <template>
     <span class="tag-type-group-wrap">
-        <span class="tag-type-infix"
-              v-bind:class="{'infix-ally': tagGroup.gamerPosition.isAlly, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
+        <div class="tag-type-infix"
+             v-bind:class="{'infix-ally': tagGroup.gamerPosition.isAlly, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
         >
             <slot name="infix"/>
-        </span>
+        </div>
         <slot name="frame-content"/>
     </span>
 </template>
@@ -28,7 +28,7 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
     .tag-type-group-wrap {
         display: inline-table;
@@ -44,7 +44,15 @@
         padding: 0 0 0 0;
     }
 
+    $infix-width: 1.5em;
+    $infix-ally-font-size: 1.4em;
+
     .infix-ally, .infix-enemy {
-        width: 1.5em;
+        min-width: $infix-width;
+    }
+
+    .infix-ally {
+        font-size: $infix-ally-font-size;
+        min-width: #{$infix-width/$infix-ally-font-size}em;
     }
 </style>
