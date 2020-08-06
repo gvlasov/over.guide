@@ -58,6 +58,7 @@
         position: absolute;
         bottom: 0;
         right: 0;
+        line-height: 0;
     }
 
     .selected-hero-ability-icon {
