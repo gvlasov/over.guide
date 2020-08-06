@@ -101,6 +101,7 @@
 <style lang="scss" scoped>
     .search-button {
         font-size: 2.8em;
+        margin-right: .5rem;
 
         & ::v-deep .background {
             opacity: .8;
