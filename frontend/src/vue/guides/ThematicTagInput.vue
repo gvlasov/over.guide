@@ -28,6 +28,7 @@
     import GuideTheme from "data/GuideTheme";
     import ThematicTagVso from "@/js/vso/ThematicTagVso";
     import MapTagVso from "@/js/vso/MapTagVso";
+    import thematicTags from "data/thematicTags";
     import maps from 'data/maps'
     import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
 
@@ -86,8 +87,7 @@
         methods: {
             getExistingTags() {
                 return (
-                    Object.values(GuideTheme)
-                        .filter(it => typeof it === 'number')
+                    Array.from(thematicTags.values())
                         .map(theme => new ThematicTagVso(theme))
                         .concat(
                             Array.from(maps.values())
@@ -116,7 +116,7 @@
     .root ::v-deep .tags-input-badge {
         padding: 0;
         margin: 0;
-        font-size: 1em;
+        font-size: 1.3em;
         border-radius: 0;
         background-color: transparent;
         line-height: 1em;

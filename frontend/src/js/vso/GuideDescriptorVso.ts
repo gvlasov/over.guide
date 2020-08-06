@@ -3,19 +3,19 @@ import heroes from 'data/heroes'
 import maps from 'data/maps'
 import thematicTags from 'data/thematicTags'
 import abilities from 'data/abilities'
-import MapDto from "data/dto/MapDto";
-import ThematicTagDto from "data/dto/ThematicTagDto";
 import TagGroupVso from "@/js/vso/TagGroupVso";
 import AbilityVso from "@/js/vso/AbilityVso";
 import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import ThematicTagVso from "@/js/vso/ThematicTagVso";
+import MapTagVso from "@/js/vso/MapTagVso";
 
 export default class GuideDescriptorVso {
 
     public players: TagGroupVso;
     public allies: TagGroupVso;
     public enemies: TagGroupVso;
-    public maps: MapDto[];
-    public thematicTags: ThematicTagDto[];
+    public maps: MapTagVso[];
+    public thematicTags: ThematicTagVso[];
 
     constructor(descriptor: GuideDescriptorDto) {
         const allHeroes = Array.from(heroes.values())
@@ -44,8 +44,15 @@ export default class GuideDescriptorVso {
                 .map(it => new AbilityVso(it)),
             GamerPositionVso.Enemies,
         );
-        this.maps = allMaps.filter(map => descriptor.mapTags.includes(map.id))
-        this.thematicTags = allThematicTags.filter(tag => descriptor.thematicTags.includes(tag.id))
+        this.maps =
+            allMaps.filter(map => descriptor.mapTags
+                .includes(map.id))
+                .map(map => new MapTagVso(map))
+
+        this.thematicTags =
+            allThematicTags
+                .filter(tag => descriptor.thematicTags.includes(tag.id))
+                .map(tag => new ThematicTagVso(tag))
     }
 
 }

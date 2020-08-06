@@ -1,13 +1,14 @@
 import TagClass from "@/js/vso/TagClass";
-import GuideTheme from "data/GuideTheme";
 import IndividualTagVso from "@/js/vso/IndividualTagVso";
+import ThematicTagDto from "data/dto/ThematicTagDto";
 
 export default class ThematicTagVso extends IndividualTagVso {
 
-    constructor(theme: GuideTheme) {
+    constructor(thematicTag: ThematicTagDto) {
+        console.log(thematicTag.dataName, thematicTag.name)
         super(
-            theme.toString(),
-            GuideTheme[theme],
+            thematicTag.dataName,
+            thematicTag.name,
             TagClass.Theme,
         )
     }
