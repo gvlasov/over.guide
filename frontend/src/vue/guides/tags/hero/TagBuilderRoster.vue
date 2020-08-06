@@ -232,12 +232,6 @@
         position: relative;
     }
 
-    .tag-type-links-wrap > a {
-        display: table-cell;
-        overflow: hidden;
-        border-radius: .3em;
-    }
-
     .roster-fixedbox-bg {
         opacity: .9;
         background-color: black;
