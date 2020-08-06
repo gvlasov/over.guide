@@ -24,8 +24,7 @@
                         <div class="invite-text">any<br/>player</div>
                     </TagGroupInvite>
                 </template>
-            </TagGroupFrame><!--
-        -->
+            </TagGroupFrame>
             <TagGroupFrame
                     :gamer-position="descriptor.allies.gamerPosition"
             >

@@ -20,8 +20,7 @@
                 >any<br/>player
                 </TagGroupInvite>
             </template>
-        </TagGroupFrame><!--
-        -->
+        </TagGroupFrame>
         <TagGroupFrame
                 v-hammer:tap="() => $emit('allyTap')"
                 :gamer-position="descriptor.allies.gamerPosition"
@@ -42,8 +41,7 @@
                 >any<br/>ally
                 </TagGroupInvite>
             </template>
-        </TagGroupFrame><!--
-        -->
+        </TagGroupFrame>
         <TagGroupFrame
                 v-hammer:tap="() => $emit('enemyTap')"
                 :gamer-position="descriptor.enemies.gamerPosition"
