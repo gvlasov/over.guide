@@ -70,10 +70,8 @@
     import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
     import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
     import GamerPositionVso from "@/js/vso/GamerPositionVso";
-    import AbilityIcon from "@/vue/AbilityIcon";
     import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 
     export default {
@@ -95,10 +93,8 @@
         methods: {},
         computed: {},
         components: {
-            AbilityIcon,
             TagGroupBackground,
             TagGroupFrame,
-            TagPortrait,
             TagGroupInvite,
             TagGroupHeroes,
         },

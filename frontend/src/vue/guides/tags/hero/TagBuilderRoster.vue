@@ -37,7 +37,7 @@
                         class="ability-select-wrap"
                 >
                     <AbilitySelect
-                            :heroes="selectedHeroes"
+                            :heroes="tagGroup.heroes"
                             v-model="tagGroup.abilities"
                             class="ability-select"
                     />
@@ -76,9 +76,6 @@
 <script>
     import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
     import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
-    import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-    import OverwatchButton from "@/vue/OverwatchButton";
     import TagBuilderRosterPortrait
         from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
     import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
@@ -86,7 +83,6 @@
     import Roster_SelectedHeroesMixin
         from "@/vue/roster/Roster_SelectedHeroesMixin";
     import HeroGroupsByRole from "@/js/HeroGroupsByRole";
-    import Tag from "@/vue/guides/tags/hero/Tag";
     import AbilityIcon from "@/vue/AbilityIcon";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
     import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
@@ -125,32 +121,13 @@
             }
         },
         computed: {
-            selectedHeroes() {
-                return this.tagGroup.heroes;
-            },
-            previousGroup() {
-                return this.tagGroup.gamerPosition.getPrevious(false)
-            },
-            nextGroup() {
-                return this.tagGroup.gamerPosition.getNext(false)
-            },
-            hasPreviousGroup() {
-                return this.previousGroup !== null
-            },
-            hasNextGroup() {
-                return this.nextGroup !== null
-            },
         },
         components: {
             AbilityIcon,
-            Tag,
             AbilitySelect,
             TagBuilderRosterPortrait,
-            OverwatchButton,
-            TagGroupInvite,
             TagGroupBackground,
             TagGroupFrame,
-            TagPortrait,
             TagBuilderRosterTag,
         },
     };
