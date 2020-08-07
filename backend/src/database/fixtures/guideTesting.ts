@@ -17,7 +17,7 @@ export default async (moduleRef: ModuleRef) => {
     const generator = new DescriptorGenerator({
         numberOfThematicTags: [1, 3],
         numberOfHeroTags: [1, 4],
-        abilitiesPerHero: [0, 2],
+        abilitiesPerHero: [2, 3],
     })
     for (let i = 0; i < 100; i++) {
         const guide = await Guide.create({
@@ -46,10 +46,11 @@ export default async (moduleRef: ModuleRef) => {
                 kind: 'text'
             } as GuidePartTextDto)
         }
+        const descriptor = generator.generate(i.toString());
         await entryService.save({
             guideId: guide.id,
             parts: parts,
-            descriptor: generator.generate(i.toString()),
+            descriptor: descriptor,
         }, user)
     }
 }

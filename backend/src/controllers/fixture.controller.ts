@@ -4,6 +4,7 @@ import heroesFixture from '@fixtures/heroes'
 import mapsFixture from '@fixtures/maps'
 import thematicTagsFixture from '@fixtures/thematicTags'
 import guideTestingFixture from '@fixtures/guideTesting'
+import abilitiesFixture from '@fixtures/abilities'
 
 @Controller('fixture')
 export class FixtureController {
@@ -28,6 +29,7 @@ export class FixtureController {
         this.service.loadFixturesClear(
             heroesFixture,
             mapsFixture,
+            abilitiesFixture,
             thematicTagsFixture,
             guideTestingFixture
         )

@@ -4,8 +4,7 @@ import heroes from 'data/heroes'
 import thematicTags from "data/thematicTags";
 import abilities from 'data/abilities'
 import SeededShuffler from "@fixtures/helpers/SeededShuffler";
-import seedrandom, {prng} from "seedrandom";
-import flatten from 'lodash.flatten'
+import AbilityId from "data/AbilityId";
 
 interface DescriptorGeneratorConfig {
     numberOfHeroTags: AmountSpecifier
@@ -20,8 +19,6 @@ const allAbilities = Array.from(abilities.values())
 type AmountSpecifier = [number, number] | number
 
 export default class DescriptorGenerator {
-
-    private random: prng = seedrandom(1)
 
     constructor(private readonly config: DescriptorGeneratorConfig) {
     }
@@ -57,12 +54,11 @@ export default class DescriptorGenerator {
         )
     }
 
-    private getGroupAbilities(playerHeroes, shuffler: SeededShuffler) {
-        return flatten(
-            playerHeroes.map(h =>
-                shuffler.shuffle(allAbilities.filter(a => a.heroId === h.id))
-                    .slice(0, this.resolveAmountSpecifier(this.config.abilitiesPerHero))
-            )
+    private getGroupAbilities(heroes, shuffler: SeededShuffler): AbilityId[] {
+        return heroes.flatMap(h =>
+            shuffler.shuffle(allAbilities.filter(a => a.heroId === h.id))
+                .slice(0, this.resolveAmountSpecifier(this.config.abilitiesPerHero))
+                .map(a => a.id)
         );
     }
 

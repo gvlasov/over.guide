@@ -10,6 +10,9 @@ import {GuideDescriptor2EnemyHero} from "src/database/models/GuideDescriptor2Ene
 import {GuideDescriptor2ThematicTag} from "src/database/models/GuideDescriptor2ThematicTag";
 import {GuideDescriptor2Map} from "src/database/models/GuideDescriptor2Map";
 import {ContentHashService} from "src/services/content-hash.service";
+import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
+import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
+import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 
 
 @Injectable()
@@ -50,8 +53,11 @@ export class GuideDescriptorService {
             ['mapTags', 'Map', 'mapId'],
             ['thematicTags', 'ThematicTag', 'thematicTagId'],
             ['playerHeroes', 'PlayerHero', 'heroId'],
+            ['playerAbilities', 'PlayerAbility', 'abilityId'],
             ['allyHeroes', 'AllyHero', 'heroId'],
+            ['allyAbilities', 'AllyAbility', 'abilityId'],
             ['enemyHeroes', 'EnemyHero', 'heroId'],
+            ['enemyAbilities', 'EnemyAbility', 'abilityId'],
         ].map(
             item => {
                 const [partName, tableSuffix, pivotTableFieldName] = item
@@ -86,8 +92,11 @@ export class GuideDescriptorService {
                     mapTags: dto.mapTags,
                     thematicTags: dto.thematicTags,
                     playerHeroes: dto.playerHeroes,
+                    playerAbilities: dto.playerAbilities,
                     allyHeroes: dto.allyHeroes,
+                    allyAbilities: dto.allyAbilities,
                     enemyHeroes: dto.enemyHeroes,
+                    enemyAbilities: dto.enemyAbilities,
                 }
             }
         )
@@ -99,8 +108,11 @@ export class GuideDescriptorService {
                 ...guideDescriptorDto.thematicTags,
                 ...guideDescriptorDto.mapTags,
                 ...guideDescriptorDto.playerHeroes,
+                ...guideDescriptorDto.playerAbilities,
                 ...guideDescriptorDto.allyHeroes,
+                ...guideDescriptorDto.allyAbilities,
                 ...guideDescriptorDto.enemyHeroes,
+                ...guideDescriptorDto.enemyAbilities,
             ]
                 .length === 0
         ) {
@@ -109,6 +121,7 @@ export class GuideDescriptorService {
         return this.getExact(guideDescriptorDto)
             .then(async oldDescriptor => {
                 let result;
+                console.log(oldDescriptor)
                 if (oldDescriptor === null) {
                     const newDescriptor = await GuideDescriptor.create({
                         contentHash: this.contentHashService.hash(guideDescriptorDto)
@@ -121,6 +134,14 @@ export class GuideDescriptorService {
                             }
                         )
                     }
+                    for (const abilityId of guideDescriptorDto.playerAbilities) {
+                        await GuideDescriptor2PlayerAbility.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                abilityId: abilityId,
+                            }
+                        )
+                    }
                     for (const heroId of guideDescriptorDto.allyHeroes) {
                         await GuideDescriptor2AllyHero.create(
                             {
@@ -129,11 +150,27 @@ export class GuideDescriptorService {
                             }
                         )
                     }
+                    for (const abilityId of guideDescriptorDto.allyAbilities) {
+                        await GuideDescriptor2AllyAbility.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                abilityId: abilityId,
+                            }
+                        )
+                    }
                     for (const heroId of guideDescriptorDto.enemyHeroes) {
                         await GuideDescriptor2EnemyHero.create(
                             {
                                 guideDescriptorId: newDescriptor.id,
                                 heroId: heroId,
+                            }
+                        )
+                    }
+                    for (const abilityId of guideDescriptorDto.enemyAbilities) {
+                        await GuideDescriptor2EnemyAbility.create(
+                            {
+                                guideDescriptorId: newDescriptor.id,
+                                abilityId: abilityId,
                             }
                         )
                     }

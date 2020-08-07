@@ -10,6 +10,9 @@ import mapsFixture from "@fixtures/maps"
 import thematicTagsFixture from "@fixtures/thematicTags"
 import {ContentHashService} from "src/services/content-hash.service";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
+import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
+import AbilityId from "data/AbilityId";
+import abilitiesFixture from '@fixtures/abilities'
 
 describe(
     GuideDescriptorService,
@@ -213,6 +216,23 @@ describe(
                         )
                     }
                 ).toThrow(`Can't obtain descriptor from empty DTO`)
+            });
+            it('gets existing descriptor with abilities', async () => {
+                await ctx.fixtures(
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture
+                )
+                const descriptorDto = new GuideDescriptorQuickie({
+                    allyHeroes: [HeroId.Ana],
+                    allyAbilities: [AbilityId.SleepDart, AbilityId.BioticGrenade],
+                    thematicTags: [GuideTheme.Psychology, GuideTheme.Communication, GuideTheme.Aim]
+                });
+                const descriptor = await ctx.app.get(GuideDescriptorService).obtainExact(descriptorDto)
+                expect(
+                    (await ctx.service.obtainExact(descriptorDto)).id
+                ).toBe(descriptor.id)
             });
         }
     )
