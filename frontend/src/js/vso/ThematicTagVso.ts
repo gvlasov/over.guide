@@ -5,7 +5,6 @@ import ThematicTagDto from "data/dto/ThematicTagDto";
 export default class ThematicTagVso extends IndividualTagVso {
 
     constructor(thematicTag: ThematicTagDto) {
-        console.log(thematicTag.dataName, thematicTag.name)
         super(
             thematicTag.dataName,
             thematicTag.name,

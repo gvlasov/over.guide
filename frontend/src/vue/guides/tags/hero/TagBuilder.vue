@@ -8,16 +8,16 @@
                             v-if="descriptor.players.heroes.length > 0"
                             :tag-group="descriptor.players"
                             class="tag-type-links-wrap-player tappable-background"
-                            v-hammer:tap="() => (selecting = 'player')"
-                            v-bind:class="selecting === 'player' ? 'selected-group' : ''"
+                            v-hammer:tap="() => (selecting = descriptor.players.gamerPosition)"
+                            v-bind:class="selecting && selecting.isPlayer ? 'selected-group' : ''"
                     >
                         <TagGroupHeroes :tag-group="descriptor.players"/>
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
                             :tag-group="descriptor.players"
-                            v-hammer:tap="() => (selecting = 'player')"
-                            v-bind:class="selecting === 'player' ? 'selected-group' : ''"
+                            v-hammer:tap="() => (selecting = descriptor.players.gamerPosition)"
+                            v-bind:class="selecting && selecting.isPlayer ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>
@@ -31,16 +31,16 @@
                             v-if="descriptor.allies.heroes.length > 0"
                             :tag-group="descriptor.allies"
                             class="tag-type-links-wrap-ally tappable-background"
-                            v-hammer:tap="() => (selecting = 'ally')"
-                            v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
+                            v-hammer:tap="() => (selecting = descriptor.allies.gamerPosition)"
+                            v-bind:class="selecting && selecting.isAlly ? 'selected-group' : ''"
                     >
                         <TagGroupHeroes :tag-group="descriptor.allies"/>
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
                             :tag-group="descriptor.allies"
-                            v-hammer:tap="() => (selecting = 'ally')"
-                            v-bind:class="selecting === 'ally' ? 'selected-group' : ''"
+                            v-hammer:tap="() => (selecting = descriptor.allies.gamerPosition)"
+                            v-bind:class="selecting && selecting.isAlly ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>
@@ -55,7 +55,7 @@
                             :tag-group="descriptor.enemies"
                             class="tag-type-links-wrap-enemy tappable-background"
                             v-hammer:tap="() => (selecting = 'enemy')"
-                            v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
+                            v-bind:class="selecting && selecting.isEnemy ? 'selected-group' : ''"
                             style="max-height: 30px;height:30px;"
                     >
                         <TagGroupHeroes :tag-group="descriptor.enemies"/>
@@ -64,28 +64,28 @@
                             v-else
                             :tag-group="descriptor.enemies"
                             v-hammer:tap="() => (selecting = 'enemy')"
-                            v-bind:class="selecting === 'enemy' ? 'selected-group' : ''"
+                            v-bind:class="selecting && selecting.isEnemy ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>
             </TagGroupFrame>
         </div>
         <TagBuilderRoster
-                v-if="selecting.isPlayer"
+                v-if="selecting && selecting.isPlayer"
                 :tag-group="descriptor.players"
                 :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
-                v-if="selecting.isAlly"
+                v-if="selecting && selecting.isAlly"
                 :tag-group="descriptor.allies"
                 :descriptor="descriptor"
                 @save="selecting = null"
                 @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
-                v-if="selecting === 'enemy'"
+                v-if="selecting && selecting.isEnemy"
                 :tag-group="descriptor.enemies"
                 :descriptor="descriptor"
                 @save="selecting = null"
