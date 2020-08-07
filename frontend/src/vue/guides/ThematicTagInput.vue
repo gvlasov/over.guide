@@ -10,7 +10,7 @@
             v-model="localSelectedTags"
             :sort-search-results="false"
             @tags-updated="onTagsUpdated"
-            :case-sensitive-tags="true"
+            :case-sensitive-tags="false"
     >
         <template v-slot:selected-tag="{tag, index, removeTag}">
             <ThematicTagBadge
