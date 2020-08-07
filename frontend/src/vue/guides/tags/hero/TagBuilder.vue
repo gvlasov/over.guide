@@ -54,7 +54,7 @@
                             v-if="descriptor.enemies.heroes.length > 0"
                             :tag-group="descriptor.enemies"
                             class="tag-type-links-wrap-enemy tappable-background"
-                            v-hammer:tap="() => (selecting = 'enemy')"
+                            v-hammer:tap="() => (selecting = descriptor.enemies.gamerPosition)"
                             v-bind:class="selecting && selecting.isEnemy ? 'selected-group' : ''"
                             style="max-height: 30px;height:30px;"
                     >
