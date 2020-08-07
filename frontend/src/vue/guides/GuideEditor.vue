@@ -334,7 +334,7 @@
         }
 
         .descriptor-builder {
-            z-index: 1;
+            z-index: 3;
             position: relative;
             width: 100%;
             margin-bottom: 1rem;

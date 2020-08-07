@@ -55,4 +55,8 @@ export default class GuideDescriptorVso {
                 .map(tag => new ThematicTagVso(tag))
     }
 
+    get tags() {
+        return this.thematicTags.concat(this.maps);
+    }
+
 }

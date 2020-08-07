@@ -24,8 +24,6 @@
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
     import TagClass from "@/js/vso/TagClass";
-    import MapTagVso from "@/js/vso/MapTagVso";
-    import ThematicTagVso from "@/js/vso/ThematicTagVso";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
     import OverwatchButton from "@/vue/OverwatchButton";
 
@@ -42,14 +40,8 @@
             }
         },
         data() {
-            const selectedTags = this.descriptor.maps
-                .map(map => new MapTagVso(map))
-                .concat(
-                    this.descriptor.thematicTags
-                        .map(theme => new ThematicTagVso(theme))
-                );
             return {
-                selectedTags: selectedTags
+                selectedTags: this.descriptor.tags
             };
         },
         watch: {
