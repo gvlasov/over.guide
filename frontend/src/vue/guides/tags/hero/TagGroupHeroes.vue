@@ -72,6 +72,7 @@
         background-color: #28253a;
         padding-left: .1em;
         border-radius: .3em 0 0 .3em;
+        margin-right: -1px;
     }
 
     .ability-icon-wrap {

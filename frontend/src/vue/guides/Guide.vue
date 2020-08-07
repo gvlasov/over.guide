@@ -114,6 +114,10 @@
         margin: .3em;
     }
 
+    .tags {
+        text-align: left;
+    }
+
     a {
         font-family: 'BigNoodleTooOblique', 'sans-serif';
         color: #2991de;
