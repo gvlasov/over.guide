@@ -71,25 +71,25 @@
             </TagGroupFrame>
         </div>
         <TagBuilderRoster
-                v-if="selecting === 'player'"
+                v-if="selecting.isPlayer"
                 :tag-group="descriptor.players"
                 :descriptor="descriptor"
                 @save="selecting = null"
-                @tagGroupSelect="($event) => {selecting = $event.dataName;}"
+                @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
-                v-if="selecting === 'ally'"
+                v-if="selecting.isAlly"
                 :tag-group="descriptor.allies"
                 :descriptor="descriptor"
                 @save="selecting = null"
-                @tagGroupSelect="($event) => {selecting = $event.dataName;}"
+                @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
                 v-if="selecting === 'enemy'"
                 :tag-group="descriptor.enemies"
                 :descriptor="descriptor"
                 @save="selecting = null"
-                @tagGroupSelect="($event) => {selecting = $event.dataName;}"
+                @tagGroupSelect="($event) => {selecting = $event;}"
         />
     </div>
 </template>
