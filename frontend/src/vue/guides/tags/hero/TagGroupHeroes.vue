@@ -5,8 +5,10 @@
                 :key="hero.dataName"
                 class="selected-hero-wrap"
         >
-            <TagPortrait class="tag-portrait" :hero="hero"/>
-            <div class="ability-icons-wrap">
+            <div
+                    v-if="tagGroup.selectedAbilities(hero).length > 0"
+                    class="ability-icons-wrap"
+            >
                 <div
                         v-for="ability in tagGroup.selectedAbilities(hero)"
                         :key="ability.dataName"
@@ -18,6 +20,10 @@
                     />
                 </div>
             </div>
+            <TagPortrait
+                    v-bind:class="tagGroup.selectedAbilities(hero).length === 0 ? 'tag-portrait-single' : 'tag-portrait-combined'"
+                    :hero="hero"
+            />
         </div>
     </div>
 </template>
@@ -63,7 +69,9 @@
         writing-mode: vertical-lr;
         max-height: 3em;
         white-space: normal;
+        background-color: #28253a;
         padding-left: .1em;
+        border-radius: .3em 0 0 .3em;
     }
 
     .ability-icon-wrap {
@@ -71,12 +79,18 @@
     }
 
     .ability-icon {
-        height: 1em;
+        height: 1.4em;
         width: auto;
-        margin: .1em;
+        margin: .05em;
     }
 
-    .tag-portrait ::v-deep .portrait {
+    .tag-portrait-single ::v-deep .portrait {
         max-height: 3em;
+        border-radius: .3em .3em .3em .3em;
+    }
+
+    .tag-portrait-combined ::v-deep .portrait {
+        max-height: 3em;
+        border-radius: 0 .3em .3em 0;
     }
 </style>
