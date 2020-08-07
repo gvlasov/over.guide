@@ -3,18 +3,20 @@
         <div class="meta">
             <div class="tags">
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
-                <ThematicTagBadge
-                        v-for="thematicTag in guide.descriptor.thematicTags"
-                        :tag="thematicTag"
-                        :key="thematicTag.dataName"
-                />
-                <ThematicTagBadge
-                        v-for="map in guide.descriptor.maps"
-                        :tag="map"
-                        :key="map.dataName"
-                />
+                <div class="badge-tags-wrap">
+                    <ThematicTagBadge
+                            v-for="thematicTag in guide.descriptor.thematicTags"
+                            :tag="thematicTag"
+                            :key="thematicTag.dataName"
+                    />
+                    <ThematicTagBadge
+                            v-for="map in guide.descriptor.maps"
+                            :tag="map"
+                            :key="map.dataName"
+                    />
+                </div>
             </div>
-            <div>
+            <div class="authorship">
                 <div class="creation-date" v-bind:title="absoluteDateText()">{{creationTimeRelative()}} ago</div>
                 <div class="author">by
                     <a v-bind:href="`/#/user/${guide.author.id}`">{{guide.author.name}}</a>
@@ -188,6 +190,14 @@
     .hero-tag {
         display: inline-block;
         margin-right: .5em;
+    }
+
+    .badge-tags-wrap {
+        display: inline-block;
+    }
+
+    .authorship {
+        white-space: nowrap;
     }
 
 </style>
