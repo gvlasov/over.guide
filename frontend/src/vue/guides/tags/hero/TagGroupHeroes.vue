@@ -6,13 +6,17 @@
                 class="selected-hero-wrap"
         >
             <TagPortrait class="tag-portrait" :hero="hero"/>
-            <div class="selected-hero-ability-icons-wrap">
-                <AbilityIcon
+            <div class="ability-icons-wrap">
+                <div
                         v-for="ability in tagGroup.selectedAbilities(hero)"
                         :key="ability.dataName"
-                        class="selected-hero-ability-icon"
-                        :ability="ability"
-                />
+                        class="ability-icon-wrap"
+                >
+                    <AbilityIcon
+                            class="ability-icon"
+                            :ability="ability"
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -46,24 +50,30 @@
     .tag-group {
         display: flex;
         gap: .22em;
+        max-height: 3em;
     }
 
     .selected-hero-wrap {
+        display: flex;
         border-spacing: 0;
-        display: inline-block;
         position: relative;
     }
 
-    .selected-hero-ability-icons-wrap {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        line-height: 0;
+    .ability-icons-wrap {
+        writing-mode: vertical-lr;
+        max-height: 3em;
+        white-space: normal;
+        padding-left: .1em;
     }
 
-    .selected-hero-ability-icon {
+    .ability-icon-wrap {
+        display: inline-block;
+    }
+
+    .ability-icon {
         height: 1em;
         width: auto;
+        margin: .1em;
     }
 
     .tag-portrait ::v-deep .portrait {
