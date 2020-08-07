@@ -63,7 +63,7 @@
                     <TagGroupInvite
                             v-else
                             :tag-group="descriptor.enemies"
-                            v-hammer:tap="() => (selecting = 'enemy')"
+                            v-hammer:tap="() => (selecting = descriptor.enemies.gamerPosition)"
                             v-bind:class="selecting && selecting.isEnemy ? 'selected-group' : ''"
                             class="invite"
                     />
