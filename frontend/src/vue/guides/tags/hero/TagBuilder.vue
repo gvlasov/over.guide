@@ -74,21 +74,21 @@
                 v-if="selecting && selecting.isPlayer"
                 :tag-group="descriptor.players"
                 :descriptor="descriptor"
-                @save="selecting = null"
+                @save="onRosterSave"
                 @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isAlly"
                 :tag-group="descriptor.allies"
                 :descriptor="descriptor"
-                @save="selecting = null"
+                @save="onRosterSave"
                 @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isEnemy"
                 :tag-group="descriptor.enemies"
                 :descriptor="descriptor"
-                @save="selecting = null"
+                @save="onRosterSave"
                 @tagGroupSelect="($event) => {selecting = $event;}"
         />
     </div>
@@ -116,7 +116,12 @@
         },
         mounted() {
         },
-        methods: {},
+        methods: {
+            onRosterSave() {
+                this.selecting = null;
+                this.$emit('tagChange');
+            },
+        },
         computed: {},
         components: {
             TagGroupInvite,

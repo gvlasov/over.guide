@@ -3,6 +3,7 @@
         <TagBuilder
                 :descriptor="descriptor"
                 style="display: table-cell;"
+                @tagChange="$emit('descriptorChange')"
         />
         <ThematicTagInput
                 style="display: table-cell; width: 100%;"
@@ -56,6 +57,7 @@
                         .filter(tag => tag.class === TagClass.Theme)
                         .map(tag => Number.parseInt(tag.name, 10))
                 );
+                this.$emit('descriptorChange');
             }
         },
         computed: {

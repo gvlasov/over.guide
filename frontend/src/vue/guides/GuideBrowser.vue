@@ -1,9 +1,10 @@
 <template>
     <div>
         <DescriptorBuilder
-                :search-button-enabled="true"
+                :search-button-enabled="false"
                 :descriptor="descriptor"
                 @search="onSearch"
+                @descriptorChange="onSearch"
         />
         <div class="guide-feed">
             <div v-for="guide in guides">
