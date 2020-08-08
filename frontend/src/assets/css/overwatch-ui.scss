@@ -59,6 +59,7 @@
 }
 
 @mixin overwatch-button-bg {
+  top: 0;
   opacity: .6;
   letter-spacing: 0.03em;
   border-radius: .06em;

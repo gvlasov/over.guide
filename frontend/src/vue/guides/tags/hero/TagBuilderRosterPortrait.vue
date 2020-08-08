@@ -75,7 +75,6 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        border-width: 0;
         border-radius: .2em;
         margin: 0;
         transform: translateX(-50%) skew(0deg);

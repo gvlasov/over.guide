@@ -30,6 +30,18 @@
                                 :abilities="selectedHeroAbilities(hero)"
                                 :tag-group-abilities="tagGroup.abilities"
                         />
+                        <div
+                                v-if="shouldShowClearButtonOnGroupRow(group)"
+                                class="clear-button-wrap"
+                        >
+                            <OverwatchButton
+                                    :type="'default'"
+                                    class="clear-button"
+                                    v-hammer:tap="() => tagGroup.heroes = []"
+                            >
+                                <div class="unskew-clear-button">Clear</div>
+                            </OverwatchButton>
+                        </div>
                     </div>
                 </div>
                 <div
@@ -86,6 +98,8 @@
     import AbilityIcon from "@/vue/AbilityIcon";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
     import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
+    import OverwatchButton from "@/vue/OverwatchButton";
+    import Role from "data/Role";
 
 
     export default {
@@ -115,6 +129,12 @@
         methods: {
             selectedHeroAbilities(hero) {
                 return this.tagGroup.abilities.filter(ability => ability.hero.id === hero.id)
+            },
+            selectedHeroesInGroup() {
+                return this.selectedHeroes.filter(h => this.tagGroup.heroes.find(gh => gh.id === h.id));
+            },
+            shouldShowClearButtonOnGroupRow(group) {
+                return this.selectedHeroesInGroup().length > 0 && group[0].role === Role.Support;
             }
         },
         computed: {
@@ -126,6 +146,7 @@
             },
         },
         components: {
+            OverwatchButton,
             AbilityIcon,
             AbilitySelect,
             TagBuilderRosterPortrait,
@@ -294,6 +315,31 @@
         max-width: 0;
         position: relative;
         white-space: nowrap
+    }
+
+    .role-group {
+        display: flex;
+        justify-content: center;
+    }
+
+    .clear-button-wrap {
+        display: inline-block;
+        position: relative;
+        /* https://stackoverflow.com/a/14896313/1542343 */
+        transform: skew(-25deg);
+        vertical-align: bottom;
+    }
+
+    .unskew-clear-button {
+        transform: skew(25deg);
+    }
+
+    .clear-button {
+        margin-left: .3em;
+        height: 100%;
+        vertical-align: top;
+        position: absolute;
+        font-size: 1.3em;
     }
 
 </style>
