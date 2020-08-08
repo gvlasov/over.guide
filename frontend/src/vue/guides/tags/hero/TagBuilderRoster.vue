@@ -339,7 +339,18 @@
         height: 100%;
         vertical-align: top;
         position: absolute;
-        font-size: 1.3em;
+        font-size: 3.5vh;
+        border-radius: .3em;
+        width: 13vh;
+    }
+
+    .clear-button ::v-deep .content {
+        padding-left: 7%;
+        padding-right: 7%;
+    }
+
+    .clear-button ::v-deep .background {
+        border-radius: .3em;
     }
 
 </style>
