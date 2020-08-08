@@ -4,7 +4,6 @@
                 v-if="descriptor.players.heroes.length > 0"
                 :tag-group="descriptor.players"
         >
-            <template slot="infix"></template>
             <template slot="frame-content">
                 <TagGroupBackground
                         v-if="descriptor.players.heroes.length > 0"
@@ -18,7 +17,6 @@
                 v-if="descriptor.allies.heroes.length > 0"
                 :tag-group="descriptor.allies"
         >
-            <template slot="infix">+</template>
             <template slot="frame-content">
                 <TagGroupBackground
                         v-if="descriptor.allies.heroes.length > 0"
@@ -32,7 +30,6 @@
                 v-if="descriptor.enemies.heroes.length > 0"
                 :tag-group="descriptor.enemies"
         >
-            <template slot="infix">VS</template>
             <template slot="frame-content">
                 <TagGroupBackground
                         v-if="descriptor.enemies.heroes.length > 0"
@@ -76,6 +73,6 @@
 
 <style lang="scss" scoped>
     ::v-deep .tag-type-infix {
-        color: white;
+        display: none;
     }
 </style>
