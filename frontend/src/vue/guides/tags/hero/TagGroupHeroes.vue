@@ -63,8 +63,6 @@
         display: flex;
         border-spacing: 0;
         position: relative;
-        padding: 0;
-        margin: 0;
     }
 
     .ability-icons-wrap {
