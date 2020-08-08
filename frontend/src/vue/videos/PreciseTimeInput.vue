@@ -1,6 +1,6 @@
 <template>
     <div class="wrap">
-        <span v-if="showHours">
+        <template v-if="showHours">
             <div class="time-part-wrap">
                 <button
                         class="add-button"
@@ -19,8 +19,10 @@
                         v-bind:disabled="totalValueSeconds === 0"
                 ></button>
             </div>
-            :
-        </span>
+            <div class="time-part-interjector">
+                <div>:</div>
+            </div>
+        </template>
         <div class="time-part-wrap">
             <button
                     class="add-button"
@@ -39,7 +41,7 @@
                     v-bind:disabled="totalValueSeconds === 0"
             ></button>
         </div>
-        :
+        <div class="time-part-interjector">:</div>
         <div class="time-part-wrap">
             <button
                     class="add-button"
@@ -58,7 +60,7 @@
                     v-bind:disabled="totalValueSeconds === 0"
             ></button>
         </div>
-        .
+        <div class="time-part-interjector">.</div>
         <div class="time-part-wrap">
             <button
                     class="add-button"
@@ -181,6 +183,20 @@
 </script>
 
 <style scoped>
+    .wrap {
+        display: flex;
+    }
+
+    .time-part-interjector {
+        line-height: 100%;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        font-weight: bold;
+        width: .5em;
+    }
+
     .time-part-wrap {
         display: inline-block;
     }
