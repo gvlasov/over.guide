@@ -63,7 +63,7 @@
              */
             placeholder() {
                 if (this.selectedTags.length === 0) {
-                    const shuffler = new SeededShuffler('asdf');
+                    const shuffler = new SeededShuffler(new Date().toLocaleString());
                     return shuffler
                         .shuffle(
                             Object.values(GuideTheme)
