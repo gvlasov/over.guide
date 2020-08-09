@@ -39,7 +39,7 @@
                         :loop="true"
                         :autoplay="false"
                         :mute="true"
-                        :player-element-id="index +'-'+ part.part.excerpt.youtubeVideoId"
+                        :player-element-id="guide.guideId + '-' + index +'-'+ part.part.excerpt.youtubeVideoId"
                         class="video"
                         v-bind:style="{width: '100%', height: '22rem'}"
                 />
