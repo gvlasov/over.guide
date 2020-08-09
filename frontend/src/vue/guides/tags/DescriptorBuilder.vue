@@ -7,8 +7,8 @@
         />
         <ThematicTagInput
                 style="display: table-cell; width: 100%;"
-                v-model="selectedTags"
-                :selected-tags="selectedTags"
+                :descriptor="descriptor"
+                @tagChange="$emit('descriptorChange')"
         />
         <OverwatchButton
                 v-if="searchButtonEnabled"
@@ -21,10 +21,8 @@
 </template>
 
 <script>
-    import SeededShuffler from "@/js/SeededShuffler";
     import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
     import ThematicTagInput from "@/vue/guides/ThematicTagInput";
-    import TagClass from "@/js/vso/TagClass";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
     import OverwatchButton from "@/vue/OverwatchButton";
 
@@ -41,47 +39,13 @@
             }
         },
         data() {
-            return {
-                selectedTags: this.descriptor.tags
-            };
+            return {};
         },
-        watch: {
-            selectedTags: function (oldTags, newTags) {
-                this.descriptor.maps.replaceAll(
-                    newTags
-                        .filter(tag => tag.class === TagClass.Map)
-                        .map(tag => Number.parseInt(tag.name, 10))
-                );
-                this.descriptor.thematicTags.replaceAll(
-                    newTags
-                        .filter(tag => tag.class === TagClass.Theme)
-                        .map(tag => Number.parseInt(tag.name, 10))
-                );
-                this.$emit('descriptorChange');
-            }
-        },
-        computed: {
-            /**
-             * @return {string}
-             */
-            placeholder() {
-                if (this.selectedTags.length === 0) {
-                    return new SeededShuffler('asdf')
-                        .shuffle(this.getExistingTags())
-                        .map(it => it.value)
-                        .slice(0, 6)
-                        .join(', ') + '...';
-                } else {
-                    return '';
-                }
-            },
-        },
+        watch: {},
+        computed: {},
         methods: {
             onSearch() {
-                this.$emit(
-                    'search',
-                    this.descriptor,
-                )
+                this.$emit('search', this.descriptor)
             },
         },
         components: {

@@ -8,14 +8,14 @@ import AbilityVso from "@/js/vso/AbilityVso";
 import GamerPositionVso from "@/js/vso/GamerPositionVso";
 import ThematicTagVso from "@/js/vso/ThematicTagVso";
 import MapTagVso from "@/js/vso/MapTagVso";
+import IndividualTagVso from "@/js/vso/IndividualTagVso";
 
 export default class GuideDescriptorVso {
 
     public players: TagGroupVso;
     public allies: TagGroupVso;
     public enemies: TagGroupVso;
-    public maps: MapTagVso[];
-    public thematicTags: ThematicTagVso[];
+    public individualTags: IndividualTagVso[];
 
     constructor(descriptor: GuideDescriptorDto) {
         const allHeroes = Array.from(heroes.values())
@@ -44,19 +44,23 @@ export default class GuideDescriptorVso {
                 .map(it => new AbilityVso(it)),
             GamerPositionVso.Enemies,
         );
-        this.maps =
+        this.individualTags =
             allMaps.filter(map => descriptor.mapTags
                 .includes(map.id))
                 .map(map => new MapTagVso(map))
-
-        this.thematicTags =
-            allThematicTags
-                .filter(tag => descriptor.thematicTags.includes(tag.id))
-                .map(tag => new ThematicTagVso(tag))
+                .concat(
+                    allThematicTags
+                        .filter(tag => descriptor.thematicTags.includes(tag.id))
+                        .map(tag => new ThematicTagVso(tag))
+                );
     }
 
-    get tags() {
-        return this.thematicTags.concat(this.maps);
+    get maps(): MapTagVso[] {
+        return this.individualTags.filter(t => t instanceof MapTagVso);
+    }
+
+    get thematicTags(): ThematicTagVso[] {
+        return this.individualTags.filter(t => t instanceof ThematicTagVso);
     }
 
 }

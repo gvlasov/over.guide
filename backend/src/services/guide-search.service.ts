@@ -88,10 +88,13 @@ export class GuideSearchService {
                         },
                         include: [{model: User, as: 'creator'}]
                     },
-                    {model: GuidePartText, as: 'guidePartTexts'},
+                    {
+                        model: GuidePartText, as: 'guidePartTexts',
+                        include: [{all: true}],
+                    },
                     {
                         model: GuidePartVideo, as: 'guidePartVideos',
-                        include: [{all: true}]
+                        include: [{all: true}],
                     },
                     {
                         model: GuideDescriptor,

@@ -7,7 +7,7 @@
             :typeahead-activation-threshold="0"
             :placeholder="placeholder"
             class="root"
-            v-model="localSelectedTags"
+            v-model="descriptor.individualTags"
             :sort-search-results="false"
             @tags-updated="onTagsUpdated"
             :case-sensitive-tags="false"
@@ -31,16 +31,13 @@
     import thematicTags from "data/thematicTags";
     import maps from 'data/maps'
     import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
+    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
     export default {
-        model: {
-            prop: 'selectedTags',
-            event: 'tagSelectionChange',
-        },
         name: "ThematicTagInput",
         props: {
-            selectedTags: {
-                type: Array,
+            descriptor: {
+                type: GuideDescriptorVso,
                 required: true,
             }
         },
@@ -50,19 +47,13 @@
             };
         },
         computed: {
-            localSelectedTags: {
-                get() {
-                    return this.selectedTags;
-                },
-                set(tags) {
-                    this.$emit('tagSelectionChange', tags);
-                },
-            },
             /**
              * @return {string}
              */
             placeholder() {
-                if (this.selectedTags.length === 0) {
+                if (
+                    this.descriptor.individualTags.length === 0
+                ) {
                     const shuffler = new SeededShuffler(new Date().toLocaleString());
                     return shuffler
                         .shuffle(
@@ -96,7 +87,7 @@
                 )
             },
             onTagsUpdated($event) {
-                this.$emit('tagSelectionChange', this.selectedTags);
+                this.$emit('tagChange');
             },
         },
         components: {

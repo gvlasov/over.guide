@@ -41,6 +41,7 @@
                 this.$refs.infiniteLoading.stateChanger.reset();
             },
             async infiniteHandler($state) {
+                console.log(this.descriptor)
                 await backend.searchGuidesPaginated({
                     playerHeroes: this.descriptor.players.heroes.map(it => it.id),
                     allyHeroes: this.descriptor.allies.heroes.map(it => it.id),

@@ -121,7 +121,6 @@ export class GuideDescriptorService {
         return this.getExact(guideDescriptorDto)
             .then(async oldDescriptor => {
                 let result;
-                console.log(oldDescriptor)
                 if (oldDescriptor === null) {
                     const newDescriptor = await GuideDescriptor.create({
                         contentHash: this.contentHashService.hash(guideDescriptorDto)

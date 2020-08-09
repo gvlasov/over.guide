@@ -1,4 +1,10 @@
-import {Column, ForeignKey, HasOne, Model, Table,} from 'sequelize-typescript';
+import {
+    BelongsTo,
+    Column,
+    ForeignKey,
+    Model,
+    Table,
+} from 'sequelize-typescript';
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {GuidePartText} from "src/database/models/GuidePartText";
 import {DataTypes} from "sequelize";
@@ -19,10 +25,10 @@ export class GuideHistoryEntry2GuidePartText extends Model<GuideHistoryEntry2Gui
     @ForeignKey(() => GuidePartText)
     guidePartTextId: number
 
-    @HasOne(() => GuideHistoryEntry, 'guideHistoryEntryId')
+    @BelongsTo(() => GuideHistoryEntry, 'guideHistoryEntryId')
     guideHistoryEntry: GuideHistoryEntry
 
-    @HasOne(() => GuidePartText, 'guidePartTextId')
+    @BelongsTo(() => GuidePartText, 'guidePartTextId')
     guidePartText: GuidePartText
 
     @Column({type: new DataTypes.INTEGER()})

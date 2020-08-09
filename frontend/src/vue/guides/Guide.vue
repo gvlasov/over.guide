@@ -37,7 +37,7 @@
                         :start="part.part.excerpt.startSeconds"
                         :end="part.part.excerpt.endSeconds"
                         :loop="true"
-                        :autoplay="true"
+                        :autoplay="false"
                         :mute="true"
                         :player-element-id="index +'-'+ part.part.excerpt.youtubeVideoId"
                         class="video"

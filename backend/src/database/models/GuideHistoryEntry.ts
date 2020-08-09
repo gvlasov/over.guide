@@ -1,5 +1,4 @@
 import {
-    AllowNull,
     AutoIncrement,
     BelongsTo,
     BelongsToMany,
@@ -43,12 +42,7 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
     @BelongsTo(() => Guide, 'guideId')
     guide: Guide
 
-    @AllowNull
-    @ForeignKey(() => GuideHead)
-    @Column
-    headRecordId: number;
-
-    @HasOne(() => GuideHead, 'guideHistoryEntryId')
+    @HasOne(() => GuideHead)
     headRecord: GuideHead | null
 
 

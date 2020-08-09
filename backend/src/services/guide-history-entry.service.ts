@@ -44,6 +44,7 @@ export class GuideHistoryEntryService {
                         })
                 )
             const oldEntry = await GuideHistoryEntry.findOne({
+                include: [{all: true}],
                 where: {
                     guideId: guide.id
                 },

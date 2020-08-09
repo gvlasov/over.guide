@@ -6,6 +6,7 @@ export default class ThematicTagVso extends IndividualTagVso {
 
     constructor(thematicTag: ThematicTagDto) {
         super(
+            thematicTag.id,
             thematicTag.dataName,
             thematicTag.name,
             TagClass.Theme,

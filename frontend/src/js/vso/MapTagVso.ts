@@ -5,8 +5,9 @@ import IndividualTagVso from "@/js/vso/IndividualTagVso";
 export default class MapTagVso extends IndividualTagVso {
     constructor(map: MapDto) {
         super(
-            map.id.toString(),
+            map.id,
             map.name,
+            map.dataName,
             TagClass.Map
         )
     }

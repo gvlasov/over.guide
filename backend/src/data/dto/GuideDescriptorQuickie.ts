@@ -13,7 +13,6 @@ export default class GuideDescriptorQuickie implements GuideDescriptorDto {
     public enemyAbilities: AbilityId[] = [];
     public mapTags: MapId[] = [];
     public thematicTags: GuideTheme[] = [];
-    public abilities: AbilityId[] = [];
 
     constructor(
         dto: {
@@ -25,7 +24,6 @@ export default class GuideDescriptorQuickie implements GuideDescriptorDto {
             enemyAbilities?: AbilityId[],
             mapTags?: MapId[],
             thematicTags?: GuideTheme[],
-            abilities?: AbilityId[]
         }
     ) {
         this.playerHeroes = dto.playerHeroes || [];
@@ -36,7 +34,6 @@ export default class GuideDescriptorQuickie implements GuideDescriptorDto {
         this.enemyAbilities = dto.enemyAbilities || [];
         this.mapTags = dto.mapTags || [];
         this.thematicTags = dto.thematicTags || [];
-        this.abilities = dto.abilities || [];
     }
 
 }

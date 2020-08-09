@@ -640,10 +640,7 @@ describe(
                     }),
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
-                    .get('/guide/search')
-                    .send({
-                        mapTags: [MapId.Havana]
-                    } as GuideSearchQuery)
+                    .get(`/guide/search?mapTags=${MapId.Havana}`)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -687,10 +684,8 @@ describe(
                     }),
                 }, user)
                 await request(ctx.app.getHttpServer())
-                    .get('/guide/search')
-                    .send({
-                        mapTags: [MapId.Havana]
-                    } as GuideSearchQuery)
+                    .get(`/guide/search`)
+                    .send()
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -699,6 +694,72 @@ describe(
                             response.body.guides.map((guide: GuideHistoryEntryDto) => (guide.parts[0] as GuidePartTextDto).contentMd)
                                 .filter(it => it === 'HEAD')
                         ).toHaveLength(2)
+                    })
+            })
+            it('can search by thematic tags', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
+                const user = await User.findOne();
+                const token = ctx.app.get(TokenService).getToken(user)
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const correctEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'not head'}],
+                    descriptor: new Descriptor({
+                        thematicTags: [GuideTheme.Communication],
+                    }),
+                }, user) as GuideHistoryEntry
+                const wrongEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou'}],
+                    descriptor: new Descriptor({
+                        thematicTags: [GuideTheme.Aim],
+                    }),
+                }, user) as GuideHistoryEntry
+                const anotherEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou'}],
+                    descriptor: new Descriptor({
+                        mapTags: [MapId.Busan],
+                    }),
+                }, user) as GuideHistoryEntry
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/search?thematicTags=${GuideTheme.Communication}`)
+                    .send()
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        console.log(response.body)
+                        expect(response.body.guides.length).toBe(1)
+                        expect(
+                            response.body.guides[0].guideId
+                        ).toBe(correctEntry.guideId)
+                    })
+            })
+            it('can search by map tags', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
+                const user = await User.findOne();
+                const token = ctx.app.get(TokenService).getToken(user)
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const wrongEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou'}],
+                    descriptor: new Descriptor({
+                        thematicTags: [GuideTheme.Aim],
+                    }),
+                }, user) as GuideHistoryEntry
+                const correctEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou'}],
+                    descriptor: new Descriptor({
+                        mapTags: [MapId.Busan],
+                    }),
+                }, user) as GuideHistoryEntry
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/search?mapTags=${MapId.Busan}`)
+                    .send()
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        console.log(response.body)
+                        expect(response.body.guides.length).toBe(1)
+                        expect(
+                            response.body.guides[0].guideId
+                        ).toBe(correctEntry.guideId)
                     })
             })
 
