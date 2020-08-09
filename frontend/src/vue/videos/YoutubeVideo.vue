@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:id="elementId"></div>
+    <div v-bind:id="playerElementId"></div>
 </template>
 
 <script>
@@ -37,7 +37,9 @@
             },
             playerElementId: {
                 type: String,
-                default: () => undefined
+                default: () => {
+                    return 'youtube-player-' + this.videoId + '-' + this.start + '-' + this.end;
+                }
             },
             mute: {
                 type: Boolean,
@@ -73,7 +75,7 @@
                 (document.head || document.body).appendChild(script);
                 script.onload = function () {
                     window.YT.ready(function () {
-                        self.player = new YT.Player(self.elementId, {
+                        self.player = new YT.Player(self.playerElementId, {
                             videoId: videoId,
                             playerVars: {
                                 modestbranding: 1,
@@ -111,15 +113,6 @@
                 };
             }
         },
-        computed: {
-            elementId() {
-                if (typeof this.playerElementId === 'undefined') {
-                    return 'youtube-player-' + this.videoId + '-' + this.start + '-' + this.end;
-                } else {
-                    return this.playerElementId;
-                }
-            },
-        },
         watch: {
             start(value) {
                 this.player.seekTo(value);
@@ -141,6 +134,9 @@
             }
         },
         mounted() {
+            // if (document.querySelectorAll('#' + this.playerElementId).length > 0) {
+            //     throw new Error('fuck you man')
+            // }
             this.rebuildVideo(this.videoId);
         },
     };
