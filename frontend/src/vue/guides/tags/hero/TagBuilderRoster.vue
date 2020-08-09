@@ -341,7 +341,7 @@
         position: absolute;
         font-size: 3.5vh;
         border-radius: .3em;
-        width: 5.1vw;
+        width: 5.0vw;
     }
 
     .clear-button ::v-deep .content {
