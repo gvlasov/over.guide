@@ -134,9 +134,11 @@
             }
         },
         mounted() {
-            // if (document.querySelectorAll('#' + this.playerElementId).length > 0) {
-            //     throw new Error('fuck you man')
-            // }
+            if (document.querySelectorAll(`[id="${this.playerElementId}"]`).length > 1) {
+                throw new Error(
+                    `Player element with id = ${this.playerElementId} is not unique`
+                )
+            }
             this.rebuildVideo(this.videoId);
         },
     };
