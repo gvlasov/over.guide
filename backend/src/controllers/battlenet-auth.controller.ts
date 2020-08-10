@@ -26,6 +26,10 @@ export class BattlenetAuthController {
         const user = await this.battlenet.obtainToken(code)
             .then(token => this.battlenet.userInfo(token))
             .then((userInfo: { id, battletag }) => {
+                console.log(userInfo)
+                if (typeof userInfo.battletag === "undefined") {
+                    throw new Error(`Empty battletag on account ${JSON.stringify(userInfo)}`)
+                }
                 return User.findOne({where: {battleNetUserId: userInfo.id}})
                     .then(async (user): Promise<User> => {
                         if (user === null) {
