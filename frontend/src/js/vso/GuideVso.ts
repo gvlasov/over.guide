@@ -4,6 +4,7 @@ import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
 import UserVso from "@/js/vso/UserVso";
 import UserDto from "data/dto/UserDto";
+import GuideTopic from "@/js/GuideTopic";
 
 export default class GuideVso {
     public guideId: number;
@@ -23,6 +24,10 @@ export default class GuideVso {
                     ? new GuidePartTextWidget(part)
                     : new GuidePartVideoWidget(part)
         );
+    }
+
+    get topic(): GuideTopic {
+        return new GuideTopic(this.guideId)
     }
 
 }

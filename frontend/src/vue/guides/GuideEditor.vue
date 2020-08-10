@@ -166,7 +166,6 @@
                         var blob = item.getAsFile();
                         var reader = new FileReader();
                         reader.onload = async function (fileEvent) {
-                            console.log(fileEvent.target.result)
                             const formData = new FormData();
                             formData.append('image', fileEvent.target.result)
                             await fetch('https://api.imgur.com/3/image', {

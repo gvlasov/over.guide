@@ -47,11 +47,11 @@ services:
       MYSQL_DATABASE: "overwatch"
       MYSQL_INITDB_SKIP_TZINFO: "1"
   remark:
-    #    build: ../../remark42/
+#    build: ../../remark42/
     image: umputun/remark42:latest
     container_name: "remark42"
     hostname: "remark42"
-    restart: always
+    restart: "no"
 
     logging:
       driver: json-file
@@ -77,8 +77,11 @@ services:
       - SSL_TYPE=static
       - SSL_CERT=/cert.pem
       - SSL_KEY=/key.pem
+      - SIMPLE_VIEW=true
     volumes:
       - ./var:/srv/var
+      - ./key.pem:/key.pem
+      - ./cert.pem:/cert.pem
   selenium-hub:
     image: selenium/hub:3.141
     expose:

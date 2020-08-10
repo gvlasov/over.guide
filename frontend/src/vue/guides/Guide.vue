@@ -45,6 +45,9 @@
                 />
             </div>
         </div>
+        <div class="comments">
+            <TopicComments :topic="guide.topic"/>
+        </div>
     </div>
 </template>
 
@@ -59,6 +62,7 @@
     import Tag from "@/vue/guides/tags/hero/Tag";
     import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
     import formatDistance from 'date-fns/formatDistance'
+    import TopicComments from "@/vue/TopicComments";
 
     const backend = new Backend(axios);
 
@@ -90,6 +94,7 @@
             DescriptorBuilder,
             OverwatchButton,
             YoutubeVideo,
+            TopicComments,
         },
     };
 
