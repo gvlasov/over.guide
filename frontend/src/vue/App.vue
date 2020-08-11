@@ -5,6 +5,7 @@
             <router-link to="/suggest-pick">Suggest pick</router-link>
             <router-link to="/guide-editor">Guide editor</router-link>
             <router-link to="/testing-ground">Testing ground</router-link>
+            <router-link to="/search">Search</router-link>
             <BattlenetAuthButton/>
         </div>
         <AdsensePlaceholder>AdSense</AdsensePlaceholder>
