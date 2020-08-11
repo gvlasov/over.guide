@@ -755,7 +755,35 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        console.log(response.body)
+                        expect(response.body.guides.length).toBe(1)
+                        expect(
+                            response.body.guides[0].guideId
+                        ).toBe(correctEntry.guideId)
+                    })
+            })
+            it('searches guides by heroes with and condition', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
+                const user = await User.findOne();
+                const token = ctx.app.get(TokenService).getToken(user)
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const wrongEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou'}],
+                    descriptor: new Descriptor({
+                        playerHeroes: [HeroId.Ana, HeroId.Baptiste],
+                    }),
+                }, user) as GuideHistoryEntry
+                const correctEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou'}],
+                    descriptor: new Descriptor({
+                        playerHeroes: [HeroId.Ana, HeroId.Reinhardt],
+                    }),
+                }, user) as GuideHistoryEntry
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/search?playerHeroes=${HeroId.Ana},${HeroId.Reinhardt}`)
+                    .send()
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(response => {
                         expect(response.body.guides.length).toBe(1)
                         expect(
                             response.body.guides[0].guideId

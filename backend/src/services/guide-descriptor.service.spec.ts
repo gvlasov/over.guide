@@ -76,7 +76,7 @@ describe(
                         ).toEqual(oldCount)
                     })
             });
-            it('doesnt find if only subset of tags matches', async () => {
+            it('doesnt find exact if only subset of tags matches', async () => {
                 await ctx.fixtures(
                     heroesFixture,
                     guideDescriptorsFixture
@@ -96,16 +96,36 @@ describe(
                         );
                     })
             });
-            it('creates new descriptor if not exists when obtaining', async () => {
-                await ctx.fixtures(
-                    heroesFixture,
-                    guideDescriptorsFixture
-                )
-                const oldCount = (await GuideDescriptor.findAndCountAll()).count;
-                await ctx.service.obtainExact(
-                    new Descriptor({
-                        playerHeroes: [HeroId.Zenyatta],
+        it('doesnt find exact with same number of different data points instead of null', async () => {
+            await ctx.fixtures(
+                heroesFixture,
+                abilitiesFixture,
+                mapsFixture,
+                thematicTagsFixture
+            )
+            await ctx.app.get(GuideDescriptorService).obtainExact(
+                new GuideDescriptorQuickie({
+                    allyHeroes: [HeroId.Ana, HeroId.Reinhardt],
+                })
+            );
+            expect(
+                (await ctx.service.getExact(
+                    new GuideDescriptorQuickie({
+                        allyHeroes: [HeroId.Ana, HeroId.Baptiste],
                     })
+                ))
+            ).toBe(null)
+        });
+        it('creates new descriptor if not exists when obtaining', async () => {
+            await ctx.fixtures(
+                heroesFixture,
+                guideDescriptorsFixture
+            )
+            const oldCount = (await GuideDescriptor.findAndCountAll()).count;
+            await ctx.service.obtainExact(
+                new Descriptor({
+                    playerHeroes: [HeroId.Zenyatta],
+                })
                 )
                     .then(async descriptor => {
                         expect(

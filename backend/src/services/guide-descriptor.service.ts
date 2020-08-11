@@ -221,7 +221,13 @@ where ${pivotTableName}.${pivotTableFieldName} is null
         } else {
             if (exact) {
                 return `
-select distinct guideDescriptorId from (
+select * from (
+              
+select guideDescriptorId
+from (
+select guideDescriptorId,
+       count(*) as cnt
+       from (
                 select guideDescriptorId
                        from (
                              select *,
@@ -230,6 +236,9 @@ select distinct guideDescriptorId from (
                            ) tbl_${pivotTableName}_${pivotTableFieldName}
                 where count = ${items.length}
                   and ${pivotTableFieldName} in (:${partName})
+) tbl_${partName}_intermediate_1
+) tbl_${partName}_intermediate_2
+where cnt = ${items.length}
 ) tbl_${partName}
             `
             } else {
@@ -240,6 +249,7 @@ select distinct guideDescriptorId from (
                              select *,
                        count(*) over(partition by guideDescriptorId) as count
                 from ${pivotTableName}
+                           where ${pivotTableFieldName} in (:${partName})
                            ) tbl_${pivotTableName}_${pivotTableFieldName}
                 where count >= ${items.length}
                   and ${pivotTableFieldName} in (:${partName})

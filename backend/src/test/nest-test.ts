@@ -37,6 +37,9 @@ export function nestTest<T>(
             testContext.app = app.createNestApplication()
             await testContext.app.init()
         });
+        afterEach(async () => {
+            await testContext.app.close()
+        })
 
         call(testContext)
     };
