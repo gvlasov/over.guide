@@ -11,5 +11,6 @@ export default class MapTagVso extends IndividualTagVso {
             TagClass.Map
         )
     }
+
 }
 

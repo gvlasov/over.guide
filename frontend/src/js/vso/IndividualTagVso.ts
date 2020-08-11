@@ -10,5 +10,9 @@ export default abstract class IndividualTagVso implements Tag {
         public cssClass: TagClass,
     ) {
     }
+
+    get dataName() {
+        return this.name;
+    }
 }
 

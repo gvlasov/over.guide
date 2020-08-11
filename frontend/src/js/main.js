@@ -7,7 +7,7 @@ import CountersPractice from '@/vue/training/CountersPractice.vue';
 import PickSuggestion from "@/vue/training/PickSuggestion.vue";
 import GuideEditor from "@/vue/guides/GuideEditor.vue";
 import TestingGround from "@/vue/TestingGround";
-import GuideBrowser from "@/vue/guides/GuideBrowser";
+import GuideSearch from "@/vue/guides/GuideSearch";
 
 const router = new VueRouter({
     routes: [
@@ -15,7 +15,7 @@ const router = new VueRouter({
         {path: '/suggest-pick', component: PickSuggestion},
         {path: '/guide-editor', component: GuideEditor},
         {path: '/testing-ground', component: TestingGround},
-        {path: '/search', component: GuideBrowser},
+        {path: '/search/:descriptor?', component: GuideSearch},
     ]
 });
 Vue.use(VueRouter);

@@ -27,12 +27,19 @@
     import Guide from "@/vue/guides/Guide";
     import GuideVso from "@/js/vso/GuideVso";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import HeroId from "data/HeroId";
-    import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 
     const backend = new Backend(axios);
     export default {
-        props: {},
+        props: {
+            descriptor: {
+                type: GuideDescriptorVso,
+                required: true
+            },
+            baseUrl: {
+                type: String,
+                required: true,
+            }
+        },
         methods: {
             async onSearch() {
                 this.guides = [];
@@ -68,13 +75,6 @@
         data() {
             return {
                 guides: [],
-                descriptor: new GuideDescriptorVso(
-                    new GuideDescriptorQuickie(
-                        {
-                            playerHeroes: [HeroId.Dva],
-                        }
-                    )
-                ),
                 pageNumber: 0,
                 alreadyLoadedGuideIds: []
             }

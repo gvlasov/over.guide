@@ -562,7 +562,7 @@ const data = [
         group: 'sonic-amplifier',
         heroId: HeroId.Lucio,
         name: 'Sonic Amplifier (Boop)',
-        dataName: 'sonic-amplifier',
+        dataName: 'sonic-amplifier-boop',
         keyIds: [KeyId.RMB],
         description: 'Lúcio can knock enemies back with a blast of sound.',
     },

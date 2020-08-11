@@ -52,13 +52,14 @@
              * @see https://github.com/gvlasov/learn-overwatch-counters/issues/117
              */
             fixWidthBug() {
-                for (let element of this.$refs.writingModeWrap) {
-                    const buf = element.style.width;
-                    element.style.width = 'min-content';
-                    setTimeout(() => {
-
-                        element.style.width = buf;
-                    }, 1)
+                if (typeof this.$refs.writingModeWrap !== 'undefined') {
+                    for (let element of this.$refs.writingModeWrap) {
+                        const buf = element.style.width;
+                        element.style.width = 'min-content';
+                        setTimeout(() => {
+                            element.style.width = buf;
+                        }, 1)
+                    }
                 }
             }
         },
