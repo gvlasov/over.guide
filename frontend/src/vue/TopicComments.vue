@@ -31,10 +31,9 @@
         methods: {
             initRemark42() {
                 window.REMARK42.createInstance(this.config);
-                console.log(this.config.node)
             },
             elementId() {
-                return 'remark42-' + this.topic.id
+                return 'remark42-comments-' + this.topic.id
             }
         },
         mounted() {
