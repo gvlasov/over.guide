@@ -3,14 +3,16 @@
         <div class="meta">
             <div class="tags">
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
-                <div class="badge-tags-wrap">
+                <div ref="badgeTagsWrap" class="badge-tags-wrap">
                     <ThematicTagBadge
                             v-for="thematicTag in guide.descriptor.thematicTags"
+                            ref="thematicTags"
                             :tag="thematicTag"
                             :key="thematicTag.dataName"
                     />
                     <ThematicTagBadge
                             v-for="map in guide.descriptor.maps"
+                            ref="mapTags"
                             :tag="map"
                             :key="map.dataName"
                     />
@@ -86,6 +88,8 @@
         data() {
             return {}
         },
+        mounted() {
+        },
         components: {
             ThematicTagBadge,
             Tag,
@@ -114,6 +118,8 @@
 
     .meta {
         display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
         color: white;
         justify-content: space-between;
         padding: 1em;

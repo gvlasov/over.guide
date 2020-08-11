@@ -44,24 +44,7 @@
         data() {
             return {};
         },
-        mounted() {
-            this.fixWidthBug()
-        },
         methods: {
-            /**
-             * @see https://github.com/gvlasov/learn-overwatch-counters/issues/117
-             */
-            fixWidthBug() {
-                if (typeof this.$refs.writingModeWrap !== 'undefined') {
-                    for (let element of this.$refs.writingModeWrap) {
-                        const buf = element.style.width;
-                        element.style.width = 'min-content';
-                        setTimeout(() => {
-                            element.style.width = buf;
-                        }, 1)
-                    }
-                }
-            }
         },
         computed: {},
         components: {
@@ -85,7 +68,14 @@
     }
 
     .ability-icons-wrap {
-        writing-mode: vertical-lr;
+        /*writing-mode: vertical-lr;*/
+        display: grid;
+        direction: rtl;
+        /*grid-template-columns: auto auto auto;*/
+        grid-auto-flow: column dense;
+        grid-template-rows: auto auto;
+        grid-template-columns: auto auto auto auto;
+        grid-gap: 0;
         max-height: 3em;
         white-space: normal;
         background-color: #28253a;
@@ -96,10 +86,11 @@
 
     .ability-icon-wrap {
         display: inline-block;
+        text-align: center;
     }
 
     .ability-icon {
-        height: 1.4em;
+        height: 1.3em;
         width: auto;
         margin: .05em;
     }
