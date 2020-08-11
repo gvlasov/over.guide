@@ -8,6 +8,7 @@
             <div
                     v-if="tagGroup.selectedAbilities(hero).length > 0"
                     class="ability-icons-wrap"
+                    ref="writingModeWrap"
             >
                 <div
                         v-for="ability in tagGroup.selectedAbilities(hero)"
@@ -43,7 +44,24 @@
         data() {
             return {};
         },
-        methods: {},
+        mounted() {
+            this.fixWidthBug()
+        },
+        methods: {
+            /**
+             * @see https://github.com/gvlasov/learn-overwatch-counters/issues/117
+             */
+            fixWidthBug() {
+                for (let element of this.$refs.writingModeWrap) {
+                    const buf = element.style.width;
+                    element.style.width = 'min-content';
+                    setTimeout(() => {
+
+                        element.style.width = buf;
+                    }, 1)
+                }
+            }
+        },
         computed: {},
         components: {
             AbilityIcon,
