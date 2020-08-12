@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="guide-browser">
         <DescriptorBuilder
                 :search-button-enabled="false"
                 :descriptor="descriptor"
@@ -101,5 +101,10 @@
         justify-content: start;
         flex-direction: column;
         gap: 2em;
+    }
+
+    .guide-browser {
+        max-width: 54em;
+        margin: 0 auto;
     }
 </style>
