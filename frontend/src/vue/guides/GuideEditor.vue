@@ -159,34 +159,35 @@
             onTextPaste(part) {
                 return (pasteEvent) => {
                     let paste = (pasteEvent.clipboardData || pasteEvent.originalEvent.clipboardData || window.clipboardData).items;
-                    const item = paste[0];
                     const uploadingText = '![Uploading...]()';
-                    if (item.kind === 'file') {
-                        pasteEvent.preventDefault();
-                        var blob = item.getAsFile();
-                        var reader = new FileReader();
-                        reader.onload = async function (fileEvent) {
-                            const formData = new FormData();
-                            formData.append('image', fileEvent.target.result)
-                            await fetch('https://api.imgur.com/3/image', {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': 'Client-ID 546c25a59c58ad7'
-                                },
-                                body: fileEvent.target.result.substr(22)
-                            }).then(
-                                async response => {
-                                    const responseJson = await response.json();
-                                    part.contentMd =
-                                        pasteEvent.target.value.replace(
-                                            uploadingText,
-                                            `![](${responseJson.data.link})`
-                                        )
-                                }
-                            )
-                        };
-                        pasteEvent.target.value += "\n" + uploadingText;
-                        reader.readAsDataURL(blob);
+                    for (let item of paste) {
+                        if (item.kind === 'file') {
+                            pasteEvent.preventDefault();
+                            var blob = item.getAsFile();
+                            var reader = new FileReader();
+                            reader.onload = async function (fileEvent) {
+                                const formData = new FormData();
+                                formData.append('image', fileEvent.target.result)
+                                await fetch('https://api.imgur.com/3/image', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': 'Client-ID 546c25a59c58ad7'
+                                    },
+                                    body: fileEvent.target.result.substr(22)
+                                }).then(
+                                    async response => {
+                                        const responseJson = await response.json();
+                                        part.contentMd =
+                                            pasteEvent.target.value.replace(
+                                                uploadingText,
+                                                `![](${responseJson.data.link})`
+                                            )
+                                    }
+                                )
+                            };
+                            pasteEvent.target.value += "\n" + uploadingText;
+                            reader.readAsDataURL(blob);
+                        }
                     }
                 };
             },
@@ -273,7 +274,8 @@
                     }),
                     parts: [
                         new GuidePartTextWidget(
-                            {kind: 'text', contentMd: 'Pantelol'}
+                            {kind: 'text', contentMd: 'Pantelol'},
+                            true
                         ),
                         new GuidePartVideoWidget(
                             {
