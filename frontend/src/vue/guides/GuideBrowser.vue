@@ -72,6 +72,11 @@
                     })
             }
         },
+        watch: {
+            descriptor(newValue) {
+                this.onSearch()
+            },
+        },
         data() {
             return {
                 guides: [],
