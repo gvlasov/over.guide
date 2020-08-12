@@ -162,7 +162,7 @@
         border: none;
         box-shadow: none;
         position: relative;
-        padding: .5em .25em .3em .25em;
+        padding: 0 .25em 0 0;
         height: 100%;
     }
 
