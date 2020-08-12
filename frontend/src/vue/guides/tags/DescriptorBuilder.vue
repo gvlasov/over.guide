@@ -67,7 +67,6 @@
     }
 
     .searchbox {
-        display: inline-table;
         box-sizing: border-box;
         padding: .5rem 0 .5rem .5rem;
         background: #fff;

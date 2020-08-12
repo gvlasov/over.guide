@@ -134,6 +134,7 @@
         padding: .3em;
         box-sizing: border-box;
         max-height: 10em;
+        max-width: 100%;
         overflow-y: auto;
         position: absolute;
         background-color: white;
@@ -144,6 +145,7 @@
         border-left: 0;
         border-right: 0;
         z-index: 2;
+        overscroll-behavior: none contain;
     }
 
     .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
@@ -171,8 +173,6 @@
     }
 
     .root {
-        max-width: 30em;
-        width: 30em;
     }
 
 </style>

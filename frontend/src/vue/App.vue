@@ -65,7 +65,7 @@
         text-align: center;
         background-color: #405275;
         width: 100%;
-        height: 100%;
-        overflow: hidden;
+        min-height: 100vh;
+        overflow-x: hidden;
     }
 </style>
