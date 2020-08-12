@@ -2,6 +2,7 @@
     <img
             :src="imgSrc"
             v-bind:data-ability-data-name="ability.dataName"
+            :title="ability.name"
     />
 </template>
 
