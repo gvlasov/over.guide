@@ -116,14 +116,9 @@ export default class DescriptorParamParser {
         } as GuideDescriptorDto;
         for (let positionPart of descriptorParam.split(';')) {
             let itemsTexts, positionPartName: string | null;
-            if (positionPart.indexOf(':') > -1) {
-                const split = positionPart.split(':');
-                positionPartName = split[0]
-                itemsTexts = split[1].split(',')
-            } else {
-                itemsTexts = positionPart.split(',')
-                positionPartName = null
-            }
+            const split = positionPart.split(':');
+            positionPartName = split[0]
+            itemsTexts = split[1].split(',')
             const dtoTypeWithDtos = uniq(itemsTexts)
                 .map(
                     (dataName: string) => this.vsoMap.getByDataName(dataName)
@@ -131,7 +126,8 @@ export default class DescriptorParamParser {
             for (let [dtoType, dto] of dtoTypeWithDtos) {
                 const field = this.vsoMap.getGuideDescriptorDtoFieldName(
                     dtoType,
-                    positionPartName === null
+                    (positionPartName === 'maps'
+                        || positionPartName === 'tags')
                         ? null
                         : DescriptorParamParser.positionPartName2PositionId(positionPartName)
                 );

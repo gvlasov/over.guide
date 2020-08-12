@@ -19,14 +19,14 @@ export default class DescriptorParamUnparser {
         if (vso.thematicTags.length === 0) {
             return null;
         }
-        return vso.thematicTags.map(tag => tag.dataName).join(',');
+        return 'tags:' + vso.thematicTags.map(tag => tag.dataName).join(',');
     }
 
     private static unparseMapTags(vso: GuideDescriptorVso) {
         if (vso.maps.length === 0) {
             return null;
         }
-        return vso.maps.map(tag => tag.dataName).join(',');
+        return 'maps:' + vso.maps.map(tag => tag.dataName).join(',');
     }
 
     private static unparseTagGroup(tagGroup: TagGroupVso): null | string {

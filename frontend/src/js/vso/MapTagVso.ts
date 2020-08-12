@@ -6,8 +6,8 @@ export default class MapTagVso extends IndividualTagVso {
     constructor(map: MapDto) {
         super(
             map.id,
-            map.name,
             map.dataName,
+            map.name,
             TagClass.Map
         )
     }
