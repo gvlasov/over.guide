@@ -81,7 +81,7 @@
                                 modestbranding: 1,
                                 rel: 0,
                                 showinfo: 0,
-                                autoplay: self.autoplay,
+                                autoplay: self.autoplay ? 1 : 0,
                             },
                             width: null,
                             height: null,
@@ -91,7 +91,14 @@
                                     if (self.autoplay) {
                                         self.player.playVideo();
                                     } else {
-                                        self.player.pauseVideo();
+                                        // self.player.pauseVideo();
+                                        /*
+                                         If I use pauseVideo here, Mobile player
+                                         breaks on both actual Android and Chrome
+                                         Dev Tools device mode, and it breaks in
+                                         the same way: doesn't load video at all,
+                                         showing a broken square icon
+                                         */
                                     }
                                     if (self.mute) {
                                         self.player.mute();
