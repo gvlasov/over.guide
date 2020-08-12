@@ -31,5 +31,6 @@
         display: inline-block;
         line-height: 100%;
         text-align: center;
+        max-width: 100%;
     }
 </style>
