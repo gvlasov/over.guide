@@ -186,7 +186,7 @@
         flex-direction: row;
         flex-wrap: nowrap;
         width: 100vw;
-        min-height: 100vh;
+        height: 100vh;
         position: relative;
         max-width: 73em;
         max-height: 35em;
@@ -205,6 +205,8 @@
     .tag-builder-roster-wrap {
         width: 100vw;
         height: 100vh;
+        line-height: 100vh;
+        vertical-align: top;
     }
 
     .roster {
@@ -369,6 +371,10 @@
     @media screen and (orientation: portrait) {
         .tag-builder-roster {
             flex-direction: column;
+            min-height: 100vh;
+        }
+        .tag-builder-roster-wrap {
+            line-height: normal;
         }
 
         .navigation-arrow {
