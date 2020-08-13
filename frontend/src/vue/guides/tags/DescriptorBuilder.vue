@@ -6,7 +6,7 @@
                 @tagChange="$emit('descriptorChange')"
         />
         <ThematicTagInput
-                style="display: block; min-width: 9em; flex-grow: 1;"
+                style="display: block; min-width: 17em; flex-grow: 1;"
                 :descriptor="descriptor"
                 @tagChange="$emit('descriptorChange')"
         />
