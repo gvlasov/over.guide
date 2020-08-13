@@ -11,61 +11,63 @@
                     <div class="aside-content">{{selectingSkills ? 'Heroes' : 'Skills'}}</div>
                     <div class="background"></div>
                 </div>
-                <div
-                        v-if="!selectingSkills"
-                        class="roster"
-                >
+                <div class="tag-builder-roster-content">
                     <div
-                            v-for="group in heroGroups.groups"
-                            class="role-group"
+                            v-if="!selectingSkills"
+                            class="roster"
                     >
-                        <TagBuilderRosterPortrait
-                                v-for="hero in group"
-                                v-bind:key="hero.dataName"
-                                ref="portraits"
-                                :hero="hero"
-                                :selected="isHeroSelected(hero)"
-                                @heroSelect="onHeroTap"
-                                @skillSelectionStart="() => {selectingSkills = true}"
-                                :abilities="selectedHeroAbilities(hero)"
-                                :tag-group-abilities="tagGroup.abilities"
-                        />
                         <div
-                                v-if="shouldShowClearButtonOnGroupRow(group)"
-                                class="clear-button-wrap"
+                                v-for="group in heroGroups.groups"
+                                class="role-group"
                         >
-                            <OverwatchButton
-                                    :type="'default'"
-                                    class="clear-button"
-                                    v-hammer:tap="() => tagGroup.heroes = []"
+                            <TagBuilderRosterPortrait
+                                    v-for="hero in group"
+                                    v-bind:key="hero.dataName"
+                                    ref="portraits"
+                                    :hero="hero"
+                                    :selected="isHeroSelected(hero)"
+                                    @heroSelect="onHeroTap"
+                                    @skillSelectionStart="() => {selectingSkills = true}"
+                                    :abilities="selectedHeroAbilities(hero)"
+                                    :tag-group-abilities="tagGroup.abilities"
+                            />
+                            <div
+                                    v-if="shouldShowClearButtonOnGroupRow(group)"
+                                    class="clear-button-wrap"
                             >
-                                <div class="unskew-clear-button">Clear</div>
-                            </OverwatchButton>
+                                <OverwatchButton
+                                        :type="'default'"
+                                        class="clear-button"
+                                        v-hammer:tap="() => tagGroup.heroes = []"
+                                >
+                                    <div class="unskew-clear-button">Clear</div>
+                                </OverwatchButton>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div
-                        v-if="selectingSkills"
-                        class="ability-select-wrap"
-                >
-                    <AbilitySelect
-                            :heroes="tagGroup.heroes"
-                            v-model="tagGroup.abilities"
-                            class="ability-select"
-                    />
-                </div>
-                <div class="button-wrap">
                     <div
-                            class="tag-builder-roster-tag-wrap"
-                            style="">
-                        <TagBuilderRosterTag
-                                :descriptor="descriptor"
-                                class="descriptor-mirror"
-                                :selected-position="tagGroup.gamerPosition"
-                                @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
-                                @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
-                                @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
+                            v-if="selectingSkills"
+                            class="ability-select-wrap"
+                    >
+                        <AbilitySelect
+                                :heroes="tagGroup.heroes"
+                                v-model="tagGroup.abilities"
+                                class="ability-select"
                         />
+                    </div>
+                    <div class="button-wrap">
+                        <div
+                                class="tag-builder-roster-tag-wrap"
+                                style="">
+                            <TagBuilderRosterTag
+                                    :descriptor="descriptor"
+                                    class="descriptor-mirror"
+                                    :selected-position="tagGroup.gamerPosition"
+                                    @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
+                                    @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
+                                    @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div
@@ -145,6 +147,9 @@
                 return this.tagGroup.heroes;
             },
         },
+        beforeMount() {
+            document.body.requestFullscreen()
+        },
         components: {
             OverwatchButton,
             AbilityIcon,
@@ -175,36 +180,43 @@
 
     .tag-builder-roster {
         display: inline-flex;
-        justify-content: center;
-        flex-direction: column;
-        flex-wrap: wrap;
+        justify-content: space-evenly;
+        align-content: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
         width: 100vw;
-        height: 100%;
+        min-height: 100vh;
         position: relative;
         max-width: 73em;
         max-height: 35em;
         line-height: 1em;
     }
 
+    .tag-builder-roster-content {
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+
     .tag-builder-roster-wrap {
-        text-align: center;
         width: 100vw;
         height: 100vh;
-        line-height: 100vh;
-        vertical-align: middle;
     }
 
     .roster {
-        flex-grow: 1;
+        flex-grow: 0;
         flex-shrink: 1;
-        flex-basis: 0;
+        flex-basis: auto;
         overflow-y: auto;
-        width: calc(100% - 18rem);
-        max-width: calc(100% - 18rem);
-        padding-top: 2rem;
+        width: 100%;
+        /*max-width: calc(100% - 18rem);*/
         display: flex;
         flex-direction: column;
         justify-content: end;
+        margin: 0 auto;
     }
 
     .ability-select-wrap {
@@ -231,10 +243,9 @@
     .aside-button {
         @include overwatch-button;
         display: flex;
-        flex-basis: 100%;
         justify-content: center;
         flex-direction: column;
-        width: 9rem;
+        flex-basis: 9rem;
         font-size: 2em;
         z-index: 2;
     }
@@ -351,6 +362,26 @@
 
     .clear-button ::v-deep .background {
         border-radius: .3em;
+    }
+
+    @media screen and (orientation: portrait) {
+        .tag-builder-roster {
+            flex-direction: column;
+        }
+
+        .navigation-arrow {
+            display: none;
+        }
+
+        .arrow-text {
+            position: static;
+            left: auto;
+            transform: none;
+        }
+
+        .aside-button {
+            flex-basis: 7rem;
+        }
     }
 
 </style>
