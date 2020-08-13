@@ -150,7 +150,7 @@
         },
         beforeMount() {
             if (typeof window.orientation !== 'undefined') {
-                document.body.requestFullscreen()
+                document.documentElement.requestFullscreen()
             }
         },
         components: {
