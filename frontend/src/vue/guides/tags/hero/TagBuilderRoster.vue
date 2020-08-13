@@ -32,10 +32,11 @@
                                     :tag-group-abilities="tagGroup.abilities"
                             />
                             <div
-                                    v-if="shouldShowClearButtonOnGroupRow(group)"
                                     class="clear-button-wrap"
+                                    v-if="shouldHaveClearButtonOnGroupRow(group)"
                             >
                                 <OverwatchButton
+                                        v-bind:style="{'visibility': selectedHeroesInGroup().length > 0 ? 'visible' : 'hidden'}"
                                         :type="'default'"
                                         class="clear-button"
                                         v-hammer:tap="() => tagGroup.heroes = []"
@@ -135,9 +136,9 @@
             selectedHeroesInGroup() {
                 return this.selectedHeroes.filter(h => this.tagGroup.heroes.find(gh => gh.id === h.id));
             },
-            shouldShowClearButtonOnGroupRow(group) {
-                return this.selectedHeroesInGroup().length > 0 && group[0].role === Role.Support;
-            }
+            shouldHaveClearButtonOnGroupRow(group) {
+                return group[0].role === Role.Support;
+            },
         },
         computed: {
             /**
@@ -339,6 +340,7 @@
         /* https://stackoverflow.com/a/14896313/1542343 */
         transform: skew(-25deg);
         vertical-align: bottom;
+        width: 9.4%;
     }
 
     .unskew-clear-button {
@@ -349,15 +351,15 @@
         margin-left: .3em;
         height: 100%;
         vertical-align: top;
-        position: absolute;
-        font-size: 3.5vh;
+        font-size: .9em;
         border-radius: .3em;
-        width: 5.0vw;
+        width: 100%;
+        border: .08vw solid transparent;
     }
 
     .clear-button ::v-deep .content {
-        padding-left: 7%;
-        padding-right: 7%;
+        padding-left: 12%;
+        padding-right: 12%;
     }
 
     .clear-button ::v-deep .background {
