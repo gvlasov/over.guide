@@ -21,7 +21,6 @@
     import PickSuggestion from "@/vue/training/PickSuggestion.vue";
     import Vue from 'vue';
     import {VueHammer} from 'vue2-hammer';
-    import flexTouch from 'vue-flex-touch';
     import MatchupEvaluation from "@/vue/MatchupEvaluation.vue";
 
     import heroes from "data/heroes";
@@ -33,7 +32,6 @@
     import MatchupEvaluator from "@/vue/MatchupEvaluator";
 
     Vue.use(VueHammer);
-    Vue.use(flexTouch);
     export default {
         methods: {},
         data() {
