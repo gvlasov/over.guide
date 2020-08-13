@@ -170,6 +170,7 @@
         display: inline-block;
         width: 2em;
         padding-right: .5em;
+        height: 3em;
     }
 
     .root {
