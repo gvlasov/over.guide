@@ -149,7 +149,9 @@
             },
         },
         beforeMount() {
-            document.body.requestFullscreen()
+            if (typeof window.orientation !== 'undefined') {
+                document.body.requestFullscreen()
+            }
         },
         components: {
             OverwatchButton,
