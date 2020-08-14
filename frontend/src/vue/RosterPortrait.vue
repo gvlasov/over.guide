@@ -5,7 +5,7 @@
             :banned="banned"
             :selected-out="selectedOut"
             v-bind:style="{ 'border-color': borderColor }"
-            v-flex-touch="(e) => e.preventDefault()"
+            @contextmenu.native="(e) => {e.preventDefault(); e.stopPropagation();return false;}"
             @portraitTap="onPortraitTap"
             v-bind:data-hero-data-name="hero.dataName"
             :selected="selected"
@@ -51,6 +51,8 @@
                     this.$emit('heroSelect', this.hero)
                 }
             },
+            touch(e) {
+            }
         },
         computed: {
             /**

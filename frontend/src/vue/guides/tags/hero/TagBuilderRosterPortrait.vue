@@ -6,7 +6,6 @@
                 :banned="false"
                 :selected-out="false"
                 :selected="selected"
-                v-flex-touch="(e) => e.preventDefault()"
                 @heroSelect="bubbleHeroSelect"
                 v-bind:data-hero-data-name="hero.dataName"
                 v-bind:class="{ 'selected': selected }"

@@ -3,7 +3,6 @@
         <HeroPortrait
                 :hero="hero"
                 :show-name="showName"
-                v-flex-touch="(e) => e.preventDefault()"
         />
     </div>
 </template>
@@ -15,7 +14,11 @@
         props: {
             hero: Object,
         },
-        methods: {},
+        methods: {
+            touch(e) {
+                e.preventDefault()
+            }
+        },
         data() {
             const self = this;
             return {
