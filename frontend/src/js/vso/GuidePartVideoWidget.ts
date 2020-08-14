@@ -5,7 +5,7 @@ import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 export default class GuidePartVideoWidget extends GuidePartWidget {
 
     constructor(
-        public part: GuidePartVideoDto,
+        public part: GuidePartVideoDto | null,
         public editing: boolean = false
     ) {
         super(part, editing)

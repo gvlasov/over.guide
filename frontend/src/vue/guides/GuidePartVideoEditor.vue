@@ -1,11 +1,19 @@
 <template>
     <div>
-        <div v-if="widget.editing" key="editor">
+        <div v-if="widget.part.excerpt === null">
+            <input
+                    type="text"
+                    class="youtube-video-link-input"
+                    @input="onVideoLinkInputChange"
+                    placeholder="Put here a link to a Youtube video"
+            />
+        </div>
+        <div v-else-if="widget.editing" key="editor">
             <YoutubeExcerptEditor
                     :video-id="widget.part.excerpt.youtubeVideoId"
                     :initial-start-seconds="widget.part.excerpt.startSeconds"
                     :initial-end-seconds="widget.part.excerpt.endSeconds"
-                    :player-element-id="index + '-editor-' + widget.part.excerpt.youtubeVideoId"
+                    :player-element-id="'video-editor-' + widget.part.excerpt.youtubeVideoId + '-' + index"
                     @startSecondsChange="onStartSecondsChangeHacky(widget, $event)"
                     @endSecondsChange="onEndSecondsChangeHacky(widget, $event)"
                     class="video-editor"
@@ -13,7 +21,7 @@
                     :video-css-height="'22rem'"
             />
         </div>
-        <div v-if="!widget.editing" key="video">
+        <div v-else-if="!widget.editing" key="video">
             <YoutubeVideo
                     :video-id="widget.part.excerpt.youtubeVideoId"
                     :start="widget.part.excerpt.startSeconds"
@@ -33,6 +41,8 @@
     import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
     import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
     import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
+    import YoutubeUrlVso from "@/js/vso/YoutubeUrlVso";
+    import {parse, toSeconds} from 'iso8601-duration';
 
     export default {
         model: {},
@@ -47,6 +57,30 @@
             }
         },
         methods: {
+            onVideoLinkInputChange(event) {
+                const inputText = event.target.value;
+                let url;
+                try {
+                    url = new URL(inputText)
+                } catch (e) {
+                    return;
+                }
+                const youtubeUrl = new YoutubeUrlVso(url)
+                youtubeUrl
+                    .contentDetails()
+                    .then(
+                        contentDetails => {
+                            this.$emit(
+                                'videoSelection',
+                                {
+                                    youtubeVideoId: youtubeUrl.videoId,
+                                    startSeconds: 0,
+                                    endSeconds: toSeconds(parse(contentDetails.items[0].contentDetails.duration)),
+                                }
+                            )
+                        }
+                    )
+            },
             onStartSecondsChangeHacky(widget, newValue) {
                 widget.part.excerpt.startSeconds = newValue;
             },
@@ -55,7 +89,9 @@
             },
         },
         data() {
-            return {}
+            return {
+                youtubeVideoUrl: null,
+            }
         },
         components: {
             YoutubeExcerptEditor,
@@ -66,6 +102,8 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "~@/assets/css/overwatch-ui.scss";
+
     .video {
         max-width: 100%;
         width: 100%;
@@ -73,5 +111,20 @@
 
     .video-editor {
         display: block;
+    }
+
+    .youtube-video-link-input {
+        display: block;
+        margin: 0 auto 2em auto;
+        height: 3em;
+        padding: .1em;
+        width: 20em;
+        @include overwatch-futura;
+        font-size: 1.2em;
+        text-align: center;
+
+        &:focus::-webkit-input-placeholder {
+            color: transparent;
+        }
     }
 </style>
