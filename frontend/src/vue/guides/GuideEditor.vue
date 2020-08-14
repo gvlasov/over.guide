@@ -283,15 +283,6 @@
             }
         }
 
-        .video {
-            max-width: 100%;
-            width: 100%;
-        }
-
-        .video-editor {
-            display: block;
-        }
-
         .descriptor-builder {
             z-index: 3;
             position: relative;
