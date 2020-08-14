@@ -25,7 +25,7 @@
             >+ video
             </OverwatchButton>
         </div>
-        <draggable v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
+        <draggable class="guide-parts" v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
             <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
                 <GuidePartTextEditor
                         v-if="widget.isText()"
@@ -249,17 +249,24 @@
     @import '~@/assets/css/fonts.css';
 
     .wrap {
-        display: inline-block;
+        display: inline-flex;
+        flex-direction: column;
+        gap: .6em;
         max-width: 40em;
 
         .guide-part {
             padding: 1em;
-            margin: .3em;
             cursor: pointer;
             background-color: rgba(43, 55, 83, 0.8);
             color: white;
             font-family: 'Futura Demi Bold', 'sans-serif';
             position: relative;
+        }
+
+        .guide-parts {
+            display: flex;
+            flex-direction: column;
+            gap: .3em;
         }
 
         .guide-part-buttons > * {
@@ -287,7 +294,6 @@
             z-index: 3;
             position: relative;
             width: 100%;
-            margin-bottom: 1rem;
             /* For it to be positioned above everything else,
                    which is important when the dropdown is displayed
                    */
