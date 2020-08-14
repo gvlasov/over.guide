@@ -34,6 +34,7 @@
                 <GuidePartVideoEditor
                         v-if="widget.isVideo()"
                         :widget="widget"
+                        :index="index"
                 />
                 <div class="guide-part-buttons">
                     <OverwatchButton
@@ -94,12 +95,10 @@
     import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
     import Backend from "@/js/Backend";
     import axios from 'axios';
-    import GuideTheme from "data/GuideTheme";
-    import MapId from "data/MapId";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import HeroId from "data/HeroId";
     import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
     import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
+    import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 
     const backend = new Backend(axios);
 
@@ -197,38 +196,10 @@
                 guide: {
                     id: undefined,
                     guideId: undefined,
-                    descriptor: new GuideDescriptorVso({
-                        playerHeroes: [HeroId.Pharah],
-                        playerAbilities: [],
-                        allyHeroes: [HeroId.Soldier],
-                        allyAbilities: [],
-                        enemyHeroes: [HeroId.Mei],
-                        enemyAbilities: [],
-                        thematicTags: [GuideTheme.Aim],
-                        mapTags: [MapId.Havana],
-                    }),
-                    parts: [
-                        new GuidePartTextWidget(
-                            {kind: 'text', contentMd: 'Pantelol'},
-                            true
-                        ),
-                        new GuidePartVideoWidget(
-                            {
-                                kind: 'video',
-                                excerpt: {
-                                    youtubeVideoId: 'qhtQx9ZXrf8',
-                                    startSeconds: 12.32,
-                                    endSeconds: 30.3,
-                                }
-                            }
-                        ),
-                        new GuidePartTextWidget(
-                            {
-                                kind: 'text',
-                                contentMd: `### Pantenol\n![](https://i.imgur.com/Eug7rxn.png) )`,
-                            }
-                        ),
-                    ]
+                    descriptor: new GuideDescriptorVso(
+                        new GuideDescriptorQuickie({})
+                    ),
+                    parts: []
                 },
             }
         },
