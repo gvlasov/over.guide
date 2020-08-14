@@ -358,6 +358,13 @@
 
             & > * {
                 font-size: 2rem;
+                flex-shrink: 1;
+                flex-basis: 5em;
+            }
+
+            & > * ::v-deep .content {
+                padding-left: 0;
+                padding-right: 0;
             }
         }
 
@@ -378,6 +385,10 @@
             /* For it to be positioned above everything else,
                    which is important when the dropdown is displayed
                    */
+        }
+
+        .create-new-part-button {
+            white-space: nowrap;
         }
     }
 
