@@ -230,8 +230,8 @@
         flex-basis: 0;
         overflow-y: auto;
         overscroll-behavior: none contain;
-        width: calc(100% - 18rem);
-        max-width: calc(100% - 18rem);
+        width: 100%;
+        max-width: 100%;
         padding-top: 2rem;
     }
 
