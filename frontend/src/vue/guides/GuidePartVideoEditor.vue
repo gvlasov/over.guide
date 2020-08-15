@@ -114,11 +114,13 @@
     }
 
     .youtube-video-link-input {
-        display: block;
+        display: inline-block;
         margin: 0 auto 2em auto;
         height: 3em;
         padding: .1em;
-        width: 20em;
+        max-width: 100%;
+        width: 30em;
+        box-sizing: border-box;
         @include overwatch-futura;
         font-size: 1.2em;
         text-align: center;
