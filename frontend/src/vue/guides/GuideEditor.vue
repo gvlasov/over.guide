@@ -46,7 +46,7 @@
                     >Edit
                     </OverwatchButton>
                     <OverwatchButton
-                            v-if="widget.editing"
+                            v-if="widget.editing && widget.part.excerpt !== null"
                             type="default"
                             class="view-button"
                             v-hammer:tap="() => widget.editing = false"
