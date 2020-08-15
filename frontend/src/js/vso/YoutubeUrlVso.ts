@@ -15,7 +15,7 @@ export default class YoutubeUrlVso {
     }
 
     get videoId(): string {
-        const match = this.url.search.match(/v=(\w+)(&|$)/);
+        const match = this.url.search.match(/v=([^&]+)(&|$)/);
         if (match === null) {
             throw new TypeError(
                 this.url.href + ' is not a valid Youtube URL'
