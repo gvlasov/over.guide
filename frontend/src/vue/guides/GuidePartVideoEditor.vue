@@ -117,7 +117,6 @@
                 } else {
                     return validations;
                 }
-                console.log(validations)
                 return validations;
             },
         },

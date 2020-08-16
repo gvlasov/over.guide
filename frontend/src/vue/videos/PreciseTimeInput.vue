@@ -16,7 +16,7 @@
                 <button
                         class="subtract-button"
                         @click="hours -= 1"
-                        v-bind:disabled="totalValueSeconds === 0"
+                        v-bind:disabled="totalValueSeconds === minSeconds"
                 ></button>
             </div>
             <div class="time-part-interjector">
@@ -38,7 +38,7 @@
             <button
                     class="subtract-button"
                     @click="minutes -= 1"
-                    v-bind:disabled="totalValueSeconds === 0"
+                    v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
         </div>
         <div class="time-part-interjector">:</div>
@@ -57,7 +57,7 @@
             <button
                     class="subtract-button"
                     @click="seconds -= 1"
-                    v-bind:disabled="totalValueSeconds === 0"
+                    v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
         </div>
         <div class="time-part-interjector">.</div>
@@ -76,7 +76,7 @@
             <button
                     class="subtract-button"
                     @click="millis -= 25"
-                    v-bind:disabled="totalValueSeconds === 0"
+                    v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
         </div>
     </div>
@@ -95,6 +95,10 @@
                 required: true,
             },
             maxSeconds: {
+                type: Number,
+                required: true,
+            },
+            minSeconds: {
                 type: Number,
                 required: true,
             },
@@ -117,8 +121,8 @@
                 let newTotalSeconds = value
                 if (newTotalSeconds > this.maxSeconds) {
                     newTotalSeconds = this.maxSeconds;
-                } else if (newTotalSeconds < 0) {
-                    newTotalSeconds = 0;
+                } else if (newTotalSeconds < this.minSeconds) {
+                    newTotalSeconds = this.minSeconds;
                 }
                 this.$emit('totalValueSecondsChange', newTotalSeconds);
             },
@@ -132,8 +136,7 @@
                 },
                 set(value) {
                     this.setNewTotalSecondsWithClamping(
-                        value * 3600 + this.minutes * 60 + this.seconds + this.millis / 1000,
-                        value * 3600
+                        value * 3600 + this.minutes * 60 + this.seconds + this.millis / 1000
                     );
                 }
             },
@@ -145,8 +148,7 @@
                 },
                 set(value) {
                     this.setNewTotalSecondsWithClamping(
-                        this.hours * 3600 + value * 60 + this.seconds + this.millis / 1000,
-                        this.hours * 3600 + value * 60
+                        this.hours * 3600 + value * 60 + this.seconds + this.millis / 1000
                     );
                 }
             },
@@ -158,8 +160,7 @@
                 },
                 set(value) {
                     this.setNewTotalSecondsWithClamping(
-                        this.hours * 3600 + this.minutes * 60 + value + this.millis / 1000,
-                        this.hours * 3600 + this.minutes * 60 + value
+                        this.hours * 3600 + this.minutes * 60 + value + this.millis / 1000
                     );
                 }
             },
@@ -168,7 +169,7 @@
                     return Math.round(((this.totalValueSeconds % 1) * 1000));
                 },
                 set(value) {
-                    this.setNewTotalSeconds(
+                    this.setNewTotalSecondsWithClamping(
                         this.hours * 3600 + this.minutes * 60 + this.seconds + value / 1000
                     );
                 }

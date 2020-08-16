@@ -39,6 +39,7 @@
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
                         :max-seconds="endSeconds"
+                        :min-seconds="0"
                 />
                 <div class="crop-buttons">
                     <button
@@ -71,6 +72,7 @@
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
                         :max-seconds="durationSeconds"
+                        :min-seconds="startSeconds"
                 />
             </div>
         </div>
@@ -222,11 +224,19 @@
                 ) {
                     this.endSeconds = value + 1;
                 }
+                if (value === this.endSeconds) {
+                    this.player.seekTo(value);
+                    this.player.pauseVideo();
+                }
                 this.$emit('startSecondsChange', value);
             },
             endSeconds(value) {
                 this.player.seekTo(value - 1);
                 this.$emit('endSecondsChange', value);
+                if (this.startSeconds === value) {
+                    this.player.seekTo(value);
+                    this.player.pauseVideo();
+                }
             },
             videoId(value) {
                 this.isVideoLoaded = false;
@@ -243,7 +253,7 @@
                     } else {
                         value = Number.parseFloat(value)
                     }
-                    if (this.endSeconds > value) {
+                    if (this.endSeconds >= value) {
                         this.startSeconds = value
                     }
                 }
@@ -258,7 +268,7 @@
                     } else {
                         value = Number.parseFloat(value)
                     }
-                    if (this.startSeconds < value) {
+                    if (this.startSeconds <= value) {
                         this.endSeconds = value;
                     }
                 }
