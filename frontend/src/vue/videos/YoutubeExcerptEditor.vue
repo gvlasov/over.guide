@@ -72,6 +72,7 @@
                         :max-seconds="durationSeconds"
                         :min-seconds="startSeconds"
                 />
+                <div class="total-cut-length">{{totalCutLengthText}}</div>
             </div>
         </div>
     </div>
@@ -256,6 +257,23 @@
                     if (this.startSeconds <= value) {
                         this.endSeconds = value;
                     }
+                }
+            },
+            totalCutLengthText() {
+                const length = this.endSeconds - this.startSeconds;
+                const hours = Math.floor(length / 3600);
+                const minutes = Math.floor((length % 3600) / 60)
+                const seconds = Math.floor(length % 60)
+                const milliseconds = Math.floor(length % 1 * 1000)
+                const parts = [hours, minutes, seconds, milliseconds];
+                if (hours !== 0) {
+                    return parts[0] + ' h ' + parts[1] + ' min';
+                } else if (minutes !== 0) {
+                    return parts[1] + ' min ' + parts[2] + ' sec';
+                } else if (seconds !== 0) {
+                    return parts[2] + '.' + parts[3].toString().padStart(3, '0') + ' sec';
+                } else {
+                    return parts[3] + ' ms';
                 }
             },
         },
