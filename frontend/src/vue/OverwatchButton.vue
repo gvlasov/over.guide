@@ -43,7 +43,9 @@
         padding: .03em 1.07em .19em 1.07em;
     }
 
-
+    button[disabled] {
+        pointer-events: none;
+    }
 
     .overwatch-main-button > .background {
         @include overwatch-button-bg-main;
