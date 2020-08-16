@@ -39,7 +39,7 @@
                     {{totalCutLengthText}} cut
                 </div>
                 <OverwatchPanelButton
-                        class="reset-button"
+                        class="reset-button action-button"
                         v-hammer:tap="resetLoopWindow"
                         title="Reset loop window to entire video"
                         type="default"
@@ -56,7 +56,7 @@
                         style="margin-left: -1.5rem;"
                 />
                 <OverwatchPanelButton
-                        class="start-cut"
+                        class="start-cut action-button"
                         v-hammer:tap="startCut"
                         title="Start loop at current position"
                         type="default"
@@ -73,7 +73,7 @@
                         style="margin-left: 1.5rem;"
                 />
                 <OverwatchPanelButton
-                        class="end-cut"
+                        class="end-cut action-button"
                         v-hammer:tap="endCut"
                         title="End loop at current position"
                         type="default"
@@ -342,5 +342,9 @@
         justify-content: center;
         align-content: center;
         flex-direction: column;
+    }
+
+    .action-button {
+        max-width: 3em;
     }
 </style>
