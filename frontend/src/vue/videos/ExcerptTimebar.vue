@@ -1,8 +1,9 @@
 <template>
     <div
-            @mousedown="onMouseDown"
-            @mouseup="onMouseUp"
-            @mousemove="onMouseMove"
+            v-hammer:panstart="onMouseDown"
+            v-hammer:panend="onMouseUp"
+            v-hammer:pan="onMouseMove"
+            v-hammer:tap="onTap"
             class="wrap"
             ref="wrap"
     >
@@ -43,6 +44,10 @@
             }
         },
         methods: {
+            onTap(e) {
+                this.onMouseDown(e)
+                this.onMouseUp(e)
+            },
             onMouseDown(e) {
                 this.dragStart = this.dragPosition(e);
                 this.isMouseDown = true;
@@ -50,6 +55,7 @@
             onMouseUp(e) {
                 this.isMouseDown = false;
                 this.currentDragPosition = null;
+                console.log(this.dragStart, this.dragPosition(e))
                 if (this.dragStart === this.dragPosition(e)) {
                     this.$emit('draglessClick', this.dragStart);
                 } else {
@@ -95,9 +101,10 @@
             },
             dragPosition(e) {
                 const timebarRect = this.$refs.wrap.getBoundingClientRect();
+                const x = typeof e.clientX === 'undefined' ? e.center.x : e.clientX;
                 return Math.min(
                     Math.max(
-                        (e.clientX - timebarRect.x) / timebarRect.width,
+                        (x - timebarRect.x) / timebarRect.width,
                         0
                     ),
                     1.0
