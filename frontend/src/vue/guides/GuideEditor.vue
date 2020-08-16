@@ -15,7 +15,7 @@
             </OverwatchButton>
             <OverwatchButton
                     type="main"
-                    :disabled="guide.parts.find(p => p.isText() || p.part.excerpt !== null) === undefined"
+                    :disabled="isDoneButtonEnabled"
                     v-hammer:tap="saveGuide"
             >Done
             </OverwatchButton>
@@ -76,6 +76,7 @@
                     type="main"
                     v-hammer:tap="saveGuide"
                     data-type="text"
+                    :disabled="isDoneButtonEnabled"
             >Done
             </OverwatchButton>
             <OverwatchButton
@@ -141,6 +142,9 @@
                         true
                     )
                 );
+            },
+            isDoneButtonEnabled() {
+                return typeof guide.parts.find(p => p.isText() || p.part.excerpt !== null) !== 'undefined';
             },
             deletePart(index) {
                 this.guide.parts.splice(index, 1);
