@@ -35,6 +35,7 @@
         @include overwatch-inline-button;
         background-color: transparent;
         font-size: 2rem;
+        white-space: nowrap;
     }
 
     .overwatch-button > .content {

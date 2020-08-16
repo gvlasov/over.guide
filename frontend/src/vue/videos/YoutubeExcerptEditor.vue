@@ -300,6 +300,7 @@
     .controls {
         display: flex;
         justify-content: space-between;
+        margin-bottom: .4em;
     }
 
     .timebar {
@@ -307,7 +308,9 @@
     }
 
     .crop-buttons {
-        display: inline-block;
+        display: inline-flex;
+        gap: .3em;
+        height: min-content;
     }
 
     .video {
