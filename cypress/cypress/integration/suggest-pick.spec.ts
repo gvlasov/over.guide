@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
-// import Role from '@data/Role'
-import Role from '../../../backend/src/data/Role'
+import Role from 'data/Role'
 import SuggestPickPage from "../components/SuggestPickPage";
 
 context('suggest-pick', () => {

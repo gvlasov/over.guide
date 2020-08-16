@@ -1,12 +1,24 @@
 <template>
     <div>
-        <div v-if="widget.part.excerpt === null">
+        <div
+                v-if="widget.part.excerpt === null"
+                class="youtube-video-link-form"
+        >
             <input
                     type="text"
                     class="youtube-video-link-input"
-                    @input="onVideoLinkInputChange"
+                    v-model="youtubeVideoUrl"
                     placeholder="Put here a link to a Youtube video"
             />
+            <div class="youtube-video-link-errors">
+                <template v-if="$asyncComputed.validations.success">
+                    <template v-if="youtubeVideoUrl === ''"></template>
+                    <div v-else-if="!validations.isUrl">This is not a valid URL</div>
+                    <div v-else-if="!validations.isValidYoutubeVideoUrl">This is not a valid Youtube video URL</div>
+                    <div v-else-if="!validations.isEmbeddingAllowed">Video owner prohibited embedding of this video</div>
+                    <div v-else-if="!validations.videoExists">This video doesn't exist</div>
+                </template>
+            </div>
         </div>
         <div v-else-if="widget.editing" key="editor">
             <YoutubeExcerptEditor
@@ -43,6 +55,7 @@
     import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
     import YoutubeUrlVso from "@/js/vso/YoutubeUrlVso";
     import {parse, toSeconds} from 'iso8601-duration';
+    import EmbeddableCache from "@/js/EmbeddableCache";
 
     export default {
         model: {},
@@ -54,43 +67,82 @@
             index: {
                 type: Number,
                 required: true,
+            },
+        },
+        asyncComputed: {
+            validations() {
+                return this.validate(this.youtubeVideoUrl)
             }
         },
         methods: {
-            onVideoLinkInputChange(event) {
-                const inputText = event.target.value;
-                let url;
-                try {
-                    url = new URL(inputText)
-                } catch (e) {
-                    return;
-                }
-                const youtubeUrl = new YoutubeUrlVso(url)
-                youtubeUrl
-                    .contentDetails()
-                    .then(
-                        contentDetails => {
-                            this.$emit(
-                                'videoSelection',
-                                {
-                                    youtubeVideoId: youtubeUrl.videoId,
-                                    startSeconds: 0,
-                                    endSeconds: toSeconds(parse(contentDetails.items[0].contentDetails.duration)),
-                                }
-                            )
-                        }
-                    )
-            },
             onStartSecondsChangeHacky(widget, newValue) {
                 widget.part.excerpt.startSeconds = newValue;
             },
             onEndSecondsChangeHacky(widget, newValue) {
                 widget.part.excerpt.endSeconds = newValue;
             },
+            async validate(inputText) {
+                const validations = {
+                    isUrl: false,
+                    isValidYoutubeVideoUrl: false,
+                    isEmbeddingAllowed: false,
+                    videoExists: false,
+                };
+                let url;
+                try {
+                    url = new URL(inputText);
+                    validations.isUrl = true;
+                } catch (e) {
+                    return validations;
+                }
+                let youtubeUrl;
+                try {
+                    youtubeUrl = new YoutubeUrlVso(url);
+                    validations.isValidYoutubeVideoUrl = true;
+                } catch (e) {
+                    return validations
+                }
+                /*
+                "Embedding allowed" is checked before "Video exists" because
+                embedding can be cached and checking if video exists is expensive
+                 */
+                if (EmbeddableCache.isEmbeddable(youtubeUrl.videoId)) {
+                    validations.isEmbeddingAllowed = true
+                } else {
+                    return validations;
+                }
+                const videoInfo = await youtubeUrl.apiJson();
+                if (videoInfo.pageInfo.totalResults > 0) {
+                    validations.videoExists = true;
+                } else {
+                    return validations;
+                }
+                console.log(validations)
+                return validations;
+            },
+        },
+        watch: {
+            async youtubeVideoUrl(newValue) {
+                const validations = await this.validate(newValue);
+                for (let validation in validations) {
+                    if (!validations[validation]) {
+                        return false;
+                    }
+                }
+                const youtubeUrl = new YoutubeUrlVso(new URL(this.youtubeVideoUrl));
+                this.$emit(
+                    'videoSelection',
+                    {
+                        youtubeVideoId: youtubeUrl.videoId,
+                        startSeconds: 0,
+                        endSeconds: toSeconds(parse((await youtubeUrl.apiJson()).items[0].contentDetails.duration)),
+                    }
+                )
+            },
         },
         data() {
             return {
-                youtubeVideoUrl: null,
+                youtubeVideoUrl: '',
             }
         },
         components: {
@@ -113,9 +165,19 @@
         display: block;
     }
 
+    .youtube-video-link-errors {
+        color: #ff0000;
+        @include overwatch-futura;
+        font-size: 1.3em;
+    }
+
+    .youtube-video-link-form {
+        margin-bottom: 2em;
+    }
+
     .youtube-video-link-input {
         display: inline-block;
-        margin: 0 auto 2em auto;
+        margin: 0 auto 0 auto;
         height: 3em;
         padding: .1em;
         max-width: 100%;

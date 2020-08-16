@@ -10,6 +10,7 @@
                     :type="'default'"
                     class="create-new-part-button"
                     v-hammer:tap="() => createNewTextPart('beginning')"
+                    data-type="text"
             >+ text
             </OverwatchButton>
             <OverwatchButton
@@ -21,6 +22,7 @@
             <OverwatchButton
                     :type="'default'"
                     class="create-new-part-button"
+                    data-type="video"
                     v-hammer:tap="() => createNewVideoPart('beginning')"
             >+ video
             </OverwatchButton>
@@ -73,12 +75,14 @@
             <OverwatchButton
                     type="main"
                     v-hammer:tap="saveGuide"
+                    data-type="text"
             >Done
             </OverwatchButton>
             <OverwatchButton
                     :type="'default'"
                     class="create-new-part-button"
                     v-hammer:tap="() => createNewVideoPart('end')"
+                    data-type="video"
             >+ video
             </OverwatchButton>
         </div>

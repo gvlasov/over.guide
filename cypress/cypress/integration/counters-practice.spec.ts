@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 import CountersPracticePage from "../components/CountersPracticePage";
-// import Role from '@data/Role'
 import Role from '../../../backend/src/data/Role'
 
 context.only('counters-practice', () => {

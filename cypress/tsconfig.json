@@ -16,7 +16,7 @@
     ],
     "outDir": "dist",
     "paths": {
-      "@data/*": [
+      "data/*": [
         "../backend/src/data/*"
       ],
       "@/*": [

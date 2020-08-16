@@ -1,6 +1,6 @@
 import './Page'
 import Role from "../../../backend/src/data/Role";
-import HeroDto from "@data/dto/HeroDto";
+import HeroDto from "data/dto/HeroDto";
 import heroes from "../../../backend/src/data/heroes";
 import intersection from 'lodash.intersection'
 

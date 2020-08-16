@@ -8,6 +8,8 @@ import PickSuggestion from "@/vue/training/PickSuggestion.vue";
 import GuideEditor from "@/vue/guides/GuideEditor.vue";
 import TestingGround from "@/vue/TestingGround";
 import GuideSearch from "@/vue/guides/GuideSearch";
+import AsyncComputed from 'vue-async-computed'
+
 
 const router = new VueRouter({
     routes: [
@@ -20,6 +22,7 @@ const router = new VueRouter({
 });
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
+Vue.use(AsyncComputed)
 const app = new Vue({
     el: '#app',
     render: function (h) {

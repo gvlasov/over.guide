@@ -11,7 +11,8 @@ export default class YoutubeUrlVso {
     }
 
     private get isValidYoutubeVideoUrl() {
-        return this.url.hostname.match(/youtube\.com$/);
+        return this.url.hostname.match(/youtube\.com$/)
+            && this.url.search.match(/v=([^&]+)(&|$)/);
     }
 
     get videoId(): string {
@@ -24,7 +25,7 @@ export default class YoutubeUrlVso {
         return match[1]
     }
 
-    async contentDetails(): Promise<any> {
+    async apiJson(): Promise<any> {
         const result = await fetch(
             "https://www.googleapis.com/youtube/v3/videos?id=" + this.videoId + "&key=" + YoutubeUrlVso.GOOGLE_API_KEY + "&part=contentDetails",
             {}
