@@ -232,6 +232,14 @@
             color: white;
             font-family: 'Futura Demi Bold', 'sans-serif';
             position: relative;
+
+            &:first-of-type {
+                margin-top: 3em;
+            }
+
+            &:last-of-type {
+                margin-bottom: 3em;
+            }
         }
 
         .guide-parts {
