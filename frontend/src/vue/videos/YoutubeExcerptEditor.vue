@@ -42,24 +42,27 @@
                         :min-seconds="0"
                 />
                 <div class="crop-buttons">
-                    <button
+                    <OverwatchPanelButton
                             class="reset-button"
-                            @click="resetLoopWindow"
+                            v-hammer:tap="resetLoopWindow"
                             title="Reset loop window to entire video"
-                    ><img src="/icons/clear-selection.svg" class="button-icon"/>
-                    </button>
-                    <button
+                            type="default"
+                    >-] [-
+                    </OverwatchPanelButton>
+                    <OverwatchPanelButton
                             class="start-cut"
-                            @click="startCut"
+                            v-hammer:tap="startCut"
                             title="Start loop at current position"
+                            type="default"
                     >[
-                    </button>
-                    <button
+                    </OverwatchPanelButton>
+                    <OverwatchPanelButton
                             class="end-cut"
-                            @click="endCut"
+                            v-hammer:tap="endCut"
                             title="End loop at current position"
+                            type="default"
                     >]
-                    </button>
+                    </OverwatchPanelButton>
                 </div>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
@@ -80,10 +83,11 @@
     import PreciseTimeInput from "@/vue/videos/PreciseTimeInput.vue";
     import Backend from "@/js/Backend";
     import axios from "axios";
+    import OverwatchButton from "@/vue/OverwatchButton";
+    import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 
     const backend = new Backend(axios);
     export default {
-        name: 'YoutubeExcerptEditor',
         props: {
             videoId: {
                 type: String,
@@ -277,9 +281,11 @@
             }
         },
         components: {
-            PreciseTimeInput: PreciseTimeInput,
-            YoutubeVideo: YoutubeVideo,
-            ExcerptTimebar: ExcerptTimebar
+            OverwatchButton,
+            OverwatchPanelButton,
+            PreciseTimeInput,
+            YoutubeVideo,
+            ExcerptTimebar,
         }
     };
 
@@ -302,17 +308,6 @@
 
     .crop-buttons {
         display: inline-block;
-    }
-
-    .crop-buttons > button {
-        width: 2em;
-        height: 2em;
-        vertical-align: top;
-    }
-
-    .button-icon {
-        width: 100%;
-        height: 100%;
     }
 
     .video {
