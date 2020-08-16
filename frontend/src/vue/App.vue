@@ -19,8 +19,6 @@
     import CountersPractice from '@/vue/training/CountersPractice.vue';
     import AdsensePlaceholder from "@/vue/AdsensePlaceholder.vue";
     import PickSuggestion from "@/vue/training/PickSuggestion.vue";
-    import Vue from 'vue';
-    import {VueHammer} from 'vue2-hammer';
     import MatchupEvaluation from "@/vue/MatchupEvaluation.vue";
 
     import heroes from "data/heroes";
@@ -31,7 +29,6 @@
     import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
     import MatchupEvaluator from "@/vue/MatchupEvaluator";
 
-    Vue.use(VueHammer);
     export default {
         methods: {},
         data() {

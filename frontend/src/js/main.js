@@ -9,6 +9,7 @@ import GuideEditor from "@/vue/guides/GuideEditor.vue";
 import TestingGround from "@/vue/TestingGround";
 import GuideSearch from "@/vue/guides/GuideSearch";
 import AsyncComputed from 'vue-async-computed'
+import {VueHammer} from 'vue2-hammer'
 
 
 const router = new VueRouter({
@@ -23,6 +24,10 @@ const router = new VueRouter({
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 Vue.use(AsyncComputed)
+Vue.use(VueHammer);
+VueHammer.config.pan = {
+    threshold: 5
+};
 const app = new Vue({
     el: '#app',
     render: function (h) {
