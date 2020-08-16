@@ -60,11 +60,6 @@
                             title="End loop at current position"
                     >]
                     </button>
-                    <button
-                            v-bind:disabled="!canSave"
-                            @click="saveToServer"
-                    >{{ canSave ? 'Save' : whyCantSave}}
-                    </button>
                 </div>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
@@ -129,20 +124,6 @@
             }
         },
         methods: {
-            saveToServer() {
-                backend.saveVideoExcerpt({
-                    youtubeVideoId: this.videoId,
-                    startSeconds: this.startSeconds,
-                    endSeconds: this.endSeconds
-                })
-                    .then((id) => {
-                        if (id === null) {
-                            alert('error saving excerpt');
-                        } else {
-                            alert('created excerpt ' + id);
-                        }
-                    })
-            },
             startCut() {
                 this.startSeconds = this.player.getCurrentTime();
             },
@@ -272,18 +253,6 @@
                         this.endSeconds = value;
                     }
                 }
-            },
-            /**
-             * @return {boolean}
-             */
-            canSave() {
-                return this.whyCantSave === null
-            },
-            /**
-             * @return {string|null}
-             */
-            whyCantSave() {
-                return null;
             },
         },
         mounted() {
