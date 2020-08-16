@@ -33,6 +33,19 @@
                 />
             </div>
             <div class="controls">
+                <div
+                        class="total-cut-length"
+                >
+                    {{totalCutLengthText}} cut
+                </div>
+                <OverwatchPanelButton
+                        class="reset-button"
+                        v-hammer:tap="resetLoopWindow"
+                        title="Reset loop window to entire video"
+                        type="default"
+                        style="margin-left: -3rem; margin-right: 3rem;"
+                >-] [-
+                </OverwatchPanelButton>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="startSecondsValidated"
@@ -40,30 +53,16 @@
                         :current-time-seconds="currentSeconds"
                         :max-seconds="endSeconds"
                         :min-seconds="0"
+                        style="margin-left: -1.5rem;"
                 />
-                <div class="crop-buttons">
-                    <OverwatchPanelButton
-                            class="reset-button"
-                            v-hammer:tap="resetLoopWindow"
-                            title="Reset loop window to entire video"
-                            type="default"
-                    >-] [-
-                    </OverwatchPanelButton>
-                    <OverwatchPanelButton
-                            class="start-cut"
-                            v-hammer:tap="startCut"
-                            title="Start loop at current position"
-                            type="default"
-                    >[
-                    </OverwatchPanelButton>
-                    <OverwatchPanelButton
-                            class="end-cut"
-                            v-hammer:tap="endCut"
-                            title="End loop at current position"
-                            type="default"
-                    >]
-                    </OverwatchPanelButton>
-                </div>
+                <OverwatchPanelButton
+                        class="start-cut"
+                        v-hammer:tap="startCut"
+                        title="Start loop at current position"
+                        type="default"
+                        style="margin-left: -1.5rem; margin-right: 1.5rem;"
+                >[
+                </OverwatchPanelButton>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="endSecondsValidated"
@@ -71,8 +70,15 @@
                         :current-time-seconds="currentSeconds"
                         :max-seconds="durationSeconds"
                         :min-seconds="startSeconds"
+                        style="margin-left: 1.5rem;"
                 />
-                <div class="total-cut-length">{{totalCutLengthText}}</div>
+                <OverwatchPanelButton
+                        class="end-cut"
+                        v-hammer:tap="endCut"
+                        title="End loop at current position"
+                        type="default"
+                >]
+                </OverwatchPanelButton>
             </div>
         </div>
     </div>
@@ -316,23 +322,25 @@
     }
 
     .controls {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: .4em;
+        display: grid;
+        grid-template-columns: auto auto;
+        margin-bottom: 1.7rem;
+        gap: .3em;
     }
 
     .timebar {
         margin-bottom: .4em;
     }
 
-    .crop-buttons {
-        display: inline-flex;
-        gap: .3em;
-        height: min-content;
-    }
-
     .video {
         max-width: 100%;
         margin-bottom: .4em;
+    }
+
+    .total-cut-length {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-direction: column;
     }
 </style>
