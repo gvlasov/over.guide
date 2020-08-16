@@ -15,7 +15,7 @@
             </OverwatchButton>
             <OverwatchButton
                     type="main"
-                    :disabled="guide.parts.length === 0"
+                    :disabled="guide.parts.find(p => p.isText() || p.part.excerpt !== null) === undefined"
                     v-hammer:tap="saveGuide"
             >Done
             </OverwatchButton>
