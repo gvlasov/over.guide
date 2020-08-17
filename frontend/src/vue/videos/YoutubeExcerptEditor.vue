@@ -360,7 +360,7 @@
         margin-left: 1.5rem;
     }
 
-    @media screen and (min-width: 45em) {
+    @media screen and (min-width: 52em) {
         .controls {
             display: flex;
             justify-content: center;

@@ -3,9 +3,9 @@
         <template v-if="showHours">
             <div class="time-part-wrap">
                 <button
-                        class="add-button"
-                        @click="seconds = 0; minutes = 0; millis =0; hours += 1;"
-                        v-bind:disabled="totalValueSeconds === maxSeconds"
+                        class="subtract-button"
+                        @click="hours -= 1"
+                        v-bind:disabled="totalValueSeconds === minSeconds"
                 ></button>
                 <input
                         type="text"
@@ -14,9 +14,9 @@
                         tabindex="1"
                 />
                 <button
-                        class="subtract-button"
-                        @click="hours -= 1"
-                        v-bind:disabled="totalValueSeconds === minSeconds"
+                        class="add-button"
+                        @click="seconds = 0; minutes = 0; millis =0; hours += 1;"
+                        v-bind:disabled="totalValueSeconds === maxSeconds"
                 ></button>
             </div>
             <div class="time-part-interjector">
@@ -25,9 +25,9 @@
         </template>
         <div class="time-part-wrap">
             <button
-                    class="add-button"
-                    @click="minutes += 1"
-                    v-bind:disabled="totalValueSeconds === maxSeconds"
+                    class="subtract-button"
+                    @click="minutes -= 1"
+                    v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
             <input
                     type="text"
@@ -36,17 +36,17 @@
                     tabindex="1"
             />
             <button
-                    class="subtract-button"
-                    @click="minutes -= 1"
-                    v-bind:disabled="totalValueSeconds === minSeconds"
+                    class="add-button"
+                    @click="minutes += 1"
+                    v-bind:disabled="totalValueSeconds === maxSeconds"
             ></button>
         </div>
         <div class="time-part-interjector">:</div>
         <div class="time-part-wrap">
             <button
-                    class="add-button"
-                    @click="seconds += 1"
-                    v-bind:disabled="totalValueSeconds === maxSeconds"
+                    class="subtract-button"
+                    @click="seconds -= 1"
+                    v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
             <input
                     type="text"
@@ -55,17 +55,17 @@
                     tabindex="1"
             />
             <button
-                    class="subtract-button"
-                    @click="seconds -= 1"
-                    v-bind:disabled="totalValueSeconds === minSeconds"
+                    class="add-button"
+                    @click="seconds += 1"
+                    v-bind:disabled="totalValueSeconds === maxSeconds"
             ></button>
         </div>
         <div class="time-part-interjector">.</div>
         <div class="time-part-wrap">
             <button
-                    class="add-button"
-                    @click="millis += 25"
-                    v-bind:disabled="totalValueSeconds === maxSeconds"
+                    class="subtract-button"
+                    @click="millis -= 25"
+                    v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
             <input
                     type="text"
@@ -74,9 +74,9 @@
                     tabindex="1"
             />
             <button
-                    class="subtract-button"
-                    @click="millis -= 25"
-                    v-bind:disabled="totalValueSeconds === minSeconds"
+                    class="add-button"
+                    @click="millis += 25"
+                    v-bind:disabled="totalValueSeconds === maxSeconds"
             ></button>
         </div>
     </div>
@@ -108,7 +108,7 @@
             setNewTotalSecondsWithClamping(targetTime, alternativeTime) {
                 if (targetTime > this.maxSeconds) {
                     this.setNewTotalSeconds(
-                        alternativeTime
+                        this.maxSeconds
                     );
                 } else {
                     this.setNewTotalSeconds(targetTime);
@@ -199,13 +199,13 @@
     }
 
     .time-part-wrap {
-        display: inline-block;
+        display: flex;
     }
 
     .add-button, .subtract-button {
         display: block;
-        width: 100%;
-        height: 1em;
+        width: .5em;
+        height: 100%;
         border: 1px solid grey;
         background-color: lightgrey;
         background-size: .5em;
@@ -218,13 +218,13 @@
     }
 
     .add-button {
-        border-radius: .3em .3em 0 0;
-        background-image: url("/icons/arrow-up.svg");
+        border-radius: 0 .3em .3em 0;
+        background-image: url("/icons/arrow-right.svg");
     }
 
     .subtract-button {
-        border-radius: 0 0 .3em .3em;
-        background-image: url("/icons/arrow-down.svg");
+        border-radius: .3em 0 0 .3em;
+        background-image: url("/icons/arrow-left.svg");
     }
 
     input[type='text'] {
