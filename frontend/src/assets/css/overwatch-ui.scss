@@ -81,6 +81,9 @@
   background-color: orange;
 }
 
+
+$overwatch-panel-bg-color: #2f3c59;
+
 .panel-bg {
-  background-color: rgba(108, 119, 148, 0.8);
+  background-color: $overwatch-panel-bg-color;
 }

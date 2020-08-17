@@ -7,20 +7,20 @@
                         @click="hours -= 1"
                         v-bind:disabled="totalValueSeconds === minSeconds"
                 ></button>
-                <input
-                        type="text"
-                        v-model.number="hours"
-                        size="2"
-                        tabindex="1"
-                />
+                <div class="input-wrap">
+                    <div class="time-part-interjector">h</div>
+                    <input
+                            type="text"
+                            v-model.number="hours"
+                            size="2"
+                            tabindex="1"
+                    />
+                </div>
                 <button
                         class="add-button"
                         @click="seconds = 0; minutes = 0; millis =0; hours += 1;"
                         v-bind:disabled="totalValueSeconds === maxSeconds"
                 ></button>
-            </div>
-            <div class="time-part-interjector">
-                <div>:</div>
             </div>
         </template>
         <div class="time-part-wrap">
@@ -29,50 +29,57 @@
                     @click="minutes -= 1"
                     v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
-            <input
-                    type="text"
-                    v-model.number="minutes"
-                    size="2"
-                    tabindex="1"
-            />
+            <div class="input-wrap">
+                <div class="time-part-interjector">m</div>
+                <input
+                        type="text"
+                        v-model.number="minutes"
+                        size="2"
+                        tabindex="1"
+                />
+            </div>
             <button
                     class="add-button"
                     @click="minutes += 1"
                     v-bind:disabled="totalValueSeconds === maxSeconds"
             ></button>
         </div>
-        <div class="time-part-interjector">:</div>
         <div class="time-part-wrap">
             <button
                     class="subtract-button"
                     @click="seconds -= 1"
                     v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
-            <input
-                    type="text"
-                    v-model.number="seconds"
-                    size="2"
-                    tabindex="1"
-            />
+            <div class="input-wrap">
+                <div class="time-part-interjector">s</div>
+                <input
+                        type="text"
+                        v-model.number="seconds"
+                        size="2"
+                        tabindex="1"
+                />
+            </div>
             <button
                     class="add-button"
                     @click="seconds += 1"
                     v-bind:disabled="totalValueSeconds === maxSeconds"
             ></button>
         </div>
-        <div class="time-part-interjector">.</div>
         <div class="time-part-wrap">
             <button
                     class="subtract-button"
                     @click="millis -= 25"
                     v-bind:disabled="totalValueSeconds === minSeconds"
             ></button>
-            <input
-                    type="text"
-                    v-model.number="millis"
-                    size="3"
-                    tabindex="1"
-            />
+            <div class="input-wrap">
+                <div class="time-part-interjector">ms</div>
+                <input
+                        type="text"
+                        v-model.number="millis"
+                        size="3"
+                        tabindex="1"
+                />
+            </div>
             <button
                     class="add-button"
                     @click="millis += 25"
@@ -183,19 +190,36 @@
 
 </script>
 
-<style scoped>
+<style lang="scss">
+    @import "~@/assets/css/overwatch-ui.scss";
+
     .wrap {
         display: flex;
     }
 
-    .time-part-interjector {
-        line-height: 100%;
-        vertical-align: middle;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        font-weight: bold;
-        width: .5em;
+    .input-wrap {
+        position: relative;
+
+        .time-part-interjector {
+            display: block;
+            position: absolute;
+            color: $overwatch-panel-bg-color;
+            z-index: 5;
+            pointer-events: none;
+            bottom: 0;
+            right: .1em;
+            font-size: 1.3em;
+        }
+
+        input[type='text'] {
+            text-align: center;
+            font-family: monospace;
+            font-size: 1.5em;
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            box-sizing: border-box;
+        }
     }
 
     .time-part-wrap {
@@ -225,12 +249,6 @@
     .subtract-button {
         border-radius: .3em 0 0 .3em;
         background-image: url("/icons/arrow-left.svg");
-    }
-
-    input[type='text'] {
-        text-align: center;
-        font-family: monospace;
-        font-size: 1.5em;
     }
 
     .wrap {
