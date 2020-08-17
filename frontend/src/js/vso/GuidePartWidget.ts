@@ -11,4 +11,6 @@ export default abstract class GuidePartWidget {
 
     abstract isVideo(): this is GuidePartVideoWidget;
 
+    abstract get hasContent(): boolean
+
 }

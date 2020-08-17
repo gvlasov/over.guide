@@ -48,7 +48,7 @@
                     >Edit
                     </OverwatchButton>
                     <OverwatchButton
-                            v-if="widget.editing && widget.part.excerpt !== null"
+                            v-if="widget.editing && widget.hasContent"
                             type="default"
                             class="view-button"
                             v-hammer:tap="() => widget.editing = false"
@@ -137,7 +137,7 @@
                     () => new GuidePartTextWidget(
                         {
                             kind: 'text',
-                            contentMd: 'New part'
+                            contentMd: ''
                         },
                         true
                     )

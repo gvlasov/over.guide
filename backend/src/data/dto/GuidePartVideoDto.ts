@@ -3,5 +3,5 @@ import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto";
 
 export default interface GuidePartVideoDto extends GuidePartDto {
     kind: 'video',
-    excerpt: YoutubeVideoExcerpsDto;
+    excerpt: YoutubeVideoExcerpsDto | null;
 }

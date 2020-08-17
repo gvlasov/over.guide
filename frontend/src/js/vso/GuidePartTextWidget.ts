@@ -26,4 +26,8 @@ export default class GuidePartTextWidget extends GuidePartWidget {
         return marked(this.part.contentMd);
     }
 
+    get hasContent(): boolean {
+        return this.part.contentMd !== '';
+    }
+
 }
