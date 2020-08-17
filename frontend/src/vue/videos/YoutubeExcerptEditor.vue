@@ -39,11 +39,10 @@
                     {{totalCutLengthText}} cut
                 </div>
                 <OverwatchPanelButton
-                        class="reset-button action-button"
+                        class="reset-button action-button left-shift-2"
                         v-hammer:tap="resetLoopWindow"
                         title="Reset loop window to entire video"
                         type="default"
-                        style="margin-left: -3rem; margin-right: 3rem;"
                 >-] [-
                 </OverwatchPanelButton>
                 <PreciseTimeInput
@@ -53,14 +52,13 @@
                         :current-time-seconds="currentSeconds"
                         :max-seconds="endSeconds"
                         :min-seconds="0"
-                        style="margin-left: -1.5rem;"
+                        class="time-input-start left-shift-1"
                 />
                 <OverwatchPanelButton
-                        class="start-cut action-button"
+                        class="cut-start action-button left-shift-1"
                         v-hammer:tap="startCut"
                         title="Start loop at current position"
                         type="default"
-                        style="margin-left: -1.5rem; margin-right: 1.5rem;"
                 >[
                 </OverwatchPanelButton>
                 <PreciseTimeInput
@@ -70,10 +68,10 @@
                         :current-time-seconds="currentSeconds"
                         :max-seconds="durationSeconds"
                         :min-seconds="startSeconds"
-                        style="margin-left: 1.5rem;"
+                        class="time-input-end left-shift-0"
                 />
                 <OverwatchPanelButton
-                        class="end-cut action-button"
+                        class="cut-end action-button"
                         v-hammer:tap="endCut"
                         title="End loop at current position"
                         type="default"
@@ -346,5 +344,59 @@
 
     .action-button {
         max-width: 3em;
+    }
+
+    .left-shift-2 {
+        margin-left: -3rem;
+        margin-right: 3rem;
+    }
+
+    .left-shift-1 {
+        margin-left: -1.5rem;
+        margin-right: 1.5rem;
+    }
+
+    .left-shift-0 {
+        margin-left: 1.5rem;
+    }
+
+    @media screen and (min-width: 45em) {
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .left-shift-0, .left-shift-1, .left-shift-2 {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .time-input-start {
+            order: 1;
+        }
+
+        .cut-start {
+            order: 2;
+        }
+
+        .reset-button {
+            order: 3;
+            margin-left: 1em;
+            margin-right: 1em;
+        }
+
+        .cut-end {
+            order: 4
+        }
+
+        .time-input-end {
+            order: 5;
+        }
+
+        .total-cut-length {
+            order: 6;
+            flex-basis: 100%;
+        }
     }
 </style>
