@@ -194,7 +194,8 @@
     @import "~@/assets/css/overwatch-ui.scss";
 
     .wrap {
-        display: flex;
+        display: inline-flex;
+        gap: .3em;
     }
 
     .input-wrap {
@@ -249,9 +250,5 @@
     .subtract-button {
         border-radius: .3em 0 0 .3em;
         background-image: url("/icons/arrow-left.svg");
-    }
-
-    .wrap {
-        display: inline-block;
     }
 </style>
