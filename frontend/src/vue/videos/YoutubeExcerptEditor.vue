@@ -15,7 +15,7 @@
                     class="video"
                     v-bind:style="'width: '+videoCssWidth+'; height: '+videoCssHeight"
             />
-            <div>
+            <div v-if="preciseDurationAvailable">
                 <ExcerptTimebar
                         v-if="isVideoLoaded"
                         :start-seconds="startSeconds"
@@ -32,7 +32,7 @@
                         class="timebar"
                 />
             </div>
-            <div class="controls">
+            <div v-if="preciseDurationAvailable" class="controls">
                 <div
                         class="total-cut-length"
                 >
@@ -99,11 +99,9 @@
                 required: true,
             },
             initialStartSeconds: {
-                type: Number,
                 required: true,
             },
             initialEndSeconds: {
-                type: Number,
                 required: true,
             },
             playerElementId: {
@@ -130,6 +128,7 @@
                 playerHasBeenPlaying: null,
                 pasteHandler: null,
                 isVideoLoaded: false,
+                preciseDurationAvailable: false,
             }
         },
         methods: {
@@ -146,14 +145,18 @@
             onPlayerReady(player) {
                 this.player = player;
                 this.durationSeconds = player.getDuration();
-                // this.startSeconds = 0;
-                // this.endSeconds = player.getDuration();
                 this.isVideoLoaded = true;
             },
             onPlay() {
                 // Duration may actually be slightly different
                 // after video starts playing
                 this.durationSeconds = this.player.getDuration();
+                if (!this.preciseDurationAvailable) {
+                    this.preciseDurationAvailable = true;
+                    if (this.endSeconds === null) {
+                        this.endSeconds = this.durationSeconds
+                    }
+                }
                 this.currentSeconds = this.player.getCurrentTime();
                 this.playing = true;
                 const self = this;

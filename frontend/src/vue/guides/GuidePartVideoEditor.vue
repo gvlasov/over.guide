@@ -54,7 +54,6 @@
     import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
     import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
     import YoutubeUrlVso from "@/js/vso/YoutubeUrlVso";
-    import {parse, toSeconds} from 'iso8601-duration';
     import EmbeddableCache from "@/js/EmbeddableCache";
 
     export default {
@@ -129,14 +128,7 @@
                     }
                 }
                 const youtubeUrl = new YoutubeUrlVso(new URL(this.youtubeVideoUrl));
-                this.$emit(
-                    'videoSelection',
-                    {
-                        youtubeVideoId: youtubeUrl.videoId,
-                        startSeconds: 0,
-                        endSeconds: toSeconds(parse((await youtubeUrl.apiJson()).items[0].contentDetails.duration)),
-                    }
-                )
+                this.$emit('videoSelection', youtubeUrl.videoId)
             },
         },
         data() {

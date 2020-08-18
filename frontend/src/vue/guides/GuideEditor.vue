@@ -37,7 +37,7 @@
                         v-if="widget.isVideo()"
                         :widget="widget"
                         :index="index"
-                        @videoSelection="(full) => {widget.part.excerpt = full}"
+                        @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
                 />
                 <div class="guide-part-buttons">
                     <OverwatchButton
