@@ -313,7 +313,8 @@
 
 </script>
 
-<style scoped>
+<style lang="scss">
+    $max-portrait-mode-width: 60em;
     .wrap {
         display: flex;
         justify-content: center;
@@ -360,7 +361,7 @@
         margin-left: 1.5rem;
     }
 
-    @media screen and (min-width: 52em) {
+    @media screen and (min-width: $max-portrait-mode-width) {
         .controls {
             display: flex;
             justify-content: center;
@@ -382,8 +383,8 @@
 
         .reset-button {
             order: 3;
-            margin-left: 1em;
-            margin-right: 1em;
+            margin-left: 1.5em;
+            margin-right: 1.5em;
         }
 
         .cut-end {

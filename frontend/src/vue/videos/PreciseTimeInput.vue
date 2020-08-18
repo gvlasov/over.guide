@@ -2,11 +2,14 @@
     <div class="wrap">
         <template v-if="showHours">
             <div class="time-part-wrap">
-                <button
+                <OverwatchPanelButton
+                        type="default"
                         class="subtract-button"
-                        @click="hours -= 1"
+                        v-hammer:tap="() => {hours -= 1}"
                         v-bind:disabled="totalValueSeconds === minSeconds"
-                ></button>
+                >
+                    <img src="/icons/arrow-left-white.svg"/>
+                </OverwatchPanelButton>
                 <div class="input-wrap">
                     <div class="time-part-interjector">h</div>
                     <input
@@ -16,19 +19,25 @@
                             tabindex="1"
                     />
                 </div>
-                <button
+                <OverwatchPanelButton
+                        type="default"
                         class="add-button"
-                        @click="seconds = 0; minutes = 0; millis =0; hours += 1;"
+                        v-hammer:tap="() => { seconds = 0; minutes = 0; millis =0; hours += 1;}"
                         v-bind:disabled="totalValueSeconds === maxSeconds"
-                ></button>
+                >
+                    <img src="/icons/arrow-right-white.svg"/>
+                </OverwatchPanelButton>
             </div>
         </template>
         <div class="time-part-wrap">
-            <button
+            <OverwatchPanelButton
+                    type="default"
                     class="subtract-button"
-                    @click="minutes -= 1"
+                    v-hammer:tap="() => {minutes -= 1}"
                     v-bind:disabled="totalValueSeconds === minSeconds"
-            ></button>
+            >
+                <img src="/icons/arrow-left-white.svg"/>
+            </OverwatchPanelButton>
             <div class="input-wrap">
                 <div class="time-part-interjector">m</div>
                 <input
@@ -38,18 +47,24 @@
                         tabindex="1"
                 />
             </div>
-            <button
+            <OverwatchPanelButton
+                    type="default"
                     class="add-button"
-                    @click="minutes += 1"
+                    v-hammer:tap="() => {minutes += 1}"
                     v-bind:disabled="totalValueSeconds === maxSeconds"
-            ></button>
+            >
+                <img src="/icons/arrow-right-white.svg"/>
+            </OverwatchPanelButton>
         </div>
         <div class="time-part-wrap">
-            <button
+            <OverwatchPanelButton
+                    type="default"
                     class="subtract-button"
-                    @click="seconds -= 1"
+                    v-hammer:tap="() => {seconds -= 1}"
                     v-bind:disabled="totalValueSeconds === minSeconds"
-            ></button>
+            >
+                <img src="/icons/arrow-left-white.svg"/>
+            </OverwatchPanelButton>
             <div class="input-wrap">
                 <div class="time-part-interjector">s</div>
                 <input
@@ -59,18 +74,24 @@
                         tabindex="1"
                 />
             </div>
-            <button
+            <OverwatchPanelButton
+                    type="default"
                     class="add-button"
-                    @click="seconds += 1"
+                    v-hammer:tap="() => {seconds += 1}"
                     v-bind:disabled="totalValueSeconds === maxSeconds"
-            ></button>
+            >
+                <img src="/icons/arrow-right-white.svg"/>
+            </OverwatchPanelButton>
         </div>
         <div class="time-part-wrap">
-            <button
+            <OverwatchPanelButton
+                    type="default"
                     class="subtract-button"
-                    @click="millis -= 25"
+                    v-hammer:tap="() => {millis -= 25}"
                     v-bind:disabled="totalValueSeconds === minSeconds"
-            ></button>
+            >
+                <img src="/icons/arrow-left-white.svg"/>
+            </OverwatchPanelButton>
             <div class="input-wrap">
                 <div class="time-part-interjector">ms</div>
                 <input
@@ -80,16 +101,22 @@
                         tabindex="1"
                 />
             </div>
-            <button
+            <OverwatchPanelButton
+                    type="default"
                     class="add-button"
-                    @click="millis += 25"
+                    v-hammer:tap="() => {millis += 25}"
                     v-bind:disabled="totalValueSeconds === maxSeconds"
-            ></button>
+            >
+                <img src="/icons/arrow-right-white.svg"/>
+            </OverwatchPanelButton>
         </div>
     </div>
 </template>
 
 <script>
+
+    import OverwatchButton from "@/vue/OverwatchButton";
+    import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 
     export default {
         model: {
@@ -185,70 +212,96 @@
         data() {
             return {}
         },
-        components: {},
+        components: {
+            OverwatchButton,
+            OverwatchPanelButton,
+        },
     };
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import "~@/assets/css/overwatch-ui.scss";
 
     .wrap {
         display: inline-flex;
         gap: .3em;
-    }
 
-    .input-wrap {
-        position: relative;
+        .time-part-wrap {
+            display: flex;
 
-        .time-part-interjector {
-            display: block;
-            position: absolute;
-            color: $overwatch-panel-bg-color;
-            z-index: 5;
-            pointer-events: none;
-            bottom: 0;
-            right: .1em;
-            font-size: 1.3em;
+            .input-wrap {
+                position: relative;
+
+                .time-part-interjector {
+                    display: block;
+                    position: absolute;
+                    color: $overwatch-panel-bg-color;
+                    z-index: 5;
+                    pointer-events: none;
+                    bottom: 0;
+                    right: .1em;
+                    font-size: 1.3em;
+                }
+
+                input[type='text'] {
+                    text-align: center;
+                    font-family: monospace;
+                    font-size: 1.5em;
+                    position: relative;
+                    z-index: 1;
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+
+            }
+
+            .add-button, .subtract-button {
+                outline: 0;
+                display: block;
+                width: .5em;
+                height: 100%;
+                background-size: .5em;
+                background-repeat: no-repeat;
+                background-position: center;
+                overflow: hidden;
+
+                img {
+                    width: .3em;
+                }
+
+                & ::v-deep .content {
+                    padding: 0;
+                    min-width: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    flex-direction: row;
+                    margin: 0 auto;
+                    width: 100%;
+                }
+
+                & ::v-deep .background {
+                    border-radius: 0;
+                }
+            }
+
+            .add-button[disabled], .subtract-button[disabled] {
+                visibility: hidden;
+            }
+
+            $adjust-button-border-radius: .15em;
+
+            .add-button {
+                border-radius: 0 $adjust-button-border-radius $adjust-button-border-radius 0 !important;
+            }
+
+            .subtract-button {
+                border-radius: $adjust-button-border-radius 0 0 $adjust-button-border-radius !important;
+            }
         }
 
-        input[type='text'] {
-            text-align: center;
-            font-family: monospace;
-            font-size: 1.5em;
-            position: relative;
-            z-index: 1;
-            height: 100%;
-            box-sizing: border-box;
-        }
+
     }
 
-    .time-part-wrap {
-        display: flex;
-    }
-
-    .add-button, .subtract-button {
-        display: block;
-        width: .5em;
-        height: 100%;
-        border: 1px solid grey;
-        background-color: lightgrey;
-        background-size: .5em;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-    .add-button[disabled], .subtract-button[disabled] {
-        visibility: hidden;
-    }
-
-    .add-button {
-        border-radius: 0 .3em .3em 0;
-        background-image: url("/icons/arrow-right.svg");
-    }
-
-    .subtract-button {
-        border-radius: .3em 0 0 .3em;
-        background-image: url("/icons/arrow-left.svg");
-    }
 </style>
