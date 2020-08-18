@@ -15,7 +15,7 @@
             </OverwatchButton>
             <OverwatchButton
                     type="main"
-                    :disabled="isDoneButtonEnabled"
+                    :disabled="!isDoneButtonEnabled"
                     v-hammer:tap="saveGuide"
             >Done
             </OverwatchButton>
@@ -76,7 +76,7 @@
                     type="main"
                     v-hammer:tap="saveGuide"
                     data-type="text"
-                    :disabled="isDoneButtonEnabled"
+                    :disabled="!isDoneButtonEnabled"
             >Done
             </OverwatchButton>
             <OverwatchButton
@@ -143,9 +143,6 @@
                     )
                 );
             },
-            isDoneButtonEnabled() {
-                return typeof guide.parts.find(p => p.isText() || p.part.excerpt !== null) !== 'undefined';
-            },
             deletePart(index) {
                 this.guide.parts.splice(index, 1);
             },
@@ -206,6 +203,11 @@
                     parts: []
                 },
             }
+        },
+        computed: {
+            isDoneButtonEnabled() {
+                return typeof this.guide.parts.find(p => p.hasContent) !== 'undefined';
+            },
         },
         components: {
             GuidePartVideoEditor,
