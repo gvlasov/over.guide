@@ -43,7 +43,7 @@
                         v-hammer:tap="resetLoopWindow"
                         title="Reset loop window to entire video"
                         type="default"
-                >-] [-
+                >reset cut
                 </OverwatchPanelButton>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
@@ -59,7 +59,7 @@
                         v-hammer:tap="startCut"
                         title="Start loop at current position"
                         type="default"
-                >[
+                >start cut
                 </OverwatchPanelButton>
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
@@ -75,7 +75,7 @@
                         v-hammer:tap="endCut"
                         title="End loop at current position"
                         type="default"
-                >]
+                >end cut
                 </OverwatchPanelButton>
             </div>
         </div>
@@ -316,7 +316,7 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     $max-portrait-mode-width: 60em;
     .wrap {
         display: flex;
@@ -348,6 +348,10 @@
 
     .action-button {
         max-width: 3em;
+
+        & ::v-deep .content {
+            font-size: .6em;
+        }
     }
 
     .left-shift-2 {

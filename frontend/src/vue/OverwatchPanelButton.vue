@@ -41,7 +41,7 @@
     .overwatch-button > .content {
         position: relative;
         overflow: hidden;
-        padding: .1em .2em .3em .2em;
+        padding: .15em .2em .25em .2em;
         min-width: 1em;
         min-height: 1em;
         width: auto;
