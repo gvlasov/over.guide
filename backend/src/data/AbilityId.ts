@@ -152,7 +152,7 @@ const enum AbilityId {
     Blink = 151,
     Recall = 152,
     PulseBomb = 153,
-    WidowsKiss = 154,
+    WidowsKissScoped = 154,
     WidowsKissUnscoped = 155,
     GrapplingHook = 156,
     VenomMine = 157,
