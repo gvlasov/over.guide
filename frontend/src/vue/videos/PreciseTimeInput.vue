@@ -239,9 +239,9 @@
                     color: $overwatch-panel-bg-color;
                     z-index: 5;
                     pointer-events: none;
-                    bottom: 0;
+                    bottom: -.15em;
                     right: .1em;
-                    font-size: 1.3em;
+                    font-size: 1.2em;
                 }
 
                 input[type='text'] {
