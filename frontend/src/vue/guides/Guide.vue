@@ -140,6 +140,7 @@
 
     .wrap {
         display: inline-block;
+        box-sizing: border-box;
         background-color: rgba(43, 55, 83, 0.8);
         @include overwatch-futura-no-smallcaps;
         color: white;
