@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {Guide} from "src/database/models/Guide";
@@ -16,7 +15,6 @@ import {Op} from "sequelize";
 import {GuideHead} from "src/database/models/GuideHead";
 import AbilityId from "data/AbilityId";
 import {User} from "src/database/models/User";
-import UserDto from "data/dto/UserDto";
 
 export class GuideSearchQuery implements GuideSearchQueryDto {
 
@@ -122,18 +120,7 @@ export class GuideSearchService {
         return {
             guides: nextGuides
                 .slice(0, GuideSearchService.pageSize)
-                .map(entry => {
-                    return {
-                        author: {
-                            id: entry.guide.creator.id,
-                            name: entry.guide.creator.name,
-                        } as UserDto,
-                        createdAt: entry.guide.createdAt,
-                        descriptor: entry.descriptor.toDto(),
-                        guideId: entry.guideId,
-                        parts: entry.partsOrdered.map(part => part.toDto()),
-                    } as GuideHistoryEntryDto
-                }),
+                .map(entry => entry.toDto()),
             pageNumber: query.pageNumber + 1,
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         }

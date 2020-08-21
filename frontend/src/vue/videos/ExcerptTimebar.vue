@@ -55,7 +55,6 @@
             onMouseUp(e) {
                 this.isMouseDown = false;
                 this.currentDragPosition = null;
-                console.log(this.dragStart, this.dragPosition(e))
                 if (this.dragStart === this.dragPosition(e)) {
                     this.$emit('draglessClick', this.dragStart);
                 } else {

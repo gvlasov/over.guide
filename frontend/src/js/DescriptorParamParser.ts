@@ -103,7 +103,6 @@ export default class DescriptorParamParser {
     }
 
     parseParam(descriptorParam: string): GuideDescriptorVso {
-        console.log(descriptorParam)
         const output = {
             playerHeroes: [],
             playerAbilities: [],
@@ -134,7 +133,6 @@ export default class DescriptorParamParser {
                 (output[field] as any[]).push(dto.id)
             }
         }
-        console.log(output)
         return new GuideDescriptorVso(output)
     }
 

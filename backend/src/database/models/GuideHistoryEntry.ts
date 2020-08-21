@@ -20,6 +20,8 @@ import {GuideHistoryEntry2GuidePartVideo} from "src/database/models/GuideHistory
 import {DataTypes} from "sequelize";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 import {GuideHead} from "src/database/models/GuideHead";
+import UserDto from "data/dto/UserDto";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 
 @Table({
     name: {
@@ -106,5 +108,18 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
             }
             return aOrder - bOrder;
         })
+    }
+
+    toDto(): GuideHistoryEntryDto {
+        return {
+            author: {
+                id: this.guide.creator.id,
+                name: this.guide.creator.name,
+            } as UserDto,
+            createdAt: this.guide.createdAt,
+            descriptor: this.descriptor.toDto(),
+            guideId: this.guideId,
+            parts: this.partsOrdered.map(part => part.toDto()),
+        } as GuideHistoryEntryDto
     }
 }

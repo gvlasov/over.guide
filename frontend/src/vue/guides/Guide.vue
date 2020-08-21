@@ -25,7 +25,22 @@
                 </div>
             </div>
         </div>
-
+        <div class="training-goal-buttons">
+            <OverwatchButton
+                    v-if="trainingGoalAdded"
+                    type="main"
+                    class="training-goal-button remove-training-goal-button"
+                    v-hammer:tap="removeTrainingGoal"
+            >Your training goal
+            </OverwatchButton>
+            <OverwatchButton
+                    v-else
+                    type="default"
+                    class="training-goal-button add-training-goal-button"
+                    v-hammer:tap="addTrainingGoal"
+            >Add training goal
+            </OverwatchButton>
+        </div>
         <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
             <div class="text-guide-part" v-if="part.part.kind === 'text'">
                 <div
@@ -63,9 +78,10 @@
     import formatDistance from 'date-fns/formatDistance'
     import TopicComments from "@/vue/TopicComments";
     import CommentsCounter from "@/vue/CommentsCounter";
+    import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
 
     const backend = new Backend(axios);
-
+    const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
     export default {
         model: {},
         props: {
@@ -84,9 +100,24 @@
             absoluteDateText() {
                 return new Date(this.guide.createdAt).toLocaleString();
             },
+            addTrainingGoal() {
+                myTrainingGoalsCache.addGoal(this.guide.guideId)
+                this.$forceUpdate();
+            },
+            removeTrainingGoal() {
+                myTrainingGoalsCache.removeGoal(this.guide.guideId)
+                this.$forceUpdate();
+            },
         },
         data() {
-            return {}
+            return {
+                goalIds: myTrainingGoalsCache.goalIds,
+            }
+        },
+        computed: {
+            trainingGoalAdded() {
+                return this.goalIds.includes(this.guide.guideId);
+            },
         },
         mounted() {
         },
@@ -109,11 +140,10 @@
 
     .wrap {
         display: inline-block;
-        max-width: 100vw;
-        min-width: 100%;
         background-color: rgba(43, 55, 83, 0.8);
         @include overwatch-futura-no-smallcaps;
         color: white;
+        padding: 1em;
     }
 
     .meta {
@@ -122,7 +152,6 @@
         flex-direction: row;
         color: white;
         justify-content: space-between;
-        padding: 1em;
         margin: .3em;
     }
 
@@ -136,9 +165,8 @@
     }
 
     .guide-part {
-        padding: 1em;
-        margin: .3em;
         cursor: pointer;
+        box-sizing: border-box;
         /*background-color: rgba(43, 55, 83, 0.8);*/
         color: white;
         font-family: 'Futura Demi Bold', 'sans-serif';
@@ -160,31 +188,9 @@
         word-break: break-word;
     }
 
-    .guide-part-buttons > * {
-        font-size: 2em;
-    }
-
-    textarea.guide-part-text-editor {
-        width: 100%;
-        max-width: 20em;
-        font-size: 1em;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-    }
-
-    .create-buttons {
-        display: flex;
-        justify-content: space-evenly;
-        z-index: 1;
-        font-size: 2rem;
-    }
-
     .video {
         max-width: 100%;
         width: 100%;
-    }
-
-    .video-editor {
-        display: block;
     }
 
     .descriptor-builder {
@@ -208,6 +214,23 @@
 
     .authorship {
         white-space: nowrap;
+    }
+
+    .training-goal-buttons {
+        text-align: right;
+        margin-bottom: 1rem;
+
+        .training-goal-button {
+            font-size: 1.5rem;
+        }
+
+        .remove-training-goal-button {
+            box-shadow: 0 0 .3rem .3rem rgba(157, 255, 0, .3) !important;
+
+            & ::v-deep .background {
+                background-color: rgb(157, 255, 0);
+            }
+        }
     }
 
 </style>

@@ -1,5 +1,13 @@
-import {Column, Model, Table, Unique} from 'sequelize-typescript';
+import {
+    BelongsToMany,
+    Column,
+    Model,
+    Table,
+    Unique
+} from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
+import {Guide} from "src/database/models/Guide";
+import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 
 @Table({
     name: {
@@ -15,5 +23,16 @@ export class User extends Model<User> {
     @Unique
     @Column({type: new DataTypes.STRING(15)})
     battleNetUserId: string
+
+    @BelongsToMany(
+        () => Guide,
+        {
+
+            through: {
+                model: () => User2TrainingGoal,
+            },
+        }
+    )
+    trainingGoals: Array<Guide & { User2TrainingGoal: User2TrainingGoal }>;
 
 }

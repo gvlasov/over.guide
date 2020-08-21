@@ -69,6 +69,7 @@
                     this.player.destroy();
                 }
                 const self = this;
+                let firstPlayWithoutAutoplay = !this.autoplay;
                 var script = document.createElement('script');
                 script.src = 'https://www.youtube.com/iframe_api';
                 script.defer = true;
@@ -78,10 +79,12 @@
                         self.player = new YT.Player(self.playerElementId, {
                             videoId: videoId,
                             playerVars: {
-                                modestbranding: 1,
+                                modestbranding: 0,
                                 rel: 0,
                                 showinfo: 0,
                                 autoplay: self.autoplay ? 1 : 0,
+                                disablekb: 1,
+                                controls: 0
                             },
                             width: null,
                             height: null,
@@ -107,6 +110,10 @@
                                 },
                                 'onStateChange': (event) => {
                                     if (event.data === YT.PlayerState.PLAYING) {
+                                        if (firstPlayWithoutAutoplay) {
+                                            firstPlayWithoutAutoplay = false;
+                                            self.player.pauseVideo();
+                                        }
                                         self.rescheduleLooping();
                                         self.$emit('play');
                                     } else if (event.data === YT.PlayerState.PAUSED) {

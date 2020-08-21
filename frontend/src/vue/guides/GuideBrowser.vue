@@ -8,7 +8,7 @@
         />
         <div class="guide-feed">
             <div v-for="guide in guides">
-                <Guide :guide="guide"/>
+                <Guide :guide="guide" class="guide"/>
             </div>
         </div>
         <InfiniteLoading
@@ -106,5 +106,10 @@
     .guide-browser {
         max-width: 54em;
         margin: 0 auto;
+    }
+
+    .guide {
+        max-width: 100vw;
+        min-width: 100%;
     }
 </style>

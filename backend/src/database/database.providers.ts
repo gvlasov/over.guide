@@ -26,6 +26,7 @@ import {GuideHead} from "src/database/models/GuideHead";
 import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
 import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
+import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 
 const Umzug = require('umzug')
 
@@ -79,6 +80,7 @@ export const databaseProviders = [
                 Map,
                 ThematicTag,
                 GuideHead,
+                User2TrainingGoal,
             ]);
             const umzug = new Umzug({
                 migrations: {

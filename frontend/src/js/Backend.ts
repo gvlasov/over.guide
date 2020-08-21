@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
+import TrainingGoalDto from "data/dto/TrainingGoalDto";
 
 const querystring = require('query-string')
 
@@ -81,6 +82,35 @@ export default class Backend {
             response => response.data as MatchupEvaluationDto
         )
     };
+
+    async getMyTrainingGoals(): Promise<TrainingGoalDto[]> {
+        return this.query(
+            'GET',
+            '/my-training-goals',
+            {},
+            response => response.data as TrainingGoalDto[]
+        )
+    };
+
+    async addTrainingGoal(guideId: number, order?: number): Promise<GuideHistoryEntryDto[]> {
+        return this.query(
+            'POST',
+            '/my-training-goals/' + guideId,
+            {
+                order
+            },
+            response => response.data
+        )
+    }
+
+    async removeTrainingGoal(guideId: number): Promise<GuideHistoryEntryDto[]> {
+        return this.query(
+            'DELETE',
+            '/my-training-goals/' + guideId,
+            {},
+            response => response.data
+        )
+    }
 
     async evaluateMatchup(subject: HeroDto, object: HeroDto, score: number): Promise<MatchupEvaluationDto> {
         return this.query(

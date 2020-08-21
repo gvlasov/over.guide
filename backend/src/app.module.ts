@@ -20,6 +20,7 @@ import {GuideHistoryEntryService} from "src/services/guide-history-entry.service
 import {GuideController} from "src/controllers/guide.controller";
 import {ContentHashService} from "src/services/content-hash.service";
 import {GuideSearchService} from "src/services/guide-search.service";
+import {TrainingGoalController} from "src/controllers/training-goal.controller";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -32,6 +33,7 @@ import {GuideSearchService} from "src/services/guide-search.service";
         GuideController,
         TestController,
         FixtureController,
+        TrainingGoalController,
     ],
     providers: [
         AppService,
