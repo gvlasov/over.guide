@@ -224,11 +224,25 @@
             font-size: 1.5rem;
         }
 
+        $training-goal-color: rgb(0, 255, 196);
+
         .remove-training-goal-button {
-            box-shadow: 0 0 .3rem .3rem rgba(157, 255, 0, .3) !important;
+            box-shadow: 0 0 .3rem .3rem rgba($training-goal-color, .3) !important;
+
+            &:hover {
+                box-shadow: 0 0 .3rem .3rem rgba($training-goal-color, .15) !important;
+
+                & ::v-deep .background {
+                    opacity: .3;
+                }
+            }
 
             & ::v-deep .background {
-                background-color: rgb(157, 255, 0);
+                background-color: $training-goal-color;
+            }
+
+            &:hover ::v-deep .background {
+                background-color: $training-goal-color;
             }
         }
     }
