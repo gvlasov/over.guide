@@ -1,7 +1,10 @@
 <template>
     <div class="wrap">
         <div class="meta">
-            <div class="tags">
+            <div
+                    class="tags"
+                    v-hammer:tap="searchTag"
+            >
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
                 <div ref="badgeTagsWrap" class="badge-tags-wrap">
                     <ThematicTagBadge
@@ -79,6 +82,7 @@
     import TopicComments from "@/vue/TopicComments";
     import CommentsCounter from "@/vue/CommentsCounter";
     import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
+    import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 
     const backend = new Backend(axios);
     const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
@@ -108,6 +112,11 @@
                 myTrainingGoalsCache.removeGoal(this.guide.guideId)
                 this.$forceUpdate();
             },
+            searchTag() {
+                const newPath = "/search/"
+                    + new DescriptorParamUnparser().unparseDescriptor(this.guide.descriptor);
+                this.$router.push(newPath)
+            }
         },
         data() {
             return {
@@ -158,6 +167,12 @@
 
     .tags {
         text-align: left;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(white, .4);
+            box-shadow: 0 0 .4rem white;
+        }
     }
 
     a {
