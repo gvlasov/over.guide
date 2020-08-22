@@ -1,5 +1,5 @@
 <template>
-    <div class="guide-browser">
+    <div class="guide-browser root-content-sizer">
         <DescriptorBuilder
                 :search-button-enabled="false"
                 :descriptor="descriptor"
@@ -95,6 +95,7 @@
 
 <style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/common.css';
 
     .guide-feed {
         display: flex;
@@ -105,8 +106,6 @@
     }
 
     .guide-browser {
-        max-width: 54em;
-        min-width: min(54em, 100vw);
         margin: 0 auto;
     }
 

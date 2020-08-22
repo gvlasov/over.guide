@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="wrap root-content-sizer">
         <DescriptorBuilder
                 :descriptor="guide.descriptor"
                 :search-button-enabled="false"
@@ -230,8 +230,6 @@
         display: inline-flex;
         flex-direction: column;
         gap: .6em;
-        max-width: min(54em, 100vw);
-        width: 54em;
 
         .guide-part {
             @include overwatch-panel;

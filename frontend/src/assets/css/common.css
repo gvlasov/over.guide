@@ -1,0 +1,8 @@
+:root {
+    --root-content-width: 54em;
+}
+
+.root-content-sizer {
+    max-width: var(--root-content-width);
+    min-width: min(var(--root-content-width), 100vw);
+}
