@@ -93,7 +93,7 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
 
     .guide-feed {
@@ -105,6 +105,7 @@
 
     .guide-browser {
         max-width: 54em;
+        min-width: min(54em, 100vw);
         margin: 0 auto;
     }
 

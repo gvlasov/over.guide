@@ -29,10 +29,9 @@
         font-size: 1.7em;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: space-around;
         gap: .1em;
         margin-bottom: 1rem;
-        max-width: 100%;
     }
 
     a {
