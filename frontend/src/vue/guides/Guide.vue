@@ -28,7 +28,10 @@
                 </div>
             </div>
         </div>
-        <div class="training-goal-buttons">
+        <div
+                v-if="showTrainingGoalButton"
+                class="training-goal-buttons"
+        >
             <OverwatchButton
                     v-if="trainingGoalAdded"
                     type="main"
@@ -92,6 +95,10 @@
             guide: {
                 type: GuideVso,
                 required: true
+            },
+            showTrainingGoalButton: {
+                type: Boolean,
+                default: true,
             }
         },
         methods: {

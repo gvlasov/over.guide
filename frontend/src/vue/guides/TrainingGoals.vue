@@ -68,14 +68,13 @@
         justify-content: center;
         gap: 1em;
         width: 50em;
-        max-width: 50em;
-        min-width: 50em;
+        max-width: min(50em, 100vw);
+        min-width: min(50em, 100vw);
 
         & > * {
             flex-basis: 100%;
-            width: 50em;
-            max-width: 50em;
-            min-width: 50em;
+            max-width: min(50em, 100vw);
+            min-width: min(50em, 100vw);
         }
     }
 </style>
