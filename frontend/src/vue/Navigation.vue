@@ -1,23 +1,24 @@
 <template>
     <div class="root">
-        <!--        <router-link to="/counters-practice">Counters practice</router-link>-->
-        <!--        <router-link to="/suggest-pick">Suggest pick</router-link>-->
         <router-link to="/search">Browse guides</router-link>
         <router-link to="/guide-editor">Create guide</router-link>
         <router-link to="/training-goals">Training goals</router-link>
-        <router-link to="/testing-ground">Testing ground</router-link>
+<!--        <router-link to="/testing-ground">Testing ground</router-link>-->
         <BattlenetAuthButton/>
     </div>
 </template>
 
 <script>
+    import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 
     export default {
         methods: {},
         data() {
             return {};
         },
-        components: {},
+        components: {
+            BattlenetAuthButton,
+        },
     }
 </script>
 
@@ -25,20 +26,21 @@
     @import "~@/assets/css/overwatch-ui.scss";
 
     .root {
-        font-size: 2em;
+        font-size: 1.7em;
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
         gap: .1em;
         margin-bottom: 1rem;
+        max-width: 100%;
     }
 
     a {
-        @include overwatch-futura;
+        @include overwatch-futura-no-smallcaps;
         color: white;
         text-decoration: none;
-        padding: 0 .5em;
+        padding: 1rem .4rem 0 .4rem;
         white-space: nowrap;
-        background-color: hsl(206, 80%, 58%);
+        text-shadow: 0 0 .2em black;
     }
 </style>
