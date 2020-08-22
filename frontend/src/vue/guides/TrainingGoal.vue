@@ -149,12 +149,14 @@
     .wrap {
         @include overwatch-futura-no-smallcaps;
         color: white;
+        --left-border-radius: .6rem;
 
         .collapsed {
             display: flex;
             min-height: 4em;
             cursor: pointer;
             @include overwatch-panel-shadow;
+            border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
         }
 
         .uncollapsed {
@@ -184,8 +186,10 @@
             display: flex;
             overflow: hidden;
             @include overwatch-panel-bg;
+            border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
 
             .tags {
+                margin-left: .3rem;
                 display: flex;
                 flex-grow: 1;
                 align-items: center;
