@@ -229,8 +229,8 @@
         display: inline-flex;
         flex-direction: column;
         gap: .6em;
-        max-width: min(67em, 100%);
-        width: 67em;
+        max-width: min(54em, 100%);
+        width: 54em;
 
         .guide-part {
             padding: 1em;

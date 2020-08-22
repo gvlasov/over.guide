@@ -36,7 +36,7 @@
                 <div
                         class="total-cut-length"
                 >
-                    {{totalCutLengthText}} cut
+                    {{totalCutLengthText}}
                 </div>
                 <OverwatchPanelButton
                         class="reset-button action-button left-shift-2"
@@ -390,13 +390,13 @@
         }
 
         .reset-button {
+            margin-left: 1em;
             order: 3;
-            margin-left: 1.5em;
-            margin-right: 1.5em;
+            margin-right: 1em;
         }
 
         .cut-end {
-            order: 4
+            order: 4;
         }
 
         .time-input-end {

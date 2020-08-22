@@ -1,5 +1,8 @@
 <template>
-    <a v-bind:href="url" class="battle-net-button" title="Battle.net auth"></a>
+    <a v-bind:href="url" class="battle-net-button" title="Battle.net auth">
+        <img src="/icons/battlenet.svg"/>
+        Log in
+    </a>
 </template>
 
 <script>
@@ -28,12 +31,15 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .battle-net-button {
-        background-image: url("/icons/battlenet.svg");
-        background-size: 3vw 3vw;
-        display: inline-block;
-        width: 3vw;
-        height: 3vw;
+        display: block;
+        /*background-image: url("/icons/battlenet.svg");*/
+        background-size: 1em 1em;
+
+        img {
+            height: 1em;
+            vertical-align: bottom;
+        }
     }
 </style>

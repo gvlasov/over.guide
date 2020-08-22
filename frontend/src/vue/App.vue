@@ -1,9 +1,7 @@
 <template>
     <div class="app">
         <Navigation/>
-        <div>
-            <router-view></router-view>
-        </div>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -53,7 +51,8 @@
     .app {
         text-align: center;
         background-color: #405275;
-        width: 100%;
+        width: max-content;
+        margin: 0 auto;
         min-height: 100vh;
         overflow-x: hidden;
     }
