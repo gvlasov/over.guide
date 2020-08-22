@@ -62,7 +62,7 @@
     }
 
     .training-goals {
-        display: flex;
+        display: inline-flex;
         flex-wrap: wrap;
         flex-direction: row;
         justify-content: center;

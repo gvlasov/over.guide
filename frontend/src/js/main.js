@@ -10,6 +10,7 @@ import TestingGround from "@/vue/TestingGround";
 import GuideSearch from "@/vue/guides/GuideSearch";
 import AsyncComputed from 'vue-async-computed'
 import {VueHammer} from 'vue2-hammer'
+import TrainingGoals from "@/vue/guides/TrainingGoals";
 
 
 const router = new VueRouter({
@@ -19,6 +20,7 @@ const router = new VueRouter({
         {path: '/guide-editor', component: GuideEditor},
         {path: '/testing-ground', component: TestingGround},
         {path: '/search/:descriptor?', component: GuideSearch},
+        {path: '/training-goals', component: TrainingGoals},
     ]
 });
 Vue.use(VueRouter);

@@ -1,14 +1,6 @@
 <template>
     <div class="app">
-        <div>
-            <router-link to="/counters-practice">Counters practice</router-link>
-            <router-link to="/suggest-pick">Suggest pick</router-link>
-            <router-link to="/guide-editor">Guide editor</router-link>
-            <router-link to="/testing-ground">Testing ground</router-link>
-            <router-link to="/search">Search</router-link>
-            <BattlenetAuthButton/>
-        </div>
-        <AdsensePlaceholder>AdSense</AdsensePlaceholder>
+        <Navigation/>
         <div>
             <router-view></router-view>
         </div>
@@ -28,6 +20,7 @@
     import RoleSelection from "@/vue/training/RoleSelection.vue";
     import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
     import MatchupEvaluator from "@/vue/MatchupEvaluator";
+    import Navigation from "@/vue/Navigation";
 
     export default {
         methods: {},
@@ -51,6 +44,7 @@
             CountersPractice: CountersPractice,
             AdsensePlaceholder: AdsensePlaceholder,
             PickSuggestion: PickSuggestion,
+            Navigation,
         },
     }
 </script>
