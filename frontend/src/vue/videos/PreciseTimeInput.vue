@@ -233,6 +233,11 @@
             .input-wrap {
                 position: relative;
 
+                & > input[type=text] {
+                    font-family: "Futura Demi Bold", sans-serif !important;
+                    font-size: 1.2em !important;
+                }
+
                 .time-part-interjector {
                     display: block;
                     position: absolute;
@@ -240,6 +245,7 @@
                     z-index: 5;
                     pointer-events: none;
                     bottom: -.15em;
+                    font-family: "Futura Demi Bold", sans-serif;
                     right: .1em;
                     font-size: 1.2em;
                 }

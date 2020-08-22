@@ -83,6 +83,7 @@
         pointer-events: none;
         font-size: 1.5em;
         word-break: break-word;
+        font-family: "Proxima Nova Light", sans-serif;
     }
 
     textarea.guide-part-text-editor {

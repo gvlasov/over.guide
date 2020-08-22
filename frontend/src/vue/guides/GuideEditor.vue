@@ -237,7 +237,6 @@
             cursor: pointer;
             background-color: rgba(43, 55, 83, 0.8);
             color: white;
-            font-family: 'Futura Demi Bold', 'sans-serif';
             position: relative;
 
             &:first-of-type {

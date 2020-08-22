@@ -202,6 +202,7 @@
                 overflow: hidden;
                 padding: 1em;
                 flex-grow: 999;
+                font-family: "Proxima Nova Light", sans-serif;
 
                 & ::v-deep * {
                     margin: 0;

@@ -158,7 +158,6 @@
         display: inline-block;
         box-sizing: border-box;
         background-color: rgba(43, 55, 83, 0.8);
-        @include overwatch-futura-no-smallcaps;
         color: white;
         padding: 1em;
     }
@@ -192,12 +191,12 @@
         box-sizing: border-box;
         /*background-color: rgba(43, 55, 83, 0.8);*/
         color: white;
-        font-family: 'Futura Demi Bold', 'sans-serif';
         position: relative;
     }
 
     .text-guide-part {
         max-width: 100%;
+        font-family: "Proxima Nova Light", sans-serif;
     }
 
     .text-guide-part ::v-deep img {

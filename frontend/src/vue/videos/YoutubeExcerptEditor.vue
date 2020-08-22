@@ -351,6 +351,7 @@
 
         & ::v-deep .content {
             font-size: .6em;
+            padding: .2em .4em;
         }
     }
 
@@ -405,6 +406,7 @@
         .total-cut-length {
             order: 6;
             flex-basis: 100%;
+            font-family: 'Futura Demi Bold', sans-serif;
         }
     }
 </style>

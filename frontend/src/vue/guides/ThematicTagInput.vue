@@ -164,6 +164,11 @@
         position: relative;
         padding: 0 .25em 0 0;
         height: 100%;
+
+        input[type=text] {
+            font-family: "Proxima Nova Light", sans-serif;
+            font-weight: bold;
+        }
     }
 
     .root ::v-deep .tags-input input[type=text] {
