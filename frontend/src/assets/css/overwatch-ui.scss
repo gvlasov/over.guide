@@ -81,8 +81,17 @@
 }
 
 
-$overwatch-panel-bg-color: #6b8cbb;
+$overwatch-panel-bg-color: rgb(13, 22, 41);
 
-.panel-bg {
-  background-color: $overwatch-panel-bg-color;
+@mixin overwatch-panel {
+  @include overwatch-panel-bg;
+  @include overwatch-panel-shadow;
+}
+
+@mixin overwatch-panel-bg {
+  background-color: rgba($overwatch-panel-bg-color, 0.43);
+}
+
+@mixin overwatch-panel-shadow {
+  box-shadow: 0 .1em .3em $overwatch-panel-bg-color;
 }

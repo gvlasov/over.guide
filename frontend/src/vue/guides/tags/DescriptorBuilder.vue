@@ -57,6 +57,8 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "~@/assets/css/overwatch-ui.scss";
+
     .search-button {
         font-size: 2.8em;
         margin-right: .5rem;
@@ -76,6 +78,7 @@
         background: #fff;
         border-radius: .25em;
         border-color: #dbdbdb;
+        box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
     }
 
     .searchbox > * {

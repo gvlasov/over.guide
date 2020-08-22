@@ -14,10 +14,13 @@
                     :show-training-goal-button="false"
             />
         </div>
-        <div v-else class="collapsed">
+        <div
+                v-else
+                class="collapsed"
+                v-bind:class="{deleted: trainingGoal.deleted}"
+        >
             <div
                     class="opacity"
-                    v-bind:class="{deleted: trainingGoal.deleted}"
                     v-hammer:tap="() => {showFull = true}"
             >
                 <div class="tags">
@@ -144,7 +147,6 @@
     @import '~@/assets/css/overwatch-ui.scss';
 
     .wrap {
-        background-color: rgba(43, 55, 83, 0.8);
         @include overwatch-futura-no-smallcaps;
         color: white;
 
@@ -152,6 +154,7 @@
             display: flex;
             min-height: 4em;
             cursor: pointer;
+            @include overwatch-panel-shadow;
         }
 
         .uncollapsed {
@@ -168,10 +171,19 @@
             }
         }
 
+        .deleted {
+            box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .5);
+
+            .opacity {
+                opacity: .3;
+            }
+        }
+
         .opacity {
             flex-grow: 1;
             display: flex;
             overflow: hidden;
+            @include overwatch-panel-bg;
 
             .tags {
                 display: flex;
@@ -195,7 +207,9 @@
             }
 
             .text-guide-part-content {
-                display: block;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
                 text-align: left;
                 font-size: 1em;
                 white-space: nowrap;
@@ -223,8 +237,5 @@
         }
     }
 
-    .deleted {
-        opacity: .3;
-    }
 
 </style>

@@ -50,7 +50,6 @@
 <style scoped>
     .app {
         text-align: center;
-        background-color: #405275;
         width: min-content;
         margin: 0 auto;
         min-height: 100vh;

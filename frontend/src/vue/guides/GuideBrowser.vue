@@ -100,7 +100,8 @@
         display: flex;
         justify-content: start;
         flex-direction: column;
-        gap: 2em;
+        gap: 2rem;
+        margin-top: 2rem;
     }
 
     .guide-browser {

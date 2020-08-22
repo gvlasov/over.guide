@@ -224,6 +224,7 @@
 
 <style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/overwatch-ui.scss';
 
     .wrap {
         display: inline-flex;
@@ -233,25 +234,23 @@
         width: 54em;
 
         .guide-part {
+            @include overwatch-panel;
             padding: 1em;
             cursor: pointer;
-            background-color: rgba(43, 55, 83, 0.8);
             color: white;
             position: relative;
 
             &:first-of-type {
-                margin-top: 3em;
             }
 
             &:last-of-type {
-                margin-bottom: 3em;
             }
         }
 
         .guide-parts {
             display: flex;
             flex-direction: column;
-            gap: .3em;
+            gap: 2rem;
         }
 
         .guide-part-buttons > * {

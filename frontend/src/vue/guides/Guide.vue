@@ -155,9 +155,9 @@
     @import '~@/assets/css/overwatch-ui.scss';
 
     .wrap {
+        @include overwatch-panel;
         display: inline-block;
         box-sizing: border-box;
-        background-color: rgba(43, 55, 83, 0.8);
         color: white;
         padding: 1em;
     }
@@ -236,6 +236,11 @@
 
     .authorship {
         white-space: nowrap;
+        @include overwatch-futura-no-smallcaps;
+
+        a {
+            color: #8bbafe;
+        }
     }
 
     .training-goal-buttons {
