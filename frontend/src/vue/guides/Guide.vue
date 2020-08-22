@@ -128,6 +128,7 @@
         data() {
             return {
                 goalIds: myTrainingGoalsCache.goalIds,
+                trainingGoalButtonHover: false,
             }
         },
         computed: {
@@ -254,14 +255,9 @@
         $training-goal-color: rgb(0, 255, 196);
 
         .remove-training-goal-button {
-            box-shadow: 0 0 .3rem .3rem rgba($training-goal-color, .3) !important;
 
             &:hover {
-                box-shadow: 0 0 .3rem .3rem rgba($training-goal-color, .15) !important;
-
-                & ::v-deep .background {
-                    opacity: .3;
-                }
+                @include overwatch-button-hover;
             }
 
             & ::v-deep .background {

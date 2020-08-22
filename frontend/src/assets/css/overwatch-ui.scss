@@ -19,6 +19,10 @@
   border-radius: .06em;
 }
 
+@mixin overwatch-button-hover {
+  box-shadow: 0 0 .05em .05em white;
+}
+
 @mixin overwatch-button {
   @include overwatch-futura;
   user-select: none;
@@ -32,7 +36,7 @@
     }
   }
   &:hover {
-    box-shadow: 0 0 .05em .05em white;
+    @include overwatch-button-hover;
   }
   & > .background {
     position: absolute;
