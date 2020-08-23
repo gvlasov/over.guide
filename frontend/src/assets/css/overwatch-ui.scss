@@ -40,7 +40,7 @@
     animation: .1s linear forwards overwatch-button-hover;
 
     .background {
-      opacity: .6;
+      opacity: .5;
     }
   }
 
@@ -86,7 +86,7 @@
   }
 }
 
-$overwatch-button-main-bg-color: hsl(39, 100%, 45%);
+$overwatch-button-main-bg-color: hsl(39, 100%, 55%);
 $overwatch-button-default-bg-color: hsl(206, 76%, 55%);
 
 @mixin overwatch-button-bg-default {
