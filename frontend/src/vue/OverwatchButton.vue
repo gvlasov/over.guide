@@ -40,7 +40,7 @@
     .overwatch-button > .content {
         position: relative;
         overflow: hidden;
-        padding: .03em 1.07em .19em 1.07em;
+        padding: .05em 1.07em .19em 1.07em;
     }
 
     button[disabled] {

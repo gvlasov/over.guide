@@ -19,7 +19,7 @@
   border-radius: .06em;
 }
 
-@mixin overwatch-button-hover {
+@mixin overwatch-button-hover-shadow {
   box-shadow: 0 0 .05em .05em white;
 }
 
@@ -35,9 +35,21 @@
       opacity: 1;
     }
   }
+
   &:hover {
-    @include overwatch-button-hover;
+    animation: .1s linear forwards overwatch-button-hover;
+
+    .background {
+      opacity: .6;
+    }
   }
+
+  @keyframes overwatch-button-hover {
+    to {
+      @include overwatch-button-hover-shadow;
+    }
+  }
+
   & > .background {
     position: absolute;
     width: 100%;
@@ -63,7 +75,7 @@
 
 @mixin overwatch-button-bg {
   top: 0;
-  opacity: .6;
+  opacity: .9;
   letter-spacing: 0.03em;
   border-radius: .06em;
   :disabled {
@@ -74,16 +86,18 @@
   }
 }
 
+$overwatch-button-main-bg-color: hsl(39, 100%, 45%);
+$overwatch-button-default-bg-color: hsl(206, 76%, 55%);
+
 @mixin overwatch-button-bg-default {
   @include overwatch-button-bg;
-  background-color: #2991de;
+  background-color: $overwatch-button-default-bg-color;
 }
 
 @mixin overwatch-button-bg-main {
   @include overwatch-button-bg;
-  background-color: orange;
+  background-color: $overwatch-button-main-bg-color;
 }
-
 
 $overwatch-panel-bg-color: rgb(13, 22, 41);
 

@@ -252,13 +252,11 @@
             font-size: 1.5rem;
         }
 
-        $training-goal-color: rgb(0, 255, 196);
+        $training-goal-color: #edad4c;
 
         .remove-training-goal-button {
 
-            &:hover {
-                @include overwatch-button-hover;
-            }
+            @include overwatch-inline-button;
 
             & ::v-deep .background {
                 background-color: $training-goal-color;
