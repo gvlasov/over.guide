@@ -3,7 +3,7 @@ import TrainingGoalDto from "data/dto/TrainingGoalDto";
 
 export default class MyTrainingGoalsCache {
 
-    private readonly _goalIds: number[];
+    private _goalIds: number[];
 
     private static readonly localStorageKey = 'my-training-goals';
 
@@ -57,9 +57,25 @@ export default class MyTrainingGoalsCache {
         return this.backend.removeTrainingGoal(guideId)
             .then(() => {
                 this._goalIds.splice(
-                    this.goalIds.indexOf(guideId),
+                    this._goalIds.indexOf(guideId),
                     1
                 );
+                this.cacheGoals();
+            });
+    }
+
+    async saveGoalsOrder(goals: number[]): Promise<void> {
+        return this.backend.reorderTrainingGoals(goals)
+            .then(() => {
+                this._goalIds.splice(0, this._goalIds.length, ...goals);
+                this.cacheGoals();
+            });
+    }
+
+    async addAndReorder(newGoalIds: number, newGoalsOrder: number[]): Promise<void> {
+        return this.backend.addAndReorderTrainingGoals(newGoalIds, newGoalsOrder)
+            .then(() => {
+                this._goalIds.splice(0, this._goalIds.length, ...newGoalsOrder);
                 this.cacheGoals();
             });
     }

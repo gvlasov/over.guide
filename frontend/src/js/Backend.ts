@@ -112,6 +112,32 @@ export default class Backend {
         )
     }
 
+    async reorderTrainingGoals(guideIds: number[]): Promise<void> {
+        return this.query(
+            'POST',
+            '/my-training-goals/reorder',
+            guideIds,
+            response => {
+            }
+        )
+    }
+
+    async addAndReorderTrainingGoals(
+        newGoalId: number,
+        newGoalsOrder: number[]
+    ): Promise<void> {
+        return this.query(
+            'POST',
+            '/my-training-goals/add-and-reorder',
+            {
+                newGoalId: newGoalId,
+                newGoalsOrder: newGoalsOrder,
+            },
+            response => {
+            }
+        )
+    }
+
     async evaluateMatchup(subject: HeroDto, object: HeroDto, score: number): Promise<MatchupEvaluationDto> {
         return this.query(
             'PUT',

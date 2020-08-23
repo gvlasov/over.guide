@@ -1,5 +1,5 @@
 <template>
-    <div class="training-goals">
+    <div class="training-goals root-content-sizer">
         <div
                 v-if="trainingGoals.length === 0"
                 class="no-guides-notice"
@@ -9,10 +9,11 @@
         <template v-else>
             <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="false">
                 <TrainingGoal
-                        class="training-goal"
+                        class="training-goal root-content-sizer"
                         v-for="trainingGoal in trainingGoals"
                         :key="trainingGoal.guide.guideId"
                         :training-goal="trainingGoal"
+                        @removeUndo="onRemoveUndo"
                 />
             </draggable>
         </template>
@@ -32,7 +33,16 @@
     const backend = new Backend(axios);
     export default {
         props: {},
-        methods: {},
+        methods: {
+            onRemoveUndo(guideId) {
+
+                const guideIds = this.trainingGoals
+                    .filter(it => !it.deleted)
+                    .map(it => it.guide.guideId);
+                (new MyTrainingGoalsCache(backend))
+                    .addAndReorder(guideId, guideIds)
+            },
+        },
         data() {
             return {
                 trainingGoals: [],
@@ -40,14 +50,32 @@
         },
         async mounted() {
             this.trainingGoals =
-                (await (new MyTrainingGoalsCache(backend)).loadGoals())
-                    .map(dto =>
-                        new TrainingGoalWidget(
-                            new GuideVso(dto.guide),
-                            dto.order,
-                            false
+                await (new MyTrainingGoalsCache(backend))
+                    .loadGoals()
+                    .then(goals =>
+                        goals.map(dto =>
+                            new TrainingGoalWidget(
+                                new GuideVso(dto.guide),
+                                dto.order,
+                                false
+                            )
                         )
-                    );
+                    )
+        },
+        watch: {
+            trainingGoals(newValue, oldValue) {
+                const newGuideIds = newValue
+                    .filter(it => !it.deleted)
+                    .map(it => it.guide.guideId);
+                const oldGuideIds = oldValue
+                    .filter(it => !it.deleted)
+                    .map(it => it.guide.guideId);
+                if (
+                    newGuideIds.toString() !== oldGuideIds.toString()
+                ) {
+                    (new MyTrainingGoalsCache(backend)).saveGoalsOrder(newGuideIds)
+                }
+            },
         },
         components: {
             TrainingGoal,
@@ -60,6 +88,7 @@
 
 <style lang="scss" scoped>
     @import '~@/assets/css/overwatch-ui.scss';
+    @import '~@/assets/css/common.css';
 
     .no-guides-notice {
         @include overwatch-futura;
@@ -67,9 +96,6 @@
     }
 
     .training-goals {
-        width: 50em;
-        max-width: min(50em, 100vw);
-        min-width: min(50em, 100vw);
 
         .draggable {
             display: inline-flex;
@@ -81,8 +107,6 @@
 
         & .training-goal {
             flex-basis: 100%;
-            max-width: min(50em, 100vw);
-            min-width: min(50em, 100vw);
         }
     }
 </style>

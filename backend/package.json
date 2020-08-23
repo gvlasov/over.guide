@@ -33,6 +33,7 @@
     "fast-shuffle": "^4.2.2",
     "lodash.flatten": "^4.4.0",
     "lodash.sum": "^4.0.2",
+    "lodash.xor": "^4.5.0",
     "mysql2": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

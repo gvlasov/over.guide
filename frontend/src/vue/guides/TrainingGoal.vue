@@ -108,11 +108,8 @@
                     })
             },
             readdTrainingGoal() {
-                (new MyTrainingGoalsCache(backend))
-                    .addGoal(this.trainingGoal.guide.guideId, this.trainingGoal.order)
-                    .then(() => {
-                        this.trainingGoal.deleted = false;
-                    })
+                this.trainingGoal.deleted = false;
+                this.$emit('removeUndo', this.trainingGoal.guide.guideId)
             }
         },
         computed: {

@@ -26,6 +26,9 @@ import {GuidePartText} from "src/database/models/GuidePartText";
 import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
 import TrainingGoalDto from "data/dto/TrainingGoalDto";
+import AddAndReorderTrainingGoalDto
+    from "data/dto/AddAndReorderTrainingGoalDto";
+import arrayXor from 'lodash.xor';
 
 @Controller('my-training-goals')
 export class TrainingGoalController {
@@ -154,13 +157,67 @@ export class TrainingGoalController {
                         goal.order = newOrder;
                     }
                 }
+                const saves = [];
                 for (let goal of updatedGoals) {
-                    await goal.save()
+                    saves.push(goal.save())
                 }
-                response.status(HttpStatus.NO_CONTENT)
-                response.send();
+                Promise.all(saves)
+                    .then(() => {
+                        response.status(HttpStatus.NO_CONTENT)
+                        response.send();
+                    })
             })
     }
+
+    @Post('add-and-reorder')
+    @UseGuards(AuthenticatedGuard)
+    async addAndReorder(
+        @Req() request,
+        @Res() response
+    ) {
+        const user = await this.authService.getUser(request)
+        const dto: AddAndReorderTrainingGoalDto = request.body
+        if (!dto.newGoalsOrder.includes(dto.newGoalId)) {
+            response.status(HttpStatus.BAD_REQUEST)
+            response.send();
+            return;
+        }
+        User2TrainingGoal.findAll({
+            where: {
+                userId: user.id,
+                guideId: dto.newGoalsOrder,
+            }
+        })
+            .then(async goals => {
+                if (
+                    arrayXor([...goals.map(g => g.guideId), dto.newGoalId], dto.newGoalsOrder).length !== 0
+                ) {
+                    response.status(HttpStatus.BAD_REQUEST)
+                    response.send({clientAndServerContentDiffer: true});
+                    return;
+                }
+                const goalSaves = [];
+                for (let goal of goals) {
+                    goal.order = dto.newGoalsOrder.length - dto.newGoalsOrder.indexOf(goal.guideId) - 1;
+                    goalSaves.push(goal.save())
+                }
+                return Promise.all(
+                    [
+                        ...goalSaves,
+                        User2TrainingGoal.create({
+                            userId: user.id,
+                            guideId: dto.newGoalId,
+                            order: dto.newGoalsOrder.length - dto.newGoalsOrder.indexOf(dto.newGoalId) - 1
+                        })
+                    ]
+                )
+                    .then(() => {
+                        response.status(HttpStatus.NO_CONTENT)
+                        response.send();
+                    })
+            })
+    }
+
 
     @Post(':id')
     @UseGuards(AuthenticatedGuard)
@@ -217,12 +274,12 @@ export class TrainingGoalController {
                     userId: user.id,
                     guideId: guide.id,
                     order: order
-                });
-            })
-            .then(() => {
-                response.status(HttpStatus.CREATED)
-                response.send()
-            })
+                })
+                    .then(() => {
+                        response.status(HttpStatus.CREATED)
+                        response.send()
+                    });
+            });
     }
 
 }

@@ -22,6 +22,8 @@ import HeroId from "data/HeroId";
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
+import AddAndReorderTrainingGoalDto
+    from "data/dto/AddAndReorderTrainingGoalDto";
 
 describe(
     TrainingGoalController,
@@ -389,6 +391,112 @@ describe(
                         expect(
                             response.body.map(item => item.guide.guideId)
                         ).toStrictEqual([2, 1, 3])
+                    })
+            });
+            it('adds-and-reorders training goals', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    abilitiesFixture,
+                    smallGuideTestingFixture
+                )
+                const user = await User.findOne({
+                    include: [{
+                        model: Guide,
+                        as: 'trainingGoals'
+                    }]
+                });
+                const tokenService = ctx.app.get(TokenService);
+                const token = tokenService.getToken(user);
+                const guides = await Guide.findAll();
+                for (let index in guides.slice(1)) {
+                    await User2TrainingGoal.create({
+                        userId: user.id,
+                        guideId: guides.slice(1)[index].id,
+                        order: index,
+                    })
+                }
+                const trainingGoals = await User2TrainingGoal.findAll();
+                expect(trainingGoals.map(g => g.guideId)).not.toContain(guides[0].id)
+                await request(ctx.app.getHttpServer())
+                    .post('/my-training-goals/add-and-reorder')
+                    .set({Authorization: `Bearer ${token}`})
+                    .send({
+                        newGoalId: 1,
+                        newGoalsOrder: [2, 3, 1],
+                    } as AddAndReorderTrainingGoalDto)
+                    .expect(HttpStatus.NO_CONTENT)
+                    .then(async response => {
+                        expect(
+                            (await User2TrainingGoal.findAll())
+                        ).toHaveLength(3)
+                        expect(
+                            (await User2TrainingGoal.findAndCountAll({
+                                where: {guideId: 2, order: 2},
+                            })).count
+                        ).toBe(1)
+                        expect(
+                            (await User2TrainingGoal.findAndCountAll({
+                                where: {guideId: 3, order: 1}
+                            })).count
+                        ).toBe(1)
+                        expect(
+                            (await User2TrainingGoal.findAndCountAll({
+                                where: {guideId: 1, order: 0}
+                            })).count
+                        ).toBe(1)
+                    })
+            });
+            it('fails to add-and-reorder if request content is wrong', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    abilitiesFixture,
+                    smallGuideTestingFixture
+                )
+                const user = await User.findOne();
+                const tokenService = ctx.app.get(TokenService);
+                const token = tokenService.getToken(user);
+                await request(ctx.app.getHttpServer())
+                    .post('/my-training-goals/add-and-reorder')
+                    .set({Authorization: `Bearer ${token}`})
+                    .send({
+                        newGoalId: 3,
+                        newGoalsOrder: [2, 1],
+                    } as AddAndReorderTrainingGoalDto)
+                    .expect(HttpStatus.BAD_REQUEST)
+                await request(ctx.app.getHttpServer())
+                    .post('/my-training-goals/add-and-reorder')
+                    .set({Authorization: `Bearer ${token}`})
+                    .send({
+                        newGoalId: 9999,
+                        newGoalsOrder: [2, 1, 3, 9999],
+                    } as AddAndReorderTrainingGoalDto)
+                    .expect(HttpStatus.BAD_REQUEST)
+                await request(ctx.app.getHttpServer())
+                    .post('/my-training-goals/add-and-reorder')
+                    .set({Authorization: `Bearer ${token}`})
+                    .send({
+                        newGoalId: 1,
+                        newGoalsOrder: [2, 1, 1],
+                    } as AddAndReorderTrainingGoalDto)
+                    .expect(HttpStatus.BAD_REQUEST)
+                await request(ctx.app.getHttpServer())
+                    .post('/my-training-goals/add-and-reorder')
+                    .set({Authorization: `Bearer ${token}`})
+                    .send({
+                        newGoalId: 1,
+                        newGoalsOrder: [1, 2],
+                    } as AddAndReorderTrainingGoalDto)
+                    .expect(HttpStatus.BAD_REQUEST)
+                    .then(response => {
+                        expect(
+                            response.body.clientAndServerContentDiffer
+                        ).not.toBeUndefined()
                     })
             });
         }
