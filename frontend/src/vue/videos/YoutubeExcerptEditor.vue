@@ -317,7 +317,9 @@
 </script>
 
 <style lang="scss" scoped>
-    $max-portrait-mode-width: 60em;
+    @import "~@/assets/css/common.scss";
+
+    $max-portrait-mode-width: $root-content-width - 3rem;
     .wrap {
         display: flex;
         justify-content: center;
