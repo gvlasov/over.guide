@@ -7,11 +7,14 @@
             Discover guides and add those you plan to master to your training goals
         </div>
         <template v-else>
-            <TrainingGoal
-                    v-for="trainingGoal in trainingGoals"
-                    :key="trainingGoal.guide.guideId"
-                    :training-goal="trainingGoal"
-            />
+            <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="false">
+                <TrainingGoal
+                        class="training-goal"
+                        v-for="trainingGoal in trainingGoals"
+                        :key="trainingGoal.guide.guideId"
+                        :training-goal="trainingGoal"
+                />
+            </draggable>
         </template>
     </div>
 </template>
@@ -24,6 +27,7 @@
     import GuideVso from "@/js/vso/GuideVso";
     import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
     import TrainingGoal from "@/vue/guides/TrainingGoal";
+    import draggable from 'vuedraggable';
 
     const backend = new Backend(axios);
     export default {
@@ -48,6 +52,7 @@
         components: {
             TrainingGoal,
             Guide,
+            draggable,
         },
     };
 
@@ -62,16 +67,19 @@
     }
 
     .training-goals {
-        display: inline-flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: center;
-        gap: 1em;
         width: 50em;
         max-width: min(50em, 100vw);
         min-width: min(50em, 100vw);
 
-        & > * {
+        .draggable {
+            display: inline-flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: center;
+            gap: 1em;
+        }
+
+        & .training-goal {
             flex-basis: 100%;
             max-width: min(50em, 100vw);
             min-width: min(50em, 100vw);
