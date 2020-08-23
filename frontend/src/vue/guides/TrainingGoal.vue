@@ -142,11 +142,13 @@
 <style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
     @import '~@/assets/css/overwatch-ui.scss';
+    @import '~@/assets/css/common.scss';
 
     .wrap {
         @include overwatch-futura-no-smallcaps;
         color: white;
         --left-border-radius: .6rem;
+        box-sizing: border-box;
 
         .collapsed {
             display: flex;

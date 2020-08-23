@@ -1,14 +1,16 @@
 <template>
     <div class="guide-browser root-content-sizer">
-        <DescriptorBuilder
-                :search-button-enabled="false"
-                :descriptor="descriptor"
-                @search="onSearch"
-                @descriptorChange="onSearch"
-        />
-        <div class="guide-feed">
+        <div class="root-content-panel-wrap">
+            <DescriptorBuilder
+                    :search-button-enabled="false"
+                    :descriptor="descriptor"
+                    @search="onSearch"
+                    @descriptorChange="onSearch"
+            />
+        </div>
+        <div class="guide-feed root-content-panel-wrap">
             <div v-for="guide in guides">
-                <Guide :guide="guide" class="guide"/>
+                <Guide :guide="guide" class="guide "/>
             </div>
         </div>
         <InfiniteLoading
@@ -95,7 +97,7 @@
 
 <style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
-    @import '~@/assets/css/common.css';
+    @import '~@/assets/css/common.scss';
 
     .guide-feed {
         display: flex;

@@ -9,7 +9,7 @@
         <template v-else>
             <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="false">
                 <TrainingGoal
-                        class="training-goal root-content-sizer"
+                        class="training-goal root-content-sizer root-content-panel-wrap"
                         v-for="trainingGoal in trainingGoals"
                         :key="trainingGoal.guide.guideId"
                         :training-goal="trainingGoal"
@@ -88,7 +88,7 @@
 
 <style lang="scss" scoped>
     @import '~@/assets/css/overwatch-ui.scss';
-    @import '~@/assets/css/common.css';
+    @import '~@/assets/css/common.scss';
 
     .no-guides-notice {
         @include overwatch-futura;
