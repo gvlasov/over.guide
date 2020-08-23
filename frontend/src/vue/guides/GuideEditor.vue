@@ -1,10 +1,12 @@
 <template>
     <div class="wrap root-content-sizer">
-        <DescriptorBuilder
-                :descriptor="guide.descriptor"
-                :search-button-enabled="false"
-                class="descriptor-builder"
-        />
+        <div class="root-content-panel-wrap">
+            <DescriptorBuilder
+                    :descriptor="guide.descriptor"
+                    :search-button-enabled="false"
+                    class="descriptor-builder"
+            />
+        </div>
         <div class="create-buttons">
             <OverwatchButton
                     :type="'default'"
@@ -225,6 +227,7 @@
 <style lang="scss" scoped>
     @import '~@/assets/css/fonts.css';
     @import '~@/assets/css/overwatch-ui.scss';
+    @import '~@/assets/css/common.scss';
 
     .wrap {
         display: inline-flex;
