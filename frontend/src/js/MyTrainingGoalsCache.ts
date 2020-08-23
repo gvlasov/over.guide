@@ -34,7 +34,6 @@ export default class MyTrainingGoalsCache {
             MyTrainingGoalsCache.localStorageKey,
             JSON.stringify(this._goalIds)
         );
-        console.log(this._goalIds);
     }
 
     async addGoal(guideId: number, order?: number): Promise<any> {
