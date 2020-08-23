@@ -54,7 +54,7 @@
                             :loop="true"
                             :autoplay="false"
                             :mute="true"
-                            :player-element-id="'training-goal-' + trainingGoal.guide.guideId + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
+                            :player-element-id="'training-goal-' + trainingGoal.guide.guideId + '-' + trainingGoal.order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
                             class="video"
                             v-bind:style="{width: '7em', height: '4em'}"
                     />

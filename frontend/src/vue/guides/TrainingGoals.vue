@@ -11,7 +11,7 @@
                 <TrainingGoal
                         class="training-goal root-content-sizer root-content-panel-wrap"
                         v-for="trainingGoal in trainingGoals"
-                        :key="trainingGoal.guide.guideId"
+                        :key="trainingGoal.guide.guideId + '-'+trainingGoal.order"
                         :training-goal="trainingGoal"
                         @removeUndo="onRemoveUndo"
                 />
@@ -35,7 +35,6 @@
         props: {},
         methods: {
             onRemoveUndo(guideId) {
-
                 const guideIds = this.trainingGoals
                     .filter(it => !it.deleted)
                     .map(it => it.guide.guideId);
@@ -70,6 +69,9 @@
                 const oldGuideIds = oldValue
                     .filter(it => !it.deleted)
                     .map(it => it.guide.guideId);
+                for (let index in this.trainingGoals) {
+                    this.trainingGoals[index].order = this.trainingGoals.length - index - 1;
+                }
                 if (
                     newGuideIds.toString() !== oldGuideIds.toString()
                 ) {
