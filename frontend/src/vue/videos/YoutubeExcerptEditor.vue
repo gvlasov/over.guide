@@ -1,20 +1,22 @@
 <template>
     <div class="wrap">
         <div>
-            <YoutubeVideo
-                    :videoId="videoId"
-                    :start="startSeconds"
-                    :end="endSeconds"
-                    :loop="true"
-                    :autoplay="true"
-                    :player-element-id="playerElementId"
-                    @playerReady="onPlayerReady"
-                    @play="onPlay"
-                    @pause="onPause"
-                    @skip="onSkip"
-                    class="video"
-                    v-bind:style="'width: '+videoCssWidth+'; height: '+videoCssHeight"
-            />
+            <AspectRatioBox>
+                <VideoLoadingScreen/>
+                <YoutubeVideo
+                        :videoId="videoId"
+                        :start="startSeconds"
+                        :end="endSeconds"
+                        :loop="true"
+                        :autoplay="true"
+                        :player-element-id="playerElementId"
+                        @playerReady="onPlayerReady"
+                        @play="onPlay"
+                        @pause="onPause"
+                        @skip="onSkip"
+                        class="video"
+                />
+            </AspectRatioBox>
             <div v-if="preciseDurationAvailable">
                 <ExcerptTimebar
                         v-if="isVideoLoaded"
@@ -90,6 +92,8 @@
     import axios from "axios";
     import OverwatchButton from "@/vue/OverwatchButton";
     import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
+    import AspectRatioBox from "@/vue/AspectRatioBox";
+    import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 
     const backend = new Backend(axios);
     export default {
@@ -106,14 +110,6 @@
             },
             playerElementId: {
                 type: String
-            },
-            videoCssWidth: {
-                type: String,
-                default: '640px'
-            },
-            videoCssHeight: {
-                type: String,
-                default: '390px'
             },
         },
         data() {
@@ -306,6 +302,8 @@
             }
         },
         components: {
+            VideoLoadingScreen,
+            AspectRatioBox,
             OverwatchButton,
             OverwatchPanelButton,
             PreciseTimeInput,
@@ -318,6 +316,7 @@
 
 <style lang="scss" scoped>
     @import "~@/assets/css/common.scss";
+    @import "~@/assets/css/fonts.css";
 
     $max-portrait-mode-width: $root-content-width - 3rem;
     .wrap {
@@ -410,5 +409,6 @@
             flex-basis: 100%;
             font-family: 'Futura Demi Bold', sans-serif;
         }
+
     }
 </style>

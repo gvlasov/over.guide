@@ -29,8 +29,6 @@
                     @startSecondsChange="onStartSecondsChangeHacky(widget, $event)"
                     @endSecondsChange="onEndSecondsChangeHacky(widget, $event)"
                     class="video-editor"
-                    :video-css-width="'100%'"
-                    :video-css-height="'22rem'"
             />
         </div>
         <div v-else-if="!widget.editing" key="video">

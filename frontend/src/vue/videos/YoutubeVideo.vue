@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:id="playerElementId"></div>
+    <div class='youtube-video' v-bind:id="playerElementId"></div>
 </template>
 
 <script>
@@ -30,10 +30,6 @@
             autoplay: {
                 type: Boolean,
                 default: false,
-            },
-            width: {
-                type: Number,
-                default: 640
             },
             playerElementId: {
                 type: String,

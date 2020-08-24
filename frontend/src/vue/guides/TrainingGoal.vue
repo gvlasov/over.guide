@@ -46,18 +46,19 @@
                         v-html="firstTextPart.render()"
                 ></div>
                 <div class="unclickable">
-                    <YoutubeVideo
-                            v-if="typeof firstVideoWidget !== 'undefined'"
-                            :video-id="firstVideoWidget.part.excerpt.youtubeVideoId"
-                            :start="firstVideoWidget.part.excerpt.startSeconds"
-                            :end="firstVideoWidget.part.excerpt.endSeconds"
-                            :loop="true"
-                            :autoplay="false"
-                            :mute="true"
-                            :player-element-id="'training-goal-' + trainingGoal.guide.guideId + '-' + trainingGoal.order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
-                            class="video"
-                            v-bind:style="{width: '7em', height: '4em'}"
-                    />
+                    <AspectRatioBox>
+                        <YoutubeVideo
+                                v-if="typeof firstVideoWidget !== 'undefined'"
+                                :video-id="firstVideoWidget.part.excerpt.youtubeVideoId"
+                                :start="firstVideoWidget.part.excerpt.startSeconds"
+                                :end="firstVideoWidget.part.excerpt.endSeconds"
+                                :loop="true"
+                                :autoplay="false"
+                                :mute="true"
+                                :player-element-id="'training-goal-' + trainingGoal.guide.guideId + '-' + trainingGoal.order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
+                                class="video"
+                        />
+                    </AspectRatioBox>
                 </div>
             </div>
             <OverwatchButton
@@ -88,6 +89,7 @@
     import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
     import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
     import Guide from "@/vue/guides/Guide";
+    import AspectRatioBox from "@/vue/AspectRatioBox";
 
     const backend = new Backend(axios);
 
@@ -129,6 +131,7 @@
             }
         },
         components: {
+            AspectRatioBox,
             Guide,
             ThematicTagBadge,
             Tag,
@@ -145,6 +148,7 @@
     @import '~@/assets/css/common.scss';
 
     .wrap {
+        $training-goal-height: 4em;
         @include overwatch-futura-no-smallcaps;
         color: white;
         --left-border-radius: .6rem;
@@ -152,7 +156,7 @@
 
         .collapsed {
             display: flex;
-            min-height: 4em;
+            min-height: $training-goal-height;
             cursor: pointer;
             @include overwatch-panel-shadow;
             border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
@@ -231,6 +235,13 @@
             .unclickable {
                 pointer-events: none;
                 display: flex;
+                flex-direction: row;
+                height: $training-goal-height;
+                width: $training-goal-height/9*16;
+
+                .aspect-ratio-box {
+                    width: $training-goal-height/9*16;
+                }
             }
         }
 
@@ -239,6 +250,5 @@
             flex-shrink: 0;
         }
     }
-
 
 </style>

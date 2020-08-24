@@ -54,7 +54,8 @@
                         v-html="part.render()"
                 ></div>
             </div>
-            <div v-if="part.part.kind === 'video'">
+            <AspectRatioBox v-if="part.part.kind === 'video'">
+                <VideoLoadingScreen/>
                 <YoutubeVideo
                         :video-id="part.part.excerpt.youtubeVideoId"
                         :start="part.part.excerpt.startSeconds"
@@ -64,9 +65,8 @@
                         :mute="true"
                         :player-element-id="guide.guideId + '-' + index +'-'+ part.part.excerpt.youtubeVideoId"
                         class="video"
-                        v-bind:style="{width: '100%', height: '22rem'}"
                 />
-            </div>
+            </AspectRatioBox>
         </div>
     </div>
 </template>
@@ -86,6 +86,8 @@
     import CommentsCounter from "@/vue/CommentsCounter";
     import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
     import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
+    import AspectRatioBox from "@/vue/AspectRatioBox";
+    import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 
     const backend = new Backend(axios);
     const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
@@ -139,6 +141,8 @@
         mounted() {
         },
         components: {
+            VideoLoadingScreen,
+            AspectRatioBox,
             ThematicTagBadge,
             Tag,
             DescriptorBuilder,
