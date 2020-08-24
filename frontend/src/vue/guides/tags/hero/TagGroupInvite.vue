@@ -48,7 +48,7 @@
         box-shadow: $invite-shadow;
 
         &:hover {
-            background-color: hsl(208, 16%, 45%);
+            background-color: hsl(208, 18%, 49%);
             box-shadow: $invite-shadow-hover;
 
             ::v-deep .invite-text {
