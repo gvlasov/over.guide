@@ -29,7 +29,7 @@
             >+ video
             </OverwatchButton>
         </div>
-        <draggable class="guide-parts" v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
+        <draggable class="guide-parts root-content-panel-wrap" v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
             <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
                 <GuidePartTextEditor
                         v-if="widget.isText()"
