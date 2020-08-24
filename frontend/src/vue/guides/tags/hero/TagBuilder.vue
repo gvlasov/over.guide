@@ -139,8 +139,4 @@
         display: inline-flex;
         padding: 0 .4rem 0 0;
     }
-
-    .invite ::v-deep .invite-text:hover {
-        transform: scale(1.1);
-    }
 </style>

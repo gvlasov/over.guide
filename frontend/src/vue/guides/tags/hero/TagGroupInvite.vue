@@ -34,6 +34,7 @@
 
 <style lang="scss" scoped>
     @import "~@/assets/css/overwatch-ui.scss";
+    @import "~@/assets/css/tags.scss";
 
     .invite {
         @include overwatch-futura;
@@ -41,9 +42,19 @@
         height: 3em;
         vertical-align: middle;
         width: 3.9em;
-        background-color: #5f7589;
+        background-color: hsl(208, 18%, 52%);
         color: #32323b;
         cursor: pointer;
+        box-shadow: $invite-shadow;
+
+        &:hover {
+            background-color: hsl(208, 16%, 45%);
+            box-shadow: $invite-shadow-hover;
+
+            ::v-deep .invite-text {
+                transform: scale(0.9);
+            }
+        }
     }
 
     .invite-text {

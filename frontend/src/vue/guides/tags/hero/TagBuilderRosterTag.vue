@@ -103,6 +103,8 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "~@/assets/css/tags.scss";
+
     .wrap {
         font-size: 0;
 
@@ -113,6 +115,14 @@
 
     .selected {
         box-shadow: 0 0 .2em .13em white;
+    }
+
+    .invite.selected {
+        box-shadow: $invite-shadow, 0 0 .2em .13em white;
+
+        .invite.selected:hover {
+            box-shadow: $invite-shadow-hover, 0 0 .2em .13em white;
+        }
     }
 
     ::v-deep .tag-type-infix {
