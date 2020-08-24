@@ -86,8 +86,8 @@
   }
 }
 
-$overwatch-button-main-bg-color: hsl(39, 100%, 55%);
-$overwatch-button-default-bg-color: hsl(206, 76%, 55%);
+$overwatch-button-main-bg-color: hsl(39, 70%, 50%);
+$overwatch-button-default-bg-color: hsl(206, 56%, 50%);
 
 @mixin overwatch-button-bg-default {
   @include overwatch-button-bg;
