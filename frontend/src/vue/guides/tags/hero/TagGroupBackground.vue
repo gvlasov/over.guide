@@ -38,7 +38,9 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import '~@/assets/css/tags.scss';
+
     .tag-type-background {
         display: inline-table;
         vertical-align: middle;
@@ -48,15 +50,15 @@
     }
 
     .tag-type-player {
-        background-color: rgba(75, 125, 217, 0.9);
+        background-color: rgba($tag-player-color, .9);
     }
 
     .tag-type-ally {
-        background-color: rgba(15, 213, 71, 0.9);
+        background-color: rgba($tag-ally-color, .9);
     }
 
     .tag-type-enemy {
-        background-color: rgba(229, 34, 34, 0.9);
+        background-color: rgba($tag-enemy-color, .9);
     }
 
     .tag-type-invite {

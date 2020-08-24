@@ -31,13 +31,15 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import '~@/assets/css/tags.scss';
+
     .portrait {
         display: table-cell;
         height: 100%;
         width: auto;
         vertical-align: middle;
-        background-color: #28253a;
+        background-color: rgba($tag-hero-bg-color, .8);
         border-radius: .4em;
     }
 </style>

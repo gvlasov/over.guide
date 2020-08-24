@@ -1,3 +1,5 @@
+@import '~@/assets/css/overwatch-ui.scss';
+
 @mixin tag-bg-theme {
   background-color: #fedd8b;
 }
@@ -5,3 +7,8 @@
 @mixin tag-bg-map {
   background-color: #b0d4a1;
 }
+
+$tag-player-color: $overwatch-button-main-bg-color;
+$tag-ally-color: rgb(130, 255, 147);
+$tag-enemy-color: rgb(255, 102, 102);
+$tag-hero-bg-color: rgb(40, 37, 58);

@@ -54,7 +54,9 @@
     };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import '~@/assets/css/tags.scss';
+
     .tag-group {
         display: flex;
         gap: .22em;
@@ -78,10 +80,9 @@
         grid-gap: 0;
         max-height: 3em;
         white-space: normal;
-        background-color: #28253a;
+        background-color: rgba($tag-hero-bg-color, .8);
         padding-left: .1em;
         border-radius: .3em 0 0 .3em;
-        margin-right: -1px;
     }
 
     .ability-icon-wrap {
