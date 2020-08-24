@@ -252,6 +252,7 @@
         flex-direction: column;
         flex-basis: 9rem;
         font-size: 2em;
+        flex-shrink: 0;
         z-index: 2;
     }
 

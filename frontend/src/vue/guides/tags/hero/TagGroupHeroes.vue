@@ -81,8 +81,8 @@
         max-height: 3em;
         white-space: normal;
         background-color: rgba($tag-hero-bg-color, .8);
-        padding-left: .1em;
         border-radius: .3em 0 0 .3em;
+        padding-left: .2em;
     }
 
     .ability-icon-wrap {
@@ -91,9 +91,8 @@
     }
 
     .ability-icon {
-        height: 1.3em;
+        height: 1.4rem;
         width: auto;
-        margin: .05em;
     }
 
     .tag-portrait-single ::v-deep .portrait {

@@ -47,6 +47,7 @@
         border-spacing: .3em;
         border-radius: .5em;
         cursor: pointer;
+        box-shadow: 0 0 .1em black;
     }
 
     .tag-type-player {

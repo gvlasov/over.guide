@@ -112,7 +112,7 @@
     }
 
     .selected {
-        box-shadow: 0 0 .5em orange, 0 0 .5em orange, 0 0 .5em orange;
+        box-shadow: 0 0 .2em .13em white;
     }
 
     ::v-deep .tag-type-infix {
