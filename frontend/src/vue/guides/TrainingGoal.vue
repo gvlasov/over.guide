@@ -204,6 +204,7 @@
                     height: 100%;
                     display: flex;
                     align-items: center;
+                    gap: .25rem
                 }
 
                 .badge-tags-wrap {
