@@ -8,6 +8,9 @@
 </template>
 
 <script>
+    /**
+     * @see https://css-tricks.com/aspect-ratio-boxes/
+     */
     export default {
         props: {
             aspectRatio: {
