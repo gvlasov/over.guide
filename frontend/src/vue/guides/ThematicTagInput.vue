@@ -151,10 +151,13 @@
     .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
     .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-highlighted-default {
         font-size: 1.5em;
-        padding: .3em;
+        padding: .18em .3em .3em .3em;
         border-radius: .2em;
         @include overwatch-futura;
-        color: #32323b;
+        text-transform: lowercase;
+        font-weight: normal;
+        color: white;
+        box-shadow: 0 0 .06em black;
     }
 
     .root ::v-deep .tags-input-wrapper-default {

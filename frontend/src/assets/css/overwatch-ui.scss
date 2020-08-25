@@ -3,6 +3,7 @@
 @mixin overwatch-futura {
   @include overwatch-futura-no-smallcaps;
   font-variant-caps: all-small-caps;
+  letter-spacing: .05em;
 }
 
 @mixin overwatch-futura-no-smallcaps {

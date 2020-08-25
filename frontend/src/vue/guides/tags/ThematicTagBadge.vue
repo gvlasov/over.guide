@@ -32,12 +32,12 @@
     .tag-custom-badge {
         @include overwatch-futura;
         display: inline-block;
-        padding: .3em;
+        padding: .17em .3em .3em .3em;
         border-radius: .3em;
-        font-weight: bold;
         margin: 0 .2em .2em 0;
         vertical-align: middle !important;
-        color: black;
+        color: white;
+        box-shadow: 0 0 .13em #343434;
     }
 
     .theme {
