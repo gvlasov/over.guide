@@ -60,7 +60,7 @@
     .invite-text {
         display: inline-block;
         line-height: 70%;
-        padding-bottom: .33em;
+        padding-bottom: .25em;
         vertical-align: middle;
         font-variant: all-small-caps;
     }
