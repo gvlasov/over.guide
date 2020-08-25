@@ -139,9 +139,10 @@
         flex-wrap: wrap;
         justify-content: flex-start;
         padding: .3em;
-        box-sizing: content-box;
+        box-sizing: border-box;
         max-height: 10em;
         max-width: 100%;
+        min-width: 100%;
         overflow-y: scroll;
         position: absolute;
         background-color: white;
@@ -164,6 +165,7 @@
         text-transform: lowercase;
         font-weight: normal;
         color: white;
+        text-shadow: 0 0 .06em black;
         box-shadow: 0 0 .06em black;
     }
 
@@ -172,7 +174,7 @@
         border: none;
         box-shadow: none;
         position: relative;
-        padding: 0 .25em 0 0;
+        padding: 0 .5rem 0 .5rem;
         height: 100%;
 
         input[type=text] {

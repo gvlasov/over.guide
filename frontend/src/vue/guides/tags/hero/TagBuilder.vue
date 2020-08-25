@@ -137,6 +137,6 @@
 <style scoped>
     .wrap {
         display: inline-flex;
-        padding: 0 .4rem 0 0;
+        padding: 0 .5rem 0 .5rem;
     }
 </style>

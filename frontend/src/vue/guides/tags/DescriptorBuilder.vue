@@ -72,7 +72,7 @@
         flex-wrap: wrap;
         justify-content: center;
         box-sizing: border-box;
-        padding: .5rem 0 .5rem .5rem;
+        padding: .5rem 0 .5rem 0;
         background: #fff;
         border-radius: .25em;
         border-color: #dbdbdb;
