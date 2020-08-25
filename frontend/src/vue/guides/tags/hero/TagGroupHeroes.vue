@@ -44,8 +44,7 @@
         data() {
             return {};
         },
-        methods: {
-        },
+        methods: {},
         computed: {},
         components: {
             AbilityIcon,
@@ -67,41 +66,43 @@
         display: flex;
         border-spacing: 0;
         position: relative;
-    }
-
-    .ability-icons-wrap {
-        /*writing-mode: vertical-lr;*/
-        display: grid;
-        direction: rtl;
-        /*grid-template-columns: auto auto auto;*/
-        grid-auto-flow: column dense;
-        grid-template-rows: auto auto;
-        grid-template-columns: auto auto auto auto;
-        grid-gap: 0;
-        max-height: 3em;
-        white-space: normal;
         background-color: rgba($tag-hero-bg-color, .8);
-        border-radius: .3em 0 0 .3em;
-        padding-left: .2em;
+        border-radius: .4em;
+
+        .ability-icons-wrap {
+            /*writing-mode: vertical-lr;*/
+            display: grid;
+            direction: rtl;
+            /*grid-template-columns: auto auto auto;*/
+            grid-auto-flow: column dense;
+            grid-template-rows: auto auto;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 0;
+            max-height: 3em;
+            white-space: normal;
+            border-radius: .3em 0 0 .3em;
+            padding-left: .2em;
+
+            .ability-icon-wrap {
+                display: inline-block;
+                text-align: center;
+
+                .ability-icon {
+                    height: 1.4rem;
+                    width: auto;
+                }
+            }
+        }
+
+        .tag-portrait-single ::v-deep .portrait {
+            max-height: 3em;
+            border-radius: .3em .3em .3em .3em;
+        }
+
+        .tag-portrait-combined ::v-deep .portrait {
+            max-height: 3em;
+            border-radius: 0 .3em .3em 0;
+        }
     }
 
-    .ability-icon-wrap {
-        display: inline-block;
-        text-align: center;
-    }
-
-    .ability-icon {
-        height: 1.4rem;
-        width: auto;
-    }
-
-    .tag-portrait-single ::v-deep .portrait {
-        max-height: 3em;
-        border-radius: .3em .3em .3em .3em;
-    }
-
-    .tag-portrait-combined ::v-deep .portrait {
-        max-height: 3em;
-        border-radius: 0 .3em .3em 0;
-    }
 </style>

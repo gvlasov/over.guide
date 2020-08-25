@@ -39,7 +39,5 @@
         height: 100%;
         width: auto;
         vertical-align: middle;
-        background-color: rgba($tag-hero-bg-color, .8);
-        border-radius: .4em;
     }
 </style>
