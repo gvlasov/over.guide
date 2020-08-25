@@ -87,11 +87,4 @@
         margin: 0.4vw;
         border: .08vw solid transparent;
     }
-
-    .selected {
-        z-index: 9000;
-        box-shadow: black 1vw 1vw 1vw;
-        background-color: orange;
-        border: .08vw solid white;
-    }
 </style>

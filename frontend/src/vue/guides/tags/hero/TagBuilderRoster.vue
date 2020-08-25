@@ -26,6 +26,7 @@
                                     ref="portraits"
                                     :hero="hero"
                                     :selected="isHeroSelected(hero)"
+                                    :gamer-position="tagGroup.gamerPosition"
                                     @heroSelect="onHeroTap"
                                     @skillSelectionStart="() => {selectingSkills = true}"
                                     :abilities="selectedHeroAbilities(hero)"
@@ -121,7 +122,7 @@
             descriptor: {
                 type: GuideDescriptorVso,
                 required: true,
-            }
+            },
         },
         data() {
             return {

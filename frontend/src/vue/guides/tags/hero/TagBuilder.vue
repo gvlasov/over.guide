@@ -101,6 +101,7 @@
     import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
     import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
     import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
+    import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
     export default {
         props: {
@@ -112,6 +113,11 @@
         data() {
             return {
                 selecting: null,
+                gamerPositions: {
+                    players: GamerPositionVso.Players,
+                    allies: GamerPositionVso.Allies,
+                    enemies: GamerPositionVso.Enemies,
+                },
             };
         },
         mounted() {

@@ -8,14 +8,14 @@
                 :selected="selected"
                 @heroSelect="bubbleHeroSelect"
                 v-bind:data-hero-data-name="hero.dataName"
-                v-bind:class="{ 'selected': selected }"
-        >
-        </RosterPortrait>
+                v-bind:class="gamerPosition.dataName"
+        />
     </div>
 </template>
 
 <script>
     import RosterPortrait from "@/vue/RosterPortrait";
+    import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
     export default {
         props: {
@@ -32,6 +32,10 @@
                 type: Array,
                 required: true,
             },
+            gamerPosition: {
+                type: GamerPositionVso,
+                required: true,
+            }
         },
         watch: {
             selected(value) {
@@ -60,7 +64,9 @@
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+    @import '~@/assets/css/tags.scss';
+
     .proportional-height-wrap {
         /* https://stackoverflow.com/a/14896313/1542343 */
         position: relative;
@@ -70,6 +76,7 @@
         margin: .34%;
         transform: skew(-25deg);
     }
+
     .roster-portrait {
         position: absolute;
         width: 100%;
@@ -78,4 +85,22 @@
         margin: 0;
         transform: translateX(-50%) skew(0deg);
     }
+
+    .selected {
+        z-index: 9000;
+        border: .08vw solid white;
+
+        &.player {
+            background-color: $tag-player-color;
+        }
+
+        &.ally {
+            background-color: $tag-ally-color;
+        }
+
+        &.enemy {
+            background-color: $tag-enemy-color;
+        }
+    }
+
 </style>
