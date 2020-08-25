@@ -79,10 +79,6 @@
         box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
     }
 
-    .searchbox > * {
-        vertical-align: middle;
-    }
-
     .searchbox.active {
         border: 1px solid #8bbafe;
         box-shadow: 0 0 0 0.2em rgba(13, 110, 253, 0.25);
