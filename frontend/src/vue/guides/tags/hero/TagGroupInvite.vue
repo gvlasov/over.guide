@@ -52,7 +52,7 @@
             box-shadow: $invite-shadow-hover;
 
             ::v-deep .invite-text {
-                transform: scale(0.9);
+                transform: scale(0.94);
             }
         }
     }

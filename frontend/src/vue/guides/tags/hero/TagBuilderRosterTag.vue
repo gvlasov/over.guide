@@ -113,6 +113,10 @@
         }
     }
 
+    .invite, .tag-type-background {
+        box-shadow: $invite-shadow, 0 0 .3em #444;
+    }
+
     .selected {
         box-shadow: 0 0 .2em .13em white;
     }
