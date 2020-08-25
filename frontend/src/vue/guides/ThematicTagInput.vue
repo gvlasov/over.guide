@@ -85,6 +85,7 @@
                                 .map(map => new MapTagVso(map))
                         )
                 )
+                    .slice(0, 12)
             },
             onTagsUpdated($event) {
                 this.$emit('tagChange');
@@ -114,8 +115,14 @@
         cursor: pointer;
     }
 
-    .root ::v-deep .tags-input > .tags-input-badge:hover {
-        opacity: .3;
+    .root ::v-deep .tags-input {
+        & > .tags-input-badge:hover {
+            opacity: .3;
+        }
+
+        span {
+            margin: 0;
+        }
     }
 
     ::v-deep .theme > *, ::v-deep .typeahead-badges .theme {
@@ -132,10 +139,10 @@
         flex-wrap: wrap;
         justify-content: flex-start;
         padding: .3em;
-        box-sizing: border-box;
+        box-sizing: content-box;
         max-height: 10em;
         max-width: 100%;
-        overflow-y: auto;
+        overflow-y: scroll;
         position: absolute;
         background-color: white;
         border-radius: .25em;

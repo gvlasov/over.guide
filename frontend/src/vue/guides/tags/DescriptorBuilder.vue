@@ -2,7 +2,6 @@
     <div class="searchbox">
         <TagBuilder
                 :descriptor="descriptor"
-                style="display: block;"
                 @tagChange="$emit('descriptorChange')"
         />
         <ThematicTagInput
@@ -70,7 +69,6 @@
 
     .searchbox {
         display: flex;
-        gap: .2em;
         flex-wrap: wrap;
         justify-content: center;
         box-sizing: border-box;
