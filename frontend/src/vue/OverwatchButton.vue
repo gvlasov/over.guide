@@ -35,6 +35,7 @@
     .overwatch-button {
         @include overwatch-inline-button;
         background-color: transparent;
+        z-index: 1;
     }
 
     .overwatch-button > .content {
