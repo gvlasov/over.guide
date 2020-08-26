@@ -110,5 +110,7 @@
         & .training-goal {
             flex-basis: 100%;
         }
+
+        padding-bottom: 10em;
     }
 </style>
