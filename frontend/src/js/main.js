@@ -21,7 +21,10 @@ const router = new VueRouter({
         {path: '/testing-ground', component: TestingGround},
         {path: '/search/:descriptor?', component: GuideSearch},
         {path: '/training-goals', component: TrainingGoals},
-    ]
+    ],
+    scrollBehavior(){
+        return {x: 0, y: 0}
+    }
 });
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
