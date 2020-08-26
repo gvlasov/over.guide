@@ -192,7 +192,6 @@
     }
 
     .guide-part {
-        cursor: pointer;
         box-sizing: border-box;
         /*background-color: rgba(43, 55, 83, 0.8);*/
         color: white;

@@ -1,48 +1,34 @@
 <template>
     <div class="app">
+        <ScrollToTop ref="scrollToTop"/>
         <Navigation/>
-        <router-view></router-view>
+        <div class="router-content-wrap">
+            <router-view @contentChange="resetScrollToTop"></router-view>
+        </div>
     </div>
 </template>
 
 <script>
-    import CountersPractice from '@/vue/training/CountersPractice.vue';
-    import AdsensePlaceholder from "@/vue/AdsensePlaceholder.vue";
-    import PickSuggestion from "@/vue/training/PickSuggestion.vue";
-    import MatchupEvaluation from "@/vue/MatchupEvaluation.vue";
-
-    import heroes from "data/heroes";
-    import Topic from "@/js/Topic";
-    import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor.vue";
-    import GuideEditor from "@/vue/guides/GuideEditor.vue";
-    import RoleSelection from "@/vue/training/RoleSelection.vue";
-    import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
-    import MatchupEvaluator from "@/vue/MatchupEvaluator";
     import Navigation from "@/vue/Navigation";
+    import ScrollToTop from "@/vue/ScrollToTop";
 
     export default {
-        methods: {},
+        methods: {
+            resetScrollToTop() {
+                this.$refs.scrollToTop.reset();
+            },
+        },
         data() {
-
-            const subject = heroes.get('pharah');
-            const object = heroes.get('mei');
-            return {
-                subject: subject,
-                object: object,
-                topic: new Topic([subject, object]),
-            };
+            return {};
+        },
+        watch: {
+            $route() {
+                this.resetScrollToTop();
+            },
         },
         components: {
-            MatchupEvaluator,
-            BattlenetAuthButton,
-            RoleSelection,
-            GuideEditor,
-            YoutubeExcerptEditor: YoutubeExcerptEditor,
-            MatchupEvaluation: MatchupEvaluation,
-            CountersPractice: CountersPractice,
-            AdsensePlaceholder: AdsensePlaceholder,
-            PickSuggestion: PickSuggestion,
             Navigation,
+            ScrollToTop,
         },
     }
 </script>
@@ -54,5 +40,19 @@
         margin: 0 auto;
         min-height: 100vh;
         overflow-x: hidden;
+    }
+
+    .scroll-to-top {
+        z-index: 1;
+    }
+
+    .navigation {
+        position: relative;
+        z-index: 2;
+    }
+
+    .router-content-wrap {
+        position: relative;
+        z-index: 2;
     }
 </style>

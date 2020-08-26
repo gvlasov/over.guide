@@ -1,9 +1,9 @@
 <template>
-    <div class="root">
+    <div class="navigation">
         <router-link to="/search">Browse guides</router-link>
         <router-link to="/guide-editor">Create guide</router-link>
         <router-link to="/training-goals">Training goals</router-link>
-<!--        <router-link to="/testing-ground">Testing ground</router-link>-->
+        <!--        <router-link to="/testing-ground">Testing ground</router-link>-->
         <BattlenetAuthButton/>
     </div>
 </template>
@@ -25,7 +25,7 @@
 <style lang="scss" scoped>
     @import "~@/assets/css/overwatch-ui.scss";
 
-    .root {
+    .navigation {
         font-size: 1.7em;
         display: flex;
         flex-wrap: wrap;

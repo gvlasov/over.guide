@@ -48,6 +48,7 @@
                 this.page = 0;
                 this.alreadyLoadedGuideIds = [];
                 this.$refs.infiniteLoading.stateChanger.reset();
+                this.$emit('contentChange');
             },
             async infiniteHandler($state) {
                 await backend.searchGuidesPaginated({
