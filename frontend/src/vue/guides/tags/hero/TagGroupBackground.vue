@@ -8,20 +8,20 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
-    import TagGroupVso from "@/js/vso/TagGroupVso";
+import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+import TagGroupVso from "@/js/vso/TagGroupVso";
 
-    export default {
-        props: {
-            tagGroup: {
-                type: TagGroupVso,
-                required: true,
-            }
-        },
-        data() {
-            return {};
-        },
-        methods: {},
+export default {
+    props: {
+        tagGroup: {
+            type: TagGroupVso,
+            required: true,
+        }
+    },
+    data() {
+        return {};
+    },
+    methods: {},
         computed: {
             cssClass() {
                 if (this.tagGroup.heroes.length > 0) {
@@ -46,7 +46,6 @@
         vertical-align: middle;
         border-spacing: .3em;
         border-radius: .5em;
-        cursor: pointer;
         box-shadow: 0 0 .1em black;
     }
 

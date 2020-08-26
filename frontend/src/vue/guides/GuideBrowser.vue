@@ -17,103 +17,175 @@
                 ref="infiniteLoading"
                 direction="bottom"
                 @infinite="infiniteHandler"
-        />
+        >
+            <div slot="no-results" class="no-results">
+                <div v-if="descriptor.isEmpty">
+                    No guides on the site
+                </div>
+                <div v-else>
+                    No guides about
+                    <div class="inline-descriptor">
+                        <Tag :descriptor="descriptor"/>
+                        <TagBadges :descriptor="descriptor"/>
+                    </div>
+                </div>
+                <div>
+                    Care to
+                    <router-link to="/guide-editor">create one</router-link>
+                    ?
+                </div>
+            </div>
+            <div slot="no-more" class="no-results">
+                <div v-if="descriptor.isEmpty">
+                    No more guides on the site
+                </div>
+                <div v-else>
+                    No more guides about
+                    <div class="inline-descriptor">
+                        <Tag :descriptor="descriptor"/>
+                        <TagBadges :descriptor="descriptor"/>
+                    </div>
+                </div>
+                <div>
+                    Care to
+                    <router-link to="/guide-editor">create one</router-link>
+                    ?
+                </div>
+            </div>
+        </InfiniteLoading>
     </div>
 </template>
 
 <script>
-    import InfiniteLoading from 'vue-infinite-loading'
-    import Backend from "@/js/Backend";
-    import axios from 'axios';
-    import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
-    import Guide from "@/vue/guides/Guide";
-    import GuideVso from "@/js/vso/GuideVso";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import InfiniteLoading from 'vue-infinite-loading'
+import Backend from "@/js/Backend";
+import axios from 'axios';
+import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
+import Guide from "@/vue/guides/Guide";
+import GuideVso from "@/js/vso/GuideVso";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import Tag from "@/vue/guides/tags/hero/Tag";
+import TagBadges from "@/vue/guides/TagBadges";
 
-    const backend = new Backend(axios);
-    export default {
-        props: {
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true
-            },
-            baseUrl: {
-                type: String,
-                required: true,
-            }
+const backend = new Backend(axios);
+export default {
+    props: {
+        descriptor: {
+            type: GuideDescriptorVso,
+            required: true
         },
-        methods: {
-            async onSearch() {
-                this.guides = [];
-                this.page = 0;
-                this.alreadyLoadedGuideIds = [];
-                this.$refs.infiniteLoading.stateChanger.reset();
-                this.$emit('contentChange');
-            },
-            async infiniteHandler($state) {
-                await backend.searchGuidesPaginated({
-                    playerHeroes: this.descriptor.players.heroes.map(it => it.id),
-                    allyHeroes: this.descriptor.allies.heroes.map(it => it.id),
-                    enemyHeroes: this.descriptor.enemies.heroes.map(it => it.id),
-                    playerAbilities: this.descriptor.players.abilities.map(it => it.id),
-                    allyAbilities: this.descriptor.allies.abilities.map(it => it.id),
-                    enemyAbilities: this.descriptor.enemies.abilities.map(it => it.id),
-                    mapTags: this.descriptor.maps.map(it => it.id),
-                    thematicTags: this.descriptor.thematicTags.map(it => it.id),
-                    pageNumber: this.pageNumber,
-                    clientAlreadyHasGuideIds: this.alreadyLoadedGuideIds,
+        baseUrl: {
+            type: String,
+            required: true,
+        }
+    },
+    methods: {
+        async onSearch() {
+            this.guides = [];
+            this.page = 0;
+            this.alreadyLoadedGuideIds = [];
+            this.$refs.infiniteLoading.stateChanger.reset();
+            this.$emit('contentChange');
+        },
+        async infiniteHandler($state) {
+            await backend.searchGuidesPaginated({
+                playerHeroes: this.descriptor.players.heroes.map(it => it.id),
+                allyHeroes: this.descriptor.allies.heroes.map(it => it.id),
+                enemyHeroes: this.descriptor.enemies.heroes.map(it => it.id),
+                playerAbilities: this.descriptor.players.abilities.map(it => it.id),
+                allyAbilities: this.descriptor.allies.abilities.map(it => it.id),
+                enemyAbilities: this.descriptor.enemies.abilities.map(it => it.id),
+                mapTags: this.descriptor.maps.map(it => it.id),
+                thematicTags: this.descriptor.thematicTags.map(it => it.id),
+                pageNumber: this.pageNumber,
+                clientAlreadyHasGuideIds: this.alreadyLoadedGuideIds,
+            })
+                .then(page => {
+                    this.page = page.pageNumber;
+                    this.guides.push(...page.guides.map(guide => new GuideVso(guide)));
+                    this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideId))
+                    if (page.hasNextPage === false) {
+                        $state.complete()
+                    } else {
+                        $state.loaded()
+                    }
                 })
-                    .then(page => {
-                        this.page = page.pageNumber;
-                        this.guides.push(...page.guides.map(guide => new GuideVso(guide)));
-                        this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideId))
-                        if (page.hasNextPage === false) {
-                            $state.complete()
-                        } else {
-                            $state.loaded()
-                        }
-                    })
-            }
+        }
+    },
+    watch: {
+        descriptor(newValue) {
+            this.onSearch()
         },
-        watch: {
-            descriptor(newValue) {
-                this.onSearch()
-            },
-        },
-        data() {
-            return {
-                guides: [],
-                pageNumber: 0,
-                alreadyLoadedGuideIds: []
-            }
-        },
-        components: {
-            DescriptorBuilder,
-            InfiniteLoading,
-            Guide,
-        },
-    };
+    },
+    data() {
+        return {
+            guides: [],
+            pageNumber: 0,
+            alreadyLoadedGuideIds: []
+        }
+    },
+    components: {
+        TagBadges,
+        Tag,
+        DescriptorBuilder,
+        InfiniteLoading,
+        Guide,
+    },
+};
 
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/fonts.css';
-    @import '~@/assets/css/common.scss';
+@import '~@/assets/css/fonts.css';
+@import '~@/assets/css/common.scss';
+@import '~@/assets/css/overwatch-ui.scss';
 
-    .guide-feed {
-        display: flex;
-        justify-content: start;
-        flex-direction: column;
-        gap: 2rem;
-        margin-top: 2rem;
+.guide-feed {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.guide-browser {
+    margin: 0 auto;
+}
+
+.guide {
+    max-width: 100vw;
+    min-width: 100%;
+}
+
+.no-results {
+    padding: 1em;
+    @include overwatch-panel;
+    margin-bottom: 2em;
+    margin-top: 2em;
+    @include overwatch-futura-no-smallcaps;
+    color: white;
+    text-shadow: 0 0 .13em black;
+
+    a {
+        color: inherit;
     }
 
-    .guide-browser {
-        margin: 0 auto;
-    }
+    line-height: 2.3em;
+    font-size: 1.3em;
 
-    .guide {
-        max-width: 100vw;
-        min-width: 100%;
+    .inline-descriptor {
+        display: inline-flex;
+        align-items: center;
+        gap: .5em;
+        margin-left: .4em;
+        vertical-align: text-bottom;
+        font-size: .5em;
+        white-space: nowrap;
+
+        & > * {
+            line-height: 1em;
+            vertical-align: bottom;
+        }
     }
+}
 </style>

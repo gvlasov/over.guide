@@ -95,54 +95,58 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-    import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
-    import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
+import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
+import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
-    export default {
-        props: {
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true,
-            }
-        },
-        data() {
-            return {
-                selecting: null,
-                gamerPositions: {
-                    players: GamerPositionVso.Players,
-                    allies: GamerPositionVso.Allies,
-                    enemies: GamerPositionVso.Enemies,
-                },
-            };
-        },
-        mounted() {
-        },
-        methods: {
-            onRosterSave() {
-                this.selecting = null;
-                this.$emit('tagChange');
+export default {
+    props: {
+        descriptor: {
+            type: GuideDescriptorVso,
+            required: true,
+        }
+    },
+    data() {
+        return {
+            selecting: null,
+            gamerPositions: {
+                players: GamerPositionVso.Players,
+                allies: GamerPositionVso.Allies,
+                enemies: GamerPositionVso.Enemies,
             },
+        };
+    },
+    mounted() {
+    },
+    methods: {
+        onRosterSave() {
+            this.selecting = null;
+            this.$emit('tagChange');
         },
-        computed: {},
-        components: {
-            TagGroupInvite,
-            TagGroupBackground,
-            TagGroupFrame,
-            TagBuilderRoster,
-            TagGroupHeroes,
-        },
-    };
+    },
+    computed: {},
+    components: {
+        TagGroupInvite,
+        TagGroupBackground,
+        TagGroupFrame,
+        TagBuilderRoster,
+        TagGroupHeroes,
+    },
+};
 
 </script>
 
-<style scoped>
-    .wrap {
-        display: inline-flex;
-        padding: 0 .5rem 0 .5rem;
+<style lang="scss" scoped>
+.wrap {
+    display: inline-flex;
+    padding: 0 .5rem 0 .5rem;
+
+    .tappable-background {
+        cursor: pointer;
     }
+}
 </style>

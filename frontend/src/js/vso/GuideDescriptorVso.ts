@@ -63,4 +63,12 @@ export default class GuideDescriptorVso {
         return this.individualTags.filter(t => t instanceof ThematicTagVso);
     }
 
+    get isEmpty(): boolean {
+        return this.players.heroes.length +
+            this.allies.heroes.length +
+            this.enemies.heroes.length +
+            this.maps.length +
+            this.individualTags.length === 0;
+    }
+
 }

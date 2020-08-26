@@ -30,21 +30,21 @@
 </template>
 
 <script>
-    import TagGroupVso from "@/js/vso/TagGroupVso";
-    import AbilityIcon from "@/vue/AbilityIcon";
-    import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
+import TagGroupVso from "@/js/vso/TagGroupVso";
+import AbilityIcon from "@/vue/AbilityIcon";
+import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
 
-    export default {
-        props: {
-            tagGroup: {
-                type: TagGroupVso,
-                required: true,
-            }
-        },
-        data() {
-            return {};
-        },
-        methods: {},
+export default {
+    props: {
+        tagGroup: {
+            type: TagGroupVso,
+            required: true,
+        }
+    },
+    data() {
+        return {};
+    },
+    methods: {},
         computed: {},
         components: {
             AbilityIcon,
@@ -88,7 +88,7 @@
                 text-align: center;
 
                 .ability-icon {
-                    height: 1.4rem;
+                    height: 1.3em;
                     width: auto;
                 }
             }
