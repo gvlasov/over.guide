@@ -143,7 +143,7 @@
         max-height: 10em;
         max-width: 100%;
         min-width: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
         position: absolute;
         background-color: white;
         border-radius: .25em;
