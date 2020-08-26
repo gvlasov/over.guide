@@ -93,30 +93,30 @@
 </template>
 
 <script>
-    import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
-    import draggable from 'vuedraggable'
-    import GuidePartWidget from "@/js/vso/GuidePartWidget";
-    import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
-    import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
-    import OverwatchButton from "@/vue/OverwatchButton";
-    import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
-    import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
-    import Backend from "@/js/Backend";
-    import axios from 'axios';
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
-    import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
-    import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
+import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
+import draggable from 'vuedraggable'
+import GuidePartWidget from "@/js/vso/GuidePartWidget";
+import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
+import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
+import OverwatchButton from "@/vue/OverwatchButton";
+import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
+import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
+import Backend from "@/js/Backend";
+import axios from 'axios';
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
+import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
+import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 
-    const backend = new Backend(axios);
+const backend = new Backend(axios);
 
-    export default {
-        model: {},
-        props: {},
-        methods: {
-            async saveGuide() {
-                const guideId = await backend.saveGuide({
-                    guideId: this.guide.guideId,
+export default {
+  model: {},
+  props: {},
+  methods: {
+    async saveGuide() {
+      const guideId = await backend.saveGuide({
+        guideId: this.guide.guideId,
                     descriptor: {
                         playerHeroes:
                             this.guide.descriptor.playerHeroes.map(hero => hero.id),
@@ -197,12 +197,21 @@
         data() {
             return {
                 guide: {
-                    id: undefined,
-                    guideId: undefined,
-                    descriptor: new GuideDescriptorVso(
-                        new GuideDescriptorQuickie({})
-                    ),
-                    parts: []
+                  id: undefined,
+                  guideId: undefined,
+                  descriptor: new GuideDescriptorVso(
+                      new GuideDescriptorQuickie({})
+                  ),
+                  parts: [
+                    new GuidePartVideoWidget({
+                      excerpt: {
+                        youtubeVideoId: 'Ev373c7wSRg',
+                        startSeconds: 0,
+                        endSeconds: 3,
+                      },
+                      kind: 'video',
+                    }, true)
+                  ]
                 },
             }
         },

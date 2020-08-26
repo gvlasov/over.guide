@@ -85,25 +85,25 @@
 </template>
 
 <script>
-    import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
-    import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
-    import PreciseTimeInput from "@/vue/videos/PreciseTimeInput.vue";
-    import Backend from "@/js/Backend";
-    import axios from "axios";
-    import OverwatchButton from "@/vue/OverwatchButton";
-    import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
-    import AspectRatioBox from "@/vue/AspectRatioBox";
-    import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
+import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
+import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
+import PreciseTimeInput from "@/vue/videos/PreciseTimeInput.vue";
+import Backend from "@/js/Backend";
+import axios from "axios";
+import OverwatchButton from "@/vue/OverwatchButton";
+import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
+import AspectRatioBox from "@/vue/AspectRatioBox";
+import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 
-    const backend = new Backend(axios);
-    export default {
-        props: {
-            videoId: {
-                type: String,
-                required: true,
-            },
-            initialStartSeconds: {
-                required: true,
+const backend = new Backend(axios);
+export default {
+  props: {
+    videoId: {
+      type: String,
+      required: true,
+    },
+    initialStartSeconds: {
+      required: true,
             },
             initialEndSeconds: {
                 required: true,
@@ -332,7 +332,8 @@
     }
 
     .timebar {
-        margin-bottom: .4em;
+      margin-bottom: .4em;
+      margin-top: .4em;
     }
 
     .video {

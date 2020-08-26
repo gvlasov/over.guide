@@ -7,6 +7,7 @@
             class="wrap"
             ref="wrap"
     >
+        <div class="background"></div>
         <div class="excerpt-area" v-bind:style="{ width: excerptWidthPercent+'%', left: excerptStartPercent + '%' }">
             <!--            <div class="excerpt-start">{{ formatTimeLabel(startSecondsVisual) }}</div>-->
             <!--            <div class="excerpt-end">{{ formatTimeLabel(endSecondsVisual) }}</div>-->
@@ -21,19 +22,19 @@
 </template>
 
 <script>
-    import formatInterval from "@/js/utils/format-interval";
+import formatInterval from "@/js/utils/format-interval";
 
-    export default {
-        name: 'ExcerptTimebar',
-        props: {
-            startSeconds: {
-                type: Number,
-            },
-            currentSeconds: {
-                type: Number
-            },
-            endSeconds: {
-                type: Number,
+export default {
+  name: 'ExcerptTimebar',
+  props: {
+    startSeconds: {
+      type: Number,
+    },
+    currentSeconds: {
+      type: Number
+    },
+    endSeconds: {
+      type: Number,
             },
             durationSeconds: {
                 type: Number,
@@ -181,23 +182,35 @@
     };
 </script>
 
-<style scoped>
-    .wrap {
-        user-select: none;
-        background-color: white;
-        position: relative;
-        cursor: pointer;
-        height: 2em;
-        border-radius: .3em;
-        overflow: hidden;
-    }
+<style lang="scss" scoped>
+@import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/tags.scss";
+
+.wrap {
+  user-select: none;
+  position: relative;
+  cursor: pointer;
+  height: 2em;
+  border-radius: .3em;
+  overflow: hidden;
+
+  .background {
+    opacity: .4;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    box-shadow: 0 0 .1em inset black;
+  }
+}
 
     .excerpt-area {
-        background-color: red;
-        position: absolute;
-        display: inline-block;
-        height: 100%;
-        font-weight: bold;
+      background-color: $tag-enemy-color;
+      position: absolute;
+      display: inline-block;
+      height: 100%;
+      font-weight: bold;
+      box-shadow: 0 0 .12em $overwatch-panel-bg-color;
     }
 
     .excerpt-start {
@@ -216,11 +229,13 @@
     }
 
     .slider {
-        width: 2px;
-        background-color: black;
-        height: 100%;
-        position: absolute;
-        transform: translateX(-50%);
+      width: .18em;
+      background-color: $overwatch-button-main-bg-color;
+      box-shadow: 0 0 .3em white;
+      opacity: .7;
+      height: 100%;
+      position: absolute;
+      transform: translateX(-50%);
     }
 
     .slider-label {
