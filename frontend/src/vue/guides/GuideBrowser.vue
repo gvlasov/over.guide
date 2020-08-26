@@ -29,11 +29,7 @@
                         <TagBadges :descriptor="descriptor"/>
                     </div>
                 </div>
-                <div>
-                    Care to
-                    <router-link to="/guide-editor">create one</router-link>
-                    ?
-                </div>
+                <div>Care to <router-link to="/guide-editor">create one</router-link>? </div>
             </div>
             <div slot="no-more" class="no-results">
                 <div v-if="descriptor.isEmpty">
@@ -48,8 +44,7 @@
                 </div>
                 <div>
                     Care to
-                    <router-link to="/guide-editor">create one</router-link>
-                    ?
+                    <router-link to="/guide-editor">create one</router-link>?
                 </div>
             </div>
         </InfiniteLoading>
