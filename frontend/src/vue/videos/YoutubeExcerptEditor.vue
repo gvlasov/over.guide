@@ -267,7 +267,7 @@
                 const hours = Math.floor(length / 3600);
                 const minutes = Math.floor((length % 3600) / 60)
                 const seconds = Math.floor(length % 60)
-                const milliseconds = Math.floor(length % 1 * 1000)
+                const milliseconds = Math.round(length % 1 * 1000)
                 const parts = [hours, minutes, seconds, milliseconds];
                 if (hours !== 0) {
                     return parts[0] + ' h ' + parts[1] + ' min';
