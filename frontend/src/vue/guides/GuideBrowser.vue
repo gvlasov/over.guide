@@ -99,10 +99,11 @@ export default {
                     this.page = page.pageNumber;
                     this.guides.push(...page.guides.map(guide => new GuideVso(guide)));
                     this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideId))
+                    if (this.guides.length > 0) {
+                        $state.loaded()
+                    }
                     if (page.hasNextPage === false) {
                         $state.complete()
-                    } else {
-                        $state.loaded()
                     }
                 })
         }
