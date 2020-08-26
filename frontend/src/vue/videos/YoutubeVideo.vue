@@ -37,6 +37,10 @@
                     return 'youtube-player-' + this.videoId + '-' + this.start + '-' + this.end;
                 }
             },
+            enableControls: {
+                type: Boolean,
+                default: true,
+            },
             mute: {
                 type: Boolean,
                 default: false
@@ -75,12 +79,12 @@
                         self.player = new YT.Player(self.playerElementId, {
                             videoId: videoId,
                             playerVars: {
-                                modestbranding: 0,
+                                modestbranding: 1,
                                 rel: 0,
                                 showinfo: 0,
                                 autoplay: self.autoplay ? 1 : 0,
-                                disablekb: 1,
-                                controls: 0
+                                disablekb: self.enableControls ? 0 : 1,
+                                controls: self.enableControls ? 1 : 0,
                             },
                             width: null,
                             height: null,

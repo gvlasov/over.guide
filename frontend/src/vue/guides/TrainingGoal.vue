@@ -57,6 +57,7 @@
                                 :mute="true"
                                 :player-element-id="'training-goal-' + trainingGoal.guide.guideId + '-' + trainingGoal.order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
                                 class="video"
+                                :enable-controls="false"
                         />
                     </AspectRatioBox>
                 </div>
