@@ -44,7 +44,6 @@
                 }
             },
             isAtTop() {
-                console.log(window.scrollY);
                 return this.scrollY === 0;
             },
         },
