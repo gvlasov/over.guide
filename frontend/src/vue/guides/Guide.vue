@@ -3,7 +3,7 @@
         <div class="meta">
             <div
                     class="tags"
-                    v-hammer:tap="() => searchTag(guide.descriptor)"
+                    v-hammer:tap="() => tagLink(guide.descriptor)"
                     v-bind:class="{'same-as-search': guide.descriptor.equals(searchDescriptor)}"
             >
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
@@ -77,13 +77,13 @@ import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 import TagBadges from "@/vue/guides/TagBadges";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-import SearchTagMixin from "@/vue/guides/tags/SearchTagMixin";
+import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 
 const backend = new Backend(axios);
 const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
 export default {
     mixins: [
-        SearchTagMixin,
+        TagLinkMixin,
     ],
     model: {},
     props: {
