@@ -121,7 +121,7 @@ export default {
     }
 
     .selected {
-        animation: 1.1s ease-in-out infinite selected-group-animation;
+        animation: 1.4s ease-in-out infinite selected-group-animation;
         $animation-main-color: black;
         @keyframes selected-group-animation {
             0% {
