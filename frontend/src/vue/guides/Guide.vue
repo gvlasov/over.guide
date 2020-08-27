@@ -73,15 +73,18 @@ import formatDistance from 'date-fns/formatDistance'
 import TopicComments from "@/vue/TopicComments";
 import CommentsCounter from "@/vue/CommentsCounter";
 import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
-import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 import TagBadges from "@/vue/guides/TagBadges";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import SearchTagMixin from "@/vue/guides/tags/SearchTagMixin";
 
 const backend = new Backend(axios);
 const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
 export default {
+    mixins: [
+        SearchTagMixin,
+    ],
     model: {},
     props: {
         guide: {
@@ -115,11 +118,6 @@ export default {
             myTrainingGoalsCache.removeGoal(this.guide.guideId)
             this.$forceUpdate();
         },
-        searchTag() {
-            const newPath = "/search/"
-                + new DescriptorParamUnparser().unparseDescriptor(this.guide.descriptor);
-            this.$router.push(newPath)
-        }
     },
     data() {
         return {
