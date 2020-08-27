@@ -44,7 +44,7 @@ export default {
     vertical-align: middle;
     width: 3.9em;
     cursor: pointer;
-    box-shadow: $overwatch-panel-bg-shadow inset;
+    box-shadow: 0 .1em .3em -.05em $overwatch-panel-bg-color inset;
 }
 
 .invite-text {
