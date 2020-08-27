@@ -2,9 +2,9 @@ import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 
 export default {
     methods: {
-        searchTag() {
+        searchTag(descriptor) {
             const newPath = "/search/"
-                + new DescriptorParamUnparser().unparseDescriptor(this.guide.descriptor);
+                + new DescriptorParamUnparser().unparseDescriptor(descriptor);
             this.$router.push(newPath)
         }
     },

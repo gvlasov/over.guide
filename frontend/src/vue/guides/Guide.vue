@@ -3,7 +3,7 @@
         <div class="meta">
             <div
                     class="tags"
-                    v-hammer:tap="searchTag"
+                    v-hammer:tap="() => searchTag(guide.descriptor)"
                     v-bind:class="{'same-as-search': guide.descriptor.equals(searchDescriptor)}"
             >
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
