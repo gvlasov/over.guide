@@ -179,7 +179,7 @@ export default {
         align-items: center;
         gap: .5em;
         margin-left: .4em;
-        vertical-align: text-bottom;
+        vertical-align: middle;
         font-size: .5em;
         white-space: nowrap;
 
