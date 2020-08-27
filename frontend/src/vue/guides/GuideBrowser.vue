@@ -160,6 +160,7 @@ export default {
 .no-results {
     padding: 1em;
     @include overwatch-panel;
+    background-color: rgba(adjust-hue($overwatch-panel-bg-color, 210), 0.43);
     margin-bottom: 2em;
     margin-top: 2em;
     @include overwatch-futura-no-smallcaps;
