@@ -12,6 +12,7 @@
             <Guide
                     :guide="trainingGoal.guide"
                     :show-training-goal-button="false"
+                    :search-descriptor="null"
             />
         </div>
         <div
@@ -81,18 +82,18 @@
 </template>
 
 <script>
-    import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
-    import OverwatchButton from "@/vue/OverwatchButton";
-    import Backend from "@/js/Backend";
-    import axios from 'axios';
-    import Tag from "@/vue/guides/tags/hero/Tag";
-    import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
-    import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
-    import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
-    import Guide from "@/vue/guides/Guide";
-    import AspectRatioBox from "@/vue/AspectRatioBox";
+import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
+import OverwatchButton from "@/vue/OverwatchButton";
+import Backend from "@/js/Backend";
+import axios from 'axios';
+import Tag from "@/vue/guides/tags/hero/Tag";
+import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
+import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
+import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
+import Guide from "@/vue/guides/Guide";
+import AspectRatioBox from "@/vue/AspectRatioBox";
 
-    const backend = new Backend(axios);
+const backend = new Backend(axios);
 
     export default {
         model: {},

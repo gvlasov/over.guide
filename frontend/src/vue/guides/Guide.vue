@@ -4,6 +4,7 @@
             <div
                     class="tags"
                     v-hammer:tap="searchTag"
+                    v-bind:class="{'same-as-search': guide.descriptor.equals(searchDescriptor)}"
             >
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
                 <TagBadges ref="badgeTagsWrap" :descriptor="guide.descriptor"/>
@@ -76,6 +77,7 @@ import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 import TagBadges from "@/vue/guides/TagBadges";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
 const backend = new Backend(axios);
 const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
@@ -89,7 +91,11 @@ export default {
         showTrainingGoalButton: {
             type: Boolean,
             default: true,
-        }
+        },
+        searchDescriptor: {
+            type: GuideDescriptorVso,
+            required: true,
+        },
     },
     methods: {
         renderTextPart(part) {
@@ -168,11 +174,22 @@ export default {
 .tags {
     text-align: left;
     cursor: pointer;
+    transform: translateX(0);
+    transition: transform .13s;
 
     &:hover {
-        background-color: rgba(white, .4);
-        box-shadow: 0 0 .4rem white;
+        transform: translateX(1em);
+        transition: transform .13s;
     }
+
+}
+.tags.same-as-search:hover {
+    transform: translateX(0) rotateY(0deg);
+    transition: transform .13s ease-in-out !important;
+}
+.tags.same-as-search:active {
+    transform: rotate3d(1, 0, 0, 90deg);
+    transition: transform .13s step-start !important;
 }
 
 a {

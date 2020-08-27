@@ -10,7 +10,11 @@
         </div>
         <div class="guide-feed root-content-panel-wrap">
             <div v-for="guide in guides">
-                <Guide :guide="guide" class="guide"/>
+                <Guide
+                        :guide="guide"
+                        class="guide"
+                        :search-descriptor="descriptor"
+                />
             </div>
         </div>
         <InfiniteLoading

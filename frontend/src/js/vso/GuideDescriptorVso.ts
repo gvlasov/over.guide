@@ -71,4 +71,24 @@ export default class GuideDescriptorVso {
             this.individualTags.length === 0;
     }
 
+    equals(another: GuideDescriptorVso|null): boolean {
+        if (another === null) {
+            return false;
+        }
+        return this.hash === another.hash;
+    }
+
+    get hash(): string {
+        return [
+            this.players.heroes.map(h => h.id),
+            this.players.abilities.map(a => a.id),
+            this.allies.heroes.map(h => h.id),
+            this.allies.abilities.map(a => a.id),
+            this.enemies.heroes.map(h => h.id),
+            this.enemies.abilities.map(a => a.id),
+            this.maps.map(m => m.id),
+            this.thematicTags.map(t => t.id)
+        ].toString()
+    }
+
 }
