@@ -175,6 +175,9 @@ const backend = new Backend(axios);
             button {
                 min-height: 4rem;
                 font-size: 2rem;
+                & ::v-deep .background {
+                    border-radius: 0 !important;
+                }
             }
         }
 
