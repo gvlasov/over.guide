@@ -17,7 +17,7 @@ const router = new VueRouter({
     routes: [
         {path: '/counters-practice', component: CountersPractice},
         {path: '/suggest-pick', component: PickSuggestion},
-        {path: '/guide-editor', component: GuideEditor},
+        {path: '/guide-editor/:descriptor?', component: GuideEditor},
         {path: '/testing-ground', component: TestingGround},
         {path: '/search/:descriptor?', component: GuideSearch},
         {path: '/training-goals', component: TrainingGoals},

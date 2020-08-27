@@ -3,7 +3,7 @@
         <div class="meta">
             <div
                     class="tags"
-                    v-hammer:tap="() => tagLink(guide.descriptor)"
+                    v-hammer:tap="() => $router.push(tagLink(guide.descriptor)).catch(()=>{})"
                     v-bind:class="{'same-as-search': guide.descriptor.equals(searchDescriptor)}"
             >
                 <Tag class="hero-tag" :descriptor="guide.descriptor"/>
@@ -96,7 +96,7 @@ export default {
             default: true,
         },
         searchDescriptor: {
-            type: GuideDescriptorVso,
+            validator: prop => prop instanceof GuideDescriptorVso || prop === null,
             required: true,
         },
     },

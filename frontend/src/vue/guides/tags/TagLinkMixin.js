@@ -1,11 +1,10 @@
 import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 
+const unparser = new DescriptorParamUnparser();
 export default {
     methods: {
-        goToTagLink(descriptor, basePath = '/search/') {
-            const newPath = basePath
-                + new DescriptorParamUnparser().unparseDescriptor(descriptor);
-            this.$router.push(newPath)
+        tagLink(descriptor, basePath = '/search/') {
+            return basePath + unparser.unparseDescriptor(descriptor);
         }
     },
 };

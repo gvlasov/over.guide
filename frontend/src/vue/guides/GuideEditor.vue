@@ -1,5 +1,9 @@
 <template>
     <div class="wrap root-content-sizer">
+        <ParameterDescriptorSynchronizer
+                base-path="/guide-editor/"
+                @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
+            />
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
                     :descriptor="guide.descriptor"
@@ -107,6 +111,8 @@ import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
 import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
+import ParameterDescriptorSynchronizer
+    from "@/vue/guides/ParameterDescriptorSynchronizer";
 
 const backend = new Backend(axios);
 
@@ -221,6 +227,7 @@ export default {
             },
         },
         components: {
+            ParameterDescriptorSynchronizer,
             GuidePartVideoEditor,
             OverwatchButton,
             DescriptorBuilder,

@@ -33,7 +33,7 @@
                         <TagBadges :descriptor="descriptor"/>
                     </div>
                 </div>
-                <div>Care to <router-link to="/guide-editor">create one</router-link>? </div>
+                Care to <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">create one</router-link>?
             </div>
             <div slot="no-more" class="no-results">
                 <div v-if="descriptor.isEmpty">
@@ -48,7 +48,7 @@
                 </div>
                 <div>
                     Care to
-                    <router-link to="/guide-editor">create one</router-link>?
+                    <router-link :to="tagLink(descriptor, '/guide-editor/')">create one</router-link>?
                 </div>
             </div>
         </InfiniteLoading>
@@ -65,9 +65,13 @@ import GuideVso from "@/js/vso/GuideVso";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import Tag from "@/vue/guides/tags/hero/Tag";
 import TagBadges from "@/vue/guides/TagBadges";
+import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 
 const backend = new Backend(axios);
 export default {
+    mixins: [
+        TagLinkMixin,
+    ],
     props: {
         descriptor: {
             type: GuideDescriptorVso,
@@ -83,7 +87,9 @@ export default {
             this.guides = [];
             this.page = 0;
             this.alreadyLoadedGuideIds = [];
-            this.$refs.infiniteLoading.stateChanger.reset();
+            if (this.$refs.infiniteLoading) {
+                this.$refs.infiniteLoading.stateChanger.reset();
+            }
             this.$emit('contentChange');
         },
         async infiniteHandler($state) {
