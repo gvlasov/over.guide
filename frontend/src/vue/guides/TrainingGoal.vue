@@ -160,7 +160,7 @@ const backend = new Backend(axios);
             display: flex;
             min-height: $training-goal-height;
             cursor: pointer;
-            @include overwatch-panel-shadow;
+            box-shadow: $overwatch-panel-bg-shadow;
             border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
         }
 

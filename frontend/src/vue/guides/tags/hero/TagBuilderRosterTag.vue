@@ -67,14 +67,14 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-    import GamerPositionVso from "@/js/vso/GamerPositionVso";
-    import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
+import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
+import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 
-    export default {
+export default {
         props: {
             descriptor: {
                 type: GuideDescriptorVso,
@@ -114,18 +114,32 @@
     }
 
     .invite, .tag-type-background {
-        box-shadow: $invite-shadow, 0 0 .3em #444;
+        cursor: pointer;
+    }
+    .invite {
+        opacity: .8;
     }
 
     .selected {
-        box-shadow: 0 0 .2em .13em white;
-    }
-
-    .invite.selected {
-        box-shadow: $invite-shadow, 0 0 .2em .13em white;
-
-        .invite.selected:hover {
-            box-shadow: $invite-shadow-hover, 0 0 .2em .13em white;
+        animation: 1.1s ease-in-out infinite selected-group-animation;
+        $animation-main-color: black;
+        @keyframes selected-group-animation {
+            0% {
+                box-shadow: 0 0 .2em .2em $animation-main-color,
+                0 0 .3em .35em white
+            ;
+            }
+            50% {
+                box-shadow:
+                        0 0 .2em .15em $animation-main-color,
+                        0 0 .3em .2em white
+            ;
+            }
+            100% {
+                box-shadow: 0 0 .2em .2em $animation-main-color,
+                0 0 .3em .35em white
+            ;
+            }
         }
     }
 

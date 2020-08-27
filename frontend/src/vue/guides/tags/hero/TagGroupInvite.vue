@@ -2,66 +2,80 @@
     <TagGroupBackground
             class="invite"
             :tag-group="tagGroup"
+            v-bind:class="tagGroup.gamerPosition.dataName"
     >
-        <div class="invite-text">any<br/>{{tagGroup.gamerPosition.dataName}}
+        <div class="invite-text">any<br/>{{ tagGroup.gamerPosition.dataName }}
         </div>
     </TagGroupBackground>
 </template>
 
 <script>
 
-    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import TagGroupVso from "@/js/vso/TagGroupVso";
+import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+import TagGroupVso from "@/js/vso/TagGroupVso";
 
-    export default {
-        props: {
-            tagGroup: {
-                type: TagGroupVso,
-                required: true,
-            },
+export default {
+    props: {
+        tagGroup: {
+            type: TagGroupVso,
+            required: true,
         },
-        data() {
-            return {};
-        },
-        methods: {},
-        computed: {},
-        components: {
-            TagGroupBackground
-        },
-    };
+    },
+    data() {
+        return {};
+    },
+    methods: {},
+    computed: {},
+    components: {
+        TagGroupBackground
+    },
+};
 
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/overwatch-ui.scss";
-    @import "~@/assets/css/tags.scss";
+@import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/tags.scss";
 
-    .invite {
-        @include overwatch-futura;
-        line-height: 3em;
-        height: 3em;
-        vertical-align: middle;
-        width: 3.9em;
-        background-color: hsl(208, 18%, 52%);
-        color: #32323b;
-        cursor: pointer;
-        box-shadow: $invite-shadow;
+.invite {
+    @include overwatch-futura;
+    line-height: 3em;
+    height: 3em;
+    vertical-align: middle;
+    width: 3.9em;
+    cursor: pointer;
+    box-shadow: $overwatch-panel-bg-shadow inset;
+}
 
-        &:hover {
-            background-color: hsl(208, 18%, 49%);
-            box-shadow: $invite-shadow-hover;
+.invite-text {
+    display: inline-block;
+    line-height: 70%;
+    padding-bottom: .25em;
+    vertical-align: middle;
+    font-variant: all-small-caps;
+}
+@function invitify($color) {
+    @return desaturate(darken($color, 30), 70)
+}
 
-            ::v-deep .invite-text {
-                transform: scale(0.94);
-            }
-        }
-    }
+@mixin group($color) {
+    color: white;
+    text-shadow: $overwatch-panel-bg-shadow;
+    background-image: url('/images/background.jpg');
+}
 
-    .invite-text {
-        display: inline-block;
-        line-height: 70%;
-        padding-bottom: .25em;
-        vertical-align: middle;
-        font-variant: all-small-caps;
-    }
+.player {
+    @include group($tag-player-color);
+    background-position-x: 0;
+}
+
+.ally {
+    @include group($tag-ally-color);
+    background-position-x: 80px;
+}
+
+.enemy {
+    @include group($tag-enemy-color);
+    background-position-x: 160px;
+}
 </style>

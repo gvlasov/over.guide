@@ -101,16 +101,17 @@ $overwatch-button-default-bg-color: hsl(206, 56%, 50%);
 }
 
 $overwatch-panel-bg-color: rgb(13, 22, 41);
+$overwatch-panel-bg-color-opaque: rgba($overwatch-panel-bg-color, 0.43);
+$overwatch-panel-bg-shadow: 0 .1em .3em $overwatch-panel-bg-color;
 
 @mixin overwatch-panel {
   @include overwatch-panel-bg;
-  @include overwatch-panel-shadow;
+  box-shadow:$overwatch-panel-bg-shadow;
 }
 
 @mixin overwatch-panel-bg {
-  background-color: rgba($overwatch-panel-bg-color, 0.43);
+  background-color: $overwatch-panel-bg-color-opaque;
 }
 
 @mixin overwatch-panel-shadow {
-  box-shadow: 0 .1em .3em $overwatch-panel-bg-color;
 }
