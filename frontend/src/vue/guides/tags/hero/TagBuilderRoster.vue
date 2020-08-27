@@ -90,30 +90,26 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import TagBuilderRosterPortrait
-        from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
-    import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
-    import TagGroupVso from "@/js/vso/TagGroupVso";
-    import Roster_SelectedHeroesMixin
-        from "@/vue/roster/Roster_SelectedHeroesMixin";
-    import HeroGroupsByRole from "@/js/HeroGroupsByRole";
-    import AbilityIcon from "@/vue/AbilityIcon";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
-    import OverwatchButton from "@/vue/OverwatchButton";
-    import Role from "data/Role";
+import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+import TagBuilderRosterPortrait
+    from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
+import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
+import TagGroupVso from "@/js/vso/TagGroupVso";
+import Roster_SelectedHeroesMixin
+    from "@/vue/roster/Roster_SelectedHeroesMixin";
+import HeroGroupsByRole from "@/js/HeroGroupsByRole";
+import AbilityIcon from "@/vue/AbilityIcon";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
+import OverwatchButton from "@/vue/OverwatchButton";
+import Role from "data/Role";
 
 
-    export default {
+export default {
         mixins: [
             Roster_SelectedHeroesMixin,
         ],
-        model: {
-            prop: 'tagGroup',
-            event: 'tagGroupChange',
-        },
         props: {
             tagGroup: {
                 type: TagGroupVso,

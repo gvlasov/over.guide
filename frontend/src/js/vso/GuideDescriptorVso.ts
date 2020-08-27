@@ -16,8 +16,10 @@ export default class GuideDescriptorVso {
     public allies: TagGroupVso;
     public enemies: TagGroupVso;
     public individualTags: IndividualTagVso[];
+    private dto: GuideDescriptorDto;
 
     constructor(descriptor: GuideDescriptorDto) {
+        this.dto = descriptor;
         const allHeroes = Array.from(heroes.values())
         const allMaps = Array.from(maps.values())
         const allThematicTags = Array.from(thematicTags.values())
@@ -55,6 +57,10 @@ export default class GuideDescriptorVso {
                 );
     }
 
+    clone(): GuideDescriptorVso {
+        return new GuideDescriptorVso(this.dto);
+    }
+
     get maps(): MapTagVso[] {
         return this.individualTags.filter(t => t instanceof MapTagVso);
     }
@@ -71,7 +77,7 @@ export default class GuideDescriptorVso {
             this.individualTags.length === 0;
     }
 
-    equals(another: GuideDescriptorVso|null): boolean {
+    equals(another: GuideDescriptorVso | null): boolean {
         if (another === null) {
             return false;
         }
