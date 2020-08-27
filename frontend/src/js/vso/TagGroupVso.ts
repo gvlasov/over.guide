@@ -4,8 +4,8 @@ import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
 export default class TagGroupVso {
     constructor(
-        public readonly heroes: HeroDto[],
-        public readonly abilities: AbilityVso[],
+        public heroes: HeroDto[],
+        public abilities: AbilityVso[],
         public readonly gamerPosition: GamerPositionVso
     ) {
     }
