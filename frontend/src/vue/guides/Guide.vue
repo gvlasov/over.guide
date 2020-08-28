@@ -151,6 +151,7 @@ export default {
 <style lang="scss" scoped>
 @import '~@/assets/css/fonts.css';
 @import '~@/assets/css/overwatch-ui.scss';
+@import '~@/assets/css/tags.scss';
 
 .wrap {
     @include overwatch-panel;
@@ -181,10 +182,12 @@ export default {
     }
 
 }
+
 .tags.same-as-search:hover {
     transform: translateX(0) rotateY(0deg);
     transition: transform .13s ease-in-out !important;
 }
+
 .tags.same-as-search:active {
     transform: rotate3d(1, 0, 0, 90deg);
     transition: transform .13s step-start !important;
@@ -192,7 +195,13 @@ export default {
 
 a {
     font-family: 'BigNoodleTooOblique', 'sans-serif';
-    color: #2991de;
+    color: white;
+    font-size: 1.3em;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .guide-part {
@@ -245,10 +254,6 @@ a {
 .authorship {
     white-space: nowrap;
     @include overwatch-futura-no-smallcaps;
-
-    a {
-        color: #8bbafe;
-    }
 }
 
 .training-goal-buttons {
