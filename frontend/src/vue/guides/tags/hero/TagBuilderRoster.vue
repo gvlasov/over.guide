@@ -26,7 +26,7 @@
                                     ref="portraits"
                                     :hero="hero"
                                     :selected="isHeroSelected(hero)"
-                                    :gamer-position="tagGroup.gamerPosition"
+                                    :gamer-position="gamerPosition"
                                     @heroSelect="onHeroTap"
                                     @skillSelectionStart="() => {selectingSkills = true}"
                                     :abilities="selectedHeroAbilities(hero)"
@@ -64,7 +64,7 @@
                             <TagBuilderRosterTag
                                     :descriptor="descriptor"
                                     class="descriptor-mirror"
-                                    :selected-position="tagGroup.gamerPosition"
+                                    :selected-position="gamerPosition"
                                     @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
                                     @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
                                     @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
@@ -74,7 +74,7 @@
                 </div>
                 <div
                         class="aside-button aside-button-done"
-                        v-hammer:tap="()=>$emit('save')"
+                        v-hammer:tap="onDoneTap"
                 >
                     <div class="aside-content">
                         <div class="arrow-text-wrap">
@@ -95,7 +95,6 @@ import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
 import TagBuilderRosterPortrait
     from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
 import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
-import TagGroupVso from "@/js/vso/TagGroupVso";
 import Roster_SelectedHeroesMixin
     from "@/vue/roster/Roster_SelectedHeroesMixin";
 import HeroGroupsByRole from "@/js/HeroGroupsByRole";
@@ -104,6 +103,7 @@ import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
 import OverwatchButton from "@/vue/OverwatchButton";
 import Role from "data/Role";
+import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
 
 export default {
@@ -111,11 +111,11 @@ export default {
             Roster_SelectedHeroesMixin,
         ],
         props: {
-            tagGroup: {
-                type: TagGroupVso,
+            gamerPosition: {
+                type: GamerPositionVso,
                 required: true,
             },
-            descriptor: {
+            initialDescriptor: {
                 type: GuideDescriptorVso,
                 required: true,
             },
@@ -123,18 +123,30 @@ export default {
         data() {
             return {
                 selectingSkills: false,
-                heroGroups: HeroGroupsByRole.ALL
+                heroGroups: HeroGroupsByRole.ALL,
+                descriptor: this.initialDescriptor.clone(),
             };
         },
         methods: {
+            onDoneTap() {
+                this.$emit('save', this.descriptor)
+            },
             selectedHeroAbilities(hero) {
-                return this.tagGroup.abilities.filter(ability => ability.hero.id === hero.id)
+                return this.descriptor
+                    .getGroupByGamerPosition(this.gamerPosition)
+                    .abilities
+                    .filter(ability => ability.hero.id === hero.id)
             },
             selectedHeroesInGroup() {
                 return this.selectedHeroes.filter(h => this.tagGroup.heroes.find(gh => gh.id === h.id));
             },
             shouldHaveClearButtonOnGroupRow(group) {
                 return group[0].role === Role.Support;
+            },
+        },
+        watch: {
+            initialDescriptor(newValue) {
+                this.descriptor = newValue;
             },
         },
         computed: {
@@ -144,6 +156,9 @@ export default {
             selectedHeroes() {
                 return this.tagGroup.heroes;
             },
+            tagGroup() {
+                return this.descriptor.getGroupByGamerPosition(this.gamerPosition);
+            }
         },
         beforeMount() {
             if (typeof window.orientation !== 'undefined') {

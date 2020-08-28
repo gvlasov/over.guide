@@ -57,6 +57,18 @@ export default class GuideDescriptorVso {
                 );
     }
 
+    getGroupByGamerPosition(gamerPosition: GamerPositionVso) : TagGroupVso {
+        if (gamerPosition.isAlly) {
+            return this.allies;
+        } else if (gamerPosition.isEnemy) {
+            return this.enemies;
+        } else if (gamerPosition.isPlayer) {
+            return this.players;
+        } else {
+            throw new Error('Unknown gamer position');
+        }
+    }
+
     clone(): GuideDescriptorVso {
         return new GuideDescriptorVso(this.dto);
     }

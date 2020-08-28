@@ -2,13 +2,14 @@
     <div class="wrap root-content-sizer">
         <ParameterDescriptorSynchronizer
                 base-path="/guide-editor/"
-                @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
-            />
+                v-model="guide.descriptor"
+        />
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
                     :descriptor="guide.descriptor"
                     :search-button-enabled="false"
                     class="descriptor-builder"
+                    @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
             />
         </div>
         <div class="create-buttons">

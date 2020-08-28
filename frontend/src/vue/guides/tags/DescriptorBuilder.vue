@@ -2,12 +2,12 @@
     <div class="searchbox">
         <TagBuilder
                 :descriptor="descriptor"
-                @tagChange="$emit('descriptorChange')"
+                @tagChange="onHeroTagChange"
         />
         <ThematicTagInput
                 style="display: block; min-width: 17em; flex-grow: 1;"
                 :descriptor="descriptor"
-                @tagChange="$emit('descriptorChange')"
+                @tagChange="onIndividualTagChange"
         />
         <OverwatchButton
                 v-if="searchButtonEnabled"
@@ -20,13 +20,12 @@
 </template>
 
 <script>
-    import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
-    import ThematicTagInput from "@/vue/guides/ThematicTagInput";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import OverwatchButton from "@/vue/OverwatchButton";
+import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
+import ThematicTagInput from "@/vue/guides/ThematicTagInput";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import OverwatchButton from "@/vue/OverwatchButton";
 
-    export default {
-        name: "DescriptorBuilder",
+export default {
         props: {
             descriptor: {
                 type: GuideDescriptorVso,
@@ -43,6 +42,12 @@
         watch: {},
         computed: {},
         methods: {
+            onHeroTagChange(newDescriptor) {
+                this.$emit('descriptorChange', newDescriptor)
+            },
+            onIndividualTagChange() {
+                this.$emit('descriptorChange', this.descriptor)
+            },
             onSearch() {
                 this.$emit('search', this.descriptor)
             },

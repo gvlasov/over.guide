@@ -3,37 +3,37 @@
 </template>
 
 <script>
-import DescriptorParamParser from "@/js/DescriptorParamParser";
 import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
-import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import ParamsDescriptor from "@/js/ParamsDescriptor";
 
 export default {
+        model: {
+            prop: 'descriptor',
+            event: 'descriptorChange',
+        },
         props: {
             basePath: {
                 type: String,
                 required: true,
+            },
+            descriptor: {
+                type: GuideDescriptorVso,
+                required: true,
             }
         },
         methods: {
-            computeDescriptor(paramsText) {
-                if (typeof paramsText === 'undefined') {
-                    return new GuideDescriptorVso(
-                        new GuideDescriptorQuickie({})
-                    )
-                } else {
-                    return (new DescriptorParamParser()).parseParam(paramsText);
-                }
-            }
         },
         data() {
             return {
-                descriptor: this.computeDescriptor(this.$route.params.descriptor)
             };
         },
         watch: {
             '$route.params.descriptor'(paramsText) {
-                this.descriptor = this.computeDescriptor(paramsText);
+                this.$emit(
+                    'descriptorChange',
+                    new ParamsDescriptor(paramsText).compute()
+                );
             },
             descriptor: {
                 handler: async function (newValue) {
@@ -42,7 +42,6 @@ export default {
                     if (this.$router.currentRoute.path !== newPath) {
                         await this.$router.push(newPath)
                     }
-                    this.$emit('descriptorChange', this.descriptor)
                 },
                 deep: true,
             }

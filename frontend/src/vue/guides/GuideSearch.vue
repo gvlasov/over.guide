@@ -1,13 +1,10 @@
 <template>
     <div>
         <ParameterDescriptorSynchronizer
-                @descriptorChange="(newDescriptor) => {descriptor = newDescriptor}"
+                v-model="descriptor"
                 base-path="/search/"
         />
-        <GuideBrowser
-                :descriptor="descriptor"
-                :base-url="'/search'"
-        />
+        <GuideBrowser v-model="descriptor"/>
     </div>
 </template>
 
@@ -15,15 +12,13 @@
 import GuideBrowser from "@/vue/guides/GuideBrowser";
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
+import ParamsDescriptor from "@/js/ParamsDescriptor";
 
 export default {
+    methods: {},
     data() {
         return {
-            descriptor: new GuideDescriptorVso(
-                new GuideDescriptorQuickie({})
-            )
+            descriptor: new ParamsDescriptor(this.$route.params.descriptor).compute(),
         };
     },
     components: {

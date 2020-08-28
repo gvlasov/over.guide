@@ -5,7 +5,7 @@
                     :search-button-enabled="false"
                     :descriptor="descriptor"
                     @search="onSearch"
-                    @descriptorChange="onSearch"
+                    @descriptorChange="(newDescriptor) => {onSearch(newDescriptor)}"
             />
         </div>
         <div class="guide-feed root-content-panel-wrap">
@@ -72,18 +72,18 @@ export default {
     mixins: [
         TagLinkMixin,
     ],
+    model: {
+        prop: 'descriptor',
+        event: 'descriptorChange',
+    },
     props: {
         descriptor: {
             type: GuideDescriptorVso,
             required: true
         },
-        baseUrl: {
-            type: String,
-            required: true,
-        }
     },
     methods: {
-        async onSearch() {
+        async onSearch(newDescriptor) {
             this.guides = [];
             this.page = 0;
             this.alreadyLoadedGuideIds = [];
@@ -91,6 +91,7 @@ export default {
                 this.$refs.infiniteLoading.stateChanger.reset();
             }
             this.$emit('contentChange');
+            this.$emit('descriptorChange', newDescriptor);
         },
         async infiniteHandler($state) {
             await backend.searchGuidesPaginated({
@@ -120,7 +121,7 @@ export default {
     },
     watch: {
         descriptor(newValue) {
-            this.onSearch()
+            this.onSearch(newValue)
         },
     },
     data() {
