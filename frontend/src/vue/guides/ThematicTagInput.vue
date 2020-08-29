@@ -22,18 +22,18 @@
 </template>
 
 <script>
-    import VoerroTagsInput from '@voerro/vue-tagsinput';
-    import Tag from "@/vue/guides/tags/hero/Tag";
-    import SeededShuffler from "@/js/SeededShuffler";
-    import GuideTheme from "data/GuideTheme";
-    import ThematicTagVso from "@/js/vso/ThematicTagVso";
-    import MapTagVso from "@/js/vso/MapTagVso";
-    import thematicTags from "data/thematicTags";
-    import maps from 'data/maps'
-    import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import VoerroTagsInput from '@voerro/vue-tagsinput';
+import Tag from "@/vue/guides/tags/hero/Tag";
+import SeededShuffler from "@/js/SeededShuffler";
+import GuideTheme from "data/GuideTheme";
+import ThematicTagVso from "@/js/vso/ThematicTagVso";
+import MapTagVso from "@/js/vso/MapTagVso";
+import thematicTags from "data/thematicTags";
+import maps from 'data/maps'
+import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
-    export default {
+export default {
         name: "ThematicTagInput",
         props: {
             descriptor: {
@@ -85,7 +85,6 @@
                                 .map(map => new MapTagVso(map))
                         )
                 )
-                    .slice(0, 12)
             },
             onTagsUpdated($event) {
                 this.$emit('tagChange');
