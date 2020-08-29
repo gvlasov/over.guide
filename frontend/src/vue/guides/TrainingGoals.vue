@@ -2,9 +2,13 @@
     <div class="training-goals root-content-sizer">
         <div
                 v-if="trainingGoals.length === 0"
-                class="no-guides-notice"
+                class="root-content-panel-wrap"
         >
-            Discover guides and add those you plan to master to your training goals
+            <WeakPanel
+                    class="no-guides-notice"
+            >
+                <router-link to="/search">Discover guides</router-link> and add those you plan to master to your training goals
+            </WeakPanel>
         </div>
         <template v-else>
             <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="false">
@@ -21,16 +25,17 @@
 </template>
 
 <script>
-    import Backend from "@/js/Backend";
-    import axios from 'axios';
-    import Guide from "@/vue/guides/Guide";
-    import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
-    import GuideVso from "@/js/vso/GuideVso";
-    import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
-    import TrainingGoal from "@/vue/guides/TrainingGoal";
-    import draggable from 'vuedraggable';
+import Backend from "@/js/Backend";
+import axios from 'axios';
+import Guide from "@/vue/guides/Guide";
+import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
+import GuideVso from "@/js/vso/GuideVso";
+import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
+import TrainingGoal from "@/vue/guides/TrainingGoal";
+import draggable from 'vuedraggable';
+import WeakPanel from "@/vue/guides/WeakPanel";
 
-    const backend = new Backend(axios);
+const backend = new Backend(axios);
     export default {
         props: {},
         methods: {
@@ -83,6 +88,7 @@
             TrainingGoal,
             Guide,
             draggable,
+            WeakPanel,
         },
     };
 

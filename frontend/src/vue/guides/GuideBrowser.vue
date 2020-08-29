@@ -21,8 +21,9 @@
                 ref="infiniteLoading"
                 direction="bottom"
                 @infinite="infiniteHandler"
+                class="root-content-panel-wrap"
         >
-            <div slot="no-results" class="no-results">
+            <WeakPanel slot="no-results" class="no-results">
                 <div v-if="descriptor.isEmpty">
                     No guides on the site
                 </div>
@@ -34,8 +35,8 @@
                     </div>
                 </div>
                 Care to <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">create one</router-link>?
-            </div>
-            <div slot="no-more" class="no-results">
+            </WeakPanel>
+            <WeakPanel slot="no-more" class="no-results">
                 <div v-if="descriptor.isEmpty">
                     No more guides on the site
                 </div>
@@ -50,7 +51,7 @@
                     Care to
                     <router-link :to="tagLink(descriptor, '/guide-editor/')">create one</router-link>?
                 </div>
-            </div>
+            </WeakPanel>
         </InfiniteLoading>
     </div>
 </template>
@@ -66,6 +67,7 @@ import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import Tag from "@/vue/guides/tags/hero/Tag";
 import TagBadges from "@/vue/guides/TagBadges";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
+import WeakPanel from "@/vue/guides/WeakPanel";
 
 const backend = new Backend(axios);
 export default {
@@ -137,6 +139,7 @@ export default {
         DescriptorBuilder,
         InfiniteLoading,
         Guide,
+        WeakPanel,
     },
 };
 
@@ -164,24 +167,9 @@ export default {
     min-width: 100%;
 }
 
-.no-results {
-    padding: 1em;
-    @include overwatch-panel;
-    background-color: rgba(adjust-hue($overwatch-panel-bg-color, 210), 0.43);
-    margin-bottom: 2em;
-    margin-top: 2em;
-    @include overwatch-futura-no-smallcaps;
-    color: white;
-    text-shadow: 0 0 .13em black;
+.weak-panel {
 
-    a {
-        color: inherit;
-    }
-
-    line-height: 2.3em;
-    font-size: 1.3em;
-
-    .inline-descriptor {
+    & ::v-deep .inline-descriptor {
         display: inline-flex;
         align-items: center;
         gap: .5em;
