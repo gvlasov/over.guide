@@ -195,12 +195,12 @@ export default {
   overflow: hidden;
 
   .background {
-    opacity: .4;
+    opacity: .5;
     position: absolute;
     width: 100%;
     height: 100%;
     background-color: white;
-    box-shadow: 0 0 .1em inset black;
+    box-shadow: 0 0 .2em inset hsl(220, 30%, 30%);
   }
 }
 

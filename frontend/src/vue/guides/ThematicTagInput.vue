@@ -164,8 +164,7 @@ export default {
         text-transform: lowercase;
         font-weight: normal;
         color: white;
-        text-shadow: 0 0 .06em black;
-        box-shadow: 0 0 .06em black;
+        box-shadow: 0 0 .06em #111;
     }
 
     .root ::v-deep .tags-input-wrapper-default {

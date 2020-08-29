@@ -21,7 +21,6 @@
         display: flex;
         flex-direction: column-reverse;
         justify-content: center;
-        text-shadow: 0 0 .06em black;
         min-height: 100%;
         background-color: #111;
 

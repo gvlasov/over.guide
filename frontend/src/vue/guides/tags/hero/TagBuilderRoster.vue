@@ -287,7 +287,7 @@ export default {
 
     .roster-fixedbox-bg {
         opacity: .9;
-        background-color: black;
+        background-color: hsl(40, 70%, 3%);
         position: fixed;
         width: 100%;
         height: 100%;

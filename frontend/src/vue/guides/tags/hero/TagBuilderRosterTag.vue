@@ -122,7 +122,7 @@ export default {
 
     .selected {
         animation: 1.4s ease-in-out infinite selected-group-animation;
-        $animation-main-color: black;
+        $animation-main-color: #443;
         @keyframes selected-group-animation {
             0% {
                 box-shadow: 0 0 .2em .2em $animation-main-color,

@@ -10,9 +10,9 @@
 </template>
 
 <script>
-    import TagGroupVso from "@/js/vso/TagGroupVso";
+import TagGroupVso from "@/js/vso/TagGroupVso";
 
-    export default {
+export default {
         props: {
             tagGroup: {
                 type: TagGroupVso,
@@ -40,7 +40,7 @@
         vertical-align: middle;
         text-align: center;
         font-family: 'Futura Demi Bold', sans-serif;
-        color: black;
+        color: hsl(220, 30%, 30%);
         padding: 0 0 0 0;
     }
 

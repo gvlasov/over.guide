@@ -46,7 +46,7 @@ export default {
         vertical-align: middle;
         border-spacing: .3em;
         border-radius: .5em;
-        box-shadow: 0 0 .1em black;
+        box-shadow: 0 0 .1em #111;
     }
 
     .tag-type-player {
