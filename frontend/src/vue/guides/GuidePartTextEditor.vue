@@ -70,6 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    @import '~@/assets/css/fonts.scss';
     .text-guide-part {
         max-width: 100%;
     }
@@ -83,7 +84,7 @@ export default {
         pointer-events: none;
         font-size: 1.5em;
         word-break: break-word;
-        font-family: "IBM Plex Sans", sans-serif;
+        font-family: $body-font;
     }
 
     textarea.guide-part-text-editor {

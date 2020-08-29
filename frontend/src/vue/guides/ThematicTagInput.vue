@@ -177,7 +177,7 @@ export default {
         height: 100%;
 
         input[type=text] {
-            font-family: "IBM Plex Sans", sans-serif;
+            font-family: $body-font;
             font-size: .9em;
         }
     }

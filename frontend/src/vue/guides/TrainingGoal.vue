@@ -229,7 +229,7 @@ const backend = new Backend(axios);
                 overflow: hidden;
                 padding: 1em;
                 flex-grow: 999;
-                font-family: "IBM Plex Sans", sans-serif;
+                font-family: $body-font;
 
                 & ::v-deep * {
                     margin: 0;

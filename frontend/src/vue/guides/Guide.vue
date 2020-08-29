@@ -213,7 +213,7 @@ a {
 
 .text-guide-part {
     max-width: 100%;
-    font-family: "IBM Plex Sans", sans-serif;
+    font-family: $body-font;
 }
 
 .text-guide-part ::v-deep img {
