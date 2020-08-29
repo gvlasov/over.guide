@@ -34,7 +34,7 @@
                         <TagBadges :descriptor="descriptor"/>
                     </div>
                 </div>
-                Care to <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">create one</router-link>?
+                Feel like <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>?
             </WeakPanel>
             <WeakPanel slot="no-more" class="no-results">
                 <div v-if="descriptor.isEmpty">
@@ -48,8 +48,8 @@
                     </div>
                 </div>
                 <div>
-                    Care to
-                    <router-link :to="tagLink(descriptor, '/guide-editor/')">create one</router-link>?
+                    Feel like
+                    <router-link :to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>?
                 </div>
             </WeakPanel>
         </InfiniteLoading>
