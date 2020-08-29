@@ -1,8 +1,8 @@
 <template>
     <div class="wrap root-content-sizer">
         <ParameterDescriptorSynchronizer
-                base-path="/guide-editor/"
                 v-model="guide.descriptor"
+                base-path="/guide-editor/"
         />
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
@@ -108,12 +108,11 @@ import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
 import Backend from "@/js/Backend";
 import axios from 'axios';
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
 import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
-import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
+import ParamsDescriptor from "@/js/ParamsDescriptor";
 
 const backend = new Backend(axios);
 
@@ -206,9 +205,7 @@ export default {
                 guide: {
                   id: undefined,
                   guideId: undefined,
-                  descriptor: new GuideDescriptorVso(
-                      new GuideDescriptorQuickie({})
-                  ),
+                  descriptor: new ParamsDescriptor(this.$route.params.descriptor).compute(),
                   parts: [
                     new GuidePartVideoWidget({
                       excerpt: {
