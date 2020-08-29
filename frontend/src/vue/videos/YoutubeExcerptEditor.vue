@@ -392,9 +392,9 @@ export default {
         }
 
         .reset-button {
-            margin-left: 1em;
+            margin-left: .8em;
             order: 3;
-            margin-right: 1em;
+            margin-right: .8em;
         }
 
         .cut-end {
