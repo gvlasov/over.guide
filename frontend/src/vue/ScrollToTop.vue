@@ -60,6 +60,9 @@
 
 <style lang="scss" scoped>
     @import "~@/assets/css/overwatch-ui.scss";
+    @import "~@/assets/css/common.scss";
+
+    $aside-width: 10rem;
 
     .scroll-to-top {
         user-select: none;
@@ -71,7 +74,6 @@
         height: 100vh;
         width: 50vw;
         text-align: left;
-        $aside-width: 10em;
 
         .hover-display-container {
             text-align: center;
@@ -124,5 +126,13 @@
             }
         }
 
+    }
+
+    $min-screen-width: $root-content-width + $aside-width*2;
+
+    @media screen and (max-width: $min-screen-width) {
+        .scroll-to-top {
+            display: none;
+        }
     }
 </style>
