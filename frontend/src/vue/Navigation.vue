@@ -1,45 +1,77 @@
 <template>
     <div class="navigation">
-        <router-link to="/search">Browse guides</router-link>
-        <router-link to="/guide-editor">Create guide</router-link>
-        <router-link to="/training-goals">Training goals</router-link>
+        <router-link
+                to="/search"
+                v-bind:class="{active: currentRouteStartsWith('/search')}"
+        >Browse guides
+        </router-link>
+        <router-link
+                to="/guide-editor"
+                v-bind:class="{active: currentRouteStartsWith('/guide-editor')}"
+        >Create guide
+        </router-link>
+        <router-link
+                to="/training-goals"
+                v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
+        >Training goals
+        </router-link>
         <!--        <router-link to="/testing-ground">Testing ground</router-link>-->
-        <BattlenetAuthButton/>
+        <BattlenetAuthButton
+                class="auth-button"
+        />
     </div>
 </template>
 
 <script>
-    import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
+import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 
-    export default {
-        methods: {},
-        data() {
-            return {};
-        },
-        components: {
-            BattlenetAuthButton,
-        },
-    }
+export default {
+    methods: {
+        currentRouteStartsWith(path) {
+            return this.$route.path.startsWith(path);
+        }
+    },
+    components: {
+        BattlenetAuthButton,
+    },
+}
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/tags.scss";
 
-    .navigation {
-        font-size: 1.7em;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        gap: .1em;
-        margin-bottom: 1rem;
-    }
+.navigation {
+    $underline-width: .3em;
+    font-size: 1.7em;
+    background-color: hsla(227, 29%, 45%, .7);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 2rem;
 
-    a {
-        @include overwatch-futura-no-smallcaps;
+    a:not(.auth-button) {
+        @include overwatch-futura;
         color: white;
         text-decoration: none;
-        padding: 1rem .4rem 0 .4rem;
         white-space: nowrap;
-        text-shadow: 0 0 .2em black;
+
+        &.active, &:hover {
+            background-color: $overwatch-button-default-bg-color;
+            border-bottom: $underline-width solid $tag-ally-color;
+        }
     }
+
+    .auth-button, a {
+        flex-grow: 1;
+        padding: .8rem 0 .8rem 0;
+    }
+
+    .auth-button {
+        &:hover {
+            background-color: hsla(227, 29%, 45%, 1);
+        }
+        border-bottom: $underline-width solid transparent;
+    }
+}
 </style>

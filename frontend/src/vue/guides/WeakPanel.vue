@@ -1,8 +1,6 @@
 <template>
     <div class="weak-panel root-content-panel-wrap">
-        <div class="root-content-panel">
             <slot></slot>
-        </div>
     </div>
 </template>
 

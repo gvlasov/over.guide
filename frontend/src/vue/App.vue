@@ -9,10 +9,10 @@
 </template>
 
 <script>
-    import Navigation from "@/vue/Navigation";
-    import ScrollToTop from "@/vue/ScrollToTop";
+import Navigation from "@/vue/Navigation";
+import ScrollToTop from "@/vue/ScrollToTop";
 
-    export default {
+export default {
         methods: {
             resetScrollToTop() {
                 this.$refs.scrollToTop.reset();
@@ -46,12 +46,7 @@
         z-index: 1;
     }
 
-    .navigation {
-        position: relative;
-        z-index: 2;
-    }
-
-    .router-content-wrap {
+    .navigation, .router-content-wrap {
         position: relative;
         z-index: 2;
     }
