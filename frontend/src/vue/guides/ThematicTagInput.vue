@@ -177,8 +177,8 @@ export default {
         height: 100%;
 
         input[type=text] {
-            font-family: "Proxima Nova Light", sans-serif;
-            font-weight: bold;
+            font-family: "IBM Plex Sans", sans-serif;
+            font-size: .9em;
         }
     }
 

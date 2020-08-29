@@ -14,9 +14,9 @@
 </template>
 
 <script>
-    import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
+import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 
-    export default {
+export default {
         model: {},
         props: {
             widget: {
@@ -83,7 +83,7 @@
         pointer-events: none;
         font-size: 1.5em;
         word-break: break-word;
-        font-family: "Proxima Nova Light", sans-serif;
+        font-family: "IBM Plex Sans", sans-serif;
     }
 
     textarea.guide-part-text-editor {
