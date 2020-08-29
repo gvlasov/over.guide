@@ -21,7 +21,7 @@
 </script>
 
 <style scoped>
-    @import "~@/assets/css/fonts.css";
+    @import "~@/assets/css/fonts.scss";
 
     img {
         width: 100%;

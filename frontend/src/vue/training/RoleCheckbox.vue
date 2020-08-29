@@ -21,9 +21,9 @@
 </template>
 
 <script>
-    import Role from "data/Role";
+import Role from "data/Role";
 
-    export default {
+export default {
         model: {
             prop: 'modelValue',
             event: 'change',
@@ -76,7 +76,7 @@
 </script>
 
 <style scoped>
-    @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/fonts.scss';
 
     .role {
         padding: 1vw;

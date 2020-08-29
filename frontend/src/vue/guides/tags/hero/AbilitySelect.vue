@@ -12,12 +12,12 @@
 </template>
 
 <script>
-    import abilities from 'data/abilities';
-    import AbilityCheckbox from "@/vue/guides/tags/hero/AbilityCheckbox";
-    import AbilityVso from "@/js/vso/AbilityVso";
+import abilities from 'data/abilities';
+import AbilityCheckbox from "@/vue/guides/tags/hero/AbilityCheckbox";
+import AbilityVso from "@/js/vso/AbilityVso";
 
 
-    export default {
+export default {
         model: {
             prop: 'selectedAbilities',
             event: 'selectedAbilitiesChange',
@@ -57,7 +57,7 @@
 </script>
 
 <style scoped>
-    @import "~@/assets/css/fonts.css";
+    @import "~@/assets/css/fonts.scss";
 
     /*.grid {*/
     /*    display: grid;*/

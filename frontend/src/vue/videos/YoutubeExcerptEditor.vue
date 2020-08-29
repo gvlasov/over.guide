@@ -316,7 +316,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~@/assets/css/common.scss";
-    @import "~@/assets/css/fonts.css";
+    @import "~@/assets/css/fonts.scss";
 
     $max-portrait-mode-width: $root-content-width - 3rem;
     .wrap {

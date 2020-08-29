@@ -36,11 +36,11 @@
 </template>
 
 <script>
-    import AbilityIcon from "@/vue/AbilityIcon";
-    import KeyIcon from "@/vue/KeyIcon";
-    import HeroPortrait from "@/vue/HeroPortrait";
+import AbilityIcon from "@/vue/AbilityIcon";
+import KeyIcon from "@/vue/KeyIcon";
+import HeroPortrait from "@/vue/HeroPortrait";
 
-    export default {
+export default {
         model: {
             prop: 'modelValue',
             event: 'change',
@@ -91,7 +91,7 @@
 </script>
 
 <style scoped>
-    @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/fonts.scss';
 
     .ability-name {
         display: block;

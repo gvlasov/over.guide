@@ -99,7 +99,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/fonts.css";
+    @import "~@/assets/css/fonts.scss";
     @import "~@voerro/vue-tagsinput/dist/style.css";
     @import "~@/assets/css/tags.scss";
     @import "~@/assets/css/overwatch-ui.scss";

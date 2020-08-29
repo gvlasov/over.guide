@@ -239,7 +239,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/fonts.scss';
     @import '~@/assets/css/overwatch-ui.scss';
     @import '~@/assets/css/common.scss';
 

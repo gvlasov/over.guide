@@ -19,11 +19,11 @@
 </template>
 
 <script>
-    import RoleCheckbox from "@/vue/training/RoleCheckbox.vue";
-    import Role from "data/Role";
-    import OverwatchButton from "@/vue/OverwatchButton";
+import RoleCheckbox from "@/vue/training/RoleCheckbox.vue";
+import Role from "data/Role";
+import OverwatchButton from "@/vue/OverwatchButton";
 
-    export default {
+export default {
         props: {},
         methods: {
             approveRoles() {
@@ -47,7 +47,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/fonts.css';
+    @import '~@/assets/css/fonts.scss';
     @import '~@/assets/css/overwatch-ui.scss';
 
     .checkboxes-wrap {
