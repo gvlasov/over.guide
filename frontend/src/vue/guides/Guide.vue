@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="guide">
         <div class="meta">
             <div
                     class="tags"
@@ -153,7 +153,7 @@ export default {
 @import '~@/assets/css/overwatch-ui.scss';
 @import '~@/assets/css/tags.scss';
 
-.wrap {
+.guide {
     @include overwatch-panel;
     display: inline-block;
     box-sizing: border-box;

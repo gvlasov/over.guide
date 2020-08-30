@@ -20,6 +20,7 @@
         <a
                 v-else
                 v-bind:href="`/#/user/${userId}`"
+                v-bind:class="{active: typeof userId !== 'undefined' && currentRouteStartsWith(`/user/${userId}`)}"
         ><div>{{username}}</div></a>
     </div>
 </template>

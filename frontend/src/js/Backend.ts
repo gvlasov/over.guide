@@ -11,6 +11,7 @@ import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
 import TrainingGoalDto from "data/dto/TrainingGoalDto";
+import UserInfoDto from "data/dto/UserInfoDto";
 
 const querystring = require('query-string')
 
@@ -194,6 +195,23 @@ export default class Backend {
         )
     }
 
+    async getUserInfo(userId: number): Promise<UserInfoDto> {
+        return this.query(
+            'GET',
+            `/user/${userId}`,
+            {},
+            response => response.data as UserInfoDto
+        )
+    };
+
+    async changeUsername(newUsername: string): Promise<null> {
+        return this.query(
+            'POST',
+            `/user/change-username`,
+            {newUsername: newUsername},
+            response => null
+        )
+    };
 
 }
 

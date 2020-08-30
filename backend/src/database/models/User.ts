@@ -8,6 +8,7 @@ import {
 import {DataTypes} from "sequelize";
 import {Guide} from "src/database/models/Guide";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
+import UserDto from "data/dto/UserDto";
 
 @Table({
     name: {
@@ -34,5 +35,12 @@ export class User extends Model<User> {
         }
     )
     trainingGoals: Array<Guide & { User2TrainingGoal: User2TrainingGoal }>;
+
+    toDto(): UserDto {
+        return {
+            id: this.id,
+            name: this.name
+        } as UserDto;
+    }
 
 }

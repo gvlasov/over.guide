@@ -54,6 +54,8 @@ export class GuideSearchQuery implements GuideSearchQueryDto {
     @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     thematicTags: GuideTheme[] = []
 
+    user: number;
+
     @Type(() => String)
     @Transform((value: string) => Number.parseInt(value))
     pageNumber: number
@@ -122,6 +124,56 @@ export class GuideSearchService {
                 .slice(0, GuideSearchService.pageSize)
                 .map(entry => entry.toDto()),
             pageNumber: query.pageNumber + 1,
+            hasNextPage: nextGuides.length > GuideSearchService.pageSize,
+        }
+    }
+
+    async searchByCreator(creatorId: number, pageNumber: number): Promise<GuideSearchPageDto> {
+        const nextGuides =
+            await GuideHistoryEntry.findAll({
+                include: [
+                    {
+                        model: Guide,
+                        as: 'guide',
+                        where: {
+                            deactivatedById: null,
+                            deactivatedAt: null,
+                        },
+                        include: [{
+                            model: User,
+                            as: 'creator',
+                            where: {
+                                id: creatorId,
+                            }
+                        }]
+                    },
+                    {
+                        model: GuidePartText, as: 'guidePartTexts',
+                        include: [{all: true}],
+                    },
+                    {
+                        model: GuidePartVideo, as: 'guidePartVideos',
+                        include: [{all: true}],
+                    },
+                    {
+                        model: GuideDescriptor,
+                        as: 'descriptor',
+                        include: [{all: true}],
+                    },
+                    {
+                        model: GuideHead,
+                        as: 'headRecord',
+                        required: true,
+                    }
+                ],
+                limit: GuideSearchService.pageSize + 1,
+                order: [['id', 'DESC']]
+            });
+        return {
+            guides: nextGuides
+                .slice(0, GuideSearchService.pageSize)
+                .map(entry => entry.toDto()),
+            pageNumber: pageNumber + 1,
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         }
     }

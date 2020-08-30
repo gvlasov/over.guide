@@ -11,6 +11,7 @@ import GuideSearch from "@/vue/guides/GuideSearch";
 import AsyncComputed from 'vue-async-computed'
 import {VueHammer} from 'vue2-hammer'
 import TrainingGoals from "@/vue/guides/TrainingGoals";
+import UserInfo from "@/vue/UserInfo";
 
 
 const router = new VueRouter({
@@ -21,6 +22,7 @@ const router = new VueRouter({
         {path: '/testing-ground', component: TestingGround},
         {path: '/search/:descriptor?', component: GuideSearch},
         {path: '/training-goals', component: TrainingGoals},
+        {path: '/user/:id', component: UserInfo},
     ],
     scrollBehavior(){
         return {x: 0, y: 0}

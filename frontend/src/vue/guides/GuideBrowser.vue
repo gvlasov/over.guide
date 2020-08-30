@@ -12,7 +12,6 @@
             <div v-for="guide in guides">
                 <Guide
                         :guide="guide"
-                        class="guide"
                         :search-descriptor="descriptor"
                 />
             </div>
@@ -34,7 +33,9 @@
                         <TagBadges :descriptor="descriptor"/>
                     </div>
                 </div>
-                Feel like <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>?
+                Feel like
+                <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>
+                ?
             </WeakPanel>
             <WeakPanel slot="no-more" class="no-results">
                 <div v-if="descriptor.isEmpty">
@@ -49,7 +50,8 @@
                 </div>
                 <div>
                     Feel like
-                    <router-link :to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>?
+                    <router-link :to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>
+                    ?
                 </div>
             </WeakPanel>
         </InfiniteLoading>
@@ -156,16 +158,18 @@ export default {
     flex-direction: column;
     gap: 2rem;
     margin-top: 2rem;
+    margin-bottom: 3rem;
+
+    .guide {
+        max-width: 100vw;
+        min-width: 100%;
+    }
 }
 
 .guide-browser {
     margin: 0 auto;
 }
 
-.guide {
-    max-width: 100vw;
-    min-width: 100%;
-}
 
 .weak-panel {
 
