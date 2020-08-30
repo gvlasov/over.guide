@@ -1,8 +1,11 @@
 <template>
     <div class="root-content-sizer">
-        <template v-if="typeof userInfo === 'undefined'">
+        <div
+                v-if="typeof userInfo === 'undefined'"
+                class="loading"
+        >
             Loading...
-        </template>
+        </div>
         <template v-else>
             <div class="root-content-panel-wrap info">
                 <div class="username">{{ userInfo.user.name }}</div>
@@ -69,15 +72,22 @@ export default {
             e.preventDefault();
             this.changingUsername = false;
             console.log(this.userInfo);
-            backend.changeUsername(this.userInfo.user.name)
-            .then(result => {
-                Cookies.set('username', this.userInfo.user.name);
-            })
+            const newUsername = this.userInfo.user.name;
+            backend.changeUsername(newUsername)
+                .then(result => {
+                    Cookies.set('username', newUsername);
+                    this.initialUsername = newUsername
+                    window.location.reload();
+                })
+                .catch(e => {
+                    this.userInfo.user.name = this.initialUsername;
+                });
             return false
         },
     },
     async mounted() {
         this.userInfo = new UserInfoVso(await (backend.getUserInfo(this.userId)));
+        this.initialUsername = this.userInfo.user.name;
     },
     components: {
         Guide,
@@ -108,8 +118,15 @@ export default {
     }
 }
 
+.loading {
+    font-size: 8em;
+    text-shadow: 0 0 .1em #333;
+    color: white;
+    font-family: BigNoodleTooOblique, sans-serif;
+}
+
 .username {
-    font-family: 'BigNoodleTooOblique', 'sans-serif';
+    font-family: BigNoodleTooOblique, sans-serif;
     font-size: 8em;
     text-shadow: 0 0 .1em #333;
     color: white;
