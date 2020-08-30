@@ -125,13 +125,19 @@ export default {
         guideId: this.guide.guideId,
                     descriptor: {
                         playerHeroes:
-                            this.guide.descriptor.playerHeroes.map(hero => hero.id),
+                            this.guide.descriptor.players.heroes.map(hero => hero.id),
                         allyHeroes:
-                            this.guide.descriptor.allyHeroes.map(hero => hero.id),
+                            this.guide.descriptor.allies.heroes.map(hero => hero.id),
                         enemyHeroes:
-                            this.guide.descriptor.enemyHeroes.map(hero => hero.id),
-                        mapTags: this.guide.descriptor.mapTags,
-                        thematicTags: this.guide.descriptor.thematicTags,
+                            this.guide.descriptor.enemies.heroes.map(hero => hero.id),
+                        playerAbilities:
+                            this.guide.descriptor.players.abilities.map(ability => ability.id),
+                        allyAbilities:
+                            this.guide.descriptor.allies.abilities.map(ability => ability.id),
+                        enemyAbilities:
+                            this.guide.descriptor.enemies.abilities.map(ability => ability.id),
+                        mapTags: this.guide.descriptor.maps.map(vso => vso.id),
+                        thematicTags: this.guide.descriptor.thematicTags.map(vso => vso.id),
                     },
                     parts: this.guide.parts.map(widget => widget.part)
                 })
