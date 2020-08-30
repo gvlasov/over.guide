@@ -57,6 +57,11 @@ export class BattlenetAuthController {
                     user.name,
                     cookieOptions
                 )
+                response.cookie(
+                    'userId',
+                    user.id,
+                    cookieOptions
+                )
                 response.redirect(FRONTEND_ROOT_URL)
             })
     }

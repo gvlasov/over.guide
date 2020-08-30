@@ -1,7 +1,9 @@
 <template>
     <a v-bind:href="url" class="battle-net-button" title="Battle.net auth">
-        <img src="/icons/battlenet.svg"/>
-        Log in
+        <div>
+            <img src="/icons/battlenet.svg"/>
+            Log in
+        </div>
     </a>
 </template>
 

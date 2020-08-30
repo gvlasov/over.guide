@@ -3,32 +3,41 @@
         <router-link
                 to="/search"
                 v-bind:class="{active: currentRouteStartsWith('/search')}"
-        >Browse guides
+        ><div>Browse guides</div>
         </router-link>
         <router-link
                 to="/guide-editor"
                 v-bind:class="{active: currentRouteStartsWith('/guide-editor')}"
-        >Create guide
+        ><div>Create guide</div>
         </router-link>
         <router-link
                 to="/training-goals"
                 v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
-        >Training goals
+        ><div>Training goals</div>
         </router-link>
         <!--        <router-link to="/testing-ground">Testing ground</router-link>-->
-        <BattlenetAuthButton
-                class="auth-button"
-        />
+        <BattlenetAuthButton v-if="typeof username === 'undefined'" />
+        <a
+                v-else
+                v-bind:href="`/#/user/${userId}`"
+        ><div>{{username}}</div></a>
     </div>
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 
 export default {
     methods: {
         currentRouteStartsWith(path) {
             return this.$route.path.startsWith(path);
+        }
+    },
+    data() {
+        return {
+            username: Cookies.get('username'),
+            userId: Cookies.get('userId')
         }
     },
     components: {
@@ -50,11 +59,12 @@ export default {
     justify-content: space-around;
     margin-bottom: 2rem;
 
-    a:not(.auth-button) {
+    a:not(.battle-net-button) {
         @include overwatch-futura;
         color: white;
         text-decoration: none;
         white-space: nowrap;
+        border-bottom: $underline-width solid transparent;
 
         &.active, &:hover {
             background-color: $overwatch-button-default-bg-color;
@@ -62,12 +72,20 @@ export default {
         }
     }
 
-    .auth-button, a {
+    a {
+        div {
+            flex-grow: 0;
+        }
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         flex-grow: 1;
-        padding: .8rem 0 .8rem 0;
+        align-self: center;
+        height: 4rem;
+        box-sizing: border-box;
     }
 
-    .auth-button {
+    .battle-net-button {
         &:hover {
             background-color: hsla(227, 29%, 45%, 1);
         }
