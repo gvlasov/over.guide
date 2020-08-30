@@ -1,7 +1,7 @@
 import {Controller, Get, Query, Req, Res,} from '@nestjs/common';
 import {BattlenetService} from "src/services/battlenet.service";
 import {User} from "src/database/models/User";
-import {Request, Response} from 'express'
+import {CookieOptions, Request, Response} from 'express'
 import {FRONTEND_ROOT_URL} from "src/constants";
 import {TokenService} from "src/services/token.service";
 
@@ -23,7 +23,7 @@ export class BattlenetAuthController {
         @Res() response: Response,
         @Req() request: Request
     ) {
-        const user = await this.battlenet.obtainToken(code)
+        this.battlenet.obtainToken(code)
             .then(token => this.battlenet.userInfo(token))
             .then((userInfo: { id, battletag }) => {
                 console.log(userInfo)
@@ -41,12 +41,24 @@ export class BattlenetAuthController {
                             return user
                         }
                     })
-            });
-        response.setHeader(
-            'Set-Cookie',
-            'auth-token=' + this.tokenService.getToken(user) + '; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/'
-        )
-        response.redirect(FRONTEND_ROOT_URL)
+            })
+            .then((user) => {
+                const cookieOptions = {
+                    expires: new Date('Tue, 19 Jan 2038 03:14:07 GMT'),
+                    path: '/',
+                } as CookieOptions;
+                response.cookie(
+                    'auth-token',
+                    this.tokenService.getToken(user),
+                    cookieOptions
+                )
+                response.cookie(
+                    'username',
+                    user.name,
+                    cookieOptions
+                )
+                response.redirect(FRONTEND_ROOT_URL)
+            })
     }
 
 }
