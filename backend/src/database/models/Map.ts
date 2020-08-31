@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     Column,
     Model,
@@ -22,15 +23,16 @@ export class Map extends Model<Map> {
     public id: number
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     name: string;
 
-    @Column({
-        type: new DataTypes.INTEGER()
-    })
+    @AllowNull(false)
+    @Column({type: new DataTypes.INTEGER()})
     type: number
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     dataName: string
 

@@ -1,9 +1,9 @@
 import {
+    AllowNull,
     BelongsTo,
     Column,
     ForeignKey,
     Model,
-    NotNull,
     Table
 } from 'sequelize-typescript';
 import {Hero} from "./Hero";
@@ -15,6 +15,7 @@ import {User} from "src/database/models/User";
 export class MatchupEvaluation extends Model<MatchupEvaluation> {
 
     @ForeignKey(() => Hero)
+    @AllowNull(false)
     @Column
     subjectId: number;
 
@@ -22,23 +23,26 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
     subject: Hero
 
     @ForeignKey(() => Hero)
+    @AllowNull(false)
     @Column
     objectId: number
 
     @BelongsTo(() => Hero, 'objectId')
     object: Hero
 
-    @NotNull
-    @Column({allowNull: false})
+    @AllowNull(false)
+    @Column
     score: number
 
     @BelongsTo(() => User, 'createdById')
     createdBy: User
 
-    @Column({type: new DataTypes.STRING({length: 14})})
+    @AllowNull(false)
+    @Column({type: new DataTypes.STRING({length: 45})})
     ip: string
 
     @ForeignKey(() => Patch)
+    @AllowNull(false)
     @Column
     patchId: number
 

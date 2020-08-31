@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     Column,
     Model,
@@ -17,14 +18,17 @@ export class Patch extends Model<Patch> {
     public id: number
 
     @Unique
+    @AllowNull(false)
     @Column
     version: string;
 
     @Unique
+    @AllowNull(false)
     @Column
     date: Date
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(30)})
     title: string
 }

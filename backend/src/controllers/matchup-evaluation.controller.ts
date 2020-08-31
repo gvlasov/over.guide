@@ -18,6 +18,7 @@ import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import HeroId from "data/HeroId";
+import {Patch} from "src/database/models/Patch";
 
 @Controller('matchup-evaluation')
 
@@ -64,12 +65,18 @@ export class MatchupEvaluationController {
                 objectId: objectId
             }
         });
+        console.log(request.ip)
+        const patch = await Patch.findOne({
+            order: [['date', 'DESC']]
+        })
         if (existingEvaluation === null) {
             await MatchupEvaluation.create({
                 subjectId: subjectId,
                 objectId: objectId,
                 score: matchupEvaluation.score,
                 createdBy: currentUser,
+                ip: request.ip,
+                patchId: patch.id,
             })
             response.status(HttpStatus.CREATED)
         } else {
@@ -78,6 +85,8 @@ export class MatchupEvaluationController {
                 objectId: objectId,
                 score: matchupEvaluation.score,
                 createdBy: currentUser,
+                ip: request.ip,
+                patchId: patch.id,
             })
             response.status(HttpStatus.ACCEPTED)
         }

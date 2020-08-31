@@ -36,7 +36,7 @@ export default class GuideDescriptorVso {
             allAbilities
                 .filter(ability => descriptor.teammateAbilities.includes(ability.id))
                 .map(it => new AbilityVso(it)),
-            GamerPositionVso.Allies,
+            GamerPositionVso.Teammates,
         );
         this.enemies = new TagGroupVso(
             allHeroes
@@ -58,7 +58,7 @@ export default class GuideDescriptorVso {
     }
 
     getGroupByGamerPosition(gamerPosition: GamerPositionVso) : TagGroupVso {
-        if (gamerPosition.isAlly) {
+        if (gamerPosition.isTeammate) {
             return this.teammates;
         } else if (gamerPosition.isEnemy) {
             return this.enemies;

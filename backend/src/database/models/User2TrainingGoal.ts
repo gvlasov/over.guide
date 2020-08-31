@@ -19,9 +19,13 @@ import {User} from "src/database/models/User";
 })
 export class User2TrainingGoal extends Model<User2TrainingGoal> {
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => User)
     userId: number
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => Guide)
     guideId: number
 

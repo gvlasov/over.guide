@@ -32,7 +32,7 @@
                             :tag-group="descriptor.teammates"
                             class="tag-type-links-wrap-teammate tappable-background"
                             v-hammer:tap="() => (selecting = descriptor.teammates.gamerPosition)"
-                            v-bind:class="selecting && selecting.isAlly ? 'selected-group' : ''"
+                            v-bind:class="selecting && selecting.isTeammate ? 'selected-group' : ''"
                     >
                         <TagGroupHeroes :tag-group="descriptor.teammates"/>
                     </TagGroupBackground>
@@ -40,7 +40,7 @@
                             v-else
                             :tag-group="descriptor.teammates"
                             v-hammer:tap="() => (selecting = descriptor.teammates.gamerPosition)"
-                            v-bind:class="selecting && selecting.isAlly ? 'selected-group' : ''"
+                            v-bind:class="selecting && selecting.isTeammate ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>
@@ -78,7 +78,7 @@
                 @tagGroupSelect="($event) => {selecting = $event;}"
         />
         <TagBuilderRoster
-                v-if="selecting && selecting.isAlly"
+                v-if="selecting && selecting.isTeammate"
                 :gamer-position="gamerPositions.teammates"
                 :initial-descriptor="descriptor"
                 @save="onRosterSave"
@@ -115,7 +115,7 @@ export default {
             selecting: null,
             gamerPositions: {
                 players: GamerPositionVso.Players,
-                teammates: GamerPositionVso.Allies,
+                teammates: GamerPositionVso.Teammates,
                 enemies: GamerPositionVso.Enemies,
             },
         };

@@ -5,13 +5,13 @@ import {Sequelize} from "sequelize-typescript";
 import {SEQUELIZE} from "src/constants";
 import {QueryTypes} from "sequelize";
 import {GuideDescriptor2PlayerHero} from "src/database/models/GuideDescriptor2PlayerHero";
-import {GuideDescriptor2AllyHero} from "src/database/models/GuideDescriptor2AllyHero";
+import {GuideDescriptor2TeammateHero} from "src/database/models/GuideDescriptor2TeammateHero";
 import {GuideDescriptor2EnemyHero} from "src/database/models/GuideDescriptor2EnemyHero";
 import {GuideDescriptor2ThematicTag} from "src/database/models/GuideDescriptor2ThematicTag";
 import {GuideDescriptor2Map} from "src/database/models/GuideDescriptor2Map";
 import {ContentHashService} from "src/services/content-hash.service";
 import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
-import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
+import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescriptor2TeammateAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 
 
@@ -54,8 +54,8 @@ export class GuideDescriptorService {
             ['thematicTags', 'ThematicTag', 'thematicTagId'],
             ['playerHeroes', 'PlayerHero', 'heroId'],
             ['playerAbilities', 'PlayerAbility', 'abilityId'],
-            ['teammateHeroes', 'AllyHero', 'heroId'],
-            ['teammateAbilities', 'AllyAbility', 'abilityId'],
+            ['teammateHeroes', 'TeammateHero', 'heroId'],
+            ['teammateAbilities', 'TeammateAbility', 'abilityId'],
             ['enemyHeroes', 'EnemyHero', 'heroId'],
             ['enemyAbilities', 'EnemyAbility', 'abilityId'],
         ].map(
@@ -142,7 +142,7 @@ export class GuideDescriptorService {
                         )
                     }
                     for (const heroId of guideDescriptorDto.teammateHeroes) {
-                        await GuideDescriptor2AllyHero.create(
+                        await GuideDescriptor2TeammateHero.create(
                             {
                                 guideDescriptorId: newDescriptor.id,
                                 heroId: heroId,
@@ -150,7 +150,7 @@ export class GuideDescriptorService {
                         )
                     }
                     for (const abilityId of guideDescriptorDto.teammateAbilities) {
-                        await GuideDescriptor2AllyAbility.create(
+                        await GuideDescriptor2TeammateAbility.create(
                             {
                                 guideDescriptorId: newDescriptor.id,
                                 abilityId: abilityId,
@@ -221,25 +221,20 @@ where ${pivotTableName}.${pivotTableFieldName} is null
         } else {
             if (exact) {
                 return `
-select * from (
-              
 select guideDescriptorId
-from (
-select guideDescriptorId,
-       count(*) as cnt
        from (
-                select guideDescriptorId
+                select guideDescriptorId, tagCount, count(*) as matchCount
                        from (
                              select *,
-                       count(*) over(partition by guideDescriptorId) as count
+                       count(*) over(partition by guideDescriptorId) as tagCount
                 from ${pivotTableName}
                            ) tbl_${pivotTableName}_${pivotTableFieldName}
-                where count = ${items.length}
+                where tagCount = ${items.length}
                   and ${pivotTableFieldName} in (:${partName})
+           group by guideDescriptorId
 ) tbl_${partName}_intermediate_1
-) tbl_${partName}_intermediate_2
-where cnt = ${items.length}
-) tbl_${partName}
+where tagCount = matchCount
+           group by guideDescriptorId
             `
             } else {
                 return `

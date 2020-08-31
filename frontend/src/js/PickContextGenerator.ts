@@ -31,7 +31,7 @@ export default class PickContextGenerator {
         );
     };
 
-    generateEmptyAlliesOnly(): PickContext {
+    generateEmptyTeammatesOnly(): PickContext {
         return new PickContext(
             new TeamComp([null, null, null, null, null, null]),
             null,

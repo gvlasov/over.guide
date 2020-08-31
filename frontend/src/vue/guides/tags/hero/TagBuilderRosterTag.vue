@@ -30,7 +30,7 @@
                 <TagGroupBackground
                         v-if="descriptor.teammates.heroes.length > 0"
                         :tag-group="descriptor.teammates"
-                        v-bind:class="{ selected : selectedPosition.isAlly}"
+                        v-bind:class="{ selected : selectedPosition.isTeammate}"
                 >
                     <TagGroupHeroes :tag-group="descriptor.teammates"/>
                 </TagGroupBackground>
@@ -38,7 +38,7 @@
                         v-else
                         :tag-group="descriptor.teammates"
                         v-hammer:tap="() => (selecting = 'teammate')"
-                        v-bind:class="{ selected : selectedPosition.isAlly}"
+                        v-bind:class="{ selected : selectedPosition.isTeammate}"
                 />
             </template>
         </TagGroupFrame>

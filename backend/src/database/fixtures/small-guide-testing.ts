@@ -46,7 +46,7 @@ export default async (moduleRef: ModuleRef) => {
                 kind: 'text'
             } as GuidePartTextDto)
         }
-        const descriptor = generator.generate(i.toString());
+        const descriptor = generator.generate(i);
         await entryService.save({
             guideId: guide.id,
             parts: parts,

@@ -9,7 +9,7 @@ import {YoutubeVideoExcerpt} from "./models/YoutubeVideoExcerpt";
 import {User} from "src/database/models/User";
 import {Guide} from "src/database/models/Guide";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
-import {GuideDescriptor2AllyHero} from "src/database/models/GuideDescriptor2AllyHero";
+import {GuideDescriptor2TeammateHero} from "src/database/models/GuideDescriptor2TeammateHero";
 import {GuideDescriptor2EnemyHero} from "src/database/models/GuideDescriptor2EnemyHero";
 import {GuideDescriptor2Map} from "src/database/models/GuideDescriptor2Map";
 import {GuideDescriptor2PlayerHero} from "src/database/models/GuideDescriptor2PlayerHero";
@@ -24,7 +24,7 @@ import {ThematicTag} from "src/database/models/ThematicTag";
 import cls from 'cls-hooked';
 import {GuideHead} from "src/database/models/GuideHead";
 import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
-import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
+import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescriptor2TeammateAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 
@@ -65,10 +65,10 @@ export const databaseProviders = [
                 Guide,
                 GuideDescriptor,
                 GuideDescriptor2PlayerHero,
-                GuideDescriptor2AllyHero,
+                GuideDescriptor2TeammateHero,
                 GuideDescriptor2EnemyHero,
                 GuideDescriptor2PlayerAbility,
-                GuideDescriptor2AllyAbility,
+                GuideDescriptor2TeammateAbility,
                 GuideDescriptor2EnemyAbility,
                 GuideDescriptor2Map,
                 GuideDescriptor2ThematicTag,

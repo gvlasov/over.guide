@@ -1,4 +1,4 @@
-import {Column, Model, Table} from 'sequelize-typescript';
+import {AllowNull, Column, Model, Table} from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
 import IYoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpsDto"
 import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto"
@@ -6,13 +6,16 @@ import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto"
 @Table
 export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> implements IYoutubeVideoExcerpt {
 
-    @Column({type: new DataTypes.STRING(16), allowNull: false})
+    @AllowNull(false)
+    @Column({type: new DataTypes.STRING(16)})
     youtubeVideoId: string
 
-    @Column({type: new DataTypes.FLOAT(8, 3), allowNull: false})
+    @AllowNull(false)
+    @Column({type: new DataTypes.FLOAT(8, 3)})
     startSeconds: number
 
-    @Column({type: new DataTypes.FLOAT(8, 3), allowNull: false})
+    @AllowNull(false)
+    @Column({type: new DataTypes.FLOAT(8, 3)})
     endSeconds: number
 
     toDto(): YoutubeVideoExcerpsDto {

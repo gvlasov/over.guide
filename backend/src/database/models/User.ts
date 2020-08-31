@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     BelongsToMany,
     Column,
     Model,
@@ -18,10 +19,12 @@ import UserDto from "data/dto/UserDto";
 })
 export class User extends Model<User> {
 
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(20)})
     name: string;
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(15)})
     battleNetUserId: string
 

@@ -6,6 +6,7 @@ import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import DescriptorGenerator from "@fixtures/helpers/DescriptorGenerator";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import abilities from 'data/abilities'
+import {ContentHashService} from "src/services/content-hash.service";
 
 export default async (moduleRef: ModuleRef) => {
     const entryService = moduleRef.get(GuideHistoryEntryService)
@@ -19,6 +20,7 @@ export default async (moduleRef: ModuleRef) => {
         numberOfHeroTags: [1, 4],
         abilitiesPerHero: [2, 3],
     })
+    const contentHashService = moduleRef.get(ContentHashService)
     for (let i = 0; i < 100; i++) {
         const guide = await Guide.create({
             creatorId: user.id,
@@ -46,7 +48,7 @@ export default async (moduleRef: ModuleRef) => {
                 kind: 'text'
             } as GuidePartTextDto)
         }
-        const descriptor = generator.generate(i.toString());
+        const descriptor = generator.generate(i);
         await entryService.save({
             guideId: guide.id,
             parts: parts,

@@ -725,7 +725,6 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        console.log(response.body)
                         expect(response.body.guides.length).toBe(1)
                         expect(
                             response.body.guides[0].guideId

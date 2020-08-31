@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     BelongsToMany,
     Column,
@@ -9,7 +10,7 @@ import {
 } from 'sequelize-typescript';
 import {Hero} from "src/database/models/Hero";
 import {GuideDescriptor2PlayerHero} from "src/database/models/GuideDescriptor2PlayerHero";
-import {GuideDescriptor2AllyHero} from "src/database/models/GuideDescriptor2AllyHero";
+import {GuideDescriptor2TeammateHero} from "src/database/models/GuideDescriptor2TeammateHero";
 import {GuideDescriptor2EnemyHero} from "src/database/models/GuideDescriptor2EnemyHero";
 import {Map} from "src/database/models/Map";
 import {GuideDescriptor2Map} from "src/database/models/GuideDescriptor2Map";
@@ -19,7 +20,7 @@ import {DataTypes} from "sequelize";
 import GuideDescriptorDto from "data/dto/GuideDescriptorDto";
 import {Ability} from "src/database/models/Ability";
 import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
-import {GuideDescriptor2AllyAbility} from "src/database/models/GuideDescriptor2AllyAbility";
+import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescriptor2TeammateAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 
 @Table({
@@ -42,10 +43,10 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
     @BelongsToMany(() => Ability, () => GuideDescriptor2PlayerAbility)
     playerAbilities: Ability[]
 
-    @BelongsToMany(() => Hero, () => GuideDescriptor2AllyHero)
+    @BelongsToMany(() => Hero, () => GuideDescriptor2TeammateHero)
     teammates: Hero[]
 
-    @BelongsToMany(() => Ability, () => GuideDescriptor2AllyAbility)
+    @BelongsToMany(() => Ability, () => GuideDescriptor2TeammateAbility)
     teammateAbilities: Ability[]
 
     @BelongsToMany(() => Hero, () => GuideDescriptor2EnemyHero)
@@ -76,6 +77,7 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
     thematicTags: ThematicTag[]
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.CHAR(32)})
     contentHash: string
 

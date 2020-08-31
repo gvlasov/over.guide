@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     Column,
     Model,
@@ -22,10 +23,12 @@ export class ThematicTag extends Model<ThematicTag> {
     public id: number
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     name: string;
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     dataName: string
 

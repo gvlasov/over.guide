@@ -227,10 +227,10 @@ const data = [
         description: 'Once her Barrier Shield is deployed, Brigitte can dash forward to stun an enemy.',
     },
     {
-        id: AbilityId.Rteammate,
+        id: AbilityId.Rally,
         heroId: HeroId.Brigitte,
-        name: 'Rteammate',
-        dataName: 'rteammate',
+        name: 'Rally',
+        dataName: 'rally',
         keyIds: [KeyId.Q],
         description: 'Brigitte moves faster and provides all nearby teammates with armor that lasts until it’s removed by damage.',
     },
@@ -1162,7 +1162,7 @@ const data = [
         name: 'Teleporter',
         dataName: 'teleporter',
         keyIds: [KeyId.E],
-        description: 'Symmetra places a temporary teleporter exit pad at a distance and connects it to a teleporter entry pad at her current location. Allies (and some of their abilities, such as Junkrat’s RIP-Tire) can travel from the entry pad to the exit pad instantly.',
+        description: 'Symmetra places a temporary teleporter exit pad at a distance and connects it to a teleporter entry pad at her current location. Teammates (and some of their abilities, such as Junkrat’s RIP-Tire) can travel from the entry pad to the exit pad instantly.',
     },
     {
         id: AbilityId.PhotonBarrier,
@@ -1318,7 +1318,7 @@ const data = [
         name: 'Barrier Projector',
         dataName: 'barrier-projector',
         keyIds: [KeyId.E],
-        description: 'Winston’s barrier projector extends a bubble-shaped field that absorbs damage until it\'s destroyed. Allies protected by the barrier can return fire from within it.',
+        description: 'Winston’s barrier projector extends a bubble-shaped field that absorbs damage until it\'s destroyed. Teammates protected by the barrier can return fire from within it.',
     },
     {
         id: AbilityId.PrimalRage,

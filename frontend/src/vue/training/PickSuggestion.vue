@@ -12,7 +12,7 @@
                     ref="teammatePicks"
                     style="margin-bottom: 1.5vw;"
                     :teamComp="context.teammateComp"
-                    @pickTap="unselectAllyHero"
+                    @pickTap="unselectTeammateHero"
             />
             <input
                     type="button"
@@ -72,10 +72,10 @@ const backend = new Backend(axios);
                 this.suggestion = null;
             },
             goToPreMatchPick() {
-                this.context = contextGenerator.generateEmptyAlliesOnly();
+                this.context = contextGenerator.generateEmptyTeammatesOnly();
                 this.suggestion = null;
             },
-            unselectAllyHero(hero, position) {
+            unselectTeammateHero(hero, position) {
                 if (hero === null) {
                     return;
                 }

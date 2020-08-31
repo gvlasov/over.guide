@@ -1,6 +1,6 @@
 enum GamerPositionId {
     Players = 1,
-    Allies = 2,
+    Teammates = 2,
     Enemies = 3
 }
 

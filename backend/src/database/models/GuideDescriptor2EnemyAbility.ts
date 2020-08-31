@@ -1,4 +1,10 @@
-import {ForeignKey, Model, Table,} from 'sequelize-typescript';
+import {
+    AllowNull,
+    Column,
+    ForeignKey,
+    Model,
+    Table,
+} from 'sequelize-typescript';
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 import {Ability} from "src/database/models/Ability";
 
@@ -12,9 +18,13 @@ import {Ability} from "src/database/models/Ability";
 })
 export class GuideDescriptor2EnemyAbility extends Model<GuideDescriptor2EnemyAbility> {
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => GuideDescriptor)
     guideDescriptorId: number
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => Ability)
     abilityId: number
 

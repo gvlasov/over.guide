@@ -8,7 +8,7 @@ import GamerPositionId from "data/GamerPositionId";
 export default class GamerPositionVso {
 
     public static Players = new GamerPositionVso(gamerPositions.get(GamerPositionId.Players) as GamerPositionDto);
-    public static Allies = new GamerPositionVso(gamerPositions.get(GamerPositionId.Allies) as GamerPositionDto);
+    public static Teammates = new GamerPositionVso(gamerPositions.get(GamerPositionId.Teammates) as GamerPositionDto);
     public static Enemies = new GamerPositionVso(gamerPositions.get(GamerPositionId.Enemies) as GamerPositionDto);
 
     public id: GamerPositionId;
@@ -28,10 +28,10 @@ export default class GamerPositionVso {
             } else {
                 return null
             }
-        } else if (this.id === GamerPositionId.Allies) {
+        } else if (this.id === GamerPositionId.Teammates) {
             return GamerPositionVso.Players
         } else if (this.id === GamerPositionId.Enemies) {
-            return GamerPositionVso.Allies
+            return GamerPositionVso.Teammates
         } else {
             throw new Error(`Unavailable GamerPositionId ${this.id}`)
         }
@@ -39,8 +39,8 @@ export default class GamerPositionVso {
 
     getNext(loop: boolean): GamerPositionVso | null {
         if (this.id === GamerPositionId.Players) {
-            return GamerPositionVso.Allies
-        } else if (this.id === GamerPositionId.Allies) {
+            return GamerPositionVso.Teammates
+        } else if (this.id === GamerPositionId.Teammates) {
             return GamerPositionVso.Enemies
         } else if (this.id === GamerPositionId.Enemies) {
             if (loop) {
@@ -57,8 +57,8 @@ export default class GamerPositionVso {
         return this.id === GamerPositionVso.Players.id;
     }
 
-    get isAlly(): boolean {
-        return this.id === GamerPositionVso.Allies.id;
+    get isTeammate(): boolean {
+        return this.id === GamerPositionVso.Teammates.id;
     }
 
     get isEnemy(): boolean {

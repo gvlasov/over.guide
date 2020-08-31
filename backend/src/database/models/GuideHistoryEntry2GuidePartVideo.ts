@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     BelongsTo,
     Column,
     ForeignKey,
@@ -19,9 +20,13 @@ import {DataTypes} from "sequelize";
 })
 export class GuideHistoryEntry2GuidePartVideo extends Model<GuideHistoryEntry2GuidePartVideo> {
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => GuideHistoryEntry)
     guideHistoryEntryId: number
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => GuidePartVideo)
     guidePartVideoId: number
 
@@ -31,6 +36,7 @@ export class GuideHistoryEntry2GuidePartVideo extends Model<GuideHistoryEntry2Gu
     @BelongsTo(() => GuidePartVideo, 'guidePartVideoId')
     guidePartVideo: GuidePartVideo
 
+    @AllowNull(false)
     @Column({type: new DataTypes.INTEGER})
     order: number
 

@@ -26,7 +26,7 @@ const enum AbilityId {
     WhipShot = 25,
     BarrierShield = 26,
     ShieldBash = 27,
-    Rteammate = 28,
+    Rally = 28,
     Eject = 29,
     FusionCannons = 30,
     LightGun = 31,

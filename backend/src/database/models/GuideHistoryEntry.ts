@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     BelongsTo,
     BelongsToMany,
@@ -37,6 +38,7 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
     @Column
     public id: number
 
+    @AllowNull(false)
     @ForeignKey(() => Guide)
     @Column
     guideId: number;
@@ -47,7 +49,7 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
     @HasOne(() => GuideHead)
     headRecord: GuideHead | null
 
-
+    @AllowNull(false)
     @ForeignKey(() => User)
     @Column
     updaterId: number;
@@ -55,6 +57,7 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
     @BelongsTo(() => User, 'updaterId')
     updater: Hero
 
+    @AllowNull(false)
     @ForeignKey(() => GuideDescriptor)
     @Column
     descriptorId: number;
@@ -87,6 +90,7 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
     )
     guidePartVideos: Array<GuidePartVideo & { pivot: GuideHistoryEntry2GuidePartVideo }>
 
+    @AllowNull(false)
     @Column({type: new DataTypes.CHAR(32)})
     contentHash: string;
 

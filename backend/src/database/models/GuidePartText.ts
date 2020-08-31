@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     Column,
     Model,
@@ -21,6 +22,7 @@ export class GuidePartText extends Model<GuidePartText> {
     @Column
     public id: number
 
+    @AllowNull(false)
     @Column({type: new DataTypes.TEXT})
     contentMd: string
 

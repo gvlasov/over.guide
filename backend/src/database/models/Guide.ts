@@ -31,6 +31,7 @@ export class Guide extends Model<Guide> {
     public id: number
 
     @ForeignKey(() => User)
+    @AllowNull(false)
     @Column
     creatorId: number
 
@@ -40,10 +41,11 @@ export class Guide extends Model<Guide> {
     @HasMany(() => GuideHistoryEntry)
     historyEntries: Array<GuideHistoryEntry>
 
-    @Column({type: new DataTypes.DATE(), allowNull: true})
+    @AllowNull(true)
+    @Column({type: new DataTypes.DATE()})
     deactivatedAt: Date
 
-    @AllowNull
+    @AllowNull(true)
     @ForeignKey(() => User)
     @Column
     deactivatedById: number

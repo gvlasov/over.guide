@@ -51,7 +51,7 @@ class DtoMap {
         if (type === 'heroes') {
             if (gamerPosition === GamerPositionId.Players) {
                 return 'playerHeroes'
-            } else if (gamerPosition === GamerPositionId.Allies) {
+            } else if (gamerPosition === GamerPositionId.Teammates) {
                 return 'teammateHeroes'
             } else if (gamerPosition === GamerPositionId.Enemies) {
                 return 'enemyHeroes'
@@ -59,7 +59,7 @@ class DtoMap {
         } else if (type === 'abilities') {
             if (gamerPosition === GamerPositionId.Players) {
                 return 'playerAbilities'
-            } else if (gamerPosition === GamerPositionId.Allies) {
+            } else if (gamerPosition === GamerPositionId.Teammates) {
                 return 'teammateAbilities'
             } else if (gamerPosition === GamerPositionId.Enemies) {
                 return 'enemyAbilities'
@@ -140,7 +140,7 @@ export default class DescriptorParamParser {
         if (positionPart === 'players') {
             return GamerPositionId.Players
         } else if (positionPart === 'teammates') {
-            return GamerPositionId.Allies
+            return GamerPositionId.Teammates
         } else if (positionPart === 'enemies') {
             return GamerPositionId.Enemies
         } else {

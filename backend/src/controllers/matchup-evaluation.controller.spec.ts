@@ -10,6 +10,7 @@ import {MatchupEvaluationService} from "src/services/matchup-evaluation.service"
 import heroesFixture from "@fixtures/heroes";
 import {Hero} from "src/database/models/Hero";
 import {HttpStatus} from "@nestjs/common";
+import {Patch} from "src/database/models/Patch";
 
 describe(
     MatchupEvaluationController,
@@ -23,6 +24,11 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
+                await Patch.create({
+                    version: '1.3.21',
+                    date: '2020-01-01 12:00:00',
+                    title: 'fuck off',
+                })
                 expect(
                     (await MatchupEvaluation.findAll()).length
                 ).toBe(0)

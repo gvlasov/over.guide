@@ -8,9 +8,9 @@ const data = [
         plural: 'Players',
     },
     {
-        id: GamerPositionId.Allies,
+        id: GamerPositionId.Teammates,
         dataName: 'teammate',
-        plural: 'Allies',
+        plural: 'Teammates',
     },
     {
         id: GamerPositionId.Enemies,

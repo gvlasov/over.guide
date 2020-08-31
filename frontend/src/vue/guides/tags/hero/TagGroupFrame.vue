@@ -1,7 +1,7 @@
 <template>
     <span class="tag-type-group-wrap">
         <div class="tag-type-infix"
-             v-bind:class="{'infix-teammate': tagGroup.gamerPosition.isAlly, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
+             v-bind:class="{'infix-teammate': tagGroup.gamerPosition.isTeammate, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
         >
             <slot name="infix"/>
         </div>

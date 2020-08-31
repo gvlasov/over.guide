@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     BelongsTo,
     Column,
@@ -23,6 +24,7 @@ export class GuidePartVideo extends Model<GuidePartVideo> {
     @Column
     public id: number
 
+    @AllowNull(false)
     @ForeignKey(() => YoutubeVideoExcerpt)
     @Column
     excerptId: number;

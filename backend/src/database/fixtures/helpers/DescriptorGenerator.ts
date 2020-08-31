@@ -23,7 +23,7 @@ export default class DescriptorGenerator {
     constructor(private readonly config: DescriptorGeneratorConfig) {
     }
 
-    generate(seed: string): GuideDescriptorDto {
+    generate(seed: number): GuideDescriptorDto {
         const shuffler = new SeededShuffler(seed)
         const heroNumber = this.resolveAmountSpecifier(this.config.numberOfHeroTags)
         const themeNumber = this.resolveAmountSpecifier(this.config.numberOfThematicTags)

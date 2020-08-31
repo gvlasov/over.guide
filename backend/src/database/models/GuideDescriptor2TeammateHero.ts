@@ -10,22 +10,22 @@ import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 
 @Table({
     name: {
-        singular: 'GuideDescriptor2EnemyHero',
-        plural: 'GuideDescriptor2EnemyHeroes',
+        singular: 'GuideDescriptor2TeammateHero',
+        plural: 'GuideDescriptor2TeammateHeroes',
     },
     createdAt: false,
     updatedAt: false,
 })
-export class GuideDescriptor2EnemyHero extends Model<GuideDescriptor2EnemyHero> {
+export class GuideDescriptor2TeammateHero extends Model<GuideDescriptor2TeammateHero> {
 
     @AllowNull(false)
-    @Column
     @ForeignKey(() => GuideDescriptor)
+    @Column
     guideDescriptorId: number
 
     @AllowNull(false)
-    @Column
     @ForeignKey(() => Hero)
+    @Column
     heroId: number
 
 }

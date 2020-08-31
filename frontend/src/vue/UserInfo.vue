@@ -79,7 +79,6 @@ export default {
         onUsernameChangeFormSubmit(e) {
             e.preventDefault();
             this.changingUsername = false;
-            console.log(this.userInfo);
             const newUsername = this.userInfo.user.name;
             backend.changeUsername(newUsername)
                 .then(result => {

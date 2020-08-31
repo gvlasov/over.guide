@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     BelongsTo,
     Column,
@@ -21,14 +22,17 @@ export class Ability extends Model<Ability> {
     public id: number
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     name: string
 
     @Unique
+    @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     dataName: string
 
     @ForeignKey(() => Hero)
+    @AllowNull(false)
     @Column
     heroId: number
 

@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     AutoIncrement,
     Column,
     Model,
@@ -24,10 +25,12 @@ export class Hero extends Model<Hero> {
     @Column
     public id: number
 
+    @AllowNull(false)
     @Unique
     @Column({type: new DataTypes.STRING(20)})
     name: string;
 
+    @AllowNull(false)
     @Unique
     @Column({type: new DataTypes.STRING(20)})
     dataName: string

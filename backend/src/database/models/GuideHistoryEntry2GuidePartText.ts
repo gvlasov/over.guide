@@ -1,4 +1,5 @@
 import {
+    AllowNull,
     BelongsTo,
     Column,
     ForeignKey,
@@ -19,9 +20,13 @@ import {DataTypes} from "sequelize";
 })
 export class GuideHistoryEntry2GuidePartText extends Model<GuideHistoryEntry2GuidePartText> {
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => GuideHistoryEntry)
     guideHistoryEntryId: number
 
+    @AllowNull(false)
+    @Column
     @ForeignKey(() => GuidePartText)
     guidePartTextId: number
 
@@ -31,6 +36,7 @@ export class GuideHistoryEntry2GuidePartText extends Model<GuideHistoryEntry2Gui
     @BelongsTo(() => GuidePartText, 'guidePartTextId')
     guidePartText: GuidePartText
 
+    @AllowNull(false)
     @Column({type: new DataTypes.INTEGER()})
     order: number
 

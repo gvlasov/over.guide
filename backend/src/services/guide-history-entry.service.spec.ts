@@ -18,106 +18,107 @@ import {ContentHashService} from "src/services/content-hash.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 
 describe(
     GuideHistoryEntryService,
     nestTest(GuideHistoryEntryService, [], [GuideDescriptorService, ContentHashService], (ctx) => {
-        it('saves first history entry in existing guide', async () => {
-            await ctx.fixtures(
-                singleUserFixture,
-                heroesFixture
-            )
-            const user = await User.findOne()
-            const guide = await Guide.create({
-                creatorId: user.id
-            })
-            const entry = <GuideHistoryEntry>await ctx.service.save(
-                {
-                    guideId: guide.id,
-                    descriptor: new Descriptor({
-                        playerHeroes: [HeroId.Zenyatta],
-                    }),
-                    parts: [
-                        {
-                            kind: 'text',
-                            contentMd: 'asdfasdf'
-                        } as GuidePartTextDto
+            it('saves first history entry in existing guide', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture
+                )
+                const user = await User.findOne()
+                const guide = await Guide.create({
+                    creatorId: user.id
+                })
+                const entry = <GuideHistoryEntry>await ctx.service.save(
+                    {
+                        guideId: guide.id,
+                        descriptor: new Descriptor({
+                            playerHeroes: [HeroId.Zenyatta],
+                        }),
+                        parts: [
+                            {
+                                kind: 'text',
+                                contentMd: 'asdfasdf'
+                            } as GuidePartTextDto
+                        ]
+                    },
+                    user
+                )
+                expect(entry.guideId).toBe(guide.id)
+                expect((await entry.$get('guidePartTexts')).length).toBe(1)
+                expect((await entry.$get('guidePartVideos')).length).toBe(0)
+                expect((await entry.$get('descriptor').then(d => d.$get('maps'))).length).toBe(0)
+                expect((await entry.$get('descriptor').then(d => d.$get('thematicTags'))).length).toBe(0)
+                expect((await entry.$get('descriptor').then(d => d.$get('players'))).length).toBe(1)
+                expect((await entry.$get('descriptor').then(d => d.$get('teammates'))).length).toBe(0)
+                expect((await entry.$get('descriptor').then(d => d.$get('enemies'))).length).toBe(0)
+            });
+            it('links descriptors with their given parts', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture
+                )
+                const user = await User.findOne()
+                const guide = await Guide.create({
+                    creatorId: user.id
+                })
+                await ctx.service.save(
+                    {
+                        guideId: guide.id,
+                        descriptor: new Descriptor({
+                            playerHeroes: [HeroId.Zenyatta, HeroId.Soldier],
+                            teammateHeroes: [HeroId.Dva],
+                            enemyHeroes: [HeroId.Winston],
+                            thematicTags: [GuideTheme.Communication],
+                            mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani],
+                        }),
+                        parts: [
+                            {
+                                kind: 'text',
+                                contentMd: 'asdfasdf'
+                            } as GuidePartTextDto
+                        ]
+                    },
+                    user
+                )
+                const descriptor = (await GuideDescriptor.findOne({
+                    include: [
+                        {all: true}
                     ]
-                },
-                user
-            )
-            expect(entry.guideId).toBe(guide.id)
-            expect((await entry.$get('guidePartTexts')).length).toBe(1)
-            expect((await entry.$get('guidePartVideos')).length).toBe(0)
-            expect((await entry.$get('descriptor').then(d => d.$get('maps'))).length).toBe(0)
-            expect((await entry.$get('descriptor').then(d => d.$get('thematicTags'))).length).toBe(0)
-            expect((await entry.$get('descriptor').then(d => d.$get('players'))).length).toBe(1)
-            expect((await entry.$get('descriptor').then(d => d.$get('teammates'))).length).toBe(0)
-            expect((await entry.$get('descriptor').then(d => d.$get('enemies'))).length).toBe(0)
-        });
-        it('links descriptors with their given parts', async () => {
-            await ctx.fixtures(
-                singleUserFixture,
-                heroesFixture,
-                mapsFixture,
-                thematicTagsFixture
-            )
-            const user = await User.findOne()
-            const guide = await Guide.create({
-                creatorId: user.id
-            })
-            await ctx.service.save(
-                {
-                    guideId: guide.id,
-                    descriptor: new Descriptor({
-                        playerHeroes: [HeroId.Zenyatta, HeroId.Soldier],
-                        teammateHeroes: [HeroId.Dva],
-                        enemyHeroes: [HeroId.Winston],
-                        thematicTags: [GuideTheme.Communication],
-                        mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani],
-                    }),
-                    parts: [
-                        {
-                            kind: 'text',
-                            contentMd: 'asdfasdf'
-                        } as GuidePartTextDto
-                    ]
-                },
-                user
-            )
-            const descriptor = (await GuideDescriptor.findOne({
-                include: [
-                    {all: true}
-                ]
-            }))
-            expect(descriptor.players.length).toBe(2)
-            expect(descriptor.teammates.length).toBe(1)
-            expect(descriptor.enemies.length).toBe(1)
-            expect(descriptor.thematicTags.length).toBe(1)
-            expect(descriptor.maps.length).toBe(3)
-        });
-        it('initializes non-existent guide with first history entry', async () => {
-            await ctx.fixtures(
-                heroesFixture,
-                singleUserFixture
-            )
-            const user = await User.findOne()
-            expect(await Guide.findOne()).toBe(null)
-            const entry = <GuideHistoryEntry>await ctx.service.save(
-                {
-                    descriptor: new Descriptor({
-                        teammateHeroes: [HeroId.WreckingBall],
-                    }),
-                    parts: [
-                        {
-                            kind: 'text',
-                            contentMd: 'asdfasdf'
-                        } as GuidePartTextDto
-                    ]
-                },
-                user
-            )
-            expect(await Guide.findOne()).not.toBe(null)
+                }))
+                expect(descriptor.players.length).toBe(2)
+                expect(descriptor.teammates.length).toBe(1)
+                expect(descriptor.enemies.length).toBe(1)
+                expect(descriptor.thematicTags.length).toBe(1)
+                expect(descriptor.maps.length).toBe(3)
+            });
+            it('initializes non-existent guide with first history entry', async () => {
+                await ctx.fixtures(
+                    heroesFixture,
+                    singleUserFixture
+                )
+                const user = await User.findOne()
+                expect(await Guide.findOne()).toBe(null)
+                const entry = <GuideHistoryEntry>await ctx.service.save(
+                    {
+                        descriptor: new Descriptor({
+                            teammateHeroes: [HeroId.WreckingBall],
+                        }),
+                        parts: [
+                            {
+                                kind: 'text',
+                                contentMd: 'asdfasdf'
+                            } as GuidePartTextDto
+                        ]
+                    },
+                    user
+                )
+                expect(await Guide.findOne()).not.toBe(null)
                 expect(entry.guideId).toBe(1)
                 expect((await entry.$get('guidePartTexts')).length).toBe(1)
                 expect((await entry.$get('guidePartVideos')).length).toBe(0)
@@ -136,12 +137,24 @@ describe(
                 const guide = await Guide.create({
                     creatorId: user.id
                 })
-                const descriptor = await GuideDescriptor.create({})
-                const entry = await GuideHistoryEntry.create({
-                    guideId: guide.id,
-                    updaterId: user.id,
-                    descriptorId: descriptor.id,
-                })
+                const descriptorService = ctx.app.get(GuideDescriptorService)
+                const entry = await ctx.service.save(
+                    {
+                        guideId: guide.id,
+                        descriptor:
+                            new Descriptor({
+                                teammateHeroes: [HeroId.WreckingBall],
+                                playerHeroes: [HeroId.Baptiste],
+                            }),
+                        parts: [
+                            {
+                                kind: 'text',
+                                contentMd: 'asdfasdf'
+                            } as GuidePartTextDto
+                        ]
+                    } as GuideHistoryEntryDto,
+                    user
+                )
                 expect(
                     (await guide.$get('historyEntries')).length
                 ).toBe(1)
@@ -178,12 +191,21 @@ describe(
                 const guide = await Guide.create({
                     creatorId: user.id
                 })
-                const descriptor = await GuideDescriptor.create({})
-                const entry = await GuideHistoryEntry.create({
-                    guideId: guide.id,
-                    updaterId: user.id,
-                    descriptorId: descriptor.id,
-                })
+                const firstEntry = <GuideHistoryEntry>await ctx.service.save(
+                    {
+                        guideId: guide.id,
+                        descriptor: new Descriptor({
+                            teammateHeroes: [HeroId.WreckingBall],
+                        }),
+                        parts: [
+                            {
+                                kind: 'text',
+                                contentMd: 'asdfasdfeed'
+                            } as GuidePartTextDto
+                        ]
+                    },
+                    user
+                )
                 expect(
                     (await guide.$get('historyEntries')).length
                 ).toBe(1)

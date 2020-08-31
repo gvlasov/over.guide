@@ -139,7 +139,6 @@ export class GuideController {
     async search(
         @Query(new ValidationPipe({transform: true})) query: GuideSearchQuery
     ): Promise<GuideSearchPageDto> {
-        console.log(query)
         return this.guideSearchService.search(query)
     }
 
