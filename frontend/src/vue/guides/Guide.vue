@@ -218,6 +218,7 @@ a {
 
 .text-guide-part ::v-deep img {
     max-width: 100%;
+    margin: 0 auto;
 }
 
 .text-guide-part-content {

@@ -77,6 +77,8 @@ export default {
 
     .text-guide-part ::v-deep img {
         max-width: 100%;
+        margin: 0 auto;
+        display: block;
     }
 
     .text-guide-part-content {
