@@ -9,17 +9,25 @@
         <template v-else>
             <div class="root-content-panel-wrap info">
                 <div class="username">{{ userInfo.user.name }}</div>
-                <transition name="fade">
-                    <form v-show="changingUsername" @submit="onUsernameChangeFormSubmit">
-                        <input type='text' v-model="userInfo.user.name"/>
-                    </form>
-                </transition>
-                <OverwatchButton
-                        v-if="isThisMe && !changingUsername"
-                        type="default"
-                        v-hammer:tap="() => {changingUsername = !changingUsername}"
-                >change username
-                </OverwatchButton>
+                <template v-if="isThisMe">
+                    <OverwatchButton
+                            v-if="isThisMe"
+                            type="default"
+                            v-hammer:tap="logout"
+                    >Logout
+                    </OverwatchButton>
+                    <transition name="fade">
+                        <form v-show="changingUsername" @submit="onUsernameChangeFormSubmit">
+                            <input type='text' v-model="userInfo.user.name"/>
+                        </form>
+                    </transition>
+                    <OverwatchButton
+                            v-if="!changingUsername"
+                            type="default"
+                            v-hammer:tap="() => {changingUsername = !changingUsername}"
+                    >change username
+                    </OverwatchButton>
+                </template>
             </div>
             <div class="guide-feed">
                 <div
@@ -83,6 +91,12 @@ export default {
                     this.userInfo.user.name = this.initialUsername;
                 });
             return false
+        },
+        logout() {
+            Cookies.remove('auth-token')
+            Cookies.remove('username')
+            Cookies.remove('userId')
+            window.location.href = '/';
         },
     },
     async mounted() {
