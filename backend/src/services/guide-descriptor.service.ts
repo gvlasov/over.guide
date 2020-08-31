@@ -54,8 +54,8 @@ export class GuideDescriptorService {
             ['thematicTags', 'ThematicTag', 'thematicTagId'],
             ['playerHeroes', 'PlayerHero', 'heroId'],
             ['playerAbilities', 'PlayerAbility', 'abilityId'],
-            ['allyHeroes', 'AllyHero', 'heroId'],
-            ['allyAbilities', 'AllyAbility', 'abilityId'],
+            ['teammateHeroes', 'AllyHero', 'heroId'],
+            ['teammateAbilities', 'AllyAbility', 'abilityId'],
             ['enemyHeroes', 'EnemyHero', 'heroId'],
             ['enemyAbilities', 'EnemyAbility', 'abilityId'],
         ].map(
@@ -93,8 +93,8 @@ export class GuideDescriptorService {
                     thematicTags: dto.thematicTags,
                     playerHeroes: dto.playerHeroes,
                     playerAbilities: dto.playerAbilities,
-                    allyHeroes: dto.allyHeroes,
-                    allyAbilities: dto.allyAbilities,
+                    teammateHeroes: dto.teammateHeroes,
+                    teammateAbilities: dto.teammateAbilities,
                     enemyHeroes: dto.enemyHeroes,
                     enemyAbilities: dto.enemyAbilities,
                 }
@@ -109,8 +109,8 @@ export class GuideDescriptorService {
                 ...guideDescriptorDto.mapTags,
                 ...guideDescriptorDto.playerHeroes,
                 ...guideDescriptorDto.playerAbilities,
-                ...guideDescriptorDto.allyHeroes,
-                ...guideDescriptorDto.allyAbilities,
+                ...guideDescriptorDto.teammateHeroes,
+                ...guideDescriptorDto.teammateAbilities,
                 ...guideDescriptorDto.enemyHeroes,
                 ...guideDescriptorDto.enemyAbilities,
             ]
@@ -141,7 +141,7 @@ export class GuideDescriptorService {
                             }
                         )
                     }
-                    for (const heroId of guideDescriptorDto.allyHeroes) {
+                    for (const heroId of guideDescriptorDto.teammateHeroes) {
                         await GuideDescriptor2AllyHero.create(
                             {
                                 guideDescriptorId: newDescriptor.id,
@@ -149,7 +149,7 @@ export class GuideDescriptorService {
                             }
                         )
                     }
-                    for (const abilityId of guideDescriptorDto.allyAbilities) {
+                    for (const abilityId of guideDescriptorDto.teammateAbilities) {
                         await GuideDescriptor2AllyAbility.create(
                             {
                                 guideDescriptorId: newDescriptor.id,

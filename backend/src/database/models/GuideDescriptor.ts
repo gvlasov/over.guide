@@ -43,10 +43,10 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
     playerAbilities: Ability[]
 
     @BelongsToMany(() => Hero, () => GuideDescriptor2AllyHero)
-    allies: Hero[]
+    teammates: Hero[]
 
     @BelongsToMany(() => Ability, () => GuideDescriptor2AllyAbility)
-    allyAbilities: Ability[]
+    teammateAbilities: Ability[]
 
     @BelongsToMany(() => Hero, () => GuideDescriptor2EnemyHero)
     enemies: Hero[]
@@ -83,8 +83,8 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
         return {
             playerHeroes: this.players.map(hero => hero.id),
             playerAbilities: this.playerAbilities.map(ability => ability.id),
-            allyHeroes: this.allies.map(hero => hero.id),
-            allyAbilities: this.allyAbilities.map(ability => ability.id),
+            teammateHeroes: this.teammates.map(hero => hero.id),
+            teammateAbilities: this.teammateAbilities.map(ability => ability.id),
             enemyHeroes: this.enemies.map(hero => hero.id),
             enemyAbilities: this.enemyAbilities.map(ability => ability.id),
             mapTags: this.maps.map(map => map.id),

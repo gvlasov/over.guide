@@ -13,7 +13,7 @@ import IndividualTagVso from "@/js/vso/IndividualTagVso";
 export default class GuideDescriptorVso {
 
     public players: TagGroupVso;
-    public allies: TagGroupVso;
+    public teammates: TagGroupVso;
     public enemies: TagGroupVso;
     public individualTags: IndividualTagVso[];
     private dto: GuideDescriptorDto;
@@ -31,10 +31,10 @@ export default class GuideDescriptorVso {
                 .map(it => new AbilityVso(it)),
             GamerPositionVso.Players,
         );
-        this.allies = new TagGroupVso(
-            allHeroes.filter(hero => descriptor.allyHeroes.includes(hero.id)),
+        this.teammates = new TagGroupVso(
+            allHeroes.filter(hero => descriptor.teammateHeroes.includes(hero.id)),
             allAbilities
-                .filter(ability => descriptor.allyAbilities.includes(ability.id))
+                .filter(ability => descriptor.teammateAbilities.includes(ability.id))
                 .map(it => new AbilityVso(it)),
             GamerPositionVso.Allies,
         );
@@ -59,7 +59,7 @@ export default class GuideDescriptorVso {
 
     getGroupByGamerPosition(gamerPosition: GamerPositionVso) : TagGroupVso {
         if (gamerPosition.isAlly) {
-            return this.allies;
+            return this.teammates;
         } else if (gamerPosition.isEnemy) {
             return this.enemies;
         } else if (gamerPosition.isPlayer) {
@@ -83,7 +83,7 @@ export default class GuideDescriptorVso {
 
     get isEmpty(): boolean {
         return this.players.heroes.length +
-            this.allies.heroes.length +
+            this.teammates.heroes.length +
             this.enemies.heroes.length +
             this.maps.length +
             this.individualTags.length === 0;
@@ -100,8 +100,8 @@ export default class GuideDescriptorVso {
         return [
             this.players.heroes.map(h => h.id),
             this.players.abilities.map(a => a.id),
-            this.allies.heroes.map(h => h.id),
-            this.allies.abilities.map(a => a.id),
+            this.teammates.heroes.map(h => h.id),
+            this.teammates.abilities.map(a => a.id),
             this.enemies.heroes.map(h => h.id),
             this.enemies.abilities.map(a => a.id),
             this.maps.map(m => m.id),

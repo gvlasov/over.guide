@@ -66,7 +66,7 @@
                                     class="descriptor-mirror"
                                     :selected-position="gamerPosition"
                                     @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
-                                    @allyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.allies.gamerPosition)}"
+                                    @teammateTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.teammates.gamerPosition)}"
                                     @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
                             />
                         </div>

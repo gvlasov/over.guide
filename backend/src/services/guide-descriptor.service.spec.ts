@@ -36,7 +36,7 @@ describe(
                 )
                 await ctx.service.getExact(
                     new Descriptor({
-                        allyHeroes: [HeroId.Ashe, HeroId.Baptiste],
+                        teammateHeroes: [HeroId.Ashe, HeroId.Baptiste],
                         enemyHeroes: [HeroId.Baptiste, HeroId.Bastion],
                         playerHeroes: [HeroId.Baptiste],
                     })
@@ -65,7 +65,7 @@ describe(
                 const oldCount = (await GuideDescriptor.findAndCountAll()).count;
                 await ctx.service.obtainExact(
                     new Descriptor({
-                        allyHeroes: [HeroId.Ashe, HeroId.Baptiste],
+                        teammateHeroes: [HeroId.Ashe, HeroId.Baptiste],
                         enemyHeroes: [HeroId.Baptiste, HeroId.Bastion],
                         playerHeroes: [HeroId.Baptiste],
                     })
@@ -84,7 +84,7 @@ describe(
                 const oldCount = (await GuideDescriptor.findAndCountAll()).count;
                 await ctx.service.getExact(
                     new Descriptor({
-                        allyHeroes: [HeroId.Ashe, HeroId.Baptiste],
+                        teammateHeroes: [HeroId.Ashe, HeroId.Baptiste],
                         enemyHeroes: [HeroId.Baptiste /* no bastion */],
                         playerHeroes: [HeroId.Baptiste],
                     })
@@ -105,13 +105,13 @@ describe(
             )
             await ctx.app.get(GuideDescriptorService).obtainExact(
                 new GuideDescriptorQuickie({
-                    allyHeroes: [HeroId.Ana, HeroId.Reinhardt],
+                    teammateHeroes: [HeroId.Ana, HeroId.Reinhardt],
                 })
             );
             expect(
                 (await ctx.service.getExact(
                     new GuideDescriptorQuickie({
-                        allyHeroes: [HeroId.Ana, HeroId.Baptiste],
+                        teammateHeroes: [HeroId.Ana, HeroId.Baptiste],
                     })
                 ))
             ).toBe(null)
@@ -142,7 +142,7 @@ describe(
                 await ctx.service.obtainExact(
                     new Descriptor({
                         mapTags: [MapId.Eichenwalde, MapId.Havana],
-                        allyHeroes: [HeroId.McCree],
+                        teammateHeroes: [HeroId.McCree],
                         enemyHeroes: [HeroId.WreckingBall],
                         playerHeroes: [HeroId.Zenyatta],
                         thematicTags: [GuideTheme.Psychology],
@@ -151,7 +151,7 @@ describe(
                     .then(async descriptor => {
                         await descriptor.reload()
                         expect((await descriptor.$get('players')).length).toBe(1)
-                        expect((await descriptor.$get('allies')).length).toBe(1)
+                        expect((await descriptor.$get('teammates')).length).toBe(1)
                         expect((await descriptor.$get('enemies')).length).toBe(1)
                         expect((await descriptor.$get('maps')).length).toBe(2)
                         expect((await descriptor.$get('thematicTags')).length).toBe(1)
@@ -166,7 +166,7 @@ describe(
                 await ctx.service.obtainExact(
                     new Descriptor({
                         mapTags: [MapId.Eichenwalde, MapId.Havana],
-                        allyHeroes: [HeroId.McCree],
+                        teammateHeroes: [HeroId.McCree],
                         enemyHeroes: [HeroId.WreckingBall],
                         playerHeroes: [HeroId.Zenyatta],
                         thematicTags: [GuideTheme.Psychology],
@@ -245,8 +245,8 @@ describe(
                     thematicTagsFixture
                 )
                 const descriptorDto = new GuideDescriptorQuickie({
-                    allyHeroes: [HeroId.Ana],
-                    allyAbilities: [AbilityId.SleepDart, AbilityId.BioticGrenade],
+                    teammateHeroes: [HeroId.Ana],
+                    teammateAbilities: [AbilityId.SleepDart, AbilityId.BioticGrenade],
                     thematicTags: [GuideTheme.Psychology, GuideTheme.Communication, GuideTheme.Aim]
                 });
                 const descriptor = await ctx.app.get(GuideDescriptorService).obtainExact(descriptorDto)

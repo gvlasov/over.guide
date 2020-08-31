@@ -23,23 +23,23 @@
                 </template>
             </TagGroupFrame>
             <TagGroupFrame
-                    :tag-group="descriptor.allies"
+                    :tag-group="descriptor.teammates"
             >
                 <template slot="infix">+</template>
                 <template slot="frame-content">
                     <TagGroupBackground
-                            v-if="descriptor.allies.heroes.length > 0"
-                            :tag-group="descriptor.allies"
-                            class="tag-type-links-wrap-ally tappable-background"
-                            v-hammer:tap="() => (selecting = descriptor.allies.gamerPosition)"
+                            v-if="descriptor.teammates.heroes.length > 0"
+                            :tag-group="descriptor.teammates"
+                            class="tag-type-links-wrap-teammate tappable-background"
+                            v-hammer:tap="() => (selecting = descriptor.teammates.gamerPosition)"
                             v-bind:class="selecting && selecting.isAlly ? 'selected-group' : ''"
                     >
-                        <TagGroupHeroes :tag-group="descriptor.allies"/>
+                        <TagGroupHeroes :tag-group="descriptor.teammates"/>
                     </TagGroupBackground>
                     <TagGroupInvite
                             v-else
-                            :tag-group="descriptor.allies"
-                            v-hammer:tap="() => (selecting = descriptor.allies.gamerPosition)"
+                            :tag-group="descriptor.teammates"
+                            v-hammer:tap="() => (selecting = descriptor.teammates.gamerPosition)"
                             v-bind:class="selecting && selecting.isAlly ? 'selected-group' : ''"
                             class="invite"
                     />
@@ -79,7 +79,7 @@
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isAlly"
-                :gamer-position="gamerPositions.allies"
+                :gamer-position="gamerPositions.teammates"
                 :initial-descriptor="descriptor"
                 @save="onRosterSave"
                 @tagGroupSelect="($event) => {selecting = $event;}"
@@ -115,7 +115,7 @@ export default {
             selecting: null,
             gamerPositions: {
                 players: GamerPositionVso.Players,
-                allies: GamerPositionVso.Allies,
+                teammates: GamerPositionVso.Allies,
                 enemies: GamerPositionVso.Enemies,
             },
         };

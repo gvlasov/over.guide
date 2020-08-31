@@ -53,8 +53,8 @@ export default {
         background-color: rgba($tag-player-color, .9);
     }
 
-    .tag-type-ally {
-        background-color: rgba($tag-ally-color, .9);
+    .tag-type-teammate {
+        background-color: rgba($tag-teammate-color, .9);
     }
 
     .tag-type-enemy {

@@ -14,15 +14,15 @@
             </template>
         </TagGroupFrame>
         <TagGroupFrame
-                v-if="descriptor.allies.heroes.length > 0"
-                :tag-group="descriptor.allies"
+                v-if="descriptor.teammates.heroes.length > 0"
+                :tag-group="descriptor.teammates"
         >
             <template slot="frame-content">
                 <TagGroupBackground
-                        v-if="descriptor.allies.heroes.length > 0"
-                        :tag-group="descriptor.allies"
+                        v-if="descriptor.teammates.heroes.length > 0"
+                        :tag-group="descriptor.teammates"
                 >
-                    <TagGroupHeroes :tag-group="descriptor.allies"/>
+                    <TagGroupHeroes :tag-group="descriptor.teammates"/>
                 </TagGroupBackground>
             </template>
         </TagGroupFrame>
@@ -43,12 +43,12 @@
 </template>
 
 <script>
-    import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
-    import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-    import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-    import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
+import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
+import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 
-    export default {
+export default {
         props: {
             descriptor: {
                 type: GuideDescriptorVso,

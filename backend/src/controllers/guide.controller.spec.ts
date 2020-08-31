@@ -44,7 +44,7 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.Baptiste],
+                            teammateHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                         }),
@@ -72,7 +72,7 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.Baptiste],
+                            teammateHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                         }),
@@ -123,7 +123,7 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.Baptiste],
+                            teammateHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                             thematicTags: [GuideTheme.Aim],
@@ -146,7 +146,7 @@ describe(
                     .send({
                         guideId: guide.id,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.Baptiste],
+                            teammateHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                             thematicTags: [GuideTheme.Aim],
@@ -179,7 +179,7 @@ describe(
                     .send({
                         descriptor:
                             new Descriptor({
-                                allyHeroes: [HeroId.Baptiste],
+                                teammateHeroes: [HeroId.Baptiste],
                                 playerHeroes: [HeroId.McCree],
                                 enemyHeroes: [HeroId.Zarya],
                             }),
@@ -283,7 +283,7 @@ describe(
                         } as GuidePartTextDto
                     ],
                     descriptor: new Descriptor({
-                        allyHeroes: [HeroId.Mei],
+                        teammateHeroes: [HeroId.Mei],
                     }),
                 }, user)
                 const guide = await Guide.findOne()
@@ -320,7 +320,7 @@ describe(
                         } as GuidePartTextDto
                     ],
                     descriptor: new Descriptor({
-                        allyHeroes: [HeroId.Ashe],
+                        teammateHeroes: [HeroId.Ashe],
                     }),
                 }, user)
                 const guide = await Guide.findOne()
@@ -373,7 +373,7 @@ describe(
                     .post('/guide')
                     .send({
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.Baptiste],
+                            teammateHeroes: [HeroId.Baptiste],
                             playerHeroes: [HeroId.McCree],
                             enemyHeroes: [HeroId.Zarya],
                         }),
@@ -598,7 +598,7 @@ describe(
                         mapTags: [MapId.Havana, MapId.Hollywood],
                         thematicTags: [GuideTheme.Positioning],
                         enemyHeroes: [HeroId.Soldier],
-                        allyHeroes: [HeroId.Zarya, HeroId.Zenyatta],
+                        teammateHeroes: [HeroId.Zarya, HeroId.Zenyatta],
                         playerHeroes: [HeroId.Dva],
                     }),
                 }, user)
@@ -610,7 +610,7 @@ describe(
                         expect(response.body.guides.length).toBe(3)
                     })
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search?allyHeroes=${HeroId.Zarya},${HeroId.Zenyatta}&playerHeroes=${HeroId.Dva}`)
+                    .get(`/guide/search?teammateHeroes=${HeroId.Zarya},${HeroId.Zenyatta}&playerHeroes=${HeroId.Dva}`)
                     .send()
                     .expect(HttpStatus.OK)
                     .then(response => {

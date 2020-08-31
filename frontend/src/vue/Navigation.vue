@@ -69,7 +69,7 @@ export default {
 
         &.active, &:hover {
             background-color: $overwatch-button-default-bg-color;
-            border-bottom: $underline-width solid $tag-ally-color;
+            border-bottom: $underline-width solid $tag-teammate-color;
         }
     }
 

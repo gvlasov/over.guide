@@ -18,9 +18,9 @@
                         :teamComp="context.enemyComp"
                 />
                 <Picks
-                        ref="allyPicks"
+                        ref="teammatePicks"
                         style="margin-bottom: 1.5vw;"
-                        :teamComp="context.allyComp"
+                        :teamComp="context.teammateComp"
                 />
                 <input
                         type="button"
@@ -50,19 +50,19 @@
 </template>
 
 <script>
-    import Picks from '@/vue/training/Picks.vue';
-    import Backend from '@/js/Backend';
-    import PickContextGenerator from "@/js/PickContextGenerator";
-    import axios from "axios";
-    import Keypress from 'vue-keypress'
-    import PickContext from "@/js/PickContext";
-    import SuggestionRoster from "@/vue/training/SuggestionRoster.vue";
-    import SelectionRoster from "@/vue/training/SelectionRoster.vue";
-    import RoleSelection from "@/vue/training/RoleSelection.vue";
-    import SeededShuffler from "@/js/SeededShuffler";
-    import MapId from "data/MapId";
+import Picks from '@/vue/training/Picks.vue';
+import Backend from '@/js/Backend';
+import PickContextGenerator from "@/js/PickContextGenerator";
+import axios from "axios";
+import Keypress from 'vue-keypress'
+import PickContext from "@/js/PickContext";
+import SuggestionRoster from "@/vue/training/SuggestionRoster.vue";
+import SelectionRoster from "@/vue/training/SelectionRoster.vue";
+import RoleSelection from "@/vue/training/RoleSelection.vue";
+import SeededShuffler from "@/js/SeededShuffler";
+import MapId from "data/MapId";
 
-    const backend = new Backend(axios);
+const backend = new Backend(axios);
     const generator = new PickContextGenerator(
         new SeededShuffler('asdf')
     );
@@ -83,7 +83,7 @@
                 backend
                     .suggestPick(
                         new PickContext(
-                            this.context.allyComp,
+                            this.context.teammateComp,
                             this.context.enemyComp,
                             this.context.bans,
                             MapId.Hanamura

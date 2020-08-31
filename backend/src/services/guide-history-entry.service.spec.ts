@@ -52,7 +52,7 @@ describe(
             expect((await entry.$get('descriptor').then(d => d.$get('maps'))).length).toBe(0)
             expect((await entry.$get('descriptor').then(d => d.$get('thematicTags'))).length).toBe(0)
             expect((await entry.$get('descriptor').then(d => d.$get('players'))).length).toBe(1)
-            expect((await entry.$get('descriptor').then(d => d.$get('allies'))).length).toBe(0)
+            expect((await entry.$get('descriptor').then(d => d.$get('teammates'))).length).toBe(0)
             expect((await entry.$get('descriptor').then(d => d.$get('enemies'))).length).toBe(0)
         });
         it('links descriptors with their given parts', async () => {
@@ -71,7 +71,7 @@ describe(
                     guideId: guide.id,
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Zenyatta, HeroId.Soldier],
-                        allyHeroes: [HeroId.Dva],
+                        teammateHeroes: [HeroId.Dva],
                         enemyHeroes: [HeroId.Winston],
                         thematicTags: [GuideTheme.Communication],
                         mapTags: [MapId.Hanamura, MapId.Nepal, MapId.Numbani],
@@ -91,7 +91,7 @@ describe(
                 ]
             }))
             expect(descriptor.players.length).toBe(2)
-            expect(descriptor.allies.length).toBe(1)
+            expect(descriptor.teammates.length).toBe(1)
             expect(descriptor.enemies.length).toBe(1)
             expect(descriptor.thematicTags.length).toBe(1)
             expect(descriptor.maps.length).toBe(3)
@@ -106,7 +106,7 @@ describe(
             const entry = <GuideHistoryEntry>await ctx.service.save(
                 {
                     descriptor: new Descriptor({
-                        allyHeroes: [HeroId.WreckingBall],
+                        teammateHeroes: [HeroId.WreckingBall],
                     }),
                     parts: [
                         {
@@ -124,7 +124,7 @@ describe(
                 expect((await entry.$get('descriptor').then(d => d.$get('maps'))).length).toBe(0)
                 expect((await entry.$get('descriptor').then(d => d.$get('thematicTags'))).length).toBe(0)
                 expect((await entry.$get('descriptor').then(d => d.$get('players'))).length).toBe(0)
-                expect((await entry.$get('descriptor').then(d => d.$get('allies'))).length).toBe(1)
+                expect((await entry.$get('descriptor').then(d => d.$get('teammates'))).length).toBe(1)
                 expect((await entry.$get('descriptor').then(d => d.$get('enemies'))).length).toBe(0)
             });
             it('creates more history entries in a guide', async () => {
@@ -149,7 +149,7 @@ describe(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -191,7 +191,7 @@ describe(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -219,7 +219,7 @@ describe(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -244,7 +244,7 @@ describe(
                     {
                         guideId: firstEntry.guideId,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -282,7 +282,7 @@ describe(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -315,7 +315,7 @@ describe(
                     {
                         guideId: firstEntry.guideId,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -360,7 +360,7 @@ describe(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {
@@ -396,7 +396,7 @@ describe(
                     {
                         guideId: firstEntry.guideId,
                         descriptor: new Descriptor({
-                            allyHeroes: [HeroId.WreckingBall],
+                            teammateHeroes: [HeroId.WreckingBall],
                         }),
                         parts: [
                             {

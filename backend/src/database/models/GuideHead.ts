@@ -8,7 +8,7 @@ import {
 import {DataTypes} from "sequelize";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {Guide} from "src/database/models/Guide";
-import {ActuallyNotTableButView} from "src/services/fixture.service";
+import {ActuteammateNotTableButView} from "src/services/fixture.service";
 
 @Table(
     {
@@ -16,7 +16,7 @@ import {ActuallyNotTableButView} from "src/services/fixture.service";
         updatedAt: false,
     },
 )
-@ActuallyNotTableButView
+@ActuteammateNotTableButView
 export class GuideHead extends Model<GuideHead> {
 
     @ForeignKey(() => GuideHistoryEntry)

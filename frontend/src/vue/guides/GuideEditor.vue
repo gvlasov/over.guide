@@ -126,14 +126,14 @@ export default {
                     descriptor: {
                         playerHeroes:
                             this.guide.descriptor.players.heroes.map(hero => hero.id),
-                        allyHeroes:
-                            this.guide.descriptor.allies.heroes.map(hero => hero.id),
+                        teammateHeroes:
+                            this.guide.descriptor.teammates.heroes.map(hero => hero.id),
                         enemyHeroes:
                             this.guide.descriptor.enemies.heroes.map(hero => hero.id),
                         playerAbilities:
                             this.guide.descriptor.players.abilities.map(ability => ability.id),
-                        allyAbilities:
-                            this.guide.descriptor.allies.abilities.map(ability => ability.id),
+                        teammateAbilities:
+                            this.guide.descriptor.teammates.abilities.map(ability => ability.id),
                         enemyAbilities:
                             this.guide.descriptor.enemies.abilities.map(ability => ability.id),
                         mapTags: this.guide.descriptor.maps.map(vso => vso.id),

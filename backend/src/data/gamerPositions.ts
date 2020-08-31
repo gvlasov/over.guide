@@ -9,7 +9,7 @@ const data = [
     },
     {
         id: GamerPositionId.Allies,
-        dataName: 'ally',
+        dataName: 'teammate',
         plural: 'Allies',
     },
     {

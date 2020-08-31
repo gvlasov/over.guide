@@ -14,10 +14,10 @@
 </template>
 
 <script>
-    import RosterPortrait from "@/vue/RosterPortrait";
-    import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import RosterPortrait from "@/vue/RosterPortrait";
+import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
-    export default {
+export default {
         props: {
             hero: Object,
             selected: {
@@ -94,8 +94,8 @@
             background-color: $tag-player-color;
         }
 
-        &.ally {
-            background-color: $tag-ally-color;
+        &.teammate {
+            background-color: $tag-teammate-color;
         }
 
         &.enemy {

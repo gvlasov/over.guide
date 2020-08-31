@@ -4,7 +4,7 @@ import TeamComp from "@/js/TeamComp";
 export default class Pick {
     constructor(
         hero: HeroDto,
-        allyComp: TeamComp,
+        teammateComp: TeamComp,
         enemyComp: TeamComp,
         bans: HeroDto[],
         map: string

@@ -15,14 +15,14 @@ export class SuggestPickService {
     }
 
     suggestPick(context: PickContextDto): AlternativeDto[] {
-        const allyHeroes: HeroDto[] = context.allyComp.map(h => heroes.get(h))
+        const teammateHeroes: HeroDto[] = context.teammateComp.map(h => heroes.get(h))
         const enemyHeroes: HeroDto[] = context.enemyComp.map(h => heroes.get(h))
-        const missingRole = SuggestPickService.getMissingRole(allyHeroes)
+        const missingRole = SuggestPickService.getMissingRole(teammateHeroes)
         return Array.from(heroes.values())
             .filter(
                 hero =>
                     hero.role === missingRole
-                    && !allyHeroes.some(
+                    && !teammateHeroes.some(
                     h => hero.dataName === h.dataName
                     )
             )

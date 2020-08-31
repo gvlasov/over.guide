@@ -11,7 +11,7 @@ const data = [
         name: 'Biotic Rifle',
         dataName: 'biotic-rifle',
         keyIds: [KeyId.LMB],
-        description: 'Ana’s rifle shoots darts that can restore health to her allies or deal ongoing damage to her enemies.'
+        description: 'Ana’s rifle shoots darts that can restore health to her teammates or deal ongoing damage to her enemies.'
     },
     {
         id: AbilityId.BioticRifleScoped,
@@ -36,7 +36,7 @@ const data = [
         name: 'Biotic Grenade',
         dataName: 'biotic-grenade',
         keyIds: [KeyId.E],
-        description: 'Ana tosses a biotic bomb that deals damage to enemies and heals allies in a small area of effect. Affected allies briefly receive increased healing from all sources, while enemies caught in the blast cannot be healed for a few moments.'
+        description: 'Ana tosses a biotic bomb that deals damage to enemies and heals teammates in a small area of effect. Affected teammates briefly receive increased healing from all sources, while enemies caught in the blast cannot be healed for a few moments.'
     },
     {
         id: AbilityId.NanoBoost,
@@ -44,7 +44,7 @@ const data = [
         name: 'Nano Boost',
         dataName: 'nano-boost',
         keyIds: [KeyId.Q],
-        description: 'After Ana hits one of her allies with a combat boost, they deal more damage, and take less damage from enemies’ attacks.'
+        description: 'After Ana hits one of her teammates with a combat boost, they deal more damage, and take less damage from enemies’ attacks.'
     },
     {
         id: AbilityId.TheViper,
@@ -104,7 +104,7 @@ const data = [
         name: 'Biotic Launcher Heal',
         dataName: 'biotic-launcher-heal',
         keyIds: [KeyId.RMB],
-        description: 'Biotic Launcher doubles as a healing device, lobbing projectiles that heal allies near the point of impact.',
+        description: 'Biotic Launcher doubles as a healing device, lobbing projectiles that heal teammates near the point of impact.',
     },
     {
         id: AbilityId.RegenerativeBurst,
@@ -112,7 +112,7 @@ const data = [
         name: 'Regenerative Burst',
         dataName: 'regenerative-burst',
         keyIds: [KeyId.Shift],
-        description: 'Baptiste activates an intense regenerative burst that heals himself and nearby allies over time.',
+        description: 'Baptiste activates an intense regenerative burst that heals himself and nearby teammates over time.',
     },
     {
         id: AbilityId.ImmortalityField,
@@ -120,7 +120,7 @@ const data = [
         name: 'Immortality Field',
         dataName: 'immortality-field',
         keyIds: [KeyId.E],
-        description: 'Baptiste uses a device to create a field that prevents allies from dying. The generator can be destroyed.',
+        description: 'Baptiste uses a device to create a field that prevents teammates from dying. The generator can be destroyed.',
     },
     {
         id: AbilityId.AmplificationMatrix,
@@ -192,7 +192,7 @@ const data = [
         name: 'Inspire',
         dataName: 'inspire',
         keyIds: [],
-        description: 'Striking enemies with your flail heals nearby allies and her',
+        description: 'Striking enemies with your flail heals nearby teammates and her',
     },
     {
         id: AbilityId.RepairPack,
@@ -200,7 +200,7 @@ const data = [
         name: 'Repair Pack',
         dataName: 'repair-pack',
         keyIds: [KeyId.E],
-        description: 'Brigitte throws a Repair Pack that can heal an ally. Any healing over that ally’s maximum health provides them with armor instead.',
+        description: 'Brigitte throws a Repair Pack that can heal an teammate. Any healing over that teammate’s maximum health provides them with armor instead.',
     },
     {
         id: AbilityId.WhipShot,
@@ -227,12 +227,12 @@ const data = [
         description: 'Once her Barrier Shield is deployed, Brigitte can dash forward to stun an enemy.',
     },
     {
-        id: AbilityId.Rally,
+        id: AbilityId.Rteammate,
         heroId: HeroId.Brigitte,
-        name: 'Rally',
-        dataName: 'rally',
+        name: 'Rteammate',
+        dataName: 'rteammate',
         keyIds: [KeyId.Q],
-        description: 'Brigitte moves faster and provides all nearby allies with armor that lasts until it’s removed by damage.',
+        description: 'Brigitte moves faster and provides all nearby teammates with armor that lasts until it’s removed by damage.',
     },
     {
         id: AbilityId.Eject,
@@ -304,7 +304,7 @@ const data = [
         name: 'Hand Cannon',
         dataName: 'hand-cannon',
         keyIds: [KeyId.LMB],
-        description: 'Doomfist fires a short-range burst from the knuckles of his fist. Its ammunition is automatically regenerated over a short time.',
+        description: 'Doomfist fires a short-range burst from the knuckles of his fist. Its ammunition is automaticteammate regenerated over a short time.',
     },
     {
         id: AbilityId.TheBestDefense,
@@ -474,7 +474,7 @@ const data = [
         name: 'Sonic Arrow',
         dataName: 'sonic-arrow',
         keyIds: [KeyId.Shift],
-        description: 'Hanzo launches an arrow that contains a sonar tracking device. Any enemy within its detection radius is visibly marked, making them easier for Hanzo and his allies to hunt down.',
+        description: 'Hanzo launches an arrow that contains a sonar tracking device. Any enemy within its detection radius is visibly marked, making them easier for Hanzo and his teammates to hunt down.',
     },
     {
         id: AbilityId.StormArrows,
@@ -588,7 +588,7 @@ const data = [
         name: 'Sound Barrier',
         dataName: 'sound-barrier',
         keyIds: [KeyId.Q],
-        description: 'Protective waves radiate out from Lúcio’s Sonic Amplifier, briefly providing him and nearby allies with personal shields.',
+        description: 'Protective waves radiate out from Lúcio’s Sonic Amplifier, briefly providing him and nearby teammates with personal shields.',
     },
     {
         id: AbilityId.Peacekeeper,
@@ -681,7 +681,7 @@ const data = [
         name: 'Caduceus Staff (Heal)',
         dataName: 'caduceus-staff-heal',
         keyIds: [KeyId.One, KeyId.LMB],
-        description: 'By maintaining beam connection, Mercy can restore that ally’s health or increase the amount of damage they deal.',
+        description: 'By maintaining beam connection, Mercy can restore that teammate’s health or increase the amount of damage they deal.',
     },
     {
         id: AbilityId.CaduceusStaffBoost,
@@ -690,7 +690,7 @@ const data = [
         name: 'Caduceus Staff (Boost)',
         dataName: 'caduceus-staff-boost',
         keyIds: [KeyId.One, KeyId.RMB],
-        description: 'By maintaining beam connection, Mercy can increase the amount of damage her ally deal.',
+        description: 'By maintaining beam connection, Mercy can increase the amount of damage her teammate deal.',
     },
     {
         id: AbilityId.CaduceusBlaster,
@@ -706,7 +706,7 @@ const data = [
         name: 'Guardian Angel',
         dataName: 'guardian-angel',
         keyIds: [KeyId.Shift],
-        description: 'Mercy flies towards a targeted ally, allowing her to reach them quickly and provide assistance in crucial moments.',
+        description: 'Mercy flies towards a targeted teammate, allowing her to reach them quickly and provide assistance in crucial moments.',
     },
     {
         id: AbilityId.Resurrect,
@@ -714,7 +714,7 @@ const data = [
         name: 'Resurrect',
         dataName: 'resurrect',
         keyIds: [KeyId.E],
-        description: 'Mercy brings a dead ally back into the fight with full health.',
+        description: 'Mercy brings a dead teammate back into the fight with full health.',
     },
     {
         id: AbilityId.Regeneration,
@@ -747,7 +747,7 @@ const data = [
         name: 'Biotic Grasp Heal',
         dataName: 'biotic-grasp-heal',
         keyIds: [KeyId.LMB],
-        description: 'Using her left hand, Moira expends biotic energy to heal allies in front of her.',
+        description: 'Using her left hand, Moira expends biotic energy to heal teammates in front of her.',
     },
     {
         id: AbilityId.BioticGraspDamage,
@@ -765,7 +765,7 @@ const data = [
         name: 'Healing Orb',
         dataName: 'biotic-orb-heal',
         keyIds: [KeyId.E, KeyId.LMB],
-        description: 'Moira launches a rebounding biotic sphere; she can choose between a regeneration effect that heals the allies it passes through, or a decay effect that deals damage to enemies.',
+        description: 'Moira launches a rebounding biotic sphere; she can choose between a regeneration effect that heals the teammates it passes through, or a decay effect that deals damage to enemies.',
     },
     {
         id: AbilityId.DamageOrb,
@@ -774,7 +774,7 @@ const data = [
         name: 'Damage Orb',
         dataName: 'biotic-orb-damage',
         keyIds: [KeyId.E, KeyId.RMB],
-        description: 'Moira launches a rebounding biotic sphere; she can choose between a regeneration effect that heals the allies it passes through, or a decay effect that deals damage to enemies.',
+        description: 'Moira launches a rebounding biotic sphere; she can choose between a regeneration effect that heals the teammates it passes through, or a decay effect that deals damage to enemies.',
     },
     {
         id: AbilityId.Fade,
@@ -790,7 +790,7 @@ const data = [
         name: 'Coalescense',
         dataName: 'coalescense',
         keyIds: [KeyId.Q],
-        description: 'Moira channels a long-range beam that both heals allies and bypasses barriers to damage her enemies.',
+        description: 'Moira channels a long-range beam that both heals teammates and bypasses barriers to damage her enemies.',
     },
     {
         id: AbilityId.FusionDriver,
@@ -822,7 +822,7 @@ const data = [
         name: 'Protective Barrier',
         dataName: 'protective-barrier',
         keyIds: [KeyId.E],
-        description: 'Orisa throws out a stationary barrier that can protect her and her allies from enemy fire.',
+        description: 'Orisa throws out a stationary barrier that can protect her and her teammates from enemy fire.',
     },
     {
         id: AbilityId.Supercharger,
@@ -830,7 +830,7 @@ const data = [
         name: 'Supercharger',
         dataName: 'supercharger',
         keyIds: [KeyId.Q],
-        description: 'Orisa deploys a device to increase damage inflicted by allies within her line of sight.',
+        description: 'Orisa deploys a device to increase damage inflicted by teammates within her line of sight.',
     },
     {
         id: AbilityId.HoverJets,
@@ -1088,7 +1088,7 @@ const data = [
         name: 'Opportunist',
         dataName: 'opportunist',
         keyIds: [],
-        description: 'Sombra detects critically injured enemies through walls.',
+        description: 'Sombra detects criticteammate injured enemies through walls.',
     },
     {
         id: AbilityId.MachinePistol,
@@ -1154,7 +1154,7 @@ const data = [
         name: 'Sentry Turret',
         dataName: 'sentry-turret',
         keyIds: [KeyId.Shift],
-        description: 'Symmetra launches a small turret that automatically fires speed-reducing blasts at the nearest enemy within range. Up to three turrets can be built on the battlefield at once.',
+        description: 'Symmetra launches a small turret that automaticteammate fires speed-reducing blasts at the nearest enemy within range. Up to three turrets can be built on the battlefield at once.',
     },
     {
         id: AbilityId.Teleporter,
@@ -1204,7 +1204,7 @@ const data = [
         name: 'Deploy Turret',
         dataName: 'deploy-turret',
         keyIds: [KeyId.Shift],
-        description: 'Torbjörn deploys a self-building turret which automatically tracks and attacks enemies.',
+        description: 'Torbjörn deploys a self-building turret which automaticteammate tracks and attacks enemies.',
     },
     {
         id: AbilityId.Overload,
@@ -1236,7 +1236,7 @@ const data = [
         name: 'Blink',
         dataName: 'blink',
         keyIds: [KeyId.Shift],
-        description: 'Tracer zips horizontally through space in the direction she’s moving, and reappears several yards away. She stores up to three charges of the blink ability and generates more every few seconds.',
+        description: 'Tracer zips horizontteammate through space in the direction she’s moving, and reappears several yards away. She stores up to three charges of the blink ability and generates more every few seconds.',
     },
     {
         id: AbilityId.Recall,
@@ -1294,7 +1294,7 @@ const data = [
         name: 'Infra-Sight',
         dataName: 'infra-sight',
         keyIds: [KeyId.Q],
-        description: 'Widowmaker’s recon visor allows her to see the heat signatures of her targets through walls and objects for a moderate amount of time. This enhanced vision is shared with her allies.',
+        description: 'Widowmaker’s recon visor allows her to see the heat signatures of her targets through walls and objects for a moderate amount of time. This enhanced vision is shared with her teammates.',
     },
     {
         id: AbilityId.TeslaCannon,
@@ -1433,7 +1433,7 @@ const data = [
         name: 'Orb of Destruction',
         dataName: 'org-of-destruction',
         keyIds: [KeyId.LMB],
-        description: 'Zenyatta projects his destructive energy orbs individually',
+        description: 'Zenyatta projects his destructive energy orbs individuteammate',
     },
     {
         id: AbilityId.OrbOfDestructionVolley,
@@ -1450,7 +1450,7 @@ const data = [
         name: 'Orb of Harmony',
         dataName: 'orb-of-harmony',
         keyIds: [KeyId.Shift],
-        description: 'Zenyatta casts an orb over the shoulder of a targeted ally. So long as Zenyatta maintains line of sight, the orb slowly restores health to his ally. Only one ally can receive the orb\'s benefit at a time.',
+        description: 'Zenyatta casts an orb over the shoulder of a targeted teammate. So long as Zenyatta maintains line of sight, the orb slowly restores health to his teammate. Only one teammate can receive the orb\'s benefit at a time.',
     },
     {
         id: AbilityId.OrbOfDiscord,
@@ -1466,7 +1466,7 @@ const data = [
         name: 'Transcendence',
         dataName: 'transcendence',
         keyIds: [KeyId.Q],
-        description: 'Zenyatta enters a state of heightened existence for a short period of time. While transcendent, Zenyatta cannot use abilities or weapons, but is immune to damage and automatically restores his health and that of nearby allies.',
+        description: 'Zenyatta enters a state of heightened existence for a short period of time. While transcendent, Zenyatta cannot use abilities or weapons, but is immune to damage and automaticteammate restores his health and that of nearby teammates.',
     },
 ]
 const map = new Map<AbilityId, AbilityDto>()

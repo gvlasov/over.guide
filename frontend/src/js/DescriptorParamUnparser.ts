@@ -6,7 +6,7 @@ export default class DescriptorParamUnparser {
     unparseDescriptor(vso: GuideDescriptorVso) {
         return [
             DescriptorParamUnparser.unparseTagGroup(vso.players),
-            DescriptorParamUnparser.unparseTagGroup(vso.allies),
+            DescriptorParamUnparser.unparseTagGroup(vso.teammates),
             DescriptorParamUnparser.unparseTagGroup(vso.enemies),
             DescriptorParamUnparser.unparseThematicTags(vso),
             DescriptorParamUnparser.unparseMapTags(vso),

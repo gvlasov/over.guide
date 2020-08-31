@@ -6,10 +6,10 @@ import AbilityId from "data/AbilityId";
 
 export default interface GuideDescriptorDto extends GuideHeroTagDto {
     playerHeroes: HeroId[];
-    allyHeroes: HeroId[];
+    teammateHeroes: HeroId[];
     enemyHeroes: HeroId[];
     playerAbilities: AbilityId[];
-    allyAbilities: AbilityId[];
+    teammateAbilities: AbilityId[];
     enemyAbilities: AbilityId[];
     thematicTags: GuideTheme[]
     mapTags: MapId[]

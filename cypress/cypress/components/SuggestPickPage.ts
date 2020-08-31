@@ -5,7 +5,7 @@ import PicksList from "./PicksList";
 export default class SuggestPickPage extends Page {
     roster: Roster = new Roster()
     enemyPicksList: PicksList = new PicksList(1)
-    allyPicksList: PicksList = new PicksList(2)
+    teammatePicksList: PicksList = new PicksList(2)
 
     constructor() {
         super('/#/suggest-pick');

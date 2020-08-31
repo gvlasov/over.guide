@@ -100,10 +100,10 @@ export default {
         async infiniteHandler($state) {
             await backend.searchGuidesPaginated({
                 playerHeroes: this.descriptor.players.heroes.map(it => it.id),
-                allyHeroes: this.descriptor.allies.heroes.map(it => it.id),
+                teammateHeroes: this.descriptor.teammates.heroes.map(it => it.id),
                 enemyHeroes: this.descriptor.enemies.heroes.map(it => it.id),
                 playerAbilities: this.descriptor.players.abilities.map(it => it.id),
-                allyAbilities: this.descriptor.allies.abilities.map(it => it.id),
+                teammateAbilities: this.descriptor.teammates.abilities.map(it => it.id),
                 enemyAbilities: this.descriptor.enemies.abilities.map(it => it.id),
                 mapTags: this.descriptor.maps.map(it => it.id),
                 thematicTags: this.descriptor.thematicTags.map(it => it.id),

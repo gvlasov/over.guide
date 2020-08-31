@@ -52,7 +52,7 @@ class DtoMap {
             if (gamerPosition === GamerPositionId.Players) {
                 return 'playerHeroes'
             } else if (gamerPosition === GamerPositionId.Allies) {
-                return 'allyHeroes'
+                return 'teammateHeroes'
             } else if (gamerPosition === GamerPositionId.Enemies) {
                 return 'enemyHeroes'
             }
@@ -60,7 +60,7 @@ class DtoMap {
             if (gamerPosition === GamerPositionId.Players) {
                 return 'playerAbilities'
             } else if (gamerPosition === GamerPositionId.Allies) {
-                return 'allyAbilities'
+                return 'teammateAbilities'
             } else if (gamerPosition === GamerPositionId.Enemies) {
                 return 'enemyAbilities'
             }
@@ -85,7 +85,7 @@ export default class DescriptorParamParser {
     unparseDescriptor(vso: GuideDescriptorVso) {
         return [
             DescriptorParamParser.unparseTagGroup(vso.players),
-            DescriptorParamParser.unparseTagGroup(vso.allies),
+            DescriptorParamParser.unparseTagGroup(vso.teammates),
             DescriptorParamParser.unparseTagGroup(vso.enemies),
             vso.thematicTags.map(tag => tag.dataName).join(','),
             vso.maps.map(m => m.dataName).join(','),
@@ -106,8 +106,8 @@ export default class DescriptorParamParser {
         const output = {
             playerHeroes: [],
             playerAbilities: [],
-            allyHeroes: [],
-            allyAbilities: [],
+            teammateHeroes: [],
+            teammateAbilities: [],
             enemyHeroes: [],
             enemyAbilities: [],
             thematicTags: [],
@@ -139,7 +139,7 @@ export default class DescriptorParamParser {
     private static positionPartName2PositionId(positionPart: string): GamerPositionId {
         if (positionPart === 'players') {
             return GamerPositionId.Players
-        } else if (positionPart === 'allies') {
+        } else if (positionPart === 'teammates') {
             return GamerPositionId.Allies
         } else if (positionPart === 'enemies') {
             return GamerPositionId.Enemies

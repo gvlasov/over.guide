@@ -1,7 +1,7 @@
 <template>
     <span class="tag-type-group-wrap">
         <div class="tag-type-infix"
-             v-bind:class="{'infix-ally': tagGroup.gamerPosition.isAlly, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
+             v-bind:class="{'infix-teammate': tagGroup.gamerPosition.isAlly, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
         >
             <slot name="infix"/>
         </div>
@@ -45,14 +45,14 @@ export default {
     }
 
     $infix-width: 1.5em;
-    $infix-ally-font-size: 1.4em;
+    $infix-teammate-font-size: 1.4em;
 
-    .infix-ally, .infix-enemy {
+    .infix-teammate, .infix-enemy {
         min-width: $infix-width;
     }
 
-    .infix-ally {
-        font-size: $infix-ally-font-size;
-        min-width: #{$infix-width/$infix-ally-font-size}em;
+    .infix-teammate {
+        font-size: $infix-teammate-font-size;
+        min-width: #{$infix-width/$infix-teammate-font-size}em;
     }
 </style>

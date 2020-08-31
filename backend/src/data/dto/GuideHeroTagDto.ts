@@ -4,8 +4,8 @@ import AbilityId from "data/AbilityId";
 export default interface GuideHeroTagDto {
     readonly playerHeroes: HeroId[];
     readonly playerAbilities: AbilityId[];
-    readonly allyHeroes: HeroId[];
-    readonly allyAbilities: AbilityId[];
+    readonly teammateHeroes: HeroId[];
+    readonly teammateAbilities: AbilityId[];
     readonly enemyHeroes: HeroId[];
     readonly enemyAbilities: AbilityId[];
 }

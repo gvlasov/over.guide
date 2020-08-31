@@ -9,9 +9,9 @@
                     @pickTap="unselectEnemyHero"
             />
             <Picks
-                    ref="allyPicks"
+                    ref="teammatePicks"
                     style="margin-bottom: 1.5vw;"
-                    :teamComp="context.allyComp"
+                    :teamComp="context.teammateComp"
                     @pickTap="unselectAllyHero"
             />
             <input
@@ -46,16 +46,16 @@
 </template>
 
 <script>
-    import Picks from '@/vue/training/Picks.vue';
-    import Backend from '@/js/Backend';
-    import axios from "axios";
-    import SuggestionRoster from "./SuggestionRoster.vue";
-    import SelectionRoster from "./SelectionRoster.vue";
-    import PickContextGenerator from "@/js/PickContextGenerator";
-    import TeamComp from "@/js/TeamComp";
-    import SeededShuffler from "@/js/SeededShuffler";
+import Picks from '@/vue/training/Picks.vue';
+import Backend from '@/js/Backend';
+import axios from "axios";
+import SuggestionRoster from "./SuggestionRoster.vue";
+import SelectionRoster from "./SelectionRoster.vue";
+import PickContextGenerator from "@/js/PickContextGenerator";
+import TeamComp from "@/js/TeamComp";
+import SeededShuffler from "@/js/SeededShuffler";
 
-    const backend = new Backend(axios);
+const backend = new Backend(axios);
     const contextGenerator = new PickContextGenerator(
         new SeededShuffler('asdf')
     );
@@ -79,7 +79,7 @@
                 if (hero === null) {
                     return;
                 }
-                this.context.allyComp.unsetAtPosition(position);
+                this.context.teammateComp.unsetAtPosition(position);
                 this.suggestion = null;
             },
             unselectEnemyHero(hero, position) {
@@ -99,14 +99,14 @@
                     } else {
                         throw new Error("Can't select " + hero.name + " in enemy comp");
                     }
-                } else if (this.context.allyComp.canSelect(hero)) {
-                    this.context.allyComp.setNextAvailable(hero);
+                } else if (this.context.teammateComp.canSelect(hero)) {
+                    this.context.teammateComp.setNextAvailable(hero);
                 } else {
                     throw new Error("Can't select " + hero.name + " in either comp");
                 }
                 if (
                     (!this.context.isAllPick() || this.context.enemyComp.isFull())
-                    && this.context.allyComp.numberOfVacancies() === 1
+                    && this.context.teammateComp.numberOfVacancies() === 1
                 ) {
                     const self = this;
                     backend
@@ -124,7 +124,7 @@
             },
         },
         watch: {
-            'context.allyComp': (n, o) => true,
+            'context.teammateComp': (n, o) => true,
             'context.enemyComp': (n, o) => true,
         },
         data() {

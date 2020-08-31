@@ -6,29 +6,29 @@ import MapId from "data/MapId";
 import HeroId from "data/HeroId";
 
 export default class PickContext {
-    public readonly allyComp: TeamComp;
+    public readonly teammateComp: TeamComp;
     public readonly enemyComp: TeamComp | null;
     public readonly bans: HeroDto[];
     public readonly map: MapId | null;
 
     constructor(
-        allyComp: TeamComp,
+        teammateComp: TeamComp,
         enemyComp: TeamComp | null,
         bans: HeroDto[],
         map: MapId | null
     ) {
-        this.allyComp = allyComp;
+        this.teammateComp = teammateComp;
         this.enemyComp = enemyComp;
         this.bans = bans;
         this.map = map;
     }
 
     heroesLeftForRoster(): HeroDto[] {
-        const remainingRoles = this.allyComp.remainingRoles();
+        const remainingRoles = this.teammateComp.remainingRoles();
         return Array.from(heroes.values()).filter(
             hero =>
-                !this.allyComp.heroes.find(
-                    allyHero => allyHero !== null && allyHero.dataName === hero.dataName
+                !this.teammateComp.heroes.find(
+                    teammateHero => teammateHero !== null && teammateHero.dataName === hero.dataName
                 )
                 && remainingRoles.includes(hero.role)
         );
@@ -44,10 +44,10 @@ export default class PickContext {
                 ...this.enemyComp.picks(),
                 ...this.enemyComp.heroesInPickedOutRoles()
             ];
-        } else if (!this.allyComp.isFull()) {
+        } else if (!this.teammateComp.isFull()) {
             return [
-                ...this.allyComp.picks(),
-                ...this.allyComp.heroesInPickedOutRoles()
+                ...this.teammateComp.picks(),
+                ...this.teammateComp.heroesInPickedOutRoles()
             ];
         } else {
             return [...heroes.values()];
@@ -55,12 +55,12 @@ export default class PickContext {
     };
 
     forRequest(): PickContextDto {
-        const allyComp: HeroId[] =
-            this.allyComp.heroes
+        const teammateComp: HeroId[] =
+            this.teammateComp.heroes
                 .filter((h): h is HeroDto => h !== null)
                 .map((hero: HeroDto): HeroId => hero.id);
         return {
-            allyComp: allyComp,
+            teammateComp: teammateComp,
             enemyComp:
                 (
                     this.isAllPick()

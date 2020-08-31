@@ -31,12 +31,12 @@ export default class DescriptorGenerator {
         const themes = shuffler.shuffle(allThemes).slice(0, themeNumber)
         const buckets = this.splitInto3Buckets(heroNumber)
         const playerHeroes = heroes.slice(0, buckets[0])
-        const allyHeroes = heroes.slice(buckets[0], buckets[1])
+        const teammateHeroes = heroes.slice(buckets[0], buckets[1])
         const enemyHeroes = heroes.slice(buckets[0] + buckets[1], buckets[2])
         const playerAbilities =
             this.getGroupAbilities(playerHeroes, shuffler);
-        const allyAbilities =
-            this.getGroupAbilities(allyHeroes, shuffler);
+        const teammateAbilities =
+            this.getGroupAbilities(teammateHeroes, shuffler);
         const enemyAbilities =
             this.getGroupAbilities(enemyHeroes, shuffler);
 
@@ -44,8 +44,8 @@ export default class DescriptorGenerator {
             {
                 playerHeroes: playerHeroes.map(h => h.id),
                 playerAbilities: playerAbilities,
-                allyHeroes: allyHeroes.map(h => h.id),
-                allyAbilities: allyAbilities,
+                teammateHeroes: teammateHeroes.map(h => h.id),
+                teammateAbilities: teammateAbilities,
                 enemyHeroes: enemyHeroes.map(h => h.id),
                 enemyAbilities: enemyAbilities,
                 mapTags: [],

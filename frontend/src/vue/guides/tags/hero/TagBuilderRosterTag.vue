@@ -22,22 +22,22 @@
             </template>
         </TagGroupFrame>
         <TagGroupFrame
-                v-hammer:tap="() => $emit('allyTap')"
-                :tag-group="descriptor.allies"
+                v-hammer:tap="() => $emit('teammateTap')"
+                :tag-group="descriptor.teammates"
         >
             <template slot="infix">+</template>
             <template slot="frame-content">
                 <TagGroupBackground
-                        v-if="descriptor.allies.heroes.length > 0"
-                        :tag-group="descriptor.allies"
+                        v-if="descriptor.teammates.heroes.length > 0"
+                        :tag-group="descriptor.teammates"
                         v-bind:class="{ selected : selectedPosition.isAlly}"
                 >
-                    <TagGroupHeroes :tag-group="descriptor.allies"/>
+                    <TagGroupHeroes :tag-group="descriptor.teammates"/>
                 </TagGroupBackground>
                 <TagGroupInvite
                         v-else
-                        :tag-group="descriptor.allies"
-                        v-hammer:tap="() => (selecting = 'ally')"
+                        :tag-group="descriptor.teammates"
+                        v-hammer:tap="() => (selecting = 'teammate')"
                         v-bind:class="{ selected : selectedPosition.isAlly}"
                 />
             </template>

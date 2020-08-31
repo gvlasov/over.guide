@@ -4,7 +4,10 @@
             :tag-group="tagGroup"
             v-bind:class="tagGroup.gamerPosition.dataName"
     >
-        <div class="invite-text">any<br/>{{ tagGroup.gamerPosition.dataName }}
+        <div class="invite-text">any<br/>
+            <span style="font-size: .84em;">
+            {{ tagGroup.gamerPosition.dataName }}
+            </span>
         </div>
     </TagGroupBackground>
 </template>
@@ -69,8 +72,8 @@ export default {
     background-position-x: 0;
 }
 
-.ally {
-    @include group($tag-ally-color);
+.teammate {
+    @include group($tag-teammate-color);
     background-position-x: 80px;
 }
 
