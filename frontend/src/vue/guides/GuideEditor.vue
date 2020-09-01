@@ -128,7 +128,6 @@ export default {
       guide: {
           handler: debounce(function (newValue) {
               draft.saveDraft(newValue);
-              console.log('saved draft')
           }, 500),
           deep: true,
       }
@@ -213,7 +212,7 @@ export default {
         data() {
             const params = new ParamsDescriptor(this.$route.params.descriptor);
             const draftGuide = draft.guide;
-            if (draftGuide === null) {
+            if (draftGuide === null || draftGuide.parts.length === 0) {
                 return {
                     guide: new GuideVso({
                         id: undefined,
