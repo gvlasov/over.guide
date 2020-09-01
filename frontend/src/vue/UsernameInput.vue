@@ -6,8 +6,18 @@
                 @input="onInput"
                 v-bind:class="{'error-input' : !valid}"
         />
-        <div class="validation" v-if="!valid">
-            <div class="error">Name must be between 3-12 characters</div>
+        <div
+                v-if="validationEnabled"
+                class="validation"
+        >
+            <div
+                    v-if="!isLengthValid"
+            >Name must be between 3-12 characters
+            </div>
+            <div
+                    v-if="!isUsernameAvailable"
+            >Username taken
+            </div>
         </div>
     </form>
 </template>
@@ -36,36 +46,42 @@ export default {
         return {
             initialUsername: undefined,
             validationEnabled: false,
-            valid: true,
+            takenUsernames: [],
         };
+    },
+    computed: {
+        isLengthValid() {
+            return this.username.length >= 3 && this.username.length <= 12;
+        },
+        isUsernameAvailable() {
+            return !this.takenUsernames.includes(this.username);
+        },
+        valid() {
+            return this.isLengthValid && this.isUsernameAvailable;
+        }
     },
     methods: {
         onInput(e) {
             this.$emit('input', e.target.value)
-            if (this.validationEnabled) {
-                this.validate();
+            if (e.target.value.length > 3) {
+                this.validationEnabled = true;
             }
         },
         onFormSubmit(e) {
             e.preventDefault();
-            const newUsername = this.username;
-            this.validate();
             if (this.valid) {
-                backend.changeUsername(newUsername)
+                backend.changeUsername(this.username)
                     .then(result => {
-                        Cookies.set('username', newUsername);
-                        this.initialUsername = newUsername
+                        Cookies.set('username', this.username);
+                        this.initialUsername = this.username
                         window.location.reload();
                     })
                     .catch(e => {
+                        this.takenUsernames.push(this.username);
                         this.$emit('usernameRevert', this.initialUsername);
                     });
             }
             return false
-        },
-        validate() {
-            this.valid = this.username.length >= 3 && this.username.length <= 12;
-            this.validationEnabled = !this.valid;
         },
     },
     async mounted() {
@@ -105,6 +121,7 @@ form {
         border-width: 0;
         box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
         font-family: $body-font;
+
         &.error-input {
             opacity: .8;
         }
@@ -120,7 +137,7 @@ form {
         white-space: nowrap;
         text-align: right;
 
-        .error {
+        & > div {
             color: $tag-player-color;
             padding: .1em .8em;
         }

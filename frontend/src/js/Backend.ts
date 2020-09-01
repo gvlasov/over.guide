@@ -12,6 +12,7 @@ import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
 import TrainingGoalDto from "data/dto/TrainingGoalDto";
 import UserInfoDto from "data/dto/UserInfoDto";
+import UsernameOccupiedException from "@/js/UsernameOccupiedException";
 
 const querystring = require('query-string')
 
@@ -209,7 +210,12 @@ export default class Backend {
             'POST',
             `/user/change-username`,
             {newUsername: newUsername},
-            response => null
+            response => {
+                if (response.status === 422){
+                    throw new UsernameOccupiedException(newUsername)
+                }
+                return null;
+            }
         )
     };
 
