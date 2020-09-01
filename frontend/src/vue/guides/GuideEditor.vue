@@ -282,6 +282,7 @@ export default {
             display: flex;
             justify-content: space-evenly;
             z-index: 1;
+            margin: .3em;
 
             & > * {
                 font-size: 2rem;
