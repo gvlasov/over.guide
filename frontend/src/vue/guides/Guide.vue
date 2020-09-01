@@ -6,7 +6,11 @@
                     v-hammer:tap="() => $router.push(tagLink(guide.descriptor)).catch(()=>{})"
                     v-bind:class="{'same-as-search': guide.descriptor.equals(searchDescriptor)}"
             >
-                <Tag class="hero-tag" :descriptor="guide.descriptor"/>
+                <Tag
+                        class="hero-tag"
+                        :descriptor="guide.descriptor"
+                        v-if="guide.descriptor.hasHeroes"
+                />
                 <TagBadges ref="badgeTagsWrap" :descriptor="guide.descriptor"/>
             </div>
             <div class="authorship">
@@ -170,6 +174,9 @@ export default {
 }
 
 .tags {
+    display: flex;
+    gap: .5em;
+    align-items: center;
     text-align: left;
     cursor: pointer;
     transform: translateX(0);
@@ -178,6 +185,14 @@ export default {
     &:hover {
         transform: translateX(1em);
         transition: transform .13s;
+    }
+
+    .badge-tags-wrap {
+        display: inline-block;
+    }
+
+    .hero-tag {
+        display: inline-block;
     }
 
 }
@@ -240,15 +255,6 @@ a {
     /* For it to be positioned above everything else,
            which is important when the dropdown is displayed
            */
-}
-
-.hero-tag {
-    display: inline-block;
-    margin-right: .5em;
-}
-
-.badge-tags-wrap {
-    display: inline-block;
 }
 
 .authorship {

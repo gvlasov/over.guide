@@ -109,4 +109,10 @@ export default class GuideDescriptorVso {
         ].toString()
     }
 
+    get hasHeroes() : boolean {
+        return this.players.heroes.length > 0 ||
+            this.teammates.heroes.length > 0 ||
+            this.enemies.heroes.length > 0;
+    }
+
 }
