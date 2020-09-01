@@ -214,6 +214,40 @@ export default {
         align-content: center;
         flex-direction: column;
         flex-wrap: nowrap;
+
+        .roster {
+            flex-grow: 0;
+            flex-shrink: 1;
+            flex-basis: auto;
+            overflow-y: auto;
+            width: 100%;
+            /*max-width: calc(100% - 18rem);*/
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            margin: 0 auto;
+        }
+
+        .ability-select-wrap {
+            flex-grow: 1;
+            flex-shrink: 1;
+            flex-basis: 0;
+            overflow-y: auto;
+            overscroll-behavior: none contain;
+            width: 100%;
+            max-width: 100%;
+            padding-top: 2rem;
+        }
+
+        .button-wrap {
+            flex-shrink: 0;
+            flex-basis: content;
+            z-index: 1;
+            padding-top: 1rem;
+            padding-bottom: 4vh;
+            max-width: initial;
+            text-align: center;
+        }
     }
 
     .tag-builder-roster-wrap {
@@ -221,40 +255,6 @@ export default {
         height: 100vh;
         line-height: 100vh;
         vertical-align: top;
-    }
-
-    .roster {
-        flex-grow: 0;
-        flex-shrink: 1;
-        flex-basis: auto;
-        overflow-y: auto;
-        width: 100%;
-        /*max-width: calc(100% - 18rem);*/
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
-        margin: 0 auto;
-    }
-
-    .ability-select-wrap {
-        flex-grow: 1;
-        flex-shrink: 1;
-        flex-basis: 0;
-        overflow-y: auto;
-        overscroll-behavior: none contain;
-        width: 100%;
-        max-width: 100%;
-        padding-top: 2rem;
-    }
-
-    .button-wrap {
-        flex-shrink: 0;
-        flex-basis: content;
-        z-index: 1;
-        padding-top: 1rem;
-        padding-bottom: 4vh;
-        max-width: initial;
-        text-align: center;
     }
 
     .aside-button {
