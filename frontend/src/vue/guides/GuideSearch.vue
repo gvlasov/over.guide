@@ -13,12 +13,15 @@ import GuideBrowser from "@/vue/guides/GuideBrowser";
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
 import ParamsDescriptor from "@/js/ParamsDescriptor";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
 export default {
     methods: {},
     data() {
         return {
-            descriptor: new ParamsDescriptor(this.$route.params.descriptor).compute(),
+            descriptor: new GuideDescriptorVso(
+                new ParamsDescriptor(this.$route.params.descriptor).compute()
+            ),
         };
     },
     components: {

@@ -1,24 +1,22 @@
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import DescriptorParamParser from "@/js/DescriptorParamParser";
+import GuideDescriptorDto from "data/dto/GuideDescriptorDto";
 
 export default class ParamsDescriptor {
     constructor(private readonly paramsText: string | undefined) {
 
     }
 
-    compute(): GuideDescriptorVso {
+    compute(): GuideDescriptorDto {
         if (typeof this.paramsText === 'undefined') {
-            return new GuideDescriptorVso(
-                new GuideDescriptorQuickie({})
-            )
+            return new GuideDescriptorQuickie({})
         } else {
             return (new DescriptorParamParser()).parseParam(this.paramsText);
         }
     }
 
     get hasParams() {
-        return typeof this.paramsText === 'undefined'
+        return typeof this.paramsText !== 'undefined'
     }
 
 }

@@ -37,10 +37,7 @@
         </div>
         <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
             <div class="text-guide-part" v-if="part.part.kind === 'text'">
-                <div
-                        class="text-guide-part-content"
-                        v-html="part.render()"
-                ></div>
+                <GuidePartText :part="part"/>
             </div>
             <AspectRatioBox v-if="part.part.kind === 'video'">
                 <VideoLoadingScreen/>
@@ -78,6 +75,7 @@ import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 import TagBadges from "@/vue/guides/TagBadges";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
+import GuidePartText from "@/vue/guides/GuidePartText";
 
 const backend = new Backend(axios);
 const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
@@ -133,6 +131,7 @@ export default {
     mounted() {
     },
     components: {
+        GuidePartText,
         TagBadges,
         VideoLoadingScreen,
         AspectRatioBox,

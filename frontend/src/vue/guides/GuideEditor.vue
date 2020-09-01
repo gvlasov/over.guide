@@ -37,11 +37,11 @@
         <draggable class="guide-parts root-content-panel-wrap" v-model="guide.parts" draggable=".guide-part" :disabled="isEditing()">
             <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
                 <GuidePartTextEditor
-                        v-if="widget.isText()"
+                        v-if="widget.part.kind === 'text'"
                         :widget="widget"
                 />
                 <GuidePartVideoEditor
-                        v-if="widget.isVideo()"
+                        v-if="widget.part.kind === 'video'"
                         :widget="widget"
                         :index="index"
                         @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
@@ -55,7 +55,7 @@
                     >Edit
                     </OverwatchButton>
                     <OverwatchButton
-                            v-if="widget.editing && widget.hasContent"
+                            v-if="widget.editing && partHasContent(widget.part)"
                             type="default"
                             class="view-button"
                             v-hammer:tap="() => widget.editing = false"
@@ -113,34 +113,29 @@ import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
 import ParamsDescriptor from "@/js/ParamsDescriptor";
+import StoredGuideDraft from "@/js/StoredGuideDraft";
+import GuideVso from "@/js/vso/GuideVso";
+import debounce from 'lodash.debounce'
 
 const backend = new Backend(axios);
 
+const draft = new StoredGuideDraft()
 export default {
+    name: 'GuideEditor',
   model: {},
   props: {},
+    watch: {
+      guide: {
+          handler: debounce(function (newValue) {
+              draft.saveDraft(newValue);
+              console.log('saved draft')
+          }, 500),
+          deep: true,
+      }
+    },
   methods: {
-    async saveGuide() {
-      const guideId = await backend.saveGuide({
-        guideId: this.guide.guideId,
-                    descriptor: {
-                        playerHeroes:
-                            this.guide.descriptor.players.heroes.map(hero => hero.id),
-                        teammateHeroes:
-                            this.guide.descriptor.teammates.heroes.map(hero => hero.id),
-                        enemyHeroes:
-                            this.guide.descriptor.enemies.heroes.map(hero => hero.id),
-                        playerAbilities:
-                            this.guide.descriptor.players.abilities.map(ability => ability.id),
-                        teammateAbilities:
-                            this.guide.descriptor.teammates.abilities.map(ability => ability.id),
-                        enemyAbilities:
-                            this.guide.descriptor.enemies.abilities.map(ability => ability.id),
-                        mapTags: this.guide.descriptor.maps.map(vso => vso.id),
-                        thematicTags: this.guide.descriptor.thematicTags.map(vso => vso.id),
-                    },
-                    parts: this.guide.parts.map(widget => widget.part)
-                })
+      async saveGuide() {
+      const guideId = await backend.saveGuide(this.guide.toDto())
                 if (guideId !== null) {
                     this.guide.guideId = guideId
                 }
@@ -205,29 +200,37 @@ export default {
             onEndSecondsChangeHacky(widget, newValue) {
                 widget.part.excerpt.endSeconds = newValue;
             },
+            partHasContent(part) {
+                if (part.kind === 'text') {
+                    return part.contentMd !== '';
+                } else if (part.kind === 'video') {
+                    return part.excerpt !== null;
+                } else {
+                    throw new Error('Unknown part type ' + part.kind)
+                }
+            }
         },
         data() {
-            return {
-                guide: {
-                  id: undefined,
-                  guideId: undefined,
-                  descriptor: new ParamsDescriptor(this.$route.params.descriptor).compute(),
-                  parts: [
-                    new GuidePartVideoWidget({
-                      excerpt: {
-                        youtubeVideoId: 'Ev373c7wSRg',
-                        startSeconds: 0,
-                        endSeconds: 3,
-                      },
-                      kind: 'video',
-                    }, true)
-                  ]
-                },
+            const params = new ParamsDescriptor(this.$route.params.descriptor);
+            const draftGuide = draft.guide;
+            if (draftGuide === null) {
+                return {
+                    guide: new GuideVso({
+                        id: undefined,
+                        guideId: undefined,
+                        descriptor: params.compute(),
+                        parts: []
+                    }),
+                }
+            } else {
+                return {
+                    guide: draftGuide,
+                }
             }
         },
         computed: {
             isDoneButtonEnabled() {
-                return typeof this.guide.parts.find(p => p.hasContent) !== 'undefined';
+                return typeof this.guide.parts.find(widget => this.partHasContent(widget.part)) !== 'undefined';
             },
         },
         components: {

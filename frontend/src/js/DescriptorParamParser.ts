@@ -102,7 +102,7 @@ export default class DescriptorParamParser {
                 .join(',');
     }
 
-    parseParam(descriptorParam: string): GuideDescriptorVso {
+    parseParam(descriptorParam: string): GuideDescriptorDto {
         const output = {
             playerHeroes: [],
             playerAbilities: [],
@@ -133,7 +133,7 @@ export default class DescriptorParamParser {
                 (output[field] as any[]).push(dto.id)
             }
         }
-        return new GuideDescriptorVso(output)
+        return output
     }
 
     private static positionPartName2PositionId(positionPart: string): GamerPositionId {

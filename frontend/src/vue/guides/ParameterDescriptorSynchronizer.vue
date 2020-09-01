@@ -32,7 +32,9 @@ export default {
             '$route.params.descriptor'(paramsText) {
                 this.$emit(
                     'descriptorChange',
-                    new ParamsDescriptor(paramsText).compute()
+                    new GuideDescriptorVso(
+                        new ParamsDescriptor(paramsText).compute()
+                    )
                 );
             },
             descriptor: {

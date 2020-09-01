@@ -1,8 +1,9 @@
 <template>
     <div class="text-guide-part">
-        <div v-if="!widget.editing" class="text-guide-part-content"
-             v-html="widget.render()"
-        ></div>
+        <GuidePartText
+                v-if="!widget.editing"
+                :part="widget.part"
+        ></GuidePartText>
         <textarea
                 v-if="widget.editing"
                 class="guide-part-text-editor"
@@ -15,6 +16,7 @@
 
 <script>
 import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
+import GuidePartText from "@/vue/guides/GuidePartText";
 
 export default {
         model: {},
@@ -64,7 +66,9 @@ export default {
         data() {
             return {}
         },
-        components: {},
+        components: {
+            GuidePartText,
+        },
     };
 
 </script>
@@ -79,14 +83,6 @@ export default {
         max-width: 100%;
         margin: 0 auto;
         display: block;
-    }
-
-    .text-guide-part-content {
-        text-align: left;
-        pointer-events: none;
-        font-size: 1.5em;
-        word-break: break-word;
-        font-family: $body-font;
     }
 
     textarea.guide-part-text-editor {
