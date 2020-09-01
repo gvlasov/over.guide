@@ -210,7 +210,7 @@ export default {
     .tag-builder-roster-content {
         display: flex;
         flex-grow: 1;
-        justify-content: center;
+        justify-content: flex-end;
         align-content: center;
         flex-direction: column;
         flex-wrap: nowrap;
@@ -244,7 +244,7 @@ export default {
             flex-basis: content;
             z-index: 1;
             padding-top: 1rem;
-            padding-bottom: 4vh;
+            padding-bottom: 1rem;
             max-width: initial;
             text-align: center;
         }
