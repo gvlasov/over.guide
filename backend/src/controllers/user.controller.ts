@@ -63,7 +63,7 @@ export class UserController {
         this.authService.getUser(request)
             .then(user => {
                 if (usernameChange.newUsername.length < 3 || usernameChange.newUsername.length > 12) {
-                    response.status(HttpStatus.BAD_REQUEST)
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     response.send()
                 } else {
                     User.update(

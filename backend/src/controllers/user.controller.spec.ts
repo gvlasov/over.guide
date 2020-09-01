@@ -128,7 +128,7 @@ describe(
                         newUsername: 'jo'
                     } as UsernameChangeDto)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                     .then(response => {
                         return user.reload()
                     })
@@ -141,7 +141,7 @@ describe(
                         newUsername: '1234567890abc'
                     } as UsernameChangeDto)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                     .then(response => {
                         return user.reload()
                     })

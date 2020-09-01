@@ -283,11 +283,11 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post(`/my-training-goals/${guide1.id}`)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                 await request(ctx.app.getHttpServer())
                     .post(`/my-training-goals/${guide1.id}`)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                 await request(ctx.app.getHttpServer())
                     .delete(`/my-training-goals/${guide1.id}`)
                     .set({Authorization: `Bearer ${token}`})
@@ -299,7 +299,7 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post(`/my-training-goals/${guide1.id}`)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
             });
             it('can add training goal at certain place in the list', async () => {
                 await ctx.fixtures(
@@ -468,7 +468,7 @@ describe(
                         newGoalId: 3,
                         newGoalsOrder: [2, 1],
                     } as AddAndReorderTrainingGoalDto)
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                 await request(ctx.app.getHttpServer())
                     .post('/my-training-goals/add-and-reorder')
                     .set({Authorization: `Bearer ${token}`})
@@ -476,7 +476,7 @@ describe(
                         newGoalId: 9999,
                         newGoalsOrder: [2, 1, 3, 9999],
                     } as AddAndReorderTrainingGoalDto)
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                 await request(ctx.app.getHttpServer())
                     .post('/my-training-goals/add-and-reorder')
                     .set({Authorization: `Bearer ${token}`})
@@ -484,7 +484,7 @@ describe(
                         newGoalId: 1,
                         newGoalsOrder: [2, 1, 1],
                     } as AddAndReorderTrainingGoalDto)
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                 await request(ctx.app.getHttpServer())
                     .post('/my-training-goals/add-and-reorder')
                     .set({Authorization: `Bearer ${token}`})
@@ -492,7 +492,7 @@ describe(
                         newGoalId: 1,
                         newGoalsOrder: [1, 2],
                     } as AddAndReorderTrainingGoalDto)
-                    .expect(HttpStatus.BAD_REQUEST)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                     .then(response => {
                         expect(
                             response.body.clientAndServerContentDiffer

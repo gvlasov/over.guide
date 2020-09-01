@@ -140,7 +140,7 @@ export class TrainingGoalController {
         })
             .then(async goals => {
                 if (newOrderedGuideIds.length !== goals.length) {
-                    response.status(HttpStatus.BAD_REQUEST)
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     response.send();
                     return;
                 }
@@ -148,7 +148,7 @@ export class TrainingGoalController {
                 for (let goal of goals) {
                     const newOrder = goals.length - newOrderedGuideIds.indexOf(goal.guideId);
                     if (newOrder === -1) {
-                        response.status(HttpStatus.BAD_REQUEST)
+                        response.status(HttpStatus.UNPROCESSABLE_ENTITY)
                         response.send();
                         return;
                     }
@@ -178,7 +178,7 @@ export class TrainingGoalController {
         const user = await this.authService.getUser(request)
         const dto: AddAndReorderTrainingGoalDto = request.body
         if (!dto.newGoalsOrder.includes(dto.newGoalId)) {
-            response.status(HttpStatus.BAD_REQUEST)
+            response.status(HttpStatus.UNPROCESSABLE_ENTITY)
             response.send();
             return;
         }
@@ -192,7 +192,7 @@ export class TrainingGoalController {
                 if (
                     arrayXor([...goals.map(g => g.guideId), dto.newGoalId], dto.newGoalsOrder).length !== 0
                 ) {
-                    response.status(HttpStatus.BAD_REQUEST)
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     response.send({clientAndServerContentDiffer: true});
                     return;
                 }
@@ -252,7 +252,7 @@ export class TrainingGoalController {
         )
             .then(async (rows: any) => {
                 if (rows.find(r => r.guideId === guide.id)) {
-                    response.status(HttpStatus.BAD_REQUEST)
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     response.send('already added')
                     return;
                 }
