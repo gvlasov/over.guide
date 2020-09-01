@@ -16,11 +16,10 @@
                             v-hammer:tap="logout"
                     >Logout
                     </OverwatchButton>
-                    <transition name="fade">
-                        <form v-show="changingUsername" @submit="onUsernameChangeFormSubmit">
-                            <input type='text' v-model="userInfo.user.name"/>
-                        </form>
-                    </transition>
+                    <UsernameInput
+                            v-show="changingUsername"
+                            v-model="userInfo.user.name"
+                    />
                     <OverwatchButton
                             v-if="!changingUsername"
                             type="default"
@@ -55,6 +54,7 @@ import Backend from "@/js/Backend";
 import Cookies from 'js-cookie';
 import Guide from "@/vue/guides/Guide";
 import UserInfoVso from "@/js/vso/UserInfoVso";
+import UsernameInput from "@/vue/UsernameInput";
 
 const backend = new Backend(axios);
 export default {
@@ -100,12 +100,12 @@ export default {
     },
     async mounted() {
         this.userInfo = new UserInfoVso(await (backend.getUserInfo(this.userId)));
-        this.initialUsername = this.userInfo.user.name;
     },
     components: {
         Guide,
         OverwatchButton,
         TrainingGoal,
+        UsernameInput,
     },
 };
 
