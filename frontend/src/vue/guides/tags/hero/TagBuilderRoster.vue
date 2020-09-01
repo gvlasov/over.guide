@@ -221,7 +221,6 @@ export default {
             flex-basis: auto;
             overflow-y: auto;
             width: 100%;
-            /*max-width: calc(100% - 18rem);*/
             display: flex;
             flex-direction: column;
             justify-content: end;
@@ -236,7 +235,7 @@ export default {
             overscroll-behavior: none contain;
             width: 100%;
             max-width: 100%;
-            padding-top: 2rem;
+            margin-top: 2rem;
         }
 
         .button-wrap {
