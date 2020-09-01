@@ -45,11 +45,10 @@
                         />
                     </div>
                 </div>
-                <div
-                        v-if="typeof firstTextPart !== 'undefined'"
-                        class="text-guide-part-content"
-                        v-html="firstTextPart.render()"
-                ></div>
+                <GuidePartText
+                        v-if="typeof firstTextWidget !== 'undefined'"
+                        :part="firstTextWidget.part"
+                />
                 <div class="unclickable">
                     <AspectRatioBox>
                         <YoutubeVideo
@@ -96,6 +95,7 @@ import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
 import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
 import Guide from "@/vue/guides/Guide";
 import AspectRatioBox from "@/vue/AspectRatioBox";
+import GuidePartText from "@/vue/guides/GuidePartText";
 
 const backend = new Backend(axios);
 
@@ -122,11 +122,11 @@ export default {
     },
     computed: {
         firstVideoWidget() {
-            return this.trainingGoal.guide.parts.find(p => p.kind === 'video')
+            return this.trainingGoal.guide.parts.find(widget => widget.part.kind === 'video')
 
         },
-        firstTextPart() {
-            return this.trainingGoal.guide.parts.find(p => p.kind === 'text')
+        firstTextWidget() {
+            return this.trainingGoal.guide.parts.find(widget => widget.part.kind === 'text')
         },
     },
     mounted() {
@@ -137,6 +137,7 @@ export default {
         }
     },
     components: {
+        GuidePartText,
         AspectRatioBox,
         Guide,
         ThematicTagBadge,
