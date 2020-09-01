@@ -20,6 +20,7 @@ import UserDto from "data/dto/UserDto";
 export class User extends Model<User> {
 
     @AllowNull(false)
+    @Unique
     @Column({type: new DataTypes.STRING(20)})
     name: string;
 

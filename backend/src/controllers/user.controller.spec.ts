@@ -109,7 +109,7 @@ describe(
                 await user.reload()
                 expect(user.name).toBe(myOriginalUsername)
             });
-            it('validates username', async () => {
+            it('validates username length', async () => {
                 await ctx.fixtures(
                     singleUserFixture,
                     heroesFixture,
@@ -160,6 +160,38 @@ describe(
                     })
                     .then(user => {
                         expect(user.name).toBe('1234567890ab')
+                    })
+            });
+            it('tells if username is already used', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    abilitiesFixture,
+                    smallGuideTestingFixture
+                )
+                const user = await User.findOne({});
+                const anotherUserName = 'another user';
+                const anotherUser = await User.create({
+                    name: anotherUserName,
+                    battleNetUserId: '1231241241243',
+                })
+                const originalUsername = user.name;
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                await request(ctx.app.getHttpServer())
+                    .post(`/user/change-username`)
+                    .send({
+                        newUsername: anotherUserName
+                    } as UsernameChangeDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .then(response => {
+                        return user.reload()
+                    })
+                    .then(user => {
+                        expect(user.name).toBe(originalUsername)
                     })
             });
         }

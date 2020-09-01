@@ -19,6 +19,7 @@ import {User} from "src/database/models/User";
 import UserInfoDto from "data/dto/UserInfoDto";
 import {GuideSearchService} from "src/services/guide-search.service";
 import UsernameChangeDto from "data/dto/UsernameChangeDto";
+import {ValidationError} from "sequelize";
 
 @Controller('user')
 export class UserController {
@@ -72,12 +73,21 @@ export class UserController {
                         {
                             where: {
                                 id: user.id,
-                            }
+                            },
                         }
-                    ).then(result => {
-                        response.status(HttpStatus.NO_CONTENT);
-                        response.send()
-                    })
+                    )
+                        .then(result => {
+                            response.status(HttpStatus.NO_CONTENT);
+                            response.send()
+                        })
+                        .catch(e => {
+                            if (e instanceof ValidationError) {
+                                response.status(HttpStatus.UNPROCESSABLE_ENTITY);
+                                response.send()
+                            } else {
+                                throw e;
+                            }
+                        });
                 }
             })
     }
