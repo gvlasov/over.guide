@@ -53,17 +53,18 @@ import TrainingGoal from "@/vue/guides/TrainingGoal";
 import OverwatchButton from "@/vue/OverwatchButton";
 import axios from 'axios';
 import Backend from "@/js/Backend";
-import Cookies from 'js-cookie';
 import Guide from "@/vue/guides/Guide";
 import UserInfoVso from "@/js/vso/UserInfoVso";
 import UsernameInput from "@/vue/UsernameInput";
+import Authentication from "@/js/Authentication";
 
 const backend = new Backend(axios);
+const auth = new Authentication()
 export default {
     props: {},
     computed: {
         isThisMe() {
-            const cookie = Cookies.get('userId');
+            const cookie = auth.userId;
             if (typeof cookie === 'undefined') {
                 return false;
             }
@@ -84,7 +85,7 @@ export default {
             const newUsername = this.userInfo.user.name;
             backend.changeUsername(newUsername)
                 .then(result => {
-                    Cookies.set('username', newUsername);
+                    auth.setUsername(newUsername);
                     this.initialUsername = newUsername
                     window.location.reload();
                 })
@@ -94,10 +95,7 @@ export default {
             return false
         },
         logout() {
-            Cookies.remove('auth-token')
-            Cookies.remove('username')
-            Cookies.remove('userId')
-            window.location.href = '/';
+            auth.logout();
         },
     },
     async mounted() {

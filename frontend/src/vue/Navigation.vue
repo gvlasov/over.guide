@@ -28,9 +28,10 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie';
 import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
+import Authentication from "@/js/Authentication";
 
+const auth = new Authentication()
 export default {
     methods: {
         currentRouteStartsWith(path) {
@@ -39,8 +40,8 @@ export default {
     },
     data() {
         return {
-            username: Cookies.get('username'),
-            userId: Cookies.get('userId')
+            username: auth.username,
+            userId: auth.userId,
         }
     },
     components: {

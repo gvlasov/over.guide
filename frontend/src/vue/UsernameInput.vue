@@ -27,10 +27,11 @@ import TrainingGoal from "@/vue/guides/TrainingGoal";
 import OverwatchButton from "@/vue/OverwatchButton";
 import axios from 'axios';
 import Backend from "@/js/Backend";
-import Cookies from 'js-cookie';
 import Guide from "@/vue/guides/Guide";
+import Authentication from "@/js/Authentication";
 
 const backend = new Backend(axios);
+const auth = new Authentication()
 export default {
     model: {
         prop: 'username',
@@ -72,7 +73,7 @@ export default {
             if (this.valid) {
                 backend.changeUsername(this.username)
                     .then(result => {
-                        Cookies.set('username', this.username);
+                        auth.setUsername(this.username)
                         this.initialUsername = this.username
                         window.location.reload();
                     })

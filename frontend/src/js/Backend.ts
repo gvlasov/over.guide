@@ -6,16 +6,17 @@ import PickContext from "./PickContext";
 import HeroDto from "data/dto/HeroDto"
 import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto";
 import env from '../env/dev'
-import Cookies from 'js-cookie'
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
 import TrainingGoalDto from "data/dto/TrainingGoalDto";
 import UserInfoDto from "data/dto/UserInfoDto";
 import UsernameOccupiedException from "@/js/UsernameOccupiedException";
+import Authentication from "@/js/Authentication";
 
 const querystring = require('query-string')
 
+const auth = new Authentication()
 export default class Backend {
     private readonly axios: AxiosStatic;
     private readonly rootUrl: string;
@@ -35,7 +36,7 @@ export default class Backend {
         inDto: object,
         onResponse: (response: AxiosResponse) => R
     ): Promise<R> {
-        const authToken = Cookies.get('auth-token');
+        const authToken = auth.authToken
         let headers = (typeof authToken === 'undefined')
             ? {}
             : {'Authorization': 'Bearer ' + authToken};
