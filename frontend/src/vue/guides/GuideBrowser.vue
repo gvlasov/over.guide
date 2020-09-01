@@ -21,6 +21,7 @@
                 direction="bottom"
                 @infinite="infiniteHandler"
                 class="root-content-panel-wrap"
+                force-use-infinite-wrapper
         >
             <WeakPanel slot="no-results" class="no-results">
                 <div v-if="descriptor.isEmpty">
