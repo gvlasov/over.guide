@@ -10,22 +10,24 @@
             <div class="root-content-panel-wrap info">
                 <div class="username">{{ userInfo.user.name }}</div>
                 <template v-if="isThisMe">
-                    <OverwatchButton
-                            v-if="isThisMe"
-                            type="default"
-                            v-hammer:tap="logout"
-                    >Logout
-                    </OverwatchButton>
-                    <UsernameInput
-                            v-show="changingUsername"
-                            v-model="userInfo.user.name"
-                    />
-                    <OverwatchButton
-                            v-if="!changingUsername"
-                            type="default"
-                            v-hammer:tap="() => {changingUsername = !changingUsername}"
-                    >change username
-                    </OverwatchButton>
+                    <div class="buttons-wrap">
+                        <OverwatchButton
+                                v-if="isThisMe"
+                                type="default"
+                                v-hammer:tap="logout"
+                        >Logout
+                        </OverwatchButton>
+                        <UsernameInput
+                                v-show="changingUsername"
+                                v-model="userInfo.user.name"
+                        />
+                        <OverwatchButton
+                                v-if="!changingUsername"
+                                type="default"
+                                v-hammer:tap="() => {changingUsername = !changingUsername}"
+                        >change username
+                        </OverwatchButton>
+                    </div>
                 </template>
             </div>
             <div class="guide-feed">
@@ -154,31 +156,39 @@ export default {
 .info {
     text-align: right;
 
-    button {
-        font-size: 1.9em;
-        vertical-align: middle;
-    }
+    .buttons-wrap {
+        display: inline-flex;
+        gap: .5em;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: flex-end;
 
-    form {
-        display: inline-block;
-        z-index: 2;
-        position: relative;
-
-        input[type=text] {
-            display: flex;
-            font-size: .8em;
+        button {
+            font-size: 1.9em;
             vertical-align: middle;
-            flex-wrap: wrap;
-            justify-content: center;
-            box-sizing: border-box;
-            padding: .5rem .5rem .5rem .5rem;
-            background: #fff;
-            color: #495057;
-            outline: 0;
-            border-radius: .25em;
-            border-width: 0;
-            box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
-            font-family: $body-font;
+
+            form {
+                display: inline-block;
+                z-index: 2;
+                position: relative;
+
+                input[type=text] {
+                    display: flex;
+                    font-size: .8em;
+                    vertical-align: middle;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    box-sizing: border-box;
+                    padding: .5rem .5rem .5rem .5rem;
+                    background: #fff;
+                    color: #495057;
+                    outline: 0;
+                    border-radius: .25em;
+                    border-width: 0;
+                    box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
+                    font-family: $body-font;
+                }
+            }
         }
     }
 }
