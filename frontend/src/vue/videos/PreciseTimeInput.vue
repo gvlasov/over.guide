@@ -11,13 +11,13 @@
                     <img src="/icons/arrow-left-white.svg"/>
                 </OverwatchPanelButton>
                 <div class="input-wrap">
-                    <div class="time-part-interjector">h</div>
                     <input
                             type="text"
                             v-model.number="hours"
                             size="2"
                             tabindex="1"
                     />
+                    <div class="time-part-interjector">h</div>
                 </div>
                 <OverwatchPanelButton
                         type="default"
@@ -39,13 +39,13 @@
                 <img src="/icons/arrow-left-white.svg"/>
             </OverwatchPanelButton>
             <div class="input-wrap">
-                <div class="time-part-interjector">m</div>
                 <input
                         type="text"
                         v-model.number="minutes"
                         size="2"
                         tabindex="1"
                 />
+                <div class="time-part-interjector">m</div>
             </div>
             <OverwatchPanelButton
                     type="default"
@@ -66,13 +66,13 @@
                 <img src="/icons/arrow-left-white.svg"/>
             </OverwatchPanelButton>
             <div class="input-wrap">
-                <div class="time-part-interjector">s</div>
                 <input
                         type="text"
                         v-model.number="seconds"
                         size="2"
                         tabindex="1"
                 />
+                <div class="time-part-interjector">s</div>
             </div>
             <OverwatchPanelButton
                     type="default"
@@ -93,13 +93,13 @@
                 <img src="/icons/arrow-left-white.svg"/>
             </OverwatchPanelButton>
             <div class="input-wrap">
-                <div class="time-part-interjector">ms</div>
                 <input
                         type="text"
                         v-model.number="millis"
                         size="3"
                         tabindex="1"
                 />
+                <div class="time-part-interjector">ms</div>
             </div>
             <OverwatchPanelButton
                     type="default"
@@ -115,10 +115,10 @@
 
 <script>
 
-    import OverwatchButton from "@/vue/OverwatchButton";
-    import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
+import OverwatchButton from "@/vue/OverwatchButton";
+import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 
-    export default {
+export default {
         model: {
             prop: 'totalValueSeconds',
             event: 'totalValueSecondsChange',
@@ -242,7 +242,6 @@
                     display: block;
                     position: absolute;
                     color: $overwatch-panel-bg-color;
-                    z-index: 5;
                     pointer-events: none;
                     bottom: -.15em;
                     font-family: "Futura Demi Bold", sans-serif;
@@ -255,7 +254,6 @@
                     font-family: monospace;
                     font-size: 1.5em;
                     position: relative;
-                    z-index: 1;
                     height: 100%;
                     box-sizing: border-box;
                 }
