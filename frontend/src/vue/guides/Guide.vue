@@ -35,20 +35,20 @@
             >Add training goal
             </OverwatchButton>
         </div>
-        <div v-for="(part, index) in guide.parts" :key="index" class="guide-part">
-            <div class="text-guide-part" v-if="part.part.kind === 'text'">
-                <GuidePartText :part="part"/>
+        <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
+            <div class="text-guide-part" v-if="widget.part.kind === 'text'">
+                <GuidePartText :part="widget.part"/>
             </div>
-            <AspectRatioBox v-if="part.part.kind === 'video'">
+            <AspectRatioBox v-if="widget.part.kind === 'video'">
                 <VideoLoadingScreen/>
                 <YoutubeVideo
-                        :video-id="part.part.excerpt.youtubeVideoId"
-                        :start="part.part.excerpt.startSeconds"
-                        :end="part.part.excerpt.endSeconds"
+                        :video-id="widget.part.excerpt.youtubeVideoId"
+                        :start="widget.part.excerpt.startSeconds"
+                        :end="widget.part.excerpt.endSeconds"
                         :loop="true"
                         :autoplay="false"
                         :mute="true"
-                        :player-element-id="guide.guideId + '-' + index +'-'+ part.part.excerpt.youtubeVideoId"
+                        :player-element-id="guide.guideId + '-' + index +'-'+ widget.part.excerpt.youtubeVideoId"
                         class="video"
                 />
             </AspectRatioBox>
