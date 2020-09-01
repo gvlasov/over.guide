@@ -25,7 +25,11 @@
                     v-hammer:tap="() => {showFull = true}"
             >
                 <div class="tags">
-                    <Tag class="hero-tag" :descriptor="trainingGoal.guide.descriptor"/>
+                    <Tag
+                            v-if="trainingGoal.guide.descriptor.hasHeroes"
+                            class="hero-tag"
+                            :descriptor="trainingGoal.guide.descriptor"
+                    />
                     <div ref="badgeTagsWrap" class="badge-tags-wrap">
                         <ThematicTagBadge
                                 v-for="thematicTag in trainingGoal.guide.descriptor.thematicTags"
@@ -95,166 +99,167 @@ import AspectRatioBox from "@/vue/AspectRatioBox";
 
 const backend = new Backend(axios);
 
-    export default {
-        model: {},
-        props: {
-            trainingGoal: {
-                type: TrainingGoalWidget,
-                required: true
-            }
+export default {
+    model: {},
+    props: {
+        trainingGoal: {
+            type: TrainingGoalWidget,
+            required: true
+        }
+    },
+    methods: {
+        removeTrainingGoal() {
+            (new MyTrainingGoalsCache(backend))
+                .removeGoal(this.trainingGoal.guide.guideId)
+                .then(() => {
+                    this.trainingGoal.deleted = true;
+                })
         },
-        methods: {
-            removeTrainingGoal() {
-                (new MyTrainingGoalsCache(backend))
-                    .removeGoal(this.trainingGoal.guide.guideId)
-                    .then(() => {
-                        this.trainingGoal.deleted = true;
-                    })
-            },
-            readdTrainingGoal() {
-                this.trainingGoal.deleted = false;
-                this.$emit('removeUndo', this.trainingGoal.guide.guideId)
-            }
-        },
-        computed: {
-            firstVideoWidget() {
-                return this.trainingGoal.guide.parts.find(p => p.isVideo())
+        readdTrainingGoal() {
+            this.trainingGoal.deleted = false;
+            this.$emit('removeUndo', this.trainingGoal.guide.guideId)
+        }
+    },
+    computed: {
+        firstVideoWidget() {
+            return this.trainingGoal.guide.parts.find(p => p.kind === 'video')
 
-            },
-            firstTextPart() {
-                return this.trainingGoal.guide.parts.find(p => p.isText())
-            },
         },
-        mounted() {
+        firstTextPart() {
+            return this.trainingGoal.guide.parts.find(p => p.kind === 'text')
         },
-        data() {
-            return {
-                showFull: false,
-            }
-        },
-        components: {
-            AspectRatioBox,
-            Guide,
-            ThematicTagBadge,
-            Tag,
-            OverwatchButton,
-            YoutubeVideo,
-        },
-    };
+    },
+    mounted() {
+    },
+    data() {
+        return {
+            showFull: false,
+        }
+    },
+    components: {
+        AspectRatioBox,
+        Guide,
+        ThematicTagBadge,
+        Tag,
+        OverwatchButton,
+        YoutubeVideo,
+    },
+};
 
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/fonts.scss';
-    @import '~@/assets/css/overwatch-ui.scss';
-    @import '~@/assets/css/common.scss';
+@import '~@/assets/css/fonts.scss';
+@import '~@/assets/css/overwatch-ui.scss';
+@import '~@/assets/css/common.scss';
 
-    .wrap {
-        $training-goal-height: 4em;
-        @include overwatch-futura-no-smallcaps;
-        color: white;
-        --left-border-radius: .6rem;
-        box-sizing: border-box;
+.wrap {
+    $training-goal-height: 4em;
+    @include overwatch-futura-no-smallcaps;
+    color: white;
+    --left-border-radius: .6rem;
+    box-sizing: border-box;
 
-        .collapsed {
-            display: flex;
-            min-height: $training-goal-height;
-            cursor: pointer;
-            box-shadow: $overwatch-panel-bg-shadow;
-            border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
+    .collapsed {
+        display: flex;
+        min-height: $training-goal-height;
+        cursor: pointer;
+        box-shadow: $overwatch-panel-bg-shadow;
+        border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
+    }
+
+    .uncollapsed {
+        display: flex;
+        flex-direction: column;
+
+        & > * {
+            flex-basis: 100%;
         }
 
-        .uncollapsed {
-            display: flex;
-            flex-direction: column;
+        button {
+            min-height: 4rem;
+            font-size: 2rem;
 
-            & > * {
-                flex-basis: 100%;
+            & ::v-deep .background {
+                border-radius: 0 !important;
             }
-
-            button {
-                min-height: 4rem;
-                font-size: 2rem;
-                & ::v-deep .background {
-                    border-radius: 0 !important;
-                }
-            }
-        }
-
-        .deleted {
-            box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .5);
-
-            .opacity {
-                opacity: .3;
-            }
-        }
-
-        .opacity {
-            flex-grow: 1;
-            display: flex;
-            overflow: hidden;
-            @include overwatch-panel-bg;
-            border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
-
-            .tags {
-                margin-left: .3rem;
-                display: flex;
-                flex-grow: 1;
-                align-items: center;
-
-                .hero-tag {
-                    margin-right: .5em;
-                    text-wrap: none;
-                    white-space: nowrap;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    gap: .25rem
-                }
-
-                .badge-tags-wrap {
-                    display: inline-block;
-                    text-wrap: none;
-                    white-space: nowrap;
-                }
-            }
-
-            .text-guide-part-content {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                text-align: left;
-                font-size: 1em;
-                white-space: nowrap;
-                overflow: hidden;
-                padding: 1em;
-                flex-grow: 999;
-                font-family: $body-font;
-
-                & ::v-deep * {
-                    margin: 0;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                }
-            }
-
-            .unclickable {
-                pointer-events: none;
-                display: flex;
-                flex-direction: row;
-                height: $training-goal-height;
-                width: $training-goal-height/9*16;
-
-                .aspect-ratio-box {
-                    width: $training-goal-height/9*16;
-                }
-            }
-        }
-
-        .button {
-            flex-basis: 5em;
-            flex-shrink: 0;
         }
     }
+
+    .deleted {
+        box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .5);
+
+        .opacity {
+            opacity: .3;
+        }
+    }
+
+    .opacity {
+        flex-grow: 1;
+        display: flex;
+        overflow: hidden;
+        @include overwatch-panel-bg;
+        border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
+
+        .tags {
+            margin-left: .3rem;
+            display: flex;
+            flex-grow: 1;
+            align-items: center;
+
+            .hero-tag {
+                margin-right: .5em;
+                text-wrap: none;
+                white-space: nowrap;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                gap: .25rem
+            }
+
+            .badge-tags-wrap {
+                display: inline-block;
+                text-wrap: none;
+                white-space: nowrap;
+            }
+        }
+
+        .text-guide-part-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+            font-size: 1em;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 1em;
+            flex-grow: 999;
+            font-family: $body-font;
+
+            & ::v-deep * {
+                margin: 0;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        .unclickable {
+            pointer-events: none;
+            display: flex;
+            flex-direction: row;
+            height: $training-goal-height;
+            width: $training-goal-height/9*16;
+
+            .aspect-ratio-box {
+                width: $training-goal-height/9*16;
+            }
+        }
+    }
+
+    .button {
+        flex-basis: 5em;
+        flex-shrink: 0;
+    }
+}
 
 </style>
