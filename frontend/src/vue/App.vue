@@ -13,41 +13,43 @@ import Navigation from "@/vue/Navigation";
 import ScrollToTop from "@/vue/ScrollToTop";
 
 export default {
-        methods: {
-            resetScrollToTop() {
-                this.$refs.scrollToTop.reset();
-            },
+    methods: {
+        resetScrollToTop() {
+            this.$refs.scrollToTop.reset();
         },
-        data() {
-            return {};
+    },
+    data() {
+        return {};
+    },
+    watch: {
+        $route() {
+            this.resetScrollToTop();
         },
-        watch: {
-            $route() {
-                this.resetScrollToTop();
-            },
-        },
-        components: {
-            Navigation,
-            ScrollToTop,
-        },
-    }
+    },
+    components: {
+        Navigation,
+        ScrollToTop,
+    },
+}
 </script>
 
-<style scoped>
-    .app {
-        text-align: center;
-        width: min-content;
-        margin: 0 auto;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
+<style lang="scss" scoped>
+.app {
+    text-align: center;
+    width: min-content;
+    margin: 0 auto;
+    min-height: 100vh;
+    overflow-x: hidden;
 
-    .scroll-to-top {
-        z-index: 1;
-    }
-
-    .navigation, .router-content-wrap {
+    & > * {
         position: relative;
         z-index: 2;
     }
+
+    .scroll-to-top {
+        position: fixed;
+        z-index: 1;
+    }
+}
+
 </style>

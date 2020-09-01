@@ -1,4 +1,5 @@
 <template>
+    <div class="root-content-panel-wrap">
     <div class="navigation">
         <router-link
                 to="/search"
@@ -22,6 +23,7 @@
                 v-bind:href="`/#/user/${userId}`"
                 v-bind:class="{active: typeof userId !== 'undefined' && currentRouteStartsWith(`/user/${userId}`)}"
         ><div>{{username}}</div></a>
+    </div>
     </div>
 </template>
 
@@ -50,6 +52,7 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/css/overwatch-ui.scss";
 @import "~@/assets/css/tags.scss";
+@import "~@/assets/css/common.scss";
 
 .navigation {
     $underline-width: .3em;
