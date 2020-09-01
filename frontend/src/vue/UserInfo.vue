@@ -79,21 +79,6 @@ export default {
         };
     },
     methods: {
-        onUsernameChangeFormSubmit(e) {
-            e.preventDefault();
-            this.changingUsername = false;
-            const newUsername = this.userInfo.user.name;
-            backend.changeUsername(newUsername)
-                .then(result => {
-                    auth.setUsername(newUsername);
-                    this.initialUsername = newUsername
-                    window.location.reload();
-                })
-                .catch(e => {
-                    this.userInfo.user.name = this.initialUsername;
-                });
-            return false
-        },
         logout() {
             auth.logout();
         },
