@@ -5,7 +5,7 @@
             v-bind:class="tagGroup.gamerPosition.dataName"
     >
         <div class="invite-text">any<br/>
-            <span style="font-size: .84em;">
+            <span v-bind:style="isTeammate ? 'font-size: .84em;' : ''">
             {{ tagGroup.gamerPosition.dataName }}
             </span>
         </div>
@@ -16,6 +16,7 @@
 
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
 import TagGroupVso from "@/js/vso/TagGroupVso";
+import GamerPositionVso from "@/js/vso/GamerPositionVso";
 
 export default {
     props: {
@@ -28,7 +29,11 @@ export default {
         return {};
     },
     methods: {},
-    computed: {},
+    computed: {
+        isTeammate() {
+            return this.tagGroup.gamerPosition.id === GamerPositionVso.Teammates.id;
+        }
+    },
     components: {
         TagGroupBackground
     },
