@@ -174,7 +174,7 @@ export default {
                 );
             },
             /**
-             * @param {string} where 'beninning' or 'end'
+             * @param {string} where 'beginning' or 'end'
              * @callback how
              */
             createNewPart(where, how) {

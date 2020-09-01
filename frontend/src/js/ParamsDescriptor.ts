@@ -17,4 +17,8 @@ export default class ParamsDescriptor {
         }
     }
 
+    get hasParams() {
+        return typeof this.paramsText === 'undefined'
+    }
+
 }
