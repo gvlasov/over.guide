@@ -4,6 +4,13 @@
                 v-model="guide.descriptor"
                 base-path="/guide-editor/"
         />
+        <LoginReqiurement
+                v-if="loginRequired"
+                @back="loginRequired = false"
+        >
+            <template v-slot:notice>Publishing a guide requires logging in with Battle.net</template>
+            <template v-slot:subnotice>Your current guide will be restored right away</template>
+        </LoginReqiurement>
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
                     :descriptor="guide.descriptor"
@@ -23,7 +30,7 @@
             <OverwatchButton
                     type="main"
                     :disabled="!isDoneButtonEnabled"
-                    v-hammer:tap="saveGuide"
+                    v-hammer:tap="onDone"
             >Done
             </OverwatchButton>
             <OverwatchButton
@@ -81,7 +88,7 @@
             </OverwatchButton>
             <OverwatchButton
                     type="main"
-                    v-hammer:tap="saveGuide"
+                    v-hammer:tap="onDone"
                     data-type="text"
                     :disabled="!isDoneButtonEnabled"
             >Done
@@ -116,6 +123,7 @@ import ParamsDescriptor from "@/js/ParamsDescriptor";
 import StoredGuideDraft from "@/js/StoredGuideDraft";
 import GuideVso from "@/js/vso/GuideVso";
 import debounce from 'lodash.debounce'
+import LoginReqiurement from "@/vue/LoginReqiurement";
 
 const backend = new Backend(axios);
 
@@ -133,12 +141,18 @@ export default {
       }
     },
   methods: {
-      async saveGuide() {
-      const guideId = await backend.saveGuide(this.guide.toDto())
-                if (guideId !== null) {
-                    this.guide.guideId = guideId
-                }
-            },
+      async onDone() {
+          const guideId = await backend.saveGuide(this.guide.toDto())
+              .then(() => draft.reset())
+              .catch(error => {
+                  if (error.response.status === 403) {
+                    this.loginRequired = true;
+                  }
+              })
+          if (guideId !== null) {
+              this.guide.guideId = guideId
+          }
+      },
             createNewTextPart(where) {
                 this.createNewPart(
                     where,
@@ -212,19 +226,21 @@ export default {
         data() {
             const params = new ParamsDescriptor(this.$route.params.descriptor);
             const draftGuide = draft.guide;
+            let guide;
             if (draftGuide === null || draftGuide.parts.length === 0) {
-                return {
-                    guide: new GuideVso({
+                guide =
+                     new GuideVso({
                         id: undefined,
                         guideId: undefined,
                         descriptor: params.compute(),
                         parts: []
-                    }),
-                }
+                    });
             } else {
-                return {
-                    guide: draftGuide,
-                }
+                guide = draftGuide;
+            }
+            return {
+                guide: guide,
+                loginRequired: false,
             }
         },
         computed: {
@@ -233,6 +249,7 @@ export default {
             },
         },
         components: {
+            LoginReqiurement,
             ParameterDescriptorSynchronizer,
             GuidePartVideoEditor,
             OverwatchButton,

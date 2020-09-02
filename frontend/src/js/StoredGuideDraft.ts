@@ -18,5 +18,11 @@ export default class StoredGuideDraft {
             JSON.stringify(guide.toDto())
         );
     }
+
+    reset() {
+        localStorage.removeItem(
+            'guide-editor-draft'
+        )
+    }
 }
 
