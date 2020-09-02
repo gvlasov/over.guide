@@ -124,6 +124,7 @@ import StoredGuideDraft from "@/js/StoredGuideDraft";
 import GuideVso from "@/js/vso/GuideVso";
 import debounce from 'lodash.debounce'
 import LoginReqiurement from "@/vue/LoginReqiurement";
+import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 
 const backend = new Backend(axios);
 
@@ -143,7 +144,15 @@ export default {
   methods: {
       async onDone() {
           const guideId = await backend.saveGuide(this.guide.toDto())
-              .then(() => draft.reset())
+              .then(() => {
+                  draft.reset()
+                  this.$router.push(
+                      '/search/'+
+                      new DescriptorParamUnparser().unparseDescriptor(
+                          this.guide.descriptor
+                      )
+                  )
+              })
               .catch(error => {
                   if (error.response.status === 403) {
                     this.loginRequired = true;
