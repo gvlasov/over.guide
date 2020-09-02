@@ -9,6 +9,7 @@ enum GuideTheme {
     'Mistake' = 8,
     'Techinque' = 9,
     'Principle' = 10,
+    'Learning' = 11,
 }
 
 export default GuideTheme

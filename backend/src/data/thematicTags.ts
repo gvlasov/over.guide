@@ -1,45 +1,56 @@
 import ThematicTagDto from "data/dto/ThematicTagDto";
+import GuideTheme from "data/GuideTheme";
 
 const data = [
     {
-        id: 1,
+        id: GuideTheme.Psychology,
         name: 'Psychology',
         dataName: 'psychology'
     },
     {
-        id: 2,
+        id: GuideTheme["Workshop training"],
         name: 'Workshop training',
         dataName: 'workshop-training',
     },
     {
-        id: 3,
+        id: GuideTheme.Positioning,
         name: 'Positioning',
         dataName: 'positioning',
     },
     {
-        id: 4,
+        id: GuideTheme["Game sense"],
         name: 'Game sense',
         dataName: 'game-sense',
     },
     {
-        id: 5,
+        id: GuideTheme.Communication,
         name: 'Communication',
         dataName: 'communication',
     },
     {
-        id: 6,
+        id: GuideTheme["Target priority"],
         name: 'Target priority',
         dataName: 'target-priority',
     },
     {
-        id: 7,
+        id: GuideTheme.Aim,
         name: 'Aim',
         dataName: 'aim',
     },
     {
-        id: 8,
+        id: GuideTheme.Learning,
         name: 'Learning',
         dataName: 'learning',
+    },
+    {
+        id: GuideTheme.Principle,
+        name: 'Principle',
+        dataName: 'principle',
+    },
+    {
+        id: GuideTheme.Techinque,
+        name: 'Technique',
+        dataName: 'technique',
     },
 ]
 const map = new Map<string, ThematicTagDto>()
