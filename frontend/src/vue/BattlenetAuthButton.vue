@@ -1,7 +1,9 @@
 <template>
     <a v-bind:href="url" class="battle-net-button" title="Battle.net auth">
         <div>
-            <img src="/icons/battlenet.svg"/>
+            <div style="position: relative; display: inline-block; vertical-align: middle">
+                <img src="/icons/battlenet.svg"/>
+            </div>
             Log in
         </div>
     </a>
@@ -46,7 +48,8 @@ export default {
 
     img {
         height: 1em;
-        vertical-align: middle;
+        position: absolute;
+        transform: translate(-80%, -50%);
     }
 }
 </style>
