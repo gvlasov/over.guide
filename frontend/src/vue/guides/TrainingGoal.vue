@@ -109,7 +109,7 @@ export default {
     },
     methods: {
         removeTrainingGoal() {
-            (new MyTrainingGoalsCache(backend))
+            MyTrainingGoalsCache.instance()
                 .removeGoal(this.trainingGoal.guide.guideId)
                 .then(() => {
                     this.trainingGoal.deleted = true;

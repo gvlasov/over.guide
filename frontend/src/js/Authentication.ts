@@ -3,6 +3,10 @@ import Cookies from 'js-cookie'
 
 export default class Authentication {
 
+    get authenticated(): boolean {
+        return typeof this.authToken !== "undefined";
+    }
+
     get authToken(): string | undefined {
         return Cookies.get('auth-token');
     }

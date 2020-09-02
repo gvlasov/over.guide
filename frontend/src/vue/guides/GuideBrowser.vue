@@ -1,5 +1,11 @@
 <template>
     <div class="guide-browser root-content-sizer">
+        <LoginReqiurement
+                v-if="loginRequired"
+                @back="() => {loginRequired = false}"
+        >
+            <template v-slot:notice>To change your training goals, log in to your account</template>
+        </LoginReqiurement>
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
                     :search-button-enabled="false"
@@ -13,6 +19,7 @@
                 <Guide
                         :guide="guide"
                         :search-descriptor="descriptor"
+                        @loginRequired="() => {loginRequired = true}"
                 />
             </div>
         </div>
@@ -71,6 +78,7 @@ import Tag from "@/vue/guides/tags/hero/Tag";
 import TagBadges from "@/vue/guides/TagBadges";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import WeakPanel from "@/vue/guides/WeakPanel";
+import LoginReqiurement from "@/vue/LoginReqiurement";
 
 const backend = new Backend(axios);
 export default {
@@ -133,10 +141,12 @@ export default {
         return {
             guides: [],
             pageNumber: 0,
-            alreadyLoadedGuideIds: []
+            alreadyLoadedGuideIds: [],
+            loginRequired: false,
         }
     },
     components: {
+        LoginReqiurement,
         TagBadges,
         Tag,
         DescriptorBuilder,

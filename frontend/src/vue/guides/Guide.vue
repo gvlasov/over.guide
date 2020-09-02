@@ -63,8 +63,6 @@
 <script>
 import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
 import OverwatchButton from "@/vue/OverwatchButton";
-import Backend from "@/js/Backend";
-import axios from 'axios';
 import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 import GuideVso from "@/js/vso/GuideVso";
@@ -81,8 +79,8 @@ import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import GuidePartText from "@/vue/guides/GuidePartText";
 
-const backend = new Backend(axios);
-const myTrainingGoalsCache = new MyTrainingGoalsCache(backend);
+const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
+
 export default {
     mixins: [
         TagLinkMixin,
@@ -113,23 +111,27 @@ export default {
             return new Date(this.guide.createdAt).toLocaleString();
         },
         addTrainingGoal() {
-            myTrainingGoalsCache.addGoal(this.guide.guideId)
-            this.$forceUpdate();
+            this.cache.addGoal(this.guide.guideId)
         },
         removeTrainingGoal() {
-            myTrainingGoalsCache.removeGoal(this.guide.guideId)
-            this.$forceUpdate();
+            const hadItPending  = this.cache.pendingGoalIds.includes(this.guide.guideId)
+            this.cache.removeGoal(this.guide.guideId)
+                .catch(() => {
+                    if (!hadItPending) {
+                        this.$emit('loginRequired')
+                    }
+                })
         },
     },
     data() {
         return {
-            goalIds: myTrainingGoalsCache.goalIds,
             trainingGoalButtonHover: false,
+            cache: myTrainingGoalsCache,
         }
     },
     computed: {
         trainingGoalAdded() {
-            return this.goalIds.includes(this.guide.guideId);
+            return this.cache.goalIds.includes(this.guide.guideId) || this.cache.pendingGoalIds.includes(this.guide.guideId);
         },
     },
     mounted() {

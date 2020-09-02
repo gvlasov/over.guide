@@ -1,7 +1,19 @@
 <template>
     <div class="training-goals root-content-sizer">
+        <LoginReqiurement
+                v-if="!authenticated"
+        >
+            <template v-slot:notice>Log in to view your training goals</template>
+        </LoginReqiurement>
         <div
-                v-if="trainingGoals.length === 0"
+                v-if="synchronizing"
+                class="synchronization"
+        >
+            Synchronizing
+            <div>{{ deliveredCount }}</div>
+        </div>
+        <div
+                v-else-if="trainingGoals.length === 0"
                 class="root-content-panel-wrap"
         >
             <WeakPanel
@@ -34,8 +46,12 @@ import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import draggable from 'vuedraggable';
 import WeakPanel from "@/vue/guides/WeakPanel";
+import Authentication from "@/js/Authentication";
+import LoginReqiurement from "@/vue/LoginReqiurement";
+import TestingGround from "@/vue/TestingGround";
 
 const backend = new Backend(axios);
+const auth = new Authentication()
     export default {
         props: {},
         methods: {
@@ -43,27 +59,40 @@ const backend = new Backend(axios);
                 const guideIds = this.trainingGoals
                     .filter(it => !it.deleted)
                     .map(it => it.guide.guideId);
-                (new MyTrainingGoalsCache(backend))
+                MyTrainingGoalsCache.instance()
                     .addAndReorder(guideId, guideIds)
             },
         },
         data() {
             return {
                 trainingGoals: [],
+                cache: MyTrainingGoalsCache.instance(),
+                deliveredCount: 0,
+                authenticated: auth.authenticated,
             };
+        },
+        computed: {
+            synchronizing() {
+                return auth.authenticated && this.cache.pendingGoalIds.length > 0;
+            }
         },
         async mounted() {
             this.trainingGoals =
-                await (new MyTrainingGoalsCache(backend))
-                    .loadGoals()
-                    .then(goals =>
-                        goals.map(dto =>
-                            new TrainingGoalWidget(
-                                new GuideVso(dto.guide),
-                                dto.order,
-                                false
+                await this.cache.deliverPending(() => {
+                    this.deliveredCount++;
+                })
+                    .then(() =>
+                        MyTrainingGoalsCache.instance()
+                            .loadGoals()
+                            .then(goals =>
+                                goals.map(dto =>
+                                    new TrainingGoalWidget(
+                                        new GuideVso(dto.guide),
+                                        dto.order,
+                                        false
+                                    )
+                                )
                             )
-                        )
                     )
         },
         watch: {
@@ -80,11 +109,13 @@ const backend = new Backend(axios);
                 if (
                     newGuideIds.toString() !== oldGuideIds.toString()
                 ) {
-                    (new MyTrainingGoalsCache(backend)).saveGoalsOrder(newGuideIds)
+                    MyTrainingGoalsCache.instance().saveGoalsOrder(newGuideIds)
                 }
             },
         },
         components: {
+            TestingGround,
+            LoginReqiurement,
             TrainingGoal,
             Guide,
             draggable,
@@ -118,5 +149,9 @@ const backend = new Backend(axios);
         }
 
         padding-bottom: 10em;
+    }
+    .synchronization {
+        font-family: BigNoodleTooOblique, sans-serif;
+        font-size: 4em;
     }
 </style>
