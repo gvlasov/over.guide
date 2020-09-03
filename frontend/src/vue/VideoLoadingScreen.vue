@@ -15,7 +15,6 @@
 <style lang="scss" scoped>
     .loading-screen {
         position: absolute;
-        height: 8em;
         font-family: BigNoodleTooOblique, sans-serif;
         font-size: 3em;
         display: flex;
@@ -26,7 +25,6 @@
 
         .loading-screen-text {
             position: static;
-            flex-basis: 1em;
             height: 1em;
             display: inline-block;
         }
