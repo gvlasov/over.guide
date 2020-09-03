@@ -31,7 +31,6 @@ export default {
 
 .text-guide-part-content {
     text-align: left;
-    pointer-events: none;
     font-size: 1.5em;
     word-break: break-word;
     font-family: $body-font;
