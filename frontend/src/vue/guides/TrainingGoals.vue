@@ -1,10 +1,10 @@
 <template>
     <div class="training-goals root-content-sizer">
-        <LoginReqiurement
+        <LoginRequirement
                 v-if="!authenticated"
         >
             <template v-slot:notice>Log in to view your training goals</template>
-        </LoginReqiurement>
+        </LoginRequirement>
         <div
                 v-if="synchronizing"
                 class="synchronization"
@@ -47,7 +47,7 @@ import TrainingGoal from "@/vue/guides/TrainingGoal";
 import draggable from 'vuedraggable';
 import WeakPanel from "@/vue/guides/WeakPanel";
 import Authentication from "@/js/Authentication";
-import LoginReqiurement from "@/vue/LoginReqiurement";
+import LoginRequirement from "@/vue/LoginRequirement";
 import TestingGround from "@/vue/TestingGround";
 
 const backend = new Backend(axios);
@@ -115,7 +115,7 @@ const auth = new Authentication()
         },
         components: {
             TestingGround,
-            LoginReqiurement,
+            LoginRequirement,
             TrainingGoal,
             Guide,
             draggable,

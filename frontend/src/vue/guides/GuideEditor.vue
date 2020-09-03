@@ -4,13 +4,13 @@
                 v-model="guide.descriptor"
                 base-path="/guide-editor/"
         />
-        <LoginReqiurement
+        <LoginRequirement
                 v-if="loginRequired"
                 @back="loginRequired = false"
         >
             <template v-slot:notice>Publishing a guide requires logging in with Battle.net</template>
             <template v-slot:subnotice>Your current guide will be restored right away</template>
-        </LoginReqiurement>
+        </LoginRequirement>
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
                     :descriptor="guide.descriptor"
@@ -120,7 +120,7 @@ import ParamsDescriptor from "@/js/ParamsDescriptor";
 import StoredGuideDraft from "@/js/StoredGuideDraft";
 import GuideVso from "@/js/vso/GuideVso";
 import debounce from 'lodash.debounce'
-import LoginReqiurement from "@/vue/LoginReqiurement";
+import LoginRequirement from "@/vue/LoginRequirement";
 import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 
 const backend = new Backend(axios);
@@ -255,7 +255,7 @@ export default {
             },
         },
         components: {
-            LoginReqiurement,
+            LoginRequirement,
             ParameterDescriptorSynchronizer,
             GuidePartVideoEditor,
             OverwatchButton,
