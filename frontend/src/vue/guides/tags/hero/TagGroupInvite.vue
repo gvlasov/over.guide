@@ -4,7 +4,7 @@
             ref="background"
             :tag-group="tagGroup"
             v-bind:class="tagGroup.gamerPosition.dataName"
-            v-bind:style="{'background-position-x': backgroundX + 'px', 'background-position-y': backgroundY+'px'}"
+            v-bind:style="{'background-position-x': backgroundX + 'px', 'background-position-y': backgroundY+'px', 'background-size': 'auto '+(1000*backgroundScale)+'px'}"
     >
         <div class="invite-text">any<br/>
             <span v-bind:style="isTeammate ? 'font-size: .84em;' : ''">
@@ -35,14 +35,20 @@ export default {
     },
     methods: {
         adjustBackgroundPosition() {
-            this.backgroundX = -(this.$el.getBoundingClientRect().x + (2560 - document.documentElement.clientWidth) / 2);
-            this.backgroundY = -this.$el.getBoundingClientRect().y;
+            const bgWidth = 2560
+            const coeff = this.backgroundScale;
+            this.backgroundX = -(this.$el.getBoundingClientRect().x + (bgWidth - document.documentElement.clientWidth) / 2) * coeff;
+            this.backgroundY = -this.$el.getBoundingClientRect().y * coeff;
+            console.log(coeff)
         }
     },
     computed: {
         isTeammate() {
             return this.tagGroup.gamerPosition.id === GamerPositionVso.Teammates.id;
         },
+        backgroundScale() {
+            return  Math.max(window.innerHeight/1000, 1)
+        }
     },
     mounted() {
         this.adjustBackgroundPosition()

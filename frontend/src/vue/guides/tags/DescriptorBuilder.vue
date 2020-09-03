@@ -73,6 +73,7 @@ export default {
     }
 
     .searchbox {
+        margin-top: 40em;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
