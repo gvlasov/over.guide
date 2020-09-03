@@ -41,38 +41,40 @@
             >+ video
             </OverwatchButton>
         </div>
-        <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
-            <GuidePartTextEditor
-                    v-if="widget.part.kind === 'text'"
-                    :widget="widget"
-            />
-            <GuidePartVideoEditor
-                    v-if="widget.part.kind === 'video'"
-                    :widget="widget"
-                    :index="index"
-                    @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
-            />
-            <div class="guide-part-buttons">
-                <OverwatchButton
-                        v-if="!widget.editing"
-                        type="default"
-                        class="edit-button"
-                        v-hammer:tap="() => widget.editing = true"
-                >Edit
-                </OverwatchButton>
-                <OverwatchButton
-                        v-if="widget.editing && partHasContent(widget.part)"
-                        type="default"
-                        class="view-button"
-                        v-hammer:tap="() => widget.editing = false"
-                >Save
-                </OverwatchButton>
-                <OverwatchButton
-                        type="default"
-                        class=""
-                        v-hammer:tap="() => deletePart(index)"
-                >Delete
-                </OverwatchButton>
+        <div class="guide-parts root-content-panel-wrap">
+            <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
+                <GuidePartTextEditor
+                        v-if="widget.part.kind === 'text'"
+                        :widget="widget"
+                />
+                <GuidePartVideoEditor
+                        v-if="widget.part.kind === 'video'"
+                        :widget="widget"
+                        :index="index"
+                        @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
+                />
+                <div class="guide-part-buttons">
+                    <OverwatchButton
+                            v-if="!widget.editing"
+                            type="default"
+                            class="edit-button"
+                            v-hammer:tap="() => widget.editing = true"
+                    >Edit
+                    </OverwatchButton>
+                    <OverwatchButton
+                            v-if="widget.editing && partHasContent(widget.part)"
+                            type="default"
+                            class="view-button"
+                            v-hammer:tap="() => widget.editing = false"
+                    >Save
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="default"
+                            class=""
+                            v-hammer:tap="() => deletePart(index)"
+                    >Delete
+                    </OverwatchButton>
+                </div>
             </div>
         </div>
         <div class="create-buttons"
