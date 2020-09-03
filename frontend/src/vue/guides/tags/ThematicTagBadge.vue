@@ -38,6 +38,7 @@
         vertical-align: middle !important;
         color: white;
         box-shadow: 0 0 .13em #343434;
+        white-space: nowrap;
     }
 
     .theme {
