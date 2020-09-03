@@ -23,13 +23,15 @@
             </WeakPanel>
         </div>
         <template v-else>
-            <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="false">
+            <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="isAnyOpen">
                 <TrainingGoal
                         class="training-goal root-content-sizer root-content-panel-wrap"
                         v-for="trainingGoal in trainingGoals"
                         :key="trainingGoal.guide.guideId + '-'+trainingGoal.order"
                         :training-goal="trainingGoal"
                         @removeUndo="onRemoveUndo"
+                        @open="() => openOnly(trainingGoal)"
+                        @close="closeAll"
                 />
             </draggable>
         </template>
@@ -62,6 +64,13 @@ const auth = new Authentication()
                 MyTrainingGoalsCache.instance()
                     .addAndReorder(guideId, guideIds)
             },
+            openOnly(goal) {
+                this.closeAll()
+                goal.open = true;
+            },
+            closeAll() {
+                this.trainingGoals.forEach(g => {g.open = false})
+            }
         },
         data() {
             return {
@@ -69,11 +78,15 @@ const auth = new Authentication()
                 cache: MyTrainingGoalsCache.instance(),
                 deliveredCount: 0,
                 authenticated: auth.authenticated,
+                draggable: true,
             };
         },
         computed: {
             synchronizing() {
                 return auth.authenticated && this.cache.pendingGoalIds.length > 0;
+            },
+            isAnyOpen() {
+                return !!this.trainingGoals.find(g => g.open);
             }
         },
         async mounted() {

@@ -1,12 +1,12 @@
 <template>
     <div class="wrap">
         <div
-                v-if="showFull"
+                v-if="trainingGoal.open"
                 class="uncollapsed"
         >
             <OverwatchButton
                     type="default"
-                    v-hammer:tap="() => showFull = false"
+                    v-hammer:tap="() => {$emit('close');}"
             >Close
             </OverwatchButton>
             <Guide
@@ -22,7 +22,7 @@
         >
             <div
                     class="opacity"
-                    v-hammer:tap="() => {showFull = true}"
+                    v-hammer:tap="() => {$emit('open')}"
             >
                 <div class="tags">
                     <Tag
@@ -105,7 +105,7 @@ export default {
         trainingGoal: {
             type: TrainingGoalWidget,
             required: true
-        }
+        },
     },
     methods: {
         removeTrainingGoal() {
@@ -133,7 +133,6 @@ export default {
     },
     data() {
         return {
-            showFull: false,
         }
     },
     components: {
