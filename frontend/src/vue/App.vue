@@ -39,7 +39,6 @@ export default {
     width: min-content;
     margin: 0 auto;
     min-height: 100vh;
-    overflow-x: hidden;
 
     & > * {
         position: relative;

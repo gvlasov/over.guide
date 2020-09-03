@@ -28,6 +28,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/css/fonts.scss';
+@import '~@/assets/css/tags.scss';
 
 .text-guide-part-content {
     text-align: left;

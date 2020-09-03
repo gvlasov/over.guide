@@ -284,12 +284,6 @@ export default {
             cursor: pointer;
             color: white;
             position: relative;
-
-            &:first-of-type {
-            }
-
-            &:last-of-type {
-            }
         }
 
         .guide-parts {

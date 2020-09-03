@@ -1,7 +1,11 @@
 <template>
     <div class="text-guide-part">
+        <MarkdownGuide
+                v-if="showMarkdownGuide && !widget.editing"
+                @back="() => {showMarkdownGuide = false; widget.editing = true}"
+        />
         <GuidePartText
-                v-if="!widget.editing"
+                v-if="!widget.editing && !showMarkdownGuide"
                 :part="widget.part"
         ></GuidePartText>
         <textarea
@@ -11,12 +15,20 @@
                 rows="10"
                 @paste="(event) => onTextPaste(widget.part)(event)"
         ></textarea>
+        <OverwatchButton
+            v-if="!showMarkdownGuide && widget.editing"
+            type="default"
+            class="markup-help-button"
+            v-hammer:tap="() => {showMarkdownGuide = true; widget.editing = false;}"
+            >Markup help</OverwatchButton>
     </div>
 </template>
 
 <script>
 import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 import GuidePartText from "@/vue/guides/GuidePartText";
+import MarkdownGuide from "@/vue/guides/MarkdownGuide";
+import OverwatchButton from "@/vue/OverwatchButton";
 
 export default {
         model: {},
@@ -64,9 +76,20 @@ export default {
             },
         },
         data() {
-            return {}
+            return {
+                showMarkdownGuide: false,
+            }
         },
+    watch: {
+        'widget.editing'(newValue) {
+            if (newValue) {
+                this.showMarkdownGuide = false;
+            }
+        }
+    },
         components: {
+            OverwatchButton,
+            MarkdownGuide,
             GuidePartText,
         },
     };
@@ -76,6 +99,7 @@ export default {
 <style lang="scss" scoped>
     @import '~@/assets/css/fonts.scss';
     .text-guide-part {
+        padding-top:1em;
         max-width: 100%;
     }
 
@@ -90,6 +114,13 @@ export default {
         max-width: 20em;
         font-size: 1em;
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+    }
+    .markup-help-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 1.2em;
+        opacity: .5;
     }
 
 </style>
