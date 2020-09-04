@@ -155,15 +155,16 @@ export default {
                   }
               })
           } else {
+              this.wipeEmptyParts();
               const guideId = await backend.saveGuide(this.guide.toDto())
                   .then(() => {
-                      draft.reset()
                       this.$router.push(
                           '/search/'+
                           new DescriptorParamUnparser().unparseDescriptor(
                               this.guide.descriptor
                           )
                       )
+                      draft.reset()
                   })
                   .catch(error => {
                       if (error.response.status === 403) {
@@ -198,6 +199,23 @@ export default {
                   clearInterval(interval)
               }
           }, 120)
+      },
+      wipeEmptyParts() {
+          const emptyIndices = [];
+          for (let index in this.guide.parts) {
+              if (!this.guide.parts.hasOwnProperty(index)){
+                  continue;
+              }
+              const part  = this.guide.parts[index];
+              if (part.isEmpty) {
+                  emptyIndices.push(index)
+              }
+          }
+          let shift = 0;
+          for (let index of emptyIndices) {
+              this.guide.parts.splice(index-shift, 1);
+              shift++;
+          }
       },
       createNewTextPart(where) {
           this.createNewPart(

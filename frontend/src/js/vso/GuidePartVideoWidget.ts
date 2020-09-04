@@ -10,4 +10,8 @@ export default class GuidePartVideoWidget extends GuidePartWidget {
         super(part, editing)
     }
 
+    get isEmpty() {
+        return this.part.excerpt === null;
+    }
+
 }

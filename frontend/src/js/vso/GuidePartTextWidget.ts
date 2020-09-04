@@ -7,4 +7,8 @@ export default class GuidePartTextWidget extends GuidePartWidget {
         super(part, editing)
     }
 
+    get isEmpty() {
+        return this.part.contentMd.trim() === '';
+    }
+
 }
