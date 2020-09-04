@@ -7,7 +7,7 @@ import {MatchupEvaluationService} from "src/services/matchup-evaluation.service"
 import heroesFixture from "@fixtures/heroes";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
-import {GuideController,} from "src/controllers/guide.controller";
+import {GuideController} from "src/controllers/guide.controller";
 import request from "supertest";
 import {HttpStatus} from "@nestjs/common";
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
@@ -107,6 +107,28 @@ describe(
                     .expect(HttpStatus.OK)
                 expect((await Guide.findAll()).length).toBe(1)
                 expect((await GuideHistoryEntry.findAll()).length).toBe(2)
+            });
+            it('can\'t create guide with empty descriptor', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture)
+                const user = await User.findOne();
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                expect((await Guide.findAll()).length).toBe(0)
+                await request(ctx.app.getHttpServer())
+                    .post('/guide')
+                    .send({
+                        descriptor: new Descriptor({ }),
+                        parts: [
+                            {
+                                kind: 'text',
+                                contentMd: 'asdf',
+                            } as GuidePartTextDto
+                        ]
+                    } as GuideHistoryEntryDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+                ;
+                expect((await Guide.findAll()).length).toBe(0)
             });
             it('update with same content doesn\'t create new history entry', async () => {
                 await ctx.fixtures(

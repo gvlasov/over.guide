@@ -20,6 +20,10 @@ export default {
             descriptor: {
                 type: GuideDescriptorVso,
                 required: true,
+            },
+            enabled: {
+                type: Boolean,
+                default: true,
             }
         },
         methods: {
@@ -30,6 +34,9 @@ export default {
         },
         watch: {
             '$route.params.descriptor'(paramsText) {
+                if (!this.enabled){
+                    return;
+                }
                 this.$emit(
                     'descriptorChange',
                     new GuideDescriptorVso(
@@ -39,6 +46,9 @@ export default {
             },
             descriptor: {
                 handler: async function (newValue) {
+                    if (!this.enabled){
+                        return;
+                    }
                     const newPath = this.basePath
                         + new DescriptorParamUnparser().unparseDescriptor(this.descriptor);
                     if (this.$router.currentRoute.path !== newPath) {

@@ -3,7 +3,7 @@ import {GuideHistoryEntryService} from "src/services/guide-history-entry.service
 import {Guide} from "src/database/models/Guide";
 import {User} from "src/database/models/User";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
-import DescriptorGenerator from "@fixtures/helpers/DescriptorGenerator";
+import DescriptorGenerator from "data/generators/DescriptorGenerator";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import abilities from 'data/abilities'
 

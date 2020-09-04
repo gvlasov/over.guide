@@ -3,6 +3,7 @@
         <ParameterDescriptorSynchronizer
                 v-model="guide.descriptor"
                 base-path="/guide-editor/"
+                :enabled="!pausedForDescriptorAnimation"
         />
         <LoginRequirement
                 v-if="loginRequired"
@@ -16,6 +17,7 @@
                     :descriptor="guide.descriptor"
                     :search-button-enabled="false"
                     class="descriptor-builder"
+                    ref="descriptorBuilder"
                     @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
             />
         </div>
@@ -124,6 +126,9 @@ import GuideVso from "@/js/vso/GuideVso";
 import debounce from 'lodash.debounce'
 import LoginRequirement from "@/vue/LoginRequirement";
 import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
+import DescriptorGenerator from "data/generators/DescriptorGenerator";
+import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 
 const backend = new Backend(axios);
 
@@ -142,31 +147,64 @@ export default {
     },
   methods: {
       async onDone() {
-          const guideId = await backend.saveGuide(this.guide.toDto())
-              .then(() => {
-                  draft.reset()
-                  this.$router.push(
-                      '/search/'+
-                      new DescriptorParamUnparser().unparseDescriptor(
-                          this.guide.descriptor
-                      )
-                  )
-              })
-              .catch(error => {
-                  if (error.response.status === 403) {
-                    this.loginRequired = true;
+          if (this.guide.descriptor.isEmpty) {
+              this.$scrollTo(this.$refs.descriptorBuilder.$el, 150, {
+                  offset: -100,
+                  onDone: () => {
+                      this.shuffleDescriptor()
                   }
               })
-          if (guideId !== null) {
-              this.guide.guideId = guideId
+          } else {
+              const guideId = await backend.saveGuide(this.guide.toDto())
+                  .then(() => {
+                      draft.reset()
+                      this.$router.push(
+                          '/search/'+
+                          new DescriptorParamUnparser().unparseDescriptor(
+                              this.guide.descriptor
+                          )
+                      )
+                  })
+                  .catch(error => {
+                      if (error.response.status === 403) {
+                          this.loginRequired = true;
+                      }
+                  })
+              if (guideId !== null) {
+                  this.guide.guideId = guideId
+              }
           }
       },
-            createNewTextPart(where) {
-                this.createNewPart(
-                    where,
-                    () => new GuidePartTextWidget(
-                        {
-                            kind: 'text',
+      shuffleDescriptor() {
+          this.pausedForDescriptorAnimation = true;
+          const emptyDescriptor =
+              new GuideDescriptorVso(
+                  new GuideDescriptorQuickie({})
+              )
+          const generator = new DescriptorGenerator({
+              abilitiesPerHero: [0, 1],
+              numberOfHeroTags: [0, 3],
+              numberOfThematicTags: [0, 2]
+          })
+          let i = 0;
+          const interval = setInterval(() => {
+              this.guide.descriptor = new GuideDescriptorVso(
+                  generator.generate(i)
+              )
+              i++
+              if (i === 10) {
+                  this.guide.descriptor = emptyDescriptor;
+                  this.pausedForDescriptorAnimation = false;
+                  clearInterval(interval)
+              }
+          }, 120)
+      },
+      createNewTextPart(where) {
+          this.createNewPart(
+              where,
+              () => new GuidePartTextWidget(
+                  {
+                      kind: 'text',
                             contentMd: ''
                         },
                         true
@@ -249,11 +287,13 @@ export default {
             return {
                 guide: guide,
                 loginRequired: false,
+                pausedForDescriptorAnimation: false,
             }
         },
         computed: {
             isDoneButtonEnabled() {
-                return typeof this.guide.parts.find(widget => this.partHasContent(widget.part)) !== 'undefined';
+                return !this.pausedForDescriptorAnimation &&
+                    typeof this.guide.parts.find(widget => this.partHasContent(widget.part)) !== 'undefined';
             },
         },
         components: {

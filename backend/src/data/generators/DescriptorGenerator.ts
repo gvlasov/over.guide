@@ -3,8 +3,9 @@ import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import heroes from 'data/heroes'
 import thematicTags from "data/thematicTags";
 import abilities from 'data/abilities'
-import SeededShuffler from "@fixtures/helpers/SeededShuffler";
 import AbilityId from "data/AbilityId";
+import SeededShuffler from "data/generators/SeededShuffler";
+import HeroDto from "data/dto/HeroDto";
 
 interface DescriptorGeneratorConfig {
     numberOfHeroTags: AmountSpecifier
@@ -54,12 +55,12 @@ export default class DescriptorGenerator {
         )
     }
 
-    private getGroupAbilities(heroes, shuffler: SeededShuffler): AbilityId[] {
-        return heroes.flatMap(h =>
+    private getGroupAbilities(heroes: HeroDto[], shuffler: SeededShuffler): AbilityId[] {
+        return heroes.map(h =>
             shuffler.shuffle(allAbilities.filter(a => a.heroId === h.id))
                 .slice(0, this.resolveAmountSpecifier(this.config.abilitiesPerHero))
                 .map(a => a.id)
-        );
+        ).reduce((x, y) => x.concat(y), []);
     }
 
     private resolveAmountSpecifier(spec: AmountSpecifier) {
@@ -82,7 +83,7 @@ export default class DescriptorGenerator {
         return buckets
     }
 
-    private randomIntFromInterval(min, max) {
+    private randomIntFromInterval(min: number, max: number) {
         if (min > max) {
             throw new Error(
                 `min must be <= max; min is ${min}, max is ${max}`

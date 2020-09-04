@@ -39,7 +39,6 @@ export default {
             const coeff = this.backgroundScale;
             this.backgroundX = -(this.$el.getBoundingClientRect().x + (bgWidth - document.documentElement.clientWidth) / 2) * coeff;
             this.backgroundY = -this.$el.getBoundingClientRect().y * coeff;
-            console.log(coeff)
         }
     },
     computed: {

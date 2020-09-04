@@ -1,7 +1,7 @@
 import heroes from "data/heroes";
 import Role from "data/Role"
 import HeroDto from "data/dto/HeroDto"
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 
 export default class BansGenerator {
 

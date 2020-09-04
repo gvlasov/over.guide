@@ -25,6 +25,7 @@ import {
     GuideSearchQuery,
     GuideSearchService
 } from "src/services/guide-search.service";
+import EmptyDescriptorException from "src/services/EmptyDescriptorException";
 
 @Controller('guide')
 export class GuideController {
@@ -58,13 +59,13 @@ export class GuideController {
         ) {
             response.status(HttpStatus.FORBIDDEN)
             response.send()
-        } else {
-            const entry = await this.guideHistoryEntryService.save(guideHistoryEntryDto, user)
-            if (entry === SaveResult.SavingDuplicateRejected) {
-                response.status(HttpStatus.ACCEPTED)
-                response.send()
-            } else {
-                if (updating) {
+        }else {
+            try {
+                const entry = await this.guideHistoryEntryService.save(guideHistoryEntryDto, user)
+                if (entry === SaveResult.SavingDuplicateRejected) {
+                    response.status(HttpStatus.ACCEPTED)
+                    response.send()
+                } else if (updating) {
                     response.status(HttpStatus.OK)
                     response.send()
                 } else {
@@ -72,6 +73,13 @@ export class GuideController {
                     response.send({
                         guideId: entry.guideId
                     })
+                }
+            } catch (e) {
+                if (e instanceof EmptyDescriptorException) {
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    response.send()
+                } else {
+                    throw e;
                 }
             }
         }

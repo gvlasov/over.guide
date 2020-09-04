@@ -13,6 +13,7 @@ import {ContentHashService} from "src/services/content-hash.service";
 import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor2PlayerAbility";
 import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescriptor2TeammateAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
+import EmptyDescriptorException from "src/services/EmptyDescriptorException";
 
 
 @Injectable()
@@ -116,7 +117,9 @@ export class GuideDescriptorService {
             ]
                 .length === 0
         ) {
-            throw new Error(`Can't obtain descriptor from empty DTO`)
+            throw new EmptyDescriptorException(
+                `Can't obtain descriptor from empty DTO`
+            )
         }
         return this.getExact(guideDescriptorDto)
             .then(async oldDescriptor => {

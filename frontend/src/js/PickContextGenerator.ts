@@ -4,7 +4,7 @@ import BansGenerator from "./BansGenerator";
 import RoleGenerator from "./RoleGenerator";
 import TeamComp from "./TeamComp";
 import Role from "data/Role";
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 import MapId from "data/MapId";
 
 export default class PickContextGenerator {

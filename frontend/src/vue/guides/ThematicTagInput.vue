@@ -24,7 +24,7 @@
 <script>
 import VoerroTagsInput from '@voerro/vue-tagsinput';
 import Tag from "@/vue/guides/tags/hero/Tag";
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 import GuideTheme from "data/GuideTheme";
 import ThematicTagVso from "@/js/vso/ThematicTagVso";
 import MapTagVso from "@/js/vso/MapTagVso";

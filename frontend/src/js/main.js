@@ -12,6 +12,7 @@ import AsyncComputed from 'vue-async-computed'
 import {VueHammer} from 'vue2-hammer'
 import TrainingGoals from "@/vue/guides/TrainingGoals";
 import UserInfo from "@/vue/UserInfo";
+import VueScrollTo from 'vue-scrollto';
 
 
 const router = new VueRouter({
@@ -35,6 +36,7 @@ Vue.use(VueHammer);
 VueHammer.config.pan = {
     threshold: 5
 };
+Vue.use(VueScrollTo)
 const app = new Vue({
     el: '#app',
     render: function (h) {

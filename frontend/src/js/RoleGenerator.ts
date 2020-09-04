@@ -1,5 +1,5 @@
 import Role from "data/Role"
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 
 export default class RoleGenerator {
 

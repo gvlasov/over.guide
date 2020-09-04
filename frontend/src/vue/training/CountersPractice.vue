@@ -59,7 +59,7 @@ import PickContext from "@/js/PickContext";
 import SuggestionRoster from "@/vue/training/SuggestionRoster.vue";
 import SelectionRoster from "@/vue/training/SelectionRoster.vue";
 import RoleSelection from "@/vue/training/RoleSelection.vue";
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 import MapId from "data/MapId";
 
 const backend = new Backend(axios);

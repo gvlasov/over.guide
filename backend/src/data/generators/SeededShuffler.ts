@@ -1,9 +1,7 @@
-import {prng} from "seedrandom";
-import shuffle from "fast-shuffle";
+const shuffle = require("fast-shuffle").default;
 
 export default class SeededShuffler {
 
-    private readonly random: prng;
     private seed: number;
 
     constructor(seed: number) {

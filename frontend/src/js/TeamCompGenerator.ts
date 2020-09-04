@@ -3,7 +3,7 @@ import TeamComp from "./TeamComp";
 import RoleGenerator from "./RoleGenerator";
 import HeroDto from "data/dto/HeroDto";
 import Role from "data/Role";
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 
 export default class TeamCompGenerator {
 

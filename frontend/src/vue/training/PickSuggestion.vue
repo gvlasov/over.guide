@@ -53,7 +53,7 @@ import SuggestionRoster from "./SuggestionRoster.vue";
 import SelectionRoster from "./SelectionRoster.vue";
 import PickContextGenerator from "@/js/PickContextGenerator";
 import TeamComp from "@/js/TeamComp";
-import SeededShuffler from "@/js/SeededShuffler";
+import SeededShuffler from "data/generators/SeededShuffler";
 
 const backend = new Backend(axios);
     const contextGenerator = new PickContextGenerator(
