@@ -194,6 +194,29 @@ describe(
                         expect(user.name).toBe(originalUsername)
                     })
             });
+            it('returns 404 if user doesn\'t exist', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    abilitiesFixture,
+                    smallGuideTestingFixture
+                )
+                const user = await User.findOne({});
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                await request(ctx.app.getHttpServer())
+                    .get(`/user/${user.id}`)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                ;
+                await request(ctx.app.getHttpServer())
+                    .get(`/user/99999`)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.NOT_FOUND)
+                ;
+            });
         }
     )
 )

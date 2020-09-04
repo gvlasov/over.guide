@@ -16,7 +16,6 @@ import {AuthenticatedGuard} from "src/services/authenticated.guard";
 import {Sequelize} from "sequelize-typescript";
 import {SEQUELIZE} from "src/constants";
 import {User} from "src/database/models/User";
-import UserInfoDto from "data/dto/UserInfoDto";
 import {GuideSearchService} from "src/services/guide-search.service";
 import UsernameChangeDto from "data/dto/UsernameChangeDto";
 import {ValidationError} from "sequelize";
@@ -33,19 +32,28 @@ export class UserController {
     }
 
     @Get(':id')
-    async get(
+    get(
         @Param('id') userId: number,
+        @Res() response: Response
     ) {
-        return User.findOne({
+        User.findOne({
             where: {
                 id: userId
             },
         })
             .then(async user => {
-                return {
-                    user: user.toDto(),
-                    lastAuthoredGuides: await this.searchService.searchByCreator(userId, 0),
-                } as UserInfoDto
+                if (user === null) {
+                    response.status(HttpStatus.NOT_FOUND)
+                    response.send()
+                } else {
+                    response.status(HttpStatus.OK)
+                    response.send(
+                        {
+                            user: user.toDto(),
+                            lastAuthoredGuides: await this.searchService.searchByCreator(userId, 0),
+                        }
+                    )
+                }
             });
     }
 
