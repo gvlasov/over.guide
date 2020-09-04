@@ -181,12 +181,12 @@ export default {
     align-items: center;
     text-align: left;
     cursor: pointer;
-    transform: translateX(0);
-    transition: transform .13s;
+    padding-left: 0;
+    transition: padding-left .13s;
 
     &:hover {
-        transform: translateX(1em);
-        transition: transform .13s;
+        padding-left: 1em;
+        transition: padding-left .13s;
     }
 
     .badge-tags-wrap {
