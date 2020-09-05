@@ -2,7 +2,7 @@
     <div class="text-guide-part">
         <MarkdownGuide
                 v-if="showMarkdownGuide && !widget.editing"
-                @back="() => {showMarkdownGuide = false; widget.editing = true}"
+                @back="onMarkdownGuideBack"
         />
         <GuidePartText
                 v-if="!widget.editing && !showMarkdownGuide"
@@ -10,6 +10,7 @@
         ></GuidePartText>
         <textarea
                 v-if="widget.editing"
+                ref="textarea"
                 class="guide-part-text-editor"
                 v-model="widget.part.contentMd"
                 rows="10"
@@ -39,6 +40,16 @@ export default {
             }
         },
         methods: {
+            onMarkdownGuideBack() {
+                this.showMarkdownGuide = false;
+                this.widget.editing = true;
+                this.$scrollTo(this.$el, 150, {
+                    offset: -100,
+                    onDone: ()  => {
+                        this.$refs.textarea.focus();
+                    }
+                });
+            },
             onTextPaste(part) {
                 return (pasteEvent) => {
                     let paste = (pasteEvent.clipboardData || pasteEvent.originalEvent.clipboardData || window.clipboardData).items;
@@ -78,6 +89,7 @@ export default {
         data() {
             return {
                 showMarkdownGuide: false,
+                fixOverscroll: true,
             }
         },
     watch: {
