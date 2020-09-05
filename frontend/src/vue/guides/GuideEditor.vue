@@ -369,7 +369,6 @@ export default {
         .guide-part {
             @include overwatch-panel;
             padding: 1em;
-            cursor: pointer;
             color: white;
             position: relative;
         }
