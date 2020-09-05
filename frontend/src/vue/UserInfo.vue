@@ -2,9 +2,15 @@
     <div class="root-content-sizer">
         <div
                 v-if="typeof userInfo === 'undefined'"
-                class="loading"
+                class="loading-notice"
         >
-            Loading...
+            Loading
+        </div>
+        <div
+                v-else-if="userInfo === null"
+                class="loading-notice"
+        >
+            User doesn't exist
         </div>
         <template v-else>
             <div class="root-content-panel-wrap info">
@@ -84,7 +90,15 @@ export default {
         },
     },
     async mounted() {
-        this.userInfo = new UserInfoVso(await (backend.getUserInfo(this.userId)));
+        backend.getUserInfo(this.userId)
+            .then(dto => {
+                this.userInfo = new UserInfoVso(dto);
+            })
+            .catch(e => {
+                if (e.response.status === 404) {
+                    this.userInfo = null;
+                }
+            })
     },
     components: {
         Guide,
@@ -116,7 +130,7 @@ export default {
     }
 }
 
-.loading {
+.loading-notice {
     font-size: 8em;
     text-shadow: 0 0 .1em #333;
     color: white;

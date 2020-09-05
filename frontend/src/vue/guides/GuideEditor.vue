@@ -3,110 +3,133 @@
         <ParameterDescriptorSynchronizer
                 v-model="guide.descriptor"
                 base-path="/guide-editor/"
-                :enabled="!pausedForDescriptorAnimation"
         />
+        <LoginRequirement
+                v-if="loginRequired"
+                @back="loginRequired = false"
+        >
+            <template v-slot:notice>Publishing a guide requires logging in with Battle.net</template>
+            <template v-slot:subnotice>Your current guide will be restored right away</template>
+        </LoginRequirement>
         <div
                 v-if="!preview"
                 class="editor"
         >
-            <LoginRequirement
-                    v-if="loginRequired"
-                    @back="loginRequired = false"
+            <div
+                    v-if="forceDescriptorSelection"
+                    class="force-descriptor-notice"
             >
-                <template v-slot:notice>Publishing a guide requires logging in with Battle.net</template>
-                <template v-slot:subnotice>Your current guide will be restored right away</template>
-            </LoginRequirement>
-            <div class="root-content-panel-wrap">
+                What is your guide about?
+            </div>
+            <div
+                    class="root-content-panel-wrap"
+            >
                 <DescriptorBuilder
                         :descriptor="guide.descriptor"
                         :search-button-enabled="false"
                         class="descriptor-builder"
-                        ref="descriptorBuilder"
+                        v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
                         @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
                 />
             </div>
-            <div class="create-buttons">
-                <OverwatchButton
-                        :type="'default'"
-                        class="create-new-part-button"
-                        v-hammer:tap="() => createNewTextPart('beginning')"
-                        data-type="text"
-                >+ text
-                </OverwatchButton>
-                <OverwatchButton
-                        type="main"
-                        :disabled="!isDoneButtonEnabled"
-                        v-hammer:tap="onDone"
-                >Done
-                </OverwatchButton>
-                <OverwatchButton
-                        :type="'default'"
-                        class="create-new-part-button"
-                        data-type="video"
-                        v-hammer:tap="() => createNewVideoPart('beginning')"
-                >+ video
-                </OverwatchButton>
-            </div>
-            <div class="guide-parts root-content-panel-wrap">
-                <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
-                    <GuidePartTextEditor
-                            v-if="widget.part.kind === 'text'"
-                            :widget="widget"
-                    />
-                    <GuidePartVideoEditor
-                            v-if="widget.part.kind === 'video'"
-                            :widget="widget"
-                            :index="index"
-                            @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
-                    />
-                    <div class="guide-part-buttons">
-                        <OverwatchButton
-                                v-if="!widget.editing"
-                                type="default"
-                                class="edit-button"
-                                v-hammer:tap="() => widget.editing = true"
-                        >Edit
-                        </OverwatchButton>
-                        <OverwatchButton
-                                v-if="widget.editing && partHasContent(widget.part)"
-                                type="default"
-                                class="view-button"
-                                v-hammer:tap="() => widget.editing = false"
-                        >Save
-                        </OverwatchButton>
-                        <OverwatchButton
-                                type="default"
-                                class=""
-                                v-hammer:tap="() => deletePart(index)"
-                        >Delete
-                        </OverwatchButton>
-                    </div>
-                </div>
-            </div>
-            <div class="create-buttons"
-                 v-if="guide.parts.length > 0"
+            <div
+                    v-if="forceDescriptorSelection"
+                    class="force-descriptor-buttons"
             >
                 <OverwatchButton
-                        :type="'default'"
-                        class="create-new-part-button"
-                        v-hammer:tap="() => createNewTextPart('end')"
-                >+ text
-                </OverwatchButton>
+                        type="default"
+                        v-hammer:tap="() => forceDescriptorSelection = false"
+                >Back</OverwatchButton>
                 <OverwatchButton
                         type="main"
-                        v-hammer:tap="onDone"
-                        data-type="text"
-                        :disabled="!isDoneButtonEnabled"
-                >Done
-                </OverwatchButton>
-                <OverwatchButton
-                        :type="'default'"
-                        class="create-new-part-button"
-                        v-hammer:tap="() => createNewVideoPart('end')"
-                        data-type="video"
-                >+ video
-                </OverwatchButton>
+                        :disabled="guide.descriptor.isEmpty"
+                        v-hammer:tap="() => {forceDescriptorSelection = false; preview = true}"
+                >Done</OverwatchButton>
             </div>
+            <template v-else>
+                <div class="create-buttons">
+                    <OverwatchButton
+                            :type="'default'"
+                            class="create-new-part-button"
+                            v-hammer:tap="() => createNewTextPart('beginning')"
+                            data-type="text"
+                    >+ text
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="main"
+                            :disabled="!isDoneButtonEnabled"
+                            v-hammer:tap="onDone"
+                    >Done
+                    </OverwatchButton>
+                    <OverwatchButton
+                            :type="'default'"
+                            class="create-new-part-button"
+                            data-type="video"
+                            v-hammer:tap="() => createNewVideoPart('beginning')"
+                    >+ video
+                    </OverwatchButton>
+                </div>
+                <div class="guide-parts root-content-panel-wrap">
+                    <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
+                        <GuidePartTextEditor
+                                v-if="widget.part.kind === 'text'"
+                                :widget="widget"
+                        />
+                        <GuidePartVideoEditor
+                                v-if="widget.part.kind === 'video'"
+                                :widget="widget"
+                                :index="index"
+                                @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
+                        />
+                        <div class="guide-part-buttons">
+                            <OverwatchButton
+                                    v-if="!widget.editing"
+                                    type="default"
+                                    class="edit-button"
+                                    v-hammer:tap="() => widget.editing = true"
+                            >Edit
+                            </OverwatchButton>
+                            <OverwatchButton
+                                    v-if="widget.editing && partHasContent(widget.part)"
+                                    type="default"
+                                    class="view-button"
+                                    v-hammer:tap="() => widget.editing = false"
+                            >Save
+                            </OverwatchButton>
+                            <OverwatchButton
+                                    type="default"
+                                    class=""
+                                    v-hammer:tap="() => deletePart(index)"
+                            >Delete
+                            </OverwatchButton>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-buttons"
+                     v-if="guide.parts.length > 0"
+                >
+                    <OverwatchButton
+                            :type="'default'"
+                            class="create-new-part-button"
+                            v-hammer:tap="() => createNewTextPart('end')"
+                    >+ text
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="main"
+                            v-hammer:tap="onDone"
+                            data-type="text"
+                            :disabled="!isDoneButtonEnabled"
+                    >Done
+                    </OverwatchButton>
+                    <OverwatchButton
+                            :type="'default'"
+                            class="create-new-part-button"
+                            v-hammer:tap="() => createNewVideoPart('end')"
+                            data-type="video"
+                    >+ video
+                    </OverwatchButton>
+                </div>
+            </template>
         </div>
         <div
                 v-if="preview"
@@ -151,9 +174,6 @@ import GuideVso from "@/js/vso/GuideVso";
 import debounce from 'lodash.debounce'
 import LoginRequirement from "@/vue/LoginRequirement";
 import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
-import DescriptorGenerator from "data/generators/DescriptorGenerator";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import Guide from "@/vue/guides/Guide";
 import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
@@ -175,13 +195,8 @@ export default {
     },
     methods: {
         onDone() {
-            if (this.guide.descriptor.isEmpty) {
-                this.$scrollTo(this.$refs.descriptorBuilder.$el, 150, {
-                    offset: -100,
-                    onDone: () => {
-                        this.shuffleDescriptor()
-                    },
-                })
+            if (this.guide.descriptor.isEmpty)  {
+                this.forceDescriptorSelection = true;
             } else {
                 this.wipeEmptyParts();
                 this.preview = true;
@@ -206,30 +221,6 @@ export default {
             if (guideId !== null) {
                 this.guide.guideId = guideId
             }
-        },
-        shuffleDescriptor() {
-            this.pausedForDescriptorAnimation = true;
-            const emptyDescriptor =
-                new GuideDescriptorVso(
-                    new GuideDescriptorQuickie({})
-                )
-            const generator = new DescriptorGenerator({
-                abilitiesPerHero: [0, 1],
-                numberOfHeroTags: [0, 3],
-                numberOfThematicTags: [0, 2]
-            })
-            let i = 0;
-            const interval = setInterval(() => {
-                this.guide.descriptor = new GuideDescriptorVso(
-                    generator.generate(i)
-                )
-                i++
-                if (i === 10) {
-                    this.guide.descriptor = emptyDescriptor;
-                    this.pausedForDescriptorAnimation = false;
-                    clearInterval(interval)
-                }
-            }, 120)
         },
         wipeEmptyParts() {
             const emptyIndices = [];
@@ -341,14 +332,13 @@ export default {
         return {
             guide: guide,
             loginRequired: false,
-            pausedForDescriptorAnimation: false,
             preview: false,
+            forceDescriptorSelection: false,
         }
     },
     computed: {
         isDoneButtonEnabled() {
-            return !this.pausedForDescriptorAnimation &&
-                typeof this.guide.parts.find(widget => this.partHasContent(widget.part)) !== 'undefined';
+            return typeof this.guide.parts.find(widget => this.partHasContent(widget.part)) !== 'undefined';
         },
     },
     components: {
@@ -375,55 +365,74 @@ export default {
     display: inline-flex;
     flex-direction: column;
     gap: .6em;
-
-    .guide-part {
-        @include overwatch-panel;
-        padding: 1em;
-        cursor: pointer;
-        color: white;
-        position: relative;
-    }
-
-    .guide-parts {
-        display: flex;
-        flex-direction: column;
-        gap: 2rem;
-    }
-
-    .guide-part-buttons > * {
-        font-size: 2em;
-    }
-
-    .create-buttons {
-        display: flex;
-        justify-content: space-evenly;
-        z-index: 1;
-        margin: .3em;
-
-        & > * {
-            font-size: 2rem;
-            flex-shrink: 1;
-            flex-basis: 5em;
+    .editor {
+        .guide-part {
+            @include overwatch-panel;
+            padding: 1em;
+            cursor: pointer;
+            color: white;
+            position: relative;
         }
 
-        & > * ::v-deep .content {
-            padding-left: 0;
-            padding-right: 0;
+        .guide-parts {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
+
+        .guide-part-buttons > * {
+            font-size: 2em;
+        }
+
+        .create-buttons {
+            display: flex;
+            justify-content: space-evenly;
+            z-index: 1;
+            margin: .3em;
+
+            & > * {
+                font-size: 2rem;
+                flex-shrink: 1;
+                flex-basis: 5em;
+            }
+
+            & > * ::v-deep .content {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+
+        .descriptor-builder {
+            z-index: 3;
+            position: relative;
+            width: 100%;
+            /* For it to be positioned above everything else,
+                   which is important when the dropdown is displayed
+                   */
+            &.forced-descriptor {
+                margin-bottom: 3em;
+            }
+        }
+
+        .create-new-part-button {
+            white-space: nowrap;
+        }
+
+        .force-descriptor-notice {
+            font-size: 2em;
+            margin: 3em 1em 0 1em;
+
+            @include overwatch-futura;
+        }
+
+        .force-descriptor-buttons {
+            button {
+                font-size: 2em;
+            }
+        }
+
     }
 
-    .descriptor-builder {
-        z-index: 3;
-        position: relative;
-        width: 100%;
-        /* For it to be positioned above everything else,
-               which is important when the dropdown is displayed
-               */
-    }
-
-    .create-new-part-button {
-        white-space: nowrap;
-    }
 
     .preview {
         .guide {
