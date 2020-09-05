@@ -291,7 +291,9 @@ export default {
             }
 
             .add-button[disabled], .subtract-button[disabled] {
-                visibility: hidden;
+                & ::v-deep .background {
+                    background: transparent;
+                }
             }
 
             $adjust-button-border-radius: .15em;
