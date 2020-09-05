@@ -1,52 +1,40 @@
 <template>
     <div class="wrap">
-        <div>
-            <AspectRatioBox>
-                <VideoLoadingScreen/>
-                <YoutubeVideo
-                        :videoId="videoId"
-                        :start="startSeconds"
-                        :end="endSeconds"
-                        :loop="true"
-                        :autoplay="true"
-                        :player-element-id="playerElementId"
-                        @playerReady="onPlayerReady"
-                        @play="onPlay"
-                        @pause="onPause"
-                        @skip="onSkip"
-                        class="video"
-                />
-            </AspectRatioBox>
-            <div v-if="preciseDurationAvailable">
-                <ExcerptTimebar
-                        v-if="isVideoLoaded"
-                        :start-seconds="startSeconds"
-                        :end-seconds="endSeconds"
-                        :current-seconds="currentSeconds"
-                        :duration-seconds="durationSeconds"
-                        @mouseenter.native="hovered = true"
-                        @mouseleave.native="hovered = false"
-                        :enable-slider-label="hovered"
-                        @dragStart="onDragStart"
-                        @dragEnd="onDragEnd"
-                        @dragContinue="onDragContinue"
-                        @draglessClick="onDraglessClick"
-                        class="timebar"
-                />
-            </div>
-            <div v-if="preciseDurationAvailable" class="controls">
-                <div
-                        class="total-cut-length"
-                >
-                    {{totalCutLengthText}}
-                </div>
-                <OverwatchPanelButton
-                        class="reset-button action-button left-shift-2"
-                        v-hammer:tap="resetLoopWindow"
-                        title="Reset loop window to entire video"
-                        type="default"
-                >reset cut
-                </OverwatchPanelButton>
+        <AspectRatioBox>
+            <VideoLoadingScreen/>
+            <YoutubeVideo
+                    :videoId="videoId"
+                    :start="startSeconds"
+                    :end="endSeconds"
+                    :loop="true"
+                    :autoplay="true"
+                    :player-element-id="playerElementId"
+                    @playerReady="onPlayerReady"
+                    @play="onPlay"
+                    @pause="onPause"
+                    @skip="onSkip"
+                    class="video"
+            />
+        </AspectRatioBox>
+        <div v-if="preciseDurationAvailable">
+            <ExcerptTimebar
+                    v-if="isVideoLoaded"
+                    :start-seconds="startSeconds"
+                    :end-seconds="endSeconds"
+                    :current-seconds="currentSeconds"
+                    :duration-seconds="durationSeconds"
+                    @mouseenter.native="hovered = true"
+                    @mouseleave.native="hovered = false"
+                    :enable-slider-label="hovered"
+                    @dragStart="onDragStart"
+                    @dragEnd="onDragEnd"
+                    @dragContinue="onDragContinue"
+                    @draglessClick="onDraglessClick"
+                    class="timebar"
+            />
+        </div>
+        <div v-if="preciseDurationAvailable" class="controls">
+            <div class="time-input-group start-group">
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="startSecondsValidated"
@@ -63,6 +51,8 @@
                         type="default"
                 >start cut
                 </OverwatchPanelButton>
+            </div>
+            <div class="time-input-group end-group">
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
                         v-model="endSecondsValidated"
@@ -80,6 +70,19 @@
                 >end cut
                 </OverwatchPanelButton>
             </div>
+            <div class="total-cut-group">
+                <OverwatchPanelButton
+                        class="reset-button action-button left-shift-2"
+                        v-hammer:tap="resetLoopWindow"
+                        title="Reset loop window to entire video"
+                        type="default"
+                >reset cut
+                </OverwatchPanelButton>
+                <div class="total-cut-length">
+                    {{ totalCutLengthText }}
+                </div>
+            </div>
+            <div style="clear: both;"></div>
         </div>
     </div>
 </template>
@@ -317,6 +320,9 @@ export default {
 <style lang="scss" scoped>
     @import "~@/assets/css/common.scss";
     @import "~@/assets/css/fonts.scss";
+    $start-color: hsl(230, 70%, 64%);
+    $end-color: hsl(0, 70%, 64%);
+
 
     $max-portrait-mode-width: $root-content-width - 3rem;
     .wrap {
@@ -324,16 +330,13 @@ export default {
         justify-content: center;
     }
 
-    .controls {
-        display: grid;
-        grid-template-columns: auto auto;
-        margin-bottom: 1.7rem;
-        gap: .3em;
-    }
-
     .timebar {
       margin-bottom: .4em;
       margin-top: .4em;
+        & ::v-deep .excerpt-area {
+            background: rgb(78,225,255);
+            background: linear-gradient(90deg, $start-color 0%,  $end-color 100%);
+        }
     }
 
     .video {
@@ -371,45 +374,53 @@ export default {
         margin-left: 1.5rem;
     }
 
-    @media screen and (min-width: $max-portrait-mode-width) {
-        .controls {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
+    .controls {
+        .time-input-group {
+            .precise-time-input {
+                height: 2.5em;
+                display: flex;
+                justify-content: center;
+                margin-bottom: .4em;
+            }
+            margin-bottom: 1em;
+        }
+        .start-group {
+            float: left;
+            .time-input-start ::v-deep button .background {
+                background-color: $start-color;
+            }
+
+            .cut-start ::v-deep .background {
+                background-color: $start-color;
+            }
         }
 
-        .left-shift-0, .left-shift-1, .left-shift-2 {
-            margin-left: 0;
-            margin-right: 0;
+        .end-group {
+            float: right;
+            .time-input-end ::v-deep button .background {
+                background-color: $end-color;
+            }
+
+            .cut-end ::v-deep .background {
+                background-color: $end-color;
+            }
         }
 
-        .time-input-start {
-            order: 1;
+        .total-cut-group {
+            button {
+                margin: 0 .4em .2em .4em;
+            }
+            .total-cut-length {
+                flex-basis: 100%;
+                font-family: 'Futura Demi Bold', sans-serif;
+            }
+            margin-bottom: 1.5em;
         }
-
-        .cut-start {
-            order: 2;
-        }
-
-        .reset-button {
-            margin-left: .8em;
-            order: 3;
-            margin-right: .8em;
-        }
-
-        .cut-end {
-            order: 4;
-        }
-
-        .time-input-end {
-            order: 5;
-        }
-
-        .total-cut-length {
-            order: 6;
-            flex-basis: 100%;
-            font-family: 'Futura Demi Bold', sans-serif;
-        }
-
     }
+
+    .left-shift-0, .left-shift-1, .left-shift-2 {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
 </style>

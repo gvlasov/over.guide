@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="precise-time-input">
         <template v-if="showHours">
             <div class="time-part-wrap">
                 <OverwatchPanelButton
@@ -223,7 +223,7 @@ export default {
 <style lang="scss" scoped>
     @import "~@/assets/css/overwatch-ui.scss";
 
-    .wrap {
+    .precise-time-input {
         display: inline-flex;
         gap: .3em;
 

@@ -1,5 +1,5 @@
 <template>
-    <div class='youtube-video'></div>
+    <div class='youtube-video' v-bind:id="playerElementId"></div>
 </template>
 
 <script>
