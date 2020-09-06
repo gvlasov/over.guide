@@ -379,8 +379,11 @@ export default {
             gap: 2rem;
         }
 
-        .guide-part-buttons > * {
-            font-size: 2em;
+        .guide-part-buttons {
+            margin-top: 2em;
+            & > * {
+                font-size: 2em;
+            }
         }
 
         .create-buttons {
