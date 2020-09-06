@@ -41,7 +41,6 @@
                 </OverwatchButton>
                 <OverwatchButton
                         type="default"
-                        class=""
                         v-hammer:tap="() => deletePart(index)"
                 >Delete
                 </OverwatchButton>

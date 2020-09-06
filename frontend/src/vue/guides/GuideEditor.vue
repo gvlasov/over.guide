@@ -171,6 +171,9 @@ export default {
                 this.wipeEmptyParts();
                 this.preview = true;
             }
+            this.$scrollTo(this.$el, {
+                force: true,
+            })
         },
         async publish() {
             const guideId = await backend.saveGuide(this.guide.toDto())
@@ -296,7 +299,7 @@ export default {
     },
     computed: {
         isDoneButtonEnabled() {
-            return typeof this.guide.parts.find(widget => widget.isEmpty) !== 'undefined';
+            return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
         },
     },
     components: {
