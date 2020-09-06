@@ -236,12 +236,15 @@ export default {
                 & > input[type=text] {
                     font-family: "Futura Demi Bold", sans-serif !important;
                     font-size: 1.2em !important;
+                    background-color: hsla(0, 0, 100%, .65);
+                    border: 0;
+                    color: #333;
                 }
 
                 .time-part-interjector {
                     display: block;
                     position: absolute;
-                    color: $overwatch-panel-bg-color;
+                    color: #333;
                     pointer-events: none;
                     bottom: -.15em;
                     font-family: "Futura Demi Bold", sans-serif;
