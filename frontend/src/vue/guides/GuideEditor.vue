@@ -410,30 +410,32 @@ export default {
         }
 
         .guide-part-buttons {
+            position: relative;
             margin-top: 2em;
             & > * {
                 font-size: 2em;
             }
-        }
-        .move-guide-buttons {
-            float: right;
-            display: inline-block;
-            button {
-                height: 100%;
-                & ::v-deep .content {
-                    padding: 0;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-                & ::v-deep img {
-                    height: .7em;
-                }
-                & ::v-deep .background {
-                    background-color: rgba(81, 96, 148, 0.7);
-                }
-                &[disabled] ::v-deep .background {
-                    background-color: transparent;
+            .move-guide-buttons {
+                position: absolute;
+                right: 0;
+                display: inline-block;
+                button {
+                    height: 100%;
+                    & ::v-deep .content {
+                        padding: 0;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    }
+                    & ::v-deep img {
+                        height: .7em;
+                    }
+                    & ::v-deep .background {
+                        background-color: rgba(81, 96, 148, 0.7);
+                    }
+                    &[disabled] ::v-deep .background {
+                        background-color: transparent;
+                    }
                 }
             }
         }
