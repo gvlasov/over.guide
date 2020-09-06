@@ -32,10 +32,11 @@
                 >Edit
                 </OverwatchButton>
                 <OverwatchButton
-                        v-if="widget.editing && partHasContent(widget.part)"
+                        v-if="widget.editing"
                         type="default"
                         class="view-button"
                         v-hammer:tap="() => widget.editing = false"
+                        :disabled="widget.isEmpty"
                 >Save
                 </OverwatchButton>
                 <OverwatchButton
