@@ -14,7 +14,7 @@
         </div>
         <template v-else>
             <div class="root-content-panel-wrap info">
-                <div class="username">{{ userInfo.user.name }}</div>
+                <BackgroundHeading class="username">{{ userInfo.user.name }}</BackgroundHeading>
                 <template v-if="isThisMe">
                     <div class="buttons-wrap">
                         <OverwatchButton
@@ -63,6 +63,7 @@ import Guide from "@/vue/guides/Guide";
 import UserInfoVso from "@/js/vso/UserInfoVso";
 import UsernameInput from "@/vue/UsernameInput";
 import Authentication from "@/js/Authentication";
+import BackgroundHeading from "@/vue/BackgroundHeading";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
@@ -101,6 +102,7 @@ export default {
             })
     },
     components: {
+        BackgroundHeading,
         Guide,
         OverwatchButton,
         TrainingGoal,
@@ -138,16 +140,9 @@ export default {
 }
 
 .username {
-    font-family: BigNoodleTooOblique, sans-serif;
-    font-size: 8em;
-    text-shadow: 0 0 .1em #333;
-    color: white;
     position: absolute;
     top: -3rem;
     z-index: 1;
-    opacity: .5;
-    user-select: none;
-    white-space: nowrap;
 }
 
 .info {
