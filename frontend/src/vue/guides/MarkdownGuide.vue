@@ -70,12 +70,15 @@ export default {
     margin: 0 auto 1em auto;
     max-width: 30em;
     text-align: center;
+
     .back-button {
+        margin-top: 1em;
         position: -webkit-sticky;
         position: sticky;
         bottom: 1.1em;
         font-size: 2.5em;
     }
+
     table {
         width: 100%;
         border-spacing: .3em;

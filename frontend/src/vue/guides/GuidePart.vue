@@ -1,53 +1,67 @@
 <template>
     <div class="guide-part">
-        <GuidePartTextEditor
-                v-if="widget.part.kind === 'text'"
-                :widget="widget"
-        />
-        <GuidePartVideoEditor
-                v-if="widget.part.kind === 'video'"
-                :widget="widget"
-                :index="index"
-                @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
-        />
-        <div class="guide-part-buttons">
+        <template v-if="widget.part.kind === 'text'">
+            <MarkdownGuide
+                    v-if="showMarkdownGuide && !widget.editing && widget.part.kind === 'text'"
+                    @back="onMarkdownGuideBack"
+            />
             <OverwatchButton
-                    v-if="!widget.editing"
+                    v-if="!showMarkdownGuide && widget.editing && widget.part.kind === 'text'"
                     type="default"
-                    class="edit-button"
-                    v-hammer:tap="() => widget.editing = true"
-            >Edit
-            </OverwatchButton>
-            <OverwatchButton
-                    v-if="widget.editing && partHasContent(widget.part)"
-                    type="default"
-                    class="view-button"
-                    v-hammer:tap="() => widget.editing = false"
-            >Save
-            </OverwatchButton>
-            <OverwatchButton
-                    type="default"
-                    class=""
-                    v-hammer:tap="() => deletePart(index)"
-            >Delete
-            </OverwatchButton>
-            <div class="move-guide-buttons">
-                <OverwatchPanelButton
-                        :disabled="index === guide.parts.length - 1"
+                    class="markup-help-button"
+                    v-hammer:tap="() => {showMarkdownGuide = true; widget.editing = false;}"
+            >Markup help</OverwatchButton>
+        </template>
+        <template v-if="!showMarkdownGuide">
+            <GuidePartTextEditor
+                    v-if="widget.part.kind === 'text'"
+                    :widget="widget"
+            />
+            <GuidePartVideoEditor
+                    v-if="widget.part.kind === 'video'"
+                    :widget="widget"
+                    :index="index"
+                    @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
+            />
+            <div class="guide-part-buttons">
+                <OverwatchButton
+                        v-if="!widget.editing"
                         type="default"
-                        v-hammer:tap="() => movePartDown(index)"
-                >
-                    <img src="/icons/arrow-down-white.svg"/>
-                </OverwatchPanelButton>
-                <OverwatchPanelButton
-                        :disabled="index === 0"
+                        class="edit-button"
+                        v-hammer:tap="() => widget.editing = true"
+                >Edit
+                </OverwatchButton>
+                <OverwatchButton
+                        v-if="widget.editing && partHasContent(widget.part)"
                         type="default"
-                        v-hammer:tap="() => movePartUp(index)"
-                >
-                    <img src="/icons/arrow-up-white.svg"/>
-                </OverwatchPanelButton>
+                        class="view-button"
+                        v-hammer:tap="() => widget.editing = false"
+                >Save
+                </OverwatchButton>
+                <OverwatchButton
+                        type="default"
+                        class=""
+                        v-hammer:tap="() => deletePart(index)"
+                >Delete
+                </OverwatchButton>
+                <div class="move-guide-buttons">
+                    <OverwatchPanelButton
+                            :disabled="index === guide.parts.length - 1"
+                            type="default"
+                            v-hammer:tap="() => movePartDown(index)"
+                    >
+                        <img src="/icons/arrow-down-white.svg"/>
+                    </OverwatchPanelButton>
+                    <OverwatchPanelButton
+                            :disabled="index === 0"
+                            type="default"
+                            v-hammer:tap="() => movePartUp(index)"
+                    >
+                        <img src="/icons/arrow-up-white.svg"/>
+                    </OverwatchPanelButton>
+                </div>
             </div>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -59,6 +73,7 @@ import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
 import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
 import GuideVso from "@/js/vso/GuideVso";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
+import MarkdownGuide from "@/vue/guides/MarkdownGuide";
 
 export default {
     props: {
@@ -76,6 +91,16 @@ export default {
         }
     },
     methods: {
+        onMarkdownGuideBack() {
+            this.showMarkdownGuide = false;
+            this.widget.editing = true;
+            this.$scrollTo(this.$el, 150, {
+                offset: -100,
+                onDone: ()  => {
+                    this.$refs.textarea.focus();
+                }
+            });
+        },
         movePartUp(index) {
             this.movePart(index, -1)
         },
@@ -101,8 +126,17 @@ export default {
             }
         }
     },
+    watch: {
+        'widget.editing'(newValue) {
+            if (newValue) {
+                this.showMarkdownGuide = false;
+            }
+        }
+    },
     data() {
-        return {}
+        return {
+            showMarkdownGuide: false,
+        }
     },
     computed: {},
     components: {
@@ -111,6 +145,7 @@ export default {
         OverwatchButton,
         YoutubeExcerptEditor,
         GuidePartTextEditor,
+        MarkdownGuide,
     },
 };
 
@@ -127,6 +162,13 @@ export default {
     color: white;
     position: relative;
 
+    .markup-help-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 1.2em;
+        opacity: .5;
+    }
 
     .guide-part-buttons {
         position: relative;
