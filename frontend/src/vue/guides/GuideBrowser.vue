@@ -15,13 +15,13 @@
             />
         </div>
         <div class="guide-feed root-content-panel-wrap">
-            <div v-for="guide in guides">
-                <Guide
-                        :guide="guide"
-                        :search-descriptor="descriptor"
-                        @loginRequired="() => {loginRequired = true}"
-                />
-            </div>
+            <Guide
+                    v-for="guide in guides"
+                    :key="guide.guideId"
+                    :guide="guide"
+                    :search-descriptor="descriptor"
+                    @loginRequired="() => {loginRequired = true}"
+            />
         </div>
         <InfiniteLoading
                 ref="infiniteLoading"
