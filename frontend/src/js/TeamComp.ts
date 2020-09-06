@@ -3,7 +3,7 @@ import Vue from 'vue';
 import heroes from "data/heroes";
 import HeroDto from "data/dto/HeroDto"
 import Role from "data/Role"
-import _ from 'lodash'
+import difference from 'lodash.difference'
 
 export default class TeamComp {
 
@@ -60,7 +60,7 @@ export default class TeamComp {
 
     remainingRoles(): Role[] {
         const pickedRoles = this.getCompletelyPickedCategories();
-        return _.difference([Role.Support, Role.Damage, Role.Tank], pickedRoles);
+        return difference([Role.Support, Role.Damage, Role.Tank], pickedRoles);
     };
 
     remainingRole(): Role {

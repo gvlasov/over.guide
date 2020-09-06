@@ -13,6 +13,7 @@ import Descriptor from "data/dto/GuideDescriptorQuickie";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import AbilityId from "data/AbilityId";
 import abilitiesFixture from '@fixtures/abilities'
+import ImpossibleDescriptorError from "src/services/ImpossibleDescriptorError";
 
 describe(
     GuideDescriptorService,
@@ -253,6 +254,46 @@ describe(
                 expect(
                     (await ctx.service.obtainExact(descriptorDto)).id
                 ).toBe(descriptor.id)
+            });
+            it('can\'t save descriptor with ability but without hero', async () => {
+                await ctx.fixtures(
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture
+                )
+                // No hero at all
+                expect(
+                    () => ctx.app.get(GuideDescriptorService)
+                            .obtainExact(
+                                new GuideDescriptorQuickie({
+                                    teammateAbilities: [AbilityId.SleepDart, AbilityId.BioticGrenade],
+                                })
+                            )
+                )
+                    .toThrow(ImpossibleDescriptorError)
+                // Different hero
+                expect(
+                    () => ctx.app.get(GuideDescriptorService)
+                        .obtainExact(
+                            new GuideDescriptorQuickie({
+                                playerHeroes: [HeroId.Junkrat],
+                                playerAbilities: [AbilityId.SleepDart, AbilityId.BioticGrenade],
+                            })
+                        )
+                )
+                    .toThrow(ImpossibleDescriptorError)
+                // One hero correct, one different
+                expect(
+                    () => ctx.app.get(GuideDescriptorService)
+                        .obtainExact(
+                            new GuideDescriptorQuickie({
+                                enemyHeroes: [HeroId.Junkrat, HeroId.Baptiste],
+                                playerAbilities: [AbilityId.TotalMayhem, AbilityId.BioticGrenade],
+                            })
+                        )
+                )
+                    .toThrow(ImpossibleDescriptorError)
             });
         }
     )

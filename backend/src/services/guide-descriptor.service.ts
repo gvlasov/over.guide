@@ -14,6 +14,12 @@ import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor
 import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescriptor2TeammateAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 import EmptyDescriptorException from "src/services/EmptyDescriptorException";
+import ImpossibleDescriptorError from "src/services/ImpossibleDescriptorError";
+import HeroId from "data/HeroId";
+import AbilityId from "data/AbilityId";
+import dataAbilities from "data/abilities"
+import difference from "lodash.difference"
+import uniq from "lodash.uniq"
 
 
 @Injectable()
@@ -121,6 +127,18 @@ export class GuideDescriptorService {
                 `Can't obtain descriptor from empty DTO`
             )
         }
+        GuideDescriptorService.validateAbilitiesCorrespondToHeroes(
+            guideDescriptorDto.playerHeroes,
+            guideDescriptorDto.playerAbilities
+        )
+        GuideDescriptorService.validateAbilitiesCorrespondToHeroes(
+            guideDescriptorDto.teammateHeroes,
+            guideDescriptorDto.teammateAbilities
+        )
+        GuideDescriptorService.validateAbilitiesCorrespondToHeroes(
+            guideDescriptorDto.enemyHeroes,
+            guideDescriptorDto.enemyAbilities
+        )
         return this.getExact(guideDescriptorDto)
             .then(async oldDescriptor => {
                 let result;
@@ -198,6 +216,24 @@ export class GuideDescriptorService {
                 }
                 return result
             })
+    }
+
+    private static validateAbilitiesCorrespondToHeroes(
+        heroes: HeroId[],
+        abilities: AbilityId[],
+    ) {
+        if (
+            difference(
+                uniq(
+                    abilities
+                        .map(a => dataAbilities.get(a).heroId)
+                ),
+                heroes
+            )
+                .length > 0
+        ) {
+            throw new ImpossibleDescriptorError()
+        }
     }
 
     private static buildQueryPart(
