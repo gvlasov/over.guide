@@ -44,8 +44,14 @@
         padding: .05em 1.07em .19em 1.07em;
     }
 
-    button[disabled] {
-        pointer-events: none;
+    button {
+        outline: 0;
+        &[disabled] {
+            pointer-events: none;
+            & ::v-deep .background {
+                background-color: transparent;
+            }
+        }
     }
 
     .overwatch-main-button > .background {

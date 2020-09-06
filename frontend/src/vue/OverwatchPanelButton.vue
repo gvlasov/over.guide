@@ -47,8 +47,14 @@
         width: auto;
     }
 
-    button[disabled] {
-        pointer-events: none;
+    button {
+        outline: 0;
+        &[disabled] {
+            pointer-events: none;
+            & ::v-deep .background {
+                background-color: transparent;
+            }
+        }
     }
 
     .overwatch-main-button > .background {

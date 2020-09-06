@@ -70,7 +70,7 @@
                     </OverwatchButton>
                 </div>
                 <div class="guide-parts root-content-panel-wrap">
-                    <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
+                    <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part" ref="guideParts">
                         <GuidePartTextEditor
                                 v-if="widget.part.kind === 'text'"
                                 :widget="widget"
@@ -102,6 +102,22 @@
                                     v-hammer:tap="() => deletePart(index)"
                             >Delete
                             </OverwatchButton>
+                            <div class="move-guide-buttons">
+                                <OverwatchPanelButton
+                                        :disabled="index === guide.parts.length - 1"
+                                        type="default"
+                                        v-hammer:tap="() => movePartDown(index)"
+                                >
+                                    <img src="/icons/arrow-down-white.svg"/>
+                                </OverwatchPanelButton>
+                                <OverwatchPanelButton
+                                        :disabled="index === 0"
+                                        type="default"
+                                        v-hammer:tap="() => movePartUp(index)"
+                                >
+                                    <img src="/icons/arrow-up-white.svg"/>
+                                </OverwatchPanelButton>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,6 +193,7 @@ import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 import Guide from "@/vue/guides/Guide";
 import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
+import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 
 const backend = new Backend(axios);
 
@@ -221,6 +238,18 @@ export default {
             if (guideId !== null) {
                 this.guide.guideId = guideId
             }
+        },
+        movePartUp(index) {
+            const elem = this.guide.parts[index]
+            this.guide.parts.splice(index, 1)
+            this.guide.parts.splice(index-1, 0, elem)
+            this.$scrollTo(this.$refs.guideParts[index-1])
+        },
+        movePartDown(index) {
+            const elem = this.guide.parts[index]
+            this.guide.parts.splice(index, 1)
+            this.guide.parts.splice(index+1, 0, elem)
+            this.$scrollTo(this.$refs.guideParts[index+1])
         },
         wipeEmptyParts() {
             const emptyIndices = [];
@@ -342,6 +371,7 @@ export default {
         },
     },
     components: {
+        OverwatchPanelButton,
         LoginRequirement,
         ParameterDescriptorSynchronizer,
         GuidePartVideoEditor,
@@ -383,6 +413,28 @@ export default {
             margin-top: 2em;
             & > * {
                 font-size: 2em;
+            }
+        }
+        .move-guide-buttons {
+            float: right;
+            display: inline-block;
+            button {
+                height: 100%;
+                & ::v-deep .content {
+                    padding: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+                & ::v-deep img {
+                    height: .7em;
+                }
+                & ::v-deep .background {
+                    background-color: rgba(81, 96, 148, 0.7);
+                }
+                &[disabled] ::v-deep .background {
+                    background-color: transparent;
+                }
             }
         }
 
