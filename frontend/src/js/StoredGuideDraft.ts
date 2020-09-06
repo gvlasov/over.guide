@@ -8,7 +8,6 @@ export default class StoredGuideDraft {
         if (item === null) {
             return null
         } else {
-            console.log(item)
             return new GuideVso(JSON.parse(item))
         }
     }

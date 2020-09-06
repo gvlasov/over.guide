@@ -48,13 +48,13 @@
 </template>
 
 <script>
-    import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
-    import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
-    import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
-    import YoutubeUrlVso from "@/js/vso/YoutubeUrlVso";
-    import EmbeddableCache from "@/js/EmbeddableCache";
+import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
+import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
+import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
+import YoutubeUrlVso from "@/js/vso/YoutubeUrlVso";
+import EmbeddableCache from "@/js/EmbeddableCache";
 
-    export default {
+export default {
         model: {},
         props: {
             widget: {
@@ -165,6 +165,7 @@
     }
 
     .youtube-video-link-input {
+        outline: 0;
         display: inline-block;
         margin: 0 auto 0 auto;
         height: 3em;
