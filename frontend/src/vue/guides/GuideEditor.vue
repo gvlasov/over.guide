@@ -108,6 +108,7 @@
                 v-if="preview"
                 class="preview root-content-panel-wrap"
         >
+            <BackgroundHeading>Preview</BackgroundHeading>
             <Guide
                     :guide="guide"
                     :search-descriptor="guide.descriptor"
@@ -147,6 +148,7 @@ import Guide from "@/vue/guides/Guide";
 import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
 import GuidePart from "@/vue/guides/GuidePart";
+import BackgroundHeading from "@/vue/BackgroundHeading";
 
 const backend = new Backend(axios);
 
@@ -309,6 +311,7 @@ export default {
         DescriptorBuilder,
         Guide,
         GuidePart,
+        BackgroundHeading,
     },
 };
 
@@ -323,6 +326,7 @@ export default {
     display: inline-flex;
     flex-direction: column;
     gap: .6em;
+    padding-bottom: 6em;
 
     .editor {
 

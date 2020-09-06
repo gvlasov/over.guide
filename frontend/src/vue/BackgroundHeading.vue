@@ -21,6 +21,7 @@ export default {
     opacity: .5;
     user-select: none;
     white-space: nowrap;
+    text-align: left;
 }
 
 </style>
