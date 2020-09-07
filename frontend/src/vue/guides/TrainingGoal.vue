@@ -225,16 +225,19 @@ export default {
         }
 
         .text-guide-part-content {
-            display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: left;
             font-size: 1em;
             white-space: nowrap;
             overflow: hidden;
-            padding: 1em;
+            margin: 1em;
             flex-grow: 999;
             font-family: $body-font;
+            height:2em;
+            //& > *:not() {
+            //
+            //}
 
             & ::v-deep * {
                 margin: 0;
@@ -258,6 +261,7 @@ export default {
 
     .button {
         flex-basis: 5em;
+        font-size: 1rem;
         flex-shrink: 0;
     }
 }
