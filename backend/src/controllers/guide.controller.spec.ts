@@ -5,6 +5,8 @@ import {TokenService} from "src/services/token.service";
 import {AuthService} from "src/services/auth.service";
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import heroesFixture from "@fixtures/heroes";
+import abilitiesFixture from "@fixtures/abilities";
+import guideTestingFixture from "@fixtures/guideTesting";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
 import {GuideController} from "src/controllers/guide.controller";
@@ -34,6 +36,56 @@ describe(
         [],
         [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService, GuideSearchService],
         (ctx) => {
+            it('gets guide by id', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    guideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/${guide.id}`)
+                    .expect(HttpStatus.OK)
+                    .then(res => {
+                        expect(res.body.guideId).toBe(guide.id)
+                    })
+            });
+            it('returns 404 if guide doesn\'t exist', async () => {
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/12341234`)
+                    .expect(HttpStatus.NOT_FOUND)
+            });
+            it('returns 404 if guide is deactivated', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    guideTestingFixture
+                )
+                const guide = await Guide.findOne({
+                    include: [
+                        {
+                            model: User,
+                            as: 'creator',
+                        }
+                    ]
+                })
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/${guide.id}`)
+                    .expect(HttpStatus.OK)
+                    .then(res => {
+                        expect(res.body.guideId).toBe(guide.id)
+                    })
+                await guide.deactivate(guide.creator)
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/${guide.id}`)
+                    .expect(HttpStatus.NOT_FOUND)
+            });
             it('user can create new guide', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture)
                 const user = await User.findOne();

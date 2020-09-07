@@ -3,6 +3,7 @@ import {
     Controller,
     Get,
     HttpStatus,
+    Param,
     Post,
     Query,
     Req,
@@ -26,6 +27,9 @@ import {
     GuideSearchService
 } from "src/services/guide-search.service";
 import EmptyDescriptorException from "src/services/EmptyDescriptorException";
+import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
+import {User} from "src/database/models/User";
+import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 
 @Controller('guide')
 export class GuideController {
@@ -37,6 +41,58 @@ export class GuideController {
         private readonly guideSearchService: GuideSearchService
     ) {
 
+    }
+
+    @Get(':id')
+    async get(
+        @Res() response: Response,
+        @Param('id') id: number
+    ) {
+        Guide.findOne({
+            where: {
+                id: id,
+                deactivatedById: null,
+            },
+            include: [
+                {
+                    model: GuideHistoryEntry,
+                    as: 'heads',
+                    include: [
+                        {
+                            all: true,
+                        },
+                        {
+                            model: Guide,
+                            as: 'guide',
+                            include: [
+                                {
+                                    model: User,
+                                    as: 'creator'
+                                }
+                            ]
+                        },
+                        {
+                            model: GuideDescriptor,
+                            as: 'descriptor',
+                            include: [
+                                {
+                                    all: true,
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ]
+        })
+            .then(guide => guide.head)
+            .then(head => {
+                response.status(HttpStatus.OK)
+                response.send(head.toDto())
+            })
+            .catch(e => {
+                response.status(HttpStatus.NOT_FOUND)
+                response.send()
+            })
     }
 
     @Post()
@@ -59,7 +115,7 @@ export class GuideController {
         ) {
             response.status(HttpStatus.FORBIDDEN)
             response.send()
-        }else {
+        } else {
             try {
                 const entry = await this.guideHistoryEntryService.save(guideHistoryEntryDto, user)
                 if (entry === SaveResult.SavingDuplicateRejected) {
