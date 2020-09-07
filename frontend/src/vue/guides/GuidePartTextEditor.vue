@@ -11,6 +11,7 @@
                 v-model="widget.part.contentMd"
                 rows="10"
                 @paste="(event) => onTextPaste(widget.part)(event)"
+                @keypress="onKeypress"
         ></textarea>
     </div>
 </template>
@@ -29,6 +30,11 @@ export default {
             }
         },
         methods: {
+            onKeypress(e) {
+                if (e.key === 'Enter' && e.ctrlKey){
+                    this.$emit('save')
+                }
+            },
             onTextPaste(part) {
                 return (pasteEvent) => {
                     let paste = (pasteEvent.clipboardData || pasteEvent.originalEvent.clipboardData || window.clipboardData).items;

@@ -16,6 +16,7 @@
             <GuidePartTextEditor
                     v-if="widget.part.kind === 'text'"
                     :widget="widget"
+                    @save="() => widget.editing = false"
             />
             <GuidePartVideoEditor
                     v-if="widget.part.kind === 'video'"
