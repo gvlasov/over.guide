@@ -46,6 +46,7 @@
 
     button {
         outline: 0;
+        font-size: 2rem;
         &[disabled] {
             pointer-events: none;
             & ::v-deep .background {
