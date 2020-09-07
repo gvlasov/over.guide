@@ -73,23 +73,23 @@
         <TagBuilderRoster
                 v-if="selecting && selecting.isPlayer"
                 :gamer-position="gamerPositions.players"
-                :initial-descriptor="descriptor"
-                @save="onRosterSave"
+                :descriptor="descriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
+                @save="() => {selecting = null; $emit('done')}"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isTeammate"
                 :gamer-position="gamerPositions.teammates"
-                :initial-descriptor="descriptor"
-                @save="onRosterSave"
+                :descriptor="descriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
+                @save="() => {selecting = null; $emit('done')}"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isEnemy"
+                :descriptor="descriptor"
                 :gamer-position="gamerPositions.enemies"
-                :initial-descriptor="descriptor"
-                @save="onRosterSave"
                 @tagGroupSelect="($event) => {selecting = $event;}"
+                @save="() => {selecting = null; $emit('done')}"
         />
     </div>
 </template>
@@ -119,14 +119,6 @@ export default {
                 enemies: GamerPositionVso.Enemies,
             },
         };
-    },
-    mounted() {
-    },
-    methods: {
-        onRosterSave(newDescriptor) {
-            this.selecting = null;
-            this.$emit('tagChange', newDescriptor);
-        },
     },
     computed: {},
     components: {

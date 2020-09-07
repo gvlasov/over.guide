@@ -29,7 +29,6 @@ export class GuidePartText extends Model<GuidePartText> {
     toDto(): GuidePartTextDto {
         return {
             contentMd: this.contentMd,
-            id: this.id,
             kind: "text"
         } as GuidePartTextDto
     }

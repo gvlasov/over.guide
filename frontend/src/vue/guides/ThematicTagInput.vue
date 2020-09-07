@@ -9,7 +9,6 @@
             class="root"
             v-model="descriptor.individualTags"
             :sort-search-results="false"
-            @tags-updated="onTagsUpdated"
             :case-sensitive-tags="false"
     >
         <template v-slot:selected-tag="{tag, index, removeTag}">
@@ -85,9 +84,6 @@ export default {
                                 .map(map => new MapTagVso(map))
                         )
                 )
-            },
-            onTagsUpdated($event) {
-                this.$emit('tagChange');
             },
         },
         components: {

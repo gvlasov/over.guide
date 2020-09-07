@@ -169,6 +169,15 @@ export default class Backend {
         )
     };
 
+    async getGuide(guideId: number): Promise<GuideHistoryEntryDto> {
+        return this.query(
+            'GET',
+            `/guide/${guideId}`,
+            {},
+            (response) => response.data
+        )
+    }
+
     async saveGuide(guide: GuideHistoryEntryDto): Promise<number | null> {
         return this.query(
             'POST',

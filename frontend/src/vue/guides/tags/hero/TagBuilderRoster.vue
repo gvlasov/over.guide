@@ -115,7 +115,7 @@ export default {
                 type: GamerPositionVso,
                 required: true,
             },
-            initialDescriptor: {
+            descriptor: {
                 type: GuideDescriptorVso,
                 required: true,
             },
@@ -124,12 +124,11 @@ export default {
             return {
                 selectingSkills: false,
                 heroGroups: HeroGroupsByRole.ALL,
-                descriptor: this.initialDescriptor.clone(),
             };
         },
         methods: {
             onDoneTap() {
-                this.$emit('save', this.descriptor)
+                this.$emit('save')
             },
             selectedHeroAbilities(hero) {
                 return this.descriptor
@@ -142,11 +141,6 @@ export default {
             },
             shouldHaveClearButtonOnGroupRow(group) {
                 return group[0].role === Role.Support;
-            },
-        },
-        watch: {
-            initialDescriptor(newValue) {
-                this.descriptor = newValue;
             },
         },
         computed: {

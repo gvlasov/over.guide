@@ -111,12 +111,13 @@ export class GuideHistoryEntryService {
         partDto: GuidePartTextDto
     ): Promise<GuidePartText> {
         if (entry !== null) {
-            for (let part of await entry.$get('guidePartTexts')) {
+            for (let part of entry.guidePartTexts) {
                 if (part.contentMd === partDto.contentMd) {
                     return Promise.resolve(part)
                 }
             }
         }
+        console.log(partDto)
         return GuidePartText.create(partDto)
     }
 
@@ -125,7 +126,7 @@ export class GuideHistoryEntryService {
         partDto: GuidePartVideoDto
     ): Promise<GuidePartVideo> {
         if (entry !== null) {
-            for (let part of await entry.$get('guidePartVideos')) {
+            for (let part of entry.guidePartVideos) {
                 const excerpt = await part.$get('excerpt');
                 if (
                     excerpt.youtubeVideoId === partDto.excerpt.youtubeVideoId

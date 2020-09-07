@@ -10,8 +10,7 @@
             <DescriptorBuilder
                     :search-button-enabled="false"
                     :descriptor="descriptor"
-                    @search="onSearch"
-                    @descriptorChange="(newDescriptor) => {onSearch(newDescriptor)}"
+                    @done="() => onSearch(this.descriptor)"
             />
         </div>
         <div class="guide-feed root-content-panel-wrap">
@@ -134,7 +133,6 @@ export default {
     },
     watch: {
         descriptor(newValue) {
-            this.onSearch(newValue)
         },
     },
     data() {

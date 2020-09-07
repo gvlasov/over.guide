@@ -57,6 +57,11 @@
                 />
             </AspectRatioBox>
         </div>
+        <OverwatchButton
+                v-if="canEdit && isStored"
+                type="default"
+                v-hammer:tap="edit"
+        >Edit</OverwatchButton>
     </div>
 </template>
 
@@ -78,8 +83,10 @@ import TagBadges from "@/vue/guides/TagBadges";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import GuidePartText from "@/vue/guides/GuidePartText";
+import Authentication from "@/js/Authentication";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
+const auth = new Authentication();
 
 export default {
     mixins: [
@@ -101,6 +108,9 @@ export default {
         },
     },
     methods: {
+        edit() {
+            this.$router.push(`/guide-editor/${this.guide.guideId}`)
+        },
         renderTextPart(part) {
             return new GuidePartTextWidget(part).render()
         },
@@ -133,6 +143,12 @@ export default {
         trainingGoalAdded() {
             return this.cache.goalIds.includes(this.guide.guideId) || this.cache.pendingGoalIds.includes(this.guide.guideId);
         },
+        canEdit() {
+            return auth.canEditGuide(this.guide)
+        },
+        isStored() {
+            return this.guide.guideId !== undefined;
+        }
     },
     mounted() {
     },
