@@ -9,7 +9,6 @@
                             :tag-group="descriptor.players"
                             class="tag-type-links-wrap-player tappable-background"
                             v-hammer:tap="() => (selecting = descriptor.players.gamerPosition)"
-                            v-bind:class="selecting && selecting.isPlayer ? 'selected-group' : ''"
                     >
                         <TagGroupHeroes :tag-group="descriptor.players"/>
                     </TagGroupBackground>
@@ -17,7 +16,6 @@
                             v-else
                             :tag-group="descriptor.players"
                             v-hammer:tap="() => (selecting = descriptor.players.gamerPosition)"
-                            v-bind:class="selecting && selecting.isPlayer ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>
@@ -32,7 +30,6 @@
                             :tag-group="descriptor.teammates"
                             class="tag-type-links-wrap-teammate tappable-background"
                             v-hammer:tap="() => (selecting = descriptor.teammates.gamerPosition)"
-                            v-bind:class="selecting && selecting.isTeammate ? 'selected-group' : ''"
                     >
                         <TagGroupHeroes :tag-group="descriptor.teammates"/>
                     </TagGroupBackground>
@@ -40,7 +37,6 @@
                             v-else
                             :tag-group="descriptor.teammates"
                             v-hammer:tap="() => (selecting = descriptor.teammates.gamerPosition)"
-                            v-bind:class="selecting && selecting.isTeammate ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>
@@ -55,8 +51,6 @@
                             :tag-group="descriptor.enemies"
                             class="tag-type-links-wrap-enemy tappable-background"
                             v-hammer:tap="() => (selecting = descriptor.enemies.gamerPosition)"
-                            v-bind:class="selecting && selecting.isEnemy ? 'selected-group' : ''"
-                            style="max-height: 30px;height:30px;"
                     >
                         <TagGroupHeroes :tag-group="descriptor.enemies"/>
                     </TagGroupBackground>
@@ -64,7 +58,6 @@
                             v-else
                             :tag-group="descriptor.enemies"
                             v-hammer:tap="() => (selecting = descriptor.enemies.gamerPosition)"
-                            v-bind:class="selecting && selecting.isEnemy ? 'selected-group' : ''"
                             class="invite"
                     />
                 </template>

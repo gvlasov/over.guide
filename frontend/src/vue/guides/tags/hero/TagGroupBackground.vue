@@ -1,10 +1,10 @@
 <template>
-    <span
+    <button
             class="tag-type-background"
             v-bind:class="cssClass"
     >
         <slot/>
-    </span>
+    </button>
 </template>
 
 <script>
@@ -44,9 +44,14 @@ export default {
     .tag-type-background {
         display: inline-table;
         vertical-align: middle;
-        border-spacing: .3em;
         border-radius: .5em;
         box-shadow: 0 0 .1em #111;
+        border-width: 0;
+        font: inherit;
+        margin: initial;
+        padding: .25em;
+        box-sizing: content-box;
+        outline: 0;
     }
 
     .tag-type-player {

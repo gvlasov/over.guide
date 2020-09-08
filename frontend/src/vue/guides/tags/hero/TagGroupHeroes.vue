@@ -58,7 +58,7 @@ export default {
 
     .tag-group {
         display: flex;
-        gap: .22em;
+        gap: .25em;
         max-height: 3em;
     }
 
@@ -96,11 +96,13 @@ export default {
 
         .tag-portrait-single ::v-deep .portrait {
             max-height: 3em;
+            min-height: 3em;
             border-radius: .3em .3em .3em .3em;
         }
 
         .tag-portrait-combined ::v-deep .portrait {
             max-height: 3em;
+            min-height: 3em;
             border-radius: 0 .3em .3em 0;
         }
     }

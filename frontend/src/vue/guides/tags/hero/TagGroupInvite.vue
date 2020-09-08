@@ -7,7 +7,7 @@
             v-bind:style="{'background-position-x': backgroundX + 'px', 'background-position-y': backgroundY+'px', 'background-size': 'auto '+(1000*backgroundScale)+'px'}"
     >
         <div class="invite-text">any<br/>
-            <span v-bind:style="isTeammate ? 'font-size: .84em;' : ''">
+            <span v-bind:style="isTeammate ? 'font-size: .81em;' : ''">
             {{ tagGroup.gamerPosition.dataName }}
             </span>
         </div>
@@ -71,7 +71,7 @@ export default {
     line-height: 3em;
     height: 3em;
     vertical-align: middle;
-    width: 3.9em;
+    width: 3.32em;
     cursor: pointer;
     box-shadow: 0 .1em .3em -.05em $overwatch-panel-bg-color inset;
 }
