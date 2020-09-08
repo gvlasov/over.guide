@@ -57,27 +57,11 @@
                     </OverwatchButton>
                 </div>
                 <template v-else>
-                    <div class="create-buttons">
-                        <OverwatchButton
-                                :type="'default'"
-                                class="create-new-part-button"
-                                v-hammer:tap="() => createNewTextPart('beginning')"
-                                data-type="text"
-                        >+ text
-                        </OverwatchButton>
-                        <OverwatchButton
-                                type="main"
-                                :disabled="!isDoneButtonEnabled"
-                                v-hammer:tap="onDone"
-                        >Done
-                        </OverwatchButton>
-                        <OverwatchButton
-                                :type="'default'"
-                                class="create-new-part-button"
-                                data-type="video"
-                                v-hammer:tap="() => createNewVideoPart('beginning')"
-                        >+ video
-                        </OverwatchButton>
+                    <div class="root-content-panel-wrap">
+                        <GuidePartSpawner
+                                :parts="guide.parts"
+                                where="beginning"
+                        />
                     </div>
                     <div class="guide-parts root-content-panel-wrap">
                         <GuidePart
@@ -88,30 +72,20 @@
                                 :index="index"
                         />
                     </div>
-                    <div class="create-buttons"
-                         v-if="guide.parts.length > 0"
-                    >
-                        <OverwatchButton
-                                :type="'default'"
-                                class="create-new-part-button"
-                                v-hammer:tap="() => createNewTextPart('end')"
-                        >+ text
-                        </OverwatchButton>
-                        <OverwatchButton
-                                type="main"
-                                v-hammer:tap="onDone"
-                                data-type="text"
-                                :disabled="!isDoneButtonEnabled"
-                        >Done
-                        </OverwatchButton>
-                        <OverwatchButton
-                                :type="'default'"
-                                class="create-new-part-button"
-                                v-hammer:tap="() => createNewVideoPart('end')"
-                                data-type="video"
-                        >+ video
-                        </OverwatchButton>
-                    </div>
+
+                    <GuidePartSpawner
+                            v-if="guide.parts.length > 0"
+                            :parts="guide.parts"
+                            where="beginning"
+                    />
+
+                    <OverwatchButton
+                            type="main"
+                            v-hammer:tap="onDone"
+                            data-type="text"
+                            :disabled="!isDoneButtonEnabled"
+                    >Done
+                    </OverwatchButton>
                 </template>
             </div>
             <div
@@ -143,8 +117,6 @@
 import GuidePartWidget from "@/js/vso/GuidePartWidget";
 import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 import OverwatchButton from "@/vue/OverwatchButton";
-import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
-import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
 import Backend from "@/js/Backend";
 import axios from 'axios';
 import ParameterDescriptorSynchronizer
@@ -160,14 +132,13 @@ import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
 import GuidePart from "@/vue/guides/GuidePart";
 import BackgroundHeading from "@/vue/BackgroundHeading";
+import GuidePartSpawner from "@/vue/guides/GuidePartSpawner";
 
 const backend = new Backend(axios);
 
 const draft = new StoredGuideDraft()
 export default {
     name: 'GuideEditor',
-    model: {},
-    props: {},
     watch: {
         guide: {
             handler: debounce(function (newValue) {
@@ -176,7 +147,7 @@ export default {
                 }
             }, 500),
             deep: true,
-        }
+        },
     },
     methods: {
         onDone() {
@@ -226,43 +197,6 @@ export default {
                 this.guide.parts.splice(index - shift, 1);
                 shift++;
             }
-        },
-        createNewTextPart(where) {
-            this.createNewPart(
-                where,
-                () => new GuidePartTextWidget(
-                    {
-                        kind: 'text',
-                        contentMd: ''
-                    },
-                    true
-                )
-            );
-        },
-        createNewVideoPart(where) {
-            this.createNewPart(
-                where,
-                () =>
-                    new GuidePartVideoWidget(
-                        {
-                            kind: 'video',
-                            excerpt: null,
-                        },
-                        true
-                    )
-            );
-        },
-        /**
-         * @param {string} where 'beginning' or 'end'
-         * @callback how
-         */
-        createNewPart(where, how) {
-            (
-                (where === 'beginning')
-                    ? this.guide.parts.unshift
-                    : this.guide.parts.push
-            )
-                .apply(this.guide.parts, [how()]);
         },
         /**
          * @return {boolean}
@@ -351,6 +285,7 @@ export default {
         },
     },
     components: {
+        GuidePartSpawner,
         LoginRequirement,
         ParameterDescriptorSynchronizer,
         OverwatchButton,
@@ -382,23 +317,6 @@ export default {
             gap: 2rem;
         }
 
-        .create-buttons {
-            display: flex;
-            justify-content: space-evenly;
-            z-index: 1;
-            margin: .3em;
-
-            & > * {
-                font-size: 2rem;
-                flex-shrink: 1;
-                flex-basis: 5em;
-            }
-
-            & > * ::v-deep .content {
-                padding-left: 0;
-                padding-right: 0;
-            }
-        }
 
         .descriptor-builder {
             z-index: 3;
@@ -410,10 +328,6 @@ export default {
             &.forced-descriptor {
                 margin-bottom: 3em;
             }
-        }
-
-        .create-new-part-button {
-            white-space: nowrap;
         }
 
         .force-descriptor-notice {
