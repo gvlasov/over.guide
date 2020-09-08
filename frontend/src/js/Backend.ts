@@ -193,6 +193,15 @@ export default class Backend {
         )
     }
 
+    async deactivateGuide(guideId: number): Promise<void> {
+        return this.query(
+            'POST',
+            `/guide/deactivate`,
+            {id: guideId},
+            () => {}
+        )
+    }
+
     async searchGuidesPaginated(
         query: GuideSearchQueryDto
     ): Promise<GuideSearchPageDto> {

@@ -20,6 +20,7 @@
                     :guide="guide"
                     :search-descriptor="descriptor"
                     @loginRequired="() => {loginRequired = true}"
+                    @guideDeactivated="onDeactivated"
             />
         </div>
         <InfiniteLoading
@@ -104,6 +105,13 @@ export default {
             }
             this.$emit('contentChange');
             this.$emit('descriptorChange', newDescriptor);
+        },
+        onDeactivated(guideId) {
+            const deactivated = this.guides.findIndex(g => g.guideId === guideId)
+            if (deactivated === -1) {
+                throw new Error('Unknown guide deactivated')
+            }
+            this.guides.splice(deactivated, 1)
         },
         async infiniteHandler($state) {
             await backend.searchGuidesPaginated({

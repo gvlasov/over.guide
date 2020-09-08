@@ -62,6 +62,11 @@
                 type="default"
                 v-hammer:tap="edit"
         >Edit</OverwatchButton>
+        <OverwatchButton
+                v-if="canEdit && isStored"
+                type="default"
+                v-hammer:tap="deactivate"
+        >Delete</OverwatchButton>
     </div>
 </template>
 
@@ -84,9 +89,12 @@ import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import GuidePartText from "@/vue/guides/GuidePartText";
 import Authentication from "@/js/Authentication";
+import axios from 'axios'
+import Backend from "@/js/Backend";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
+const backend = new Backend(axios)
 
 export default {
     mixins: [
@@ -110,6 +118,12 @@ export default {
     methods: {
         edit() {
             this.$router.push(`/guide-editor/${this.guide.guideId}`)
+        },
+        deactivate() {
+            backend.deactivateGuide(this.guide.guideId)
+                .then(() => {
+                    this.$emit('guideDeactivated', this.guide.guideId)
+                })
         },
         renderTextPart(part) {
             return new GuidePartTextWidget(part).render()
