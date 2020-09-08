@@ -156,6 +156,9 @@ const auth = new Authentication()
             justify-content: center;
             gap: 1em;
         }
+        .sortable-ghost {
+            visibility: hidden;
+        }
 
         & .training-goal {
             flex-basis: 100%;
