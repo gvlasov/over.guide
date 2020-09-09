@@ -47,7 +47,7 @@
                 </OverwatchButton>
                 <div class="move-guide-buttons">
                     <OverwatchPanelButton
-                            :disabled="index === guide.parts.length - 1"
+                            :disabled="index === parts.length - 1"
                             type="default"
                             v-hammer:tap="() => movePartDown(index)"
                     >
@@ -72,7 +72,6 @@ import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
 import OverwatchButton from "@/vue/OverwatchButton";
 import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
 import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
-import GuideVso from "@/js/vso/GuideVso";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import MarkdownGuide from "@/vue/guides/MarkdownGuide";
 
@@ -82,8 +81,8 @@ export default {
             type: GuidePartWidget,
             required: true,
         },
-        guide: {
-            type: GuideVso,
+        parts: {
+            type: Array,
             required: true,
         },
         index: {
@@ -109,13 +108,13 @@ export default {
             this.movePart(index, 1)
         },
         movePart(index, d) {
-            const elem = this.guide.parts[index]
-            this.guide.parts.splice(index, 1)
-            this.guide.parts.splice(index + d, 0, elem)
+            const elem = this.parts[index]
+            this.parts.splice(index, 1)
+            this.parts.splice(index + d, 0, elem)
             this.$scrollTo(this.$el)
         },
         deletePart(index) {
-            this.guide.parts.splice(index, 1);
+            this.parts.splice(index, 1);
         },
         partHasContent(part) {
             if (part.kind === 'text') {

@@ -202,7 +202,7 @@ export default {
     flex-direction: row;
     color: white;
     justify-content: space-between;
-    margin: .3em;
+    margin: .3em 0 .3em 0;
 }
 
 .tags {

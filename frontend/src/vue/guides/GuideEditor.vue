@@ -57,35 +57,36 @@
                     </OverwatchButton>
                 </div>
                 <template v-else>
-                    <div class="root-content-panel-wrap">
+                    <div class="guide-parts root-content-panel-wrap">
                         <GuidePartSpawner
                                 :parts="guide.parts"
                                 where="beginning"
+                                :show-buttons="guide.parts.length === 0"
                         />
-                    </div>
-                    <div class="guide-parts root-content-panel-wrap">
                         <GuidePart
                                 v-for="(widget, index) in guide.parts" :key="index"
                                 ref="guideParts"
                                 :widget="widget"
-                                :guide="guide"
+                                :parts="guide.parts"
                                 :index="index"
                         />
+                        <GuidePartSpawner
+                                v-if="guide.parts.length > 0"
+                                :parts="guide.parts"
+                                where="end"
+                                :show-buttons="false"
+                        />
                     </div>
-
-                    <GuidePartSpawner
-                            v-if="guide.parts.length > 0"
-                            :parts="guide.parts"
-                            where="beginning"
-                    />
-
-                    <OverwatchButton
-                            type="main"
-                            v-hammer:tap="onDone"
-                            data-type="text"
-                            :disabled="!isDoneButtonEnabled"
-                    >Done
-                    </OverwatchButton>
+                    <div>
+                        <OverwatchButton
+                                type="main"
+                                v-hammer:tap="onDone"
+                                data-type="text"
+                                :disabled="!isDoneButtonEnabled"
+                                :show-buttons="false"
+                        >Done
+                        </OverwatchButton>
+                    </div>
                 </template>
             </div>
             <div
@@ -310,13 +311,16 @@ export default {
     padding-bottom: 6em;
 
     .editor {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        min-height: 100vh;
 
         .guide-parts {
             display: flex;
             flex-direction: column;
             gap: 2rem;
         }
-
 
         .descriptor-builder {
             z-index: 3;
