@@ -70,7 +70,7 @@
                             class="guide-parts root-content-panel-wrap"
                             name="appear"
                             @before-enter="beforeEnter"
-                            :v-enter-to="enterToClass"
+                            :enter-to-class="enterToClass"
                     >
                         <GuidePart
                                 v-for="(widget, index) in guide.parts"
@@ -198,8 +198,8 @@ export default {
         },
         spawnPart(how, where) {
             this[where + 'SpawnerHidden'] = true;
-            const part = how();
-            this.enterToClass = part.kind === 'text'
+            const widget = how();
+            this.enterToClass = (widget.part.kind === 'text')
                 ? 'appear-enter-to-text'
                 : 'appear-enter-to-video';
             this.$nextTick(() => {
@@ -208,7 +208,7 @@ export default {
                         ? this.guide.parts.unshift
                         : this.guide.parts.push
                 )
-                    .apply(this.guide.parts, [part]);
+                    .apply(this.guide.parts, [widget]);
             })
         },
         onDone() {
@@ -393,15 +393,15 @@ export default {
                 overflow: hidden;
 
                 &.appear-enter {
-                    max-height: 5em;
+                    max-height: 3em;
                 }
 
                 &.appear-enter-to-text {
-                    max-height: 17em;
+                    max-height: 24em;
                 }
 
                 &.appear-enter-to-video {
-                    max-height: 10em;
+                    max-height: 14em;
                 }
 
                 &.appear-enter-active {
@@ -426,11 +426,17 @@ export default {
                 max-height: 0;
                 margin-top: 0;
                 opacity: 0;
+                overflow: hidden;
+            }
+
+            &.new-buttons-appear-enter-to {
+                overflow: hidden;
             }
 
             &.new-buttons-appear-enter-active {
                 transition: max-height $new-buttons-animation-duration ease-out,
                 margin-top $new-buttons-animation-duration ease-out;
+                transition-delay: .05s, .05s;
             }
         }
 
