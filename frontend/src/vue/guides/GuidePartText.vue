@@ -1,27 +1,22 @@
 <template>
-    <div class="text-guide-part-content" v-html="render(part)"></div>
+    <div class="text-guide-part-content">
+        <Markdown
+            :code="part.contentMd"
+        />
+    </div>
 </template>
 
 <script>
-import marked from 'marked'
+import Markdown from "@/vue/guides/Markdown";
 
 export default {
-    model: {},
     props: {
         part: {
             type: Object,
             required: true,
         }
     },
-    methods: {
-        render() {
-            return marked(this.part.contentMd)
-        },
-    },
-    data() {
-        return {}
-    },
-    components: {},
+    components: {Markdown},
 };
 
 </script>
