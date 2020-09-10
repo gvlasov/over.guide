@@ -56,30 +56,44 @@
                     >Done
                     </OverwatchButton>
                 </div>
-                <template v-else>
-                    <div class="guide-parts root-content-panel-wrap">
+                <div v-else>
+                    <transition name="new-buttons-appear">
                         <GuidePartSpawner
-                                :parts="guide.parts"
+                                v-if="!beginningSpawnerHidden"
                                 where="beginning"
-                                :show-buttons="guide.parts.length === 0"
+                                :initial-seeding="guide.parts.length === 0"
+                                @addVideo="createNewVideoPart"
+                                @addText="createNewTextPart"
                         />
+                    </transition>
+                    <transition-group
+                            class="guide-parts root-content-panel-wrap"
+                            name="appear"
+                            @before-enter="beforeEnter"
+                            :v-enter-to="enterToClass"
+                    >
                         <GuidePart
-                                v-for="(widget, index) in guide.parts" :key="index"
+                                v-for="(widget, index) in guide.parts"
+                                :key="widget.id"
                                 ref="guideParts"
                                 :widget="widget"
                                 :parts="guide.parts"
                                 :index="index"
                         />
+                    </transition-group>
+                    <transition name="new-buttons-appear">
                         <GuidePartSpawner
-                                v-if="guide.parts.length > 0"
-                                :parts="guide.parts"
+                                v-if="endSpawnerEnabled"
                                 where="end"
-                                :show-buttons="false"
+                                :initial-seeding="false"
+                                @addVideo="createNewVideoPart"
+                                @addText="createNewTextPart"
                         />
-                    </div>
+                    </transition>
                     <div>
                         <OverwatchButton
                                 type="main"
+                                class="done-button"
                                 v-hammer:tap="onDone"
                                 data-type="text"
                                 :disabled="!isDoneButtonEnabled"
@@ -87,7 +101,7 @@
                         >Done
                         </OverwatchButton>
                     </div>
-                </template>
+                </div>
             </div>
             <div
                     v-if="preview"
@@ -134,6 +148,8 @@ import Authentication from "@/js/Authentication";
 import GuidePart from "@/vue/guides/GuidePart";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import GuidePartSpawner from "@/vue/guides/GuidePartSpawner";
+import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
+import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
 
 const backend = new Backend(axios);
 
@@ -151,6 +167,50 @@ export default {
         },
     },
     methods: {
+        beforeEnter() {
+            this.beginningSpawnerHidden = false;
+            this.endSpawnerHidden = false
+        },
+        createNewTextPart(where) {
+            this.spawnPart(
+                () => new GuidePartTextWidget(
+                    {
+                        kind: 'text',
+                        contentMd: ''
+                    },
+                    true
+                ),
+                where
+            );
+        },
+        createNewVideoPart(where) {
+            this.spawnPart(
+                () =>
+                    new GuidePartVideoWidget(
+                        {
+                            kind: 'video',
+                            excerpt: null,
+                        },
+                        true
+                    ),
+                where
+            );
+        },
+        spawnPart(how, where) {
+            this[where + 'SpawnerHidden'] = true;
+            const part = how();
+            this.enterToClass = part.kind === 'text'
+                ? 'appear-enter-to-text'
+                : 'appear-enter-to-video';
+            this.$nextTick(() => {
+                (
+                    (where === 'beginning')
+                        ? this.guide.parts.unshift
+                        : this.guide.parts.push
+                )
+                    .apply(this.guide.parts, [part]);
+            })
+        },
         onDone() {
             if (this.guide.descriptor.isEmpty) {
                 this.forceDescriptorSelection = true;
@@ -257,7 +317,10 @@ export default {
             loginRequired: false,
             preview: false,
             forceDescriptorSelection: false,
-            guideNotFound: false
+            guideNotFound: false,
+            beginningSpawnerHidden: false,
+            endSpawnerHidden: false,
+            enterToClass: undefined,
         }
     },
     mounted() {
@@ -284,6 +347,12 @@ export default {
         isNewGuide() {
             return typeof this.guide.guideId === 'undefined';
         },
+        beginningSpawnerEnabled() {
+            return !this.beginningSpawnerHidden;
+        },
+        endSpawnerEnabled() {
+            return this.guide.parts.length > 0 && !this.endSpawnerHidden;
+        }
     },
     components: {
         GuidePartSpawner,
@@ -313,13 +382,60 @@ export default {
     .editor {
         display: flex;
         flex-direction: column;
-        gap: 3rem;
         min-height: 100vh;
 
         .guide-parts {
             display: flex;
             flex-direction: column;
             gap: 2rem;
+
+            .guide-part {
+                overflow: hidden;
+
+                &.appear-enter {
+                    max-height: 5em;
+                }
+
+                &.appear-enter-to-text {
+                    max-height: 12em;
+                }
+
+                &.appear-enter-to-video {
+                    max-height: 9em;
+                }
+
+                &.appear-enter-active {
+                    transition: max-height .2s ease-out,
+                    opacity .2s ease-out;
+                }
+
+                &:first-child {
+                    margin-top: 2em;
+                }
+            }
+        }
+
+        .part-spawner {
+            margin-top: 2rem;
+            max-height: 15em;
+            opacity: 1;
+
+            $new-buttons-animation-duration: .2s;
+
+            &.new-buttons-appear-enter {
+                max-height: 0;
+                margin-top: 0;
+                opacity: 0;
+            }
+
+            &.new-buttons-appear-enter-active {
+                transition: max-height $new-buttons-animation-duration ease-out,
+                margin-top $new-buttons-animation-duration ease-out;
+            }
+        }
+
+        .done-button {
+            margin-top: 3em;
         }
 
         .descriptor-builder {
