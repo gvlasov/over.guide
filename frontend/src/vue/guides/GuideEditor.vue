@@ -411,6 +411,23 @@ export default {
                     opacity .2s ease-out;
                 }
 
+                &.appear-leave {
+                    max-height: 24em;
+                    opacity: 1;
+                    overflow: hidden;
+                }
+
+                &.appear-leave-to {
+                    max-height: 0;
+                    opacity: 0;
+                    overflow: hidden;
+                }
+
+                &.appear-leave-active {
+                    transition: max-height .2s ease-out,
+                    opacity .2s ease-out;
+                }
+
                 &:first-child {
                     margin-top: 2em;
                 }
