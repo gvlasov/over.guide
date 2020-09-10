@@ -296,9 +296,9 @@ export default {
         }
 
         .force-descriptor-notice {
-            font-size: 2em;
+            font-size: 2.2em;
             margin: 3em 1em .5em 1em;
-            text-shadow: 0 0 .1em #333;
+            text-shadow: 0 0 .15em hsl(279, 30%, 30%);
 
             @include overwatch-futura;
         }
