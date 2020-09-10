@@ -6,7 +6,7 @@ import {AuthService} from "src/services/auth.service";
 import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import heroesFixture from "@fixtures/heroes";
 import abilitiesFixture from "@fixtures/abilities";
-import guideTestingFixture from "@fixtures/guideTesting";
+import smallGuideTestingFixture from "@fixtures/small-guide-testing";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
 import {GuideController} from "src/controllers/guide.controller";
@@ -43,7 +43,7 @@ describe(
                     abilitiesFixture,
                     mapsFixture,
                     thematicTagsFixture,
-                    guideTestingFixture
+                    smallGuideTestingFixture
                 )
                 const guide = await Guide.findOne()
                 await request(ctx.app.getHttpServer())
@@ -65,7 +65,7 @@ describe(
                     abilitiesFixture,
                     mapsFixture,
                     thematicTagsFixture,
-                    guideTestingFixture
+                    smallGuideTestingFixture
                 )
                 const guide = await Guide.findOne({
                     include: [
