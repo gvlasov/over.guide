@@ -44,7 +44,9 @@ export default {
 <style lang="scss" scoped>
 
 .badge-tags-wrap {
-    display: inline-block;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .3em;
 }
 
 </style>

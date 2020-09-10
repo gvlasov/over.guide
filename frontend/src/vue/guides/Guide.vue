@@ -219,10 +219,6 @@ export default {
         transition: padding-left .13s;
     }
 
-    .badge-tags-wrap {
-        display: inline-block;
-    }
-
     .hero-tag {
         display: inline-block;
     }
