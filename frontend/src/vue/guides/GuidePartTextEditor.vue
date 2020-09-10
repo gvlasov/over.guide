@@ -98,9 +98,12 @@ export default {
         display: block;
     }
 
+    textarea {
+        outline: none;
+    }
+
     textarea.guide-part-text-editor {
         width: 100%;
-        max-width: 20em;
         font-size: 1em;
         font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     }
