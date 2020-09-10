@@ -108,6 +108,7 @@ export default {
         background-color: transparent;
         line-height: 1em;
         cursor: pointer;
+        font-weight: normal;
     }
 
     .root ::v-deep .tags-input {
@@ -163,12 +164,18 @@ export default {
     }
 
     .root ::v-deep .tags-input-wrapper-default {
-        background: none;
+        display: flex;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        gap: .2em;
         border: none;
-        box-shadow: none;
         position: relative;
-        padding: 0 .5rem 0 .5rem;
+        padding: .3rem .5rem .3rem .5rem;
         height: 100%;
+        box-shadow: 0 .05em .35em -.05em inset hsl(279, 30%, 30%);
+        border-radius: .5em;
+        margin: 0 .4em 0 0;
+        background-color: hsl(338, 80%, 96%);
 
         input[type=text] {
             font-family: $body-font;
@@ -180,7 +187,7 @@ export default {
         display: inline-block;
         width: 2em;
         padding-right: .5em;
-        height: 3em;
+        height: 2em;
     }
 
     .root {

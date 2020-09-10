@@ -34,7 +34,6 @@
         display: inline-block;
         padding: .17em .3em .3em .3em;
         border-radius: .3em;
-        margin: 0 .2em .2em 0;
         vertical-align: middle !important;
         box-shadow: 0 0 .13em #343434;
         white-space: nowrap;

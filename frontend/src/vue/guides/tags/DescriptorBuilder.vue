@@ -72,11 +72,12 @@ export default {
     .searchbox {
         display: flex;
         flex-wrap: wrap;
+        gap: .4em;
         justify-content: center;
         box-sizing: border-box;
         padding: .5rem 0 .5rem 0;
         background: #fff;
-        border-radius: .25em;
+        border-radius: .4em;
         border-color: #dbdbdb;
         box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
     }
