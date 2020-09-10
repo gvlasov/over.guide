@@ -68,12 +68,10 @@ export class GuideHistoryEntryService {
                     async (partDto) => {
                         if (partDto.kind === 'text') {
                             return GuideHistoryEntryService.obtainGuidePartText(
-                                oldEntry,
                                 partDto as GuidePartTextDto
                             )
                         } else if (partDto.kind === 'video') {
                             return GuideHistoryEntryService.obtainGuidePartVideo(
-                                oldEntry,
                                 partDto as GuidePartVideoDto
                             )
                         }
@@ -107,40 +105,58 @@ export class GuideHistoryEntryService {
     }
 
     private static async obtainGuidePartText(
-        entry: GuideHistoryEntry | null,
         partDto: GuidePartTextDto
     ): Promise<GuidePartText> {
-        if (entry !== null) {
-            for (let part of entry.guidePartTexts) {
-                if (part.contentMd === partDto.contentMd) {
-                    return Promise.resolve(part)
-                }
+        return GuidePartText.findOne({
+            where: {
+                contentMd: partDto.contentMd,
             }
-        }
-        console.log(partDto)
-        return GuidePartText.create(partDto)
+        })
+            .then(part => {
+                if (part !== null) {
+                    return part
+                } else {
+                    return GuidePartText.create(partDto)
+                }
+            })
     }
 
     private static async obtainGuidePartVideo(
-        entry: GuideHistoryEntry | null,
         partDto: GuidePartVideoDto
     ): Promise<GuidePartVideo> {
-        if (entry !== null) {
-            for (let part of entry.guidePartVideos) {
-                const excerpt = await part.$get('excerpt');
-                if (
-                    excerpt.youtubeVideoId === partDto.excerpt.youtubeVideoId
-                    && excerpt.startSeconds === partDto.excerpt.startSeconds
-                    && excerpt.endSeconds === partDto.excerpt.endSeconds
-                ) {
-                    return Promise.resolve(part)
-                }
+        return YoutubeVideoExcerpt.findOne({
+            where: {
+                youtubeVideoId: partDto.excerpt.youtubeVideoId,
+                startSeconds: partDto.excerpt.startSeconds,
+                endSeconds: partDto.excerpt.endSeconds,
             }
-        }
-        const excerpt = await YoutubeVideoExcerpt.create(partDto.excerpt)
-        return GuidePartVideo.create({
-            excerptId: excerpt.id
         })
+            .then(excerpt => {
+                if (excerpt === null) {
+                    return YoutubeVideoExcerpt.create(partDto.excerpt)
+                        .then(
+                            (excerpt) =>
+                                GuidePartVideo.create({
+                                    excerptId: excerpt.id
+                                })
+                        )
+                } else {
+                    return GuidePartVideo.findOne({
+                        where: {
+                            excerptId: excerpt.id,
+                        }
+                    })
+                        .then(part => {
+                            if (part === null) {
+                                return GuidePartVideo.create({
+                                    excerptId: excerpt.id,
+                                })
+                            } else {
+                                return part
+                            }
+                        })
+                }
+            })
     }
 
 }
