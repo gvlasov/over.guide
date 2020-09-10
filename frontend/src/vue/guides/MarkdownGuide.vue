@@ -73,7 +73,6 @@ export default {
 
     .back-button {
         margin-top: 1em;
-        position: -webkit-sticky;
         position: sticky;
         bottom: 1.1em;
         font-size: 2.5em;

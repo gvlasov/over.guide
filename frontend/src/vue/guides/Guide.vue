@@ -262,11 +262,6 @@ a {
     font-family: $body-font;
 }
 
-.text-guide-part ::v-deep img {
-    max-width: 100%;
-    margin: 0 auto;
-}
-
 .text-guide-part-content {
     text-align: left;
     font-size: 1.5em;

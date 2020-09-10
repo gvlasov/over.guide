@@ -40,7 +40,13 @@ export default {
         }
     }
 
+    & ::v-deep img {
+        margin: 0 auto;
+        display: block;
+    }
+
     & ::v-deep table  {
+        margin: 0 auto;
         td, th {
             padding: .4em;
         }

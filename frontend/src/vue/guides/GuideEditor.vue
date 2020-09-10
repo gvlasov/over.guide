@@ -390,18 +390,20 @@ export default {
             gap: 2rem;
 
             .guide-part {
-                overflow: hidden;
 
                 &.appear-enter {
                     max-height: 3em;
+                    overflow: hidden;
                 }
 
                 &.appear-enter-to-text {
                     max-height: 24em;
+                    overflow: hidden;
                 }
 
                 &.appear-enter-to-video {
                     max-height: 14em;
+                    overflow: hidden;
                 }
 
                 &.appear-enter-active {
