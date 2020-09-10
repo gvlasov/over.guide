@@ -397,11 +397,11 @@ export default {
                 }
 
                 &.appear-enter-to-text {
-                    max-height: 12em;
+                    max-height: 17em;
                 }
 
                 &.appear-enter-to-video {
-                    max-height: 9em;
+                    max-height: 10em;
                 }
 
                 &.appear-enter-active {
