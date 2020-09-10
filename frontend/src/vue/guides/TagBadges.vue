@@ -45,7 +45,6 @@ export default {
 
 .badge-tags-wrap {
     display: inline-flex;
-    flex-wrap: wrap;
     gap: .3em;
 }
 

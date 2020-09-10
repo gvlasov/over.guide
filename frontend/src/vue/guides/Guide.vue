@@ -11,7 +11,10 @@
                         :descriptor="guide.descriptor"
                         v-if="guide.descriptor.hasHeroes"
                 />
-                <TagBadges ref="badgeTagsWrap" :descriptor="guide.descriptor"/>
+                <TagBadges
+                        v-if="guide.descriptor.individualTags.length > 0"
+                        :descriptor="guide.descriptor"
+                />
             </div>
             <div class="authorship">
                 <div class="creation-date" v-bind:title="absoluteDateText()">{{ creationTimeRelative() }} ago</div>
