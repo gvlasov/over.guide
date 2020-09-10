@@ -144,7 +144,6 @@ const auth = new Authentication()
 
     .no-guides-notice {
         @include overwatch-futura;
-        color: white;
     }
 
     .training-goals {

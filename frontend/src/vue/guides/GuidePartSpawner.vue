@@ -108,14 +108,12 @@ export default {
 
         .close-button {
             @include overwatch-futura;
-            color: white;
             cursor: pointer;
             padding: 1rem;
         }
 
         .create-new-heading {
             font-size: 2em;
-            color: white;
             @include overwatch-futura;
             flex-basis: 100%;
             position: absolute;

@@ -40,7 +40,6 @@ export default {
 
 .battle-net-button {
     @include overwatch-futura;
-    color: white;
     text-decoration: none;
     display: block;
     background-size: 1em 1em;

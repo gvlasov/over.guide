@@ -21,7 +21,6 @@ export default {
     margin-bottom: 2em;
     margin-top: 2em;
     @include overwatch-futura-no-smallcaps;
-    color: white;
     text-shadow: 0 0 .13em #111;
 
     a {

@@ -156,7 +156,6 @@ export default {
 .wrap {
     $training-goal-height: 4em;
     @include overwatch-futura-no-smallcaps;
-    color: white;
     --left-border-radius: .6rem;
     box-sizing: border-box;
 

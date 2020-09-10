@@ -8,6 +8,7 @@
 
 @mixin overwatch-futura-no-smallcaps {
   font-family: 'Futura Demi Bold', sans-serif;
+  color: white;
 }
 
 @mixin overwatch-inline-button {
@@ -30,7 +31,6 @@
   font-weight: bold;
   cursor: pointer;
   position: relative;
-  color: white;
   &:active {
     .background {
       opacity: 1;

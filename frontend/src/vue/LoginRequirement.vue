@@ -61,7 +61,6 @@ $width: 40rem;
 
     .notice {
         font-size: 1.1em;
-        color: white;
         @include overwatch-futura;
         &.subnotice {
             font-size: .8em;

@@ -81,7 +81,6 @@
             height: 100%;
             width: $aside-width;
             box-sizing: border-box;
-            color: white;
 
             & > * {
                 position: relative;

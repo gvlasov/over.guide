@@ -159,7 +159,6 @@ export default {
         @include overwatch-futura;
         text-transform: lowercase;
         font-weight: normal;
-        color: white;
         box-shadow: 0 0 .06em #111;
     }
 

@@ -155,7 +155,6 @@ export default {
         flex-wrap: nowrap;
         align-items: flex-end;
         @include overwatch-futura;
-        color: white;
 
         button {
             font-size: 1.9em;

@@ -66,7 +66,6 @@ export default {
 
     a:not(.battle-net-button) {
         @include overwatch-futura;
-        color: white;
         text-decoration: none;
         white-space: nowrap;
         border-bottom: $underline-width solid transparent;
