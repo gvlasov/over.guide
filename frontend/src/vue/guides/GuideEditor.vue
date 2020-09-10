@@ -57,39 +57,9 @@
                     </OverwatchButton>
                 </div>
                 <div v-else>
-                    <transition name="new-buttons-appear">
-                        <GuidePartSpawner
-                                v-if="!beginningSpawnerHidden"
-                                where="beginning"
-                                :initial-seeding="guide.parts.length === 0"
-                                @addVideo="createNewVideoPart"
-                                @addText="createNewTextPart"
-                        />
-                    </transition>
-                    <transition-group
-                            class="guide-parts root-content-panel-wrap"
-                            name="appear"
-                            @before-enter="beforeEnter"
-                            :enter-to-class="enterToClass"
-                    >
-                        <GuidePart
-                                v-for="(widget, index) in guide.parts"
-                                :key="widget.id"
-                                ref="guideParts"
-                                :widget="widget"
-                                :parts="guide.parts"
-                                :index="index"
-                        />
-                    </transition-group>
-                    <transition name="new-buttons-appear">
-                        <GuidePartSpawner
-                                v-if="endSpawnerEnabled"
-                                where="end"
-                                :initial-seeding="false"
-                                @addVideo="createNewVideoPart"
-                                @addText="createNewTextPart"
-                        />
-                    </transition>
+                    <GuideEditorPartsList
+                            :guide="guide"
+                    />
                     <div>
                         <OverwatchButton
                                 type="main"
@@ -129,7 +99,6 @@
 </template>
 
 <script>
-import GuidePartWidget from "@/js/vso/GuidePartWidget";
 import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 import OverwatchButton from "@/vue/OverwatchButton";
 import Backend from "@/js/Backend";
@@ -145,11 +114,8 @@ import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 import Guide from "@/vue/guides/Guide";
 import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
-import GuidePart from "@/vue/guides/GuidePart";
 import BackgroundHeading from "@/vue/BackgroundHeading";
-import GuidePartSpawner from "@/vue/guides/GuidePartSpawner";
-import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
-import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
+import GuideEditorPartsList from "@/vue/guides/GuideEditorPartsList";
 
 const backend = new Backend(axios);
 
@@ -167,50 +133,6 @@ export default {
         },
     },
     methods: {
-        beforeEnter() {
-            this.beginningSpawnerHidden = false;
-            this.endSpawnerHidden = false
-        },
-        createNewTextPart(where) {
-            this.spawnPart(
-                () => new GuidePartTextWidget(
-                    {
-                        kind: 'text',
-                        contentMd: ''
-                    },
-                    true
-                ),
-                where
-            );
-        },
-        createNewVideoPart(where) {
-            this.spawnPart(
-                () =>
-                    new GuidePartVideoWidget(
-                        {
-                            kind: 'video',
-                            excerpt: null,
-                        },
-                        true
-                    ),
-                where
-            );
-        },
-        spawnPart(how, where) {
-            this[where + 'SpawnerHidden'] = true;
-            const widget = how();
-            this.enterToClass = (widget.part.kind === 'text')
-                ? 'appear-enter-to-text'
-                : 'appear-enter-to-video';
-            this.$nextTick(() => {
-                (
-                    (where === 'beginning')
-                        ? this.guide.parts.unshift
-                        : this.guide.parts.push
-                )
-                    .apply(this.guide.parts, [widget]);
-            })
-        },
         onDone() {
             if (this.guide.descriptor.isEmpty) {
                 this.forceDescriptorSelection = true;
@@ -259,26 +181,6 @@ export default {
                 shift++;
             }
         },
-        /**
-         * @return {boolean}
-         */
-        isEditing() {
-            return this.guide.parts.some(part => part.editing);
-        },
-        /**
-         * @param {GuidePartWidget} widget
-         * @param {number} newValue
-         */
-        onStartSecondsChangeHacky(widget, newValue) {
-            widget.part.excerpt.startSeconds = newValue;
-        },
-        /**
-         * @param {GuidePartWidget} widget
-         * @param {number} newValue
-         */
-        onEndSecondsChangeHacky(widget, newValue) {
-            widget.part.excerpt.endSeconds = newValue;
-        },
         readGuide() {
             let guide;
             let guideId;
@@ -318,9 +220,6 @@ export default {
             preview: false,
             forceDescriptorSelection: false,
             guideNotFound: false,
-            beginningSpawnerHidden: false,
-            endSpawnerHidden: false,
-            enterToClass: undefined,
         }
     },
     mounted() {
@@ -344,24 +243,14 @@ export default {
         isDoneButtonEnabled() {
             return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
         },
-        isNewGuide() {
-            return typeof this.guide.guideId === 'undefined';
-        },
-        beginningSpawnerEnabled() {
-            return !this.beginningSpawnerHidden;
-        },
-        endSpawnerEnabled() {
-            return this.guide.parts.length > 0 && !this.endSpawnerHidden;
-        }
     },
     components: {
-        GuidePartSpawner,
+        GuideEditorPartsList,
         LoginRequirement,
         ParameterDescriptorSynchronizer,
         OverwatchButton,
         DescriptorBuilder,
         Guide,
-        GuidePart,
         BackgroundHeading,
     },
 };
@@ -388,75 +277,6 @@ export default {
             display: flex;
             flex-direction: column;
             gap: 2rem;
-
-            .guide-part {
-
-                &.appear-enter {
-                    max-height: 3em;
-                    overflow: hidden;
-                }
-
-                &.appear-enter-to-text {
-                    max-height: 24em;
-                    overflow: hidden;
-                }
-
-                &.appear-enter-to-video {
-                    max-height: 14em;
-                    overflow: hidden;
-                }
-
-                &.appear-enter-active {
-                    transition: max-height .2s ease-out,
-                    opacity .2s ease-out;
-                }
-
-                &.appear-leave {
-                    max-height: 24em;
-                    opacity: 1;
-                    overflow: hidden;
-                }
-
-                &.appear-leave-to {
-                    max-height: 0;
-                    opacity: 0;
-                    overflow: hidden;
-                }
-
-                &.appear-leave-active {
-                    transition: max-height .2s ease-out,
-                    opacity .2s ease-out;
-                }
-
-                &:first-child {
-                    margin-top: 2em;
-                }
-            }
-        }
-
-        .part-spawner {
-            margin-top: 2rem;
-            max-height: 15em;
-            opacity: 1;
-
-            $new-buttons-animation-duration: .2s;
-
-            &.new-buttons-appear-enter {
-                max-height: 0;
-                margin-top: 0;
-                opacity: 0;
-                overflow: hidden;
-            }
-
-            &.new-buttons-appear-enter-to {
-                overflow: hidden;
-            }
-
-            &.new-buttons-appear-enter-active {
-                transition: max-height $new-buttons-animation-duration ease-out,
-                margin-top $new-buttons-animation-duration ease-out;
-                transition-delay: .05s, .05s;
-            }
         }
 
         .done-button {

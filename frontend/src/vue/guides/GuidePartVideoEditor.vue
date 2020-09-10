@@ -174,6 +174,7 @@ export default {
         width: 30em;
         box-sizing: border-box;
         @include overwatch-futura;
+        color: black;
         font-size: 1.2em;
         text-align: center;
 
