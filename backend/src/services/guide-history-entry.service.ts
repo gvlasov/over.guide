@@ -78,15 +78,15 @@ export class GuideHistoryEntryService {
                     }
                 )
                     .map((partPromise, index) => {
-                        return partPromise.then((part: GuidePartText | GuidePartVideo) => {
+                        return partPromise.then((part: GuidePartText | GuidePartVideo): Promise<GuideHistoryEntry2GuidePartText | GuideHistoryEntry2GuidePartVideo> => {
                             if (part instanceof GuidePartText) {
-                                GuideHistoryEntry2GuidePartText.create({
+                                return GuideHistoryEntry2GuidePartText.create({
                                     guideHistoryEntryId: newEntry.id,
                                     guidePartTextId: part.id,
                                     order: index
                                 })
                             } else if (part instanceof GuidePartVideo) {
-                                GuideHistoryEntry2GuidePartVideo.create({
+                                return GuideHistoryEntry2GuidePartVideo.create({
                                     guideHistoryEntryId: newEntry.id,
                                     guidePartVideoId: part.id,
                                     order: index

@@ -2,14 +2,14 @@ import {
     Body,
     Controller,
     Get,
+    HttpCode,
     HttpStatus,
+    NotFoundException,
     Param,
     Post,
-    Query,
     Req,
     Res,
-    UseGuards,
-    ValidationPipe
+    UseGuards
 } from '@nestjs/common';
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import {AuthService} from "src/services/auth.service";
@@ -30,6 +30,9 @@ import EmptyDescriptorException from "src/services/EmptyDescriptorException";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {User} from "src/database/models/User";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
+import {GuidePartVideo} from "src/database/models/GuidePartVideo";
+import {GuidePartText} from "src/database/models/GuidePartText";
+import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
 
 @Controller('guide')
 export class GuideController {
@@ -40,7 +43,6 @@ export class GuideController {
         private readonly moderationService: ModerationService,
         private readonly guideSearchService: GuideSearchService
     ) {
-
     }
 
     @Get(':id')
@@ -75,23 +77,45 @@ export class GuideController {
                             model: GuideDescriptor,
                             as: 'descriptor',
                             include: [
+                                {all: true},
+                            ],
+                        },
+                        {
+                            model: GuidePartText,
+                            as: 'guidePartTexts',
+                        },
+                        {
+                            model: GuidePartVideo,
+                            as: 'guidePartVideos',
+
+                            include: [
                                 {
-                                    all: true,
-                                }
+                                    model: YoutubeVideoExcerpt,
+                                    as: 'excerpt'
+                                },
                             ],
                         }
                     ],
                 }
             ]
         })
-            .then(guide => guide.head)
+            .then(guide => {
+                if (guide === null) {
+                    throw new NotFoundException()
+                }
+                return guide.head
+            })
             .then(head => {
                 response.status(HttpStatus.OK)
                 response.send(head.toDto())
             })
             .catch(e => {
-                response.status(HttpStatus.NOT_FOUND)
-                response.send()
+                if (e instanceof NotFoundException) {
+                    response.status(HttpStatus.NOT_FOUND)
+                    response.send()
+                } else {
+                    throw e
+                }
             })
     }
 
@@ -199,14 +223,8 @@ export class GuideController {
         response.send()
     }
 
-    @Get('search')
-    async search(
-        @Query(new ValidationPipe({transform: true})) query: GuideSearchQuery
-    ): Promise<GuideSearchPageDto> {
-        return this.guideSearchService.search(query)
-    }
-
     @Post('search')
+    @HttpCode(HttpStatus.OK)
     async searchPost(
         @Body() query: GuideSearchQuery
     ): Promise<GuideSearchPageDto> {

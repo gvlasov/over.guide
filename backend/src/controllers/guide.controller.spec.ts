@@ -23,11 +23,9 @@ import {ModerationService} from "src/services/moderation.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import {ContentHashService} from "src/services/content-hash.service";
-import {
-    GuideSearchQuery,
-    GuideSearchService
-} from "src/services/guide-search.service";
+import {GuideSearchService} from "src/services/guide-search.service";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
+import GuideSearchQueryQuickie from "data/dto/GuideSearchQueryQuickie";
 
 describe(
     GuideController,
@@ -677,21 +675,27 @@ describe(
                     }),
                 }, user)
                 await request(ctx.app.getHttpServer())
-                    .get('/guide/search?mapTags=' + MapId.Havana)
-                    .send()
+                    .post('/guide/search')
+                    .send(new GuideSearchQueryQuickie({
+                        mapTags: [MapId.Havana]
+                    }))
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(response.body.guides.length).toBe(3)
                     })
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search?teammateHeroes=${HeroId.Zarya},${HeroId.Zenyatta}&playerHeroes=${HeroId.Dva}`)
-                    .send()
+                    .post('/guide/search')
+                    .send(new GuideSearchQueryQuickie({
+                        teammateHeroes: [HeroId.Zarya, HeroId.Zenyatta],
+                        playerHeroes: [HeroId.Dva],
+                    }))
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(response.body.guides.length).toBe(1)
                     })
                 await request(ctx.app.getHttpServer())
-                    .get('/guide/search')
+                    .post('/guide/search')
+                    .send(new GuideSearchQueryQuickie({}))
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(response.body.guides.length).toBe(3)
@@ -714,18 +718,22 @@ describe(
                     }),
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search?mapTags=${MapId.Havana}`)
+                    .post('/guide/search')
+                    .send(new GuideSearchQueryQuickie({
+                        mapTags: [MapId.Havana],
+                    }))
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(response.body.guides.length).toBe(1)
                     });
-                (await entry.$get('guide')).deactivate(user)
+                await entry.$get('guide')
+                    .then(guide => guide.deactivate(user))
                 await request(ctx.app.getHttpServer())
-                    .get('/guide/search')
-                    .send({
+                    .post('/guide/search')
+                    .send(new GuideSearchQueryQuickie({
                         mapTags: [MapId.Havana]
-                    } as GuideSearchQuery)
+                    }))
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -758,8 +766,10 @@ describe(
                     }),
                 }, user)
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search`)
-                    .send()
+                    .post(`/guide/search`)
+                    .send(new GuideSearchQueryQuickie({
+
+                    }))
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -794,8 +804,12 @@ describe(
                     }),
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search?thematicTags=${GuideTheme.Communication}`)
-                    .send()
+                    .post('/guide/search')
+                    .send(
+                        new GuideSearchQueryQuickie({
+                            thematicTags: [GuideTheme.Communication]
+                        })
+                    )
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -823,8 +837,15 @@ describe(
                     }),
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search?mapTags=${MapId.Busan}`)
-                    .send()
+                    .post('/guide/search')
+                    .send(
+
+                        new GuideSearchQueryQuickie(
+                            {
+                                mapTags: [MapId.Busan],
+                            }
+                        )
+                    )
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -852,8 +873,14 @@ describe(
                     }),
                 }, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
-                    .get(`/guide/search?playerHeroes=${HeroId.Ana},${HeroId.Reinhardt}`)
-                    .send()
+                    .post(`/guide/search`)
+                    .send(
+                        new GuideSearchQueryQuickie(
+                            {
+                                playerHeroes: [HeroId.Ana, HeroId.Reinhardt],
+                            }
+                        )
+                    )
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {

@@ -1,7 +1,7 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {Fixture, FixtureService} from "src/services/fixture.service";
 import {Provider} from "@nestjs/common/interfaces/modules/provider.interface";
-import {INestApplication, Type} from "@nestjs/common";
+import {INestApplication, Type, ValidationPipe} from "@nestjs/common";
 import {databaseProviders} from "src/database/database.providers";
 
 class TestContext<T> {
@@ -36,6 +36,15 @@ export function nestTest<T>(
                 await fixtureService.loadFixturesClear(...fixtures)
             testContext.app = app.createNestApplication()
             await testContext.app.init()
+                .then(app => {
+                    app.useGlobalPipes(new ValidationPipe({
+                        skipUndefinedProperties: false,
+                        forbidUnknownValues: true,
+                        disableErrorMessages: false,
+                        transform: true,
+                    }))
+                })
+
         });
         afterEach(async () => {
             await testContext.app.close()

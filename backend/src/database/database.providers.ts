@@ -46,6 +46,10 @@ export const databaseProviders = [
                 define: {
                     freezeTableName: true,
                 },
+                pool: {
+                    min: 0,
+                    max: 2,
+                },
                 dialectOptions: {
                     multipleStatements: true,
                 },

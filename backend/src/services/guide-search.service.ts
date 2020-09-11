@@ -7,7 +7,6 @@ import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
-import {Transform, Type} from "class-transformer";
 import HeroId from "data/HeroId";
 import MapId from "data/MapId";
 import GuideTheme from "data/GuideTheme";
@@ -15,54 +14,35 @@ import {Op} from "sequelize";
 import {GuideHead} from "src/database/models/GuideHead";
 import AbilityId from "data/AbilityId";
 import {User} from "src/database/models/User";
+import {IsDefined} from "class-validator";
 
 export class GuideSearchQuery implements GuideSearchQueryDto {
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     playerHeroes: HeroId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     playerAbilities: AbilityId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     teammateHeroes: HeroId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     teammateAbilities: AbilityId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     enemyHeroes: HeroId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     enemyAbilities: AbilityId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     abilities: AbilityId[];
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     mapTags: MapId[] = []
 
-    @Type(() => String)
-    @Transform((value: string) => value.split(',').map(it => Number.parseInt(it)))
     thematicTags: GuideTheme[] = []
 
     user: number;
 
-    @Type(() => String)
-    @Transform((value: string) => Number.parseInt(value))
+    @IsDefined({always: true})
     pageNumber: number
 
-    @Type(() => String)
-    @Transform((value: string) => atob(value).split(',').map(it => Number.parseInt(it)))
-    clientAlreadyHasGuideIds: number[] = []
+    @IsDefined({always: true})
+    clientAlreadyHasGuideIds: number[];
 
 }
 
