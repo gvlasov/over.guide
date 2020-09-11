@@ -29,11 +29,19 @@ export default class Authentication {
         }
     }
 
-    logout(): void {
+    logoutSite(): void {
         Cookies.remove('auth-token')
         Cookies.remove('username')
         Cookies.remove('userId')
-        window.location.href = '/';
+        window.location.href = '/'
+    }
+
+    logoutBattleNet() {
+        window.location.href = this.battleNetLogoutUrl;
+    }
+
+    get battleNetLogoutUrl() : string {
+        return 'https://account.blizzard.com/api/logout';
     }
 
     canEditGuide(guide: GuideVso): boolean {

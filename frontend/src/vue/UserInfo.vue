@@ -17,11 +17,16 @@
                 <BackgroundHeading class="username">{{ userInfo.user.name }}</BackgroundHeading>
                 <template v-if="isThisMe">
                     <div class="buttons-wrap">
+                        <LogoutDangerNotice
+                                v-if="promptLogoutDanger"
+                                @back="() => promptLogoutDanger = false"
+                                @confirm="logout"
+                        />
                         <OverwatchButton
                                 v-if="isThisMe"
                                 type="default"
-                                v-hammer:tap="logout"
-                        >Logout
+                                v-hammer:tap="() => promptLogoutDanger = true"
+                        >Log out
                         </OverwatchButton>
                         <UsernameInput
                                 v-show="changingUsername"
@@ -64,6 +69,7 @@ import UserInfoVso from "@/js/vso/UserInfoVso";
 import UsernameInput from "@/vue/UsernameInput";
 import Authentication from "@/js/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
+import LogoutDangerNotice from "@/vue/LogoutDangerNotice";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
@@ -77,17 +83,27 @@ export default {
             }
             return Number.parseInt(cookie) === this.userInfo.user.id;
         },
+        battleNetLogoutUrl() {
+            return auth.battleNetLogoutUrl;
+        },
     },
     data() {
         return {
             userId: this.$route.params.id,
             changingUsername: false,
             userInfo: undefined,
+            promptLogoutDanger: false,
         };
     },
     methods: {
         logout() {
-            auth.logout();
+            const img = document.createElement('img');
+            img.src = auth.battleNetLogoutUrl;
+            img.style.display = 'none';
+            img.onerror = () => {
+                auth.logoutSite()
+            }
+            this.$el.append(img)
         },
     },
     async mounted() {
@@ -102,6 +118,7 @@ export default {
             })
     },
     components: {
+        LogoutDangerNotice,
         BackgroundHeading,
         Guide,
         OverwatchButton,
