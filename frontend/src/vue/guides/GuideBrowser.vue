@@ -10,7 +10,7 @@
             <DescriptorBuilder
                     :search-button-enabled="false"
                     :descriptor="descriptor"
-                    @done="() => onSearch(this.descriptor)"
+                    @descriptorChange="(newDesc) => onSearch(newDesc)"
             />
         </div>
         <div class="guide-feed root-content-panel-wrap">
@@ -106,6 +106,9 @@ export default {
             this.$emit('contentChange');
             this.$emit('descriptorChange', newDescriptor);
         },
+        onDescriptorChange(newDescriptor) {
+            console.log('new desc')
+        },
         onDeactivated(guideId) {
             const deactivated = this.guides.findIndex(g => g.guideId === guideId)
             if (deactivated === -1) {
@@ -141,6 +144,7 @@ export default {
     },
     watch: {
         descriptor(newValue) {
+            this.onSearch(newValue)
         },
     },
     data() {

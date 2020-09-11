@@ -2,7 +2,7 @@
     <div class="searchbox">
         <TagBuilder
                 :descriptor="descriptor"
-                @done="() => $emit('done')"
+                @done="() => $emit('descriptorChange', this.descriptor)"
         />
         <ThematicTagInput
                 style="display: block; min-width: 17em; flex-grow: 1;"
@@ -43,6 +43,7 @@ export default {
         computed: {},
         methods: {
             onIndividualTagChange() {
+                console.log('ind t c')
                 this.$emit('descriptorChange', this.descriptor)
             },
             onSearch() {
