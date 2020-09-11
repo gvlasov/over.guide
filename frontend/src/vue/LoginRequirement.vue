@@ -16,7 +16,7 @@
                 type="default"
                 class="close-button"
                 v-hammer:tap="() => $emit('back')"
-        >Close
+        >Back
         </OverwatchButton>
     </LoginNotice>
 </template>

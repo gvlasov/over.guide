@@ -2,6 +2,7 @@
     <div class="training-goals root-content-sizer">
         <LoginRequirement
                 v-if="!authenticated"
+                @back="$router.go(-1)"
         >
             <template v-slot:notice>Log in to view your training goals</template>
         </LoginRequirement>
