@@ -1,7 +1,12 @@
 <template>
-    <div class="login-notice">
-        <slot/>
-    </div>
+    <transition
+            name="login-notice-appear"
+            appear
+    >
+        <div class="login-notice">
+            <slot/>
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -10,6 +15,11 @@ import OverwatchButton from "@/vue/OverwatchButton";
 
 export default {
     props: {},
+    methods: {
+        asdf() {
+            alert('start')
+        }
+    },
     computed: {},
     components: {
         OverwatchButton,
@@ -42,5 +52,21 @@ $width: 40rem;
     justify-content: center;
     flex-wrap: wrap;
     font-size: 1.5rem;
+
+}
+
+
+.login-notice-appear-enter {
+    margin-top: 1em;
+    opacity: 0;
+}
+
+.login-notice-appear-enter-to {
+    margin-top: 0;
+    opacity: 1;
+}
+
+.login-notice-appear-enter-active {
+    transition: margin-top .2s ease-in, opacity .2s ease-out;
 }
 </style>
