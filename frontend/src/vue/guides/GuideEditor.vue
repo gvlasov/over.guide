@@ -86,12 +86,12 @@
                 <OverwatchButton
                         type="default"
                         v-hammer:tap="() => preview = false"
-                >Back
+                >Edit
                 </OverwatchButton>
                 <OverwatchButton
                         type="main"
                         v-hammer:tap="publish"
-                >publish
+                >Publish
                 </OverwatchButton>
             </div>
         </template>
