@@ -231,4 +231,49 @@ export class GuideController {
         return this.guideSearchService.search(query)
     }
 
+    @Get('search-by-video/:videoId')
+    async searchByVideo(
+        @Param('videoId') videoId: string
+    ): Promise<GuideHistoryEntryDto[]> {
+        return GuideHistoryEntry.findAll({
+            include: [
+                {
+                    model: GuidePartVideo,
+                    as: 'guidePartVideos',
+                    include: [
+                        {
+                            model: YoutubeVideoExcerpt,
+                            as: 'excerpt',
+                            where: {
+                                youtubeVideoId: videoId
+                            },
+                            required: true,
+                        }
+                    ],
+                    required: true,
+                },
+                {
+                    model: GuidePartText,
+                    as: 'guidePartTexts',
+                },
+                {
+                    model: Guide,
+                    as: 'guide',
+                    include: [
+                        {
+                            model: User,
+                            as: 'creator',
+                        }
+                    ],
+                },
+                {
+                    model: GuideDescriptor,
+                    as: 'descriptor',
+                    include: [{ all: true }]
+                }
+            ]
+        })
+            .then(guides => guides.map(g => g.toDto()))
+    }
+
 }

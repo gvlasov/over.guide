@@ -890,6 +890,75 @@ describe(
                         ).toBe(correctEntry.guideId)
                     })
             })
+            it('searches for guides by video', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    abilitiesFixture,
+                )
+                const user = await User.findOne();
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const commonVideoId = 'asdf';
+                const guide1 = await service.save({
+                    parts: [{
+                        kind: 'video',
+                        excerpt: {
+                            youtubeVideoId: commonVideoId,
+                            startSeconds: 0,
+                            endSeconds: 1,
+                        }
+                    }],
+                    descriptor: new Descriptor({
+                        mapTags: [MapId.Busan],
+                    }),
+                }, user) as GuideHistoryEntry
+                const guide2 = await service.save({
+                    parts: [{
+                        kind: 'video',
+                        excerpt: {
+                            youtubeVideoId: commonVideoId,
+                            startSeconds: 1,
+                            endSeconds: 2,
+                        }
+                    }],
+                    descriptor: new Descriptor({
+                        mapTags: [MapId.Busan],
+                    }),
+                }, user) as GuideHistoryEntry
+                const guide3 = await service.save({
+                    parts: [{
+                        kind: 'video',
+                        excerpt: {
+                            youtubeVideoId: `${commonVideoId}_DIFFERENT`,
+                            startSeconds: 1,
+                            endSeconds: 2,
+                        }
+                    }],
+                    descriptor: new Descriptor({
+                        mapTags: [MapId.Busan],
+                    }),
+                }, user) as GuideHistoryEntry
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/search-by-video/${commonVideoId}`)
+                    .send()
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body).toHaveLength(2)
+                        const foundGuideIds = response.body.map(ghe => ghe.guideId);
+                        expect(foundGuideIds).toContain(guide1.id)
+                        expect(foundGuideIds).toContain(guide2.id)
+                        expect(foundGuideIds).not.toContain(guide3.id)
+                    })
+                await request(ctx.app.getHttpServer())
+                    .get(`/guide/search-by-video/NO_SUCH_VIDEO_ID`)
+                    .send()
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body).toHaveLength(0)
+                    })
+            })
 
             afterAll(() => {
                 ctx.app.close()
