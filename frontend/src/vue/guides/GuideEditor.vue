@@ -243,6 +243,9 @@ export default {
         isDoneButtonEnabled() {
             return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
         },
+        isNewGuide() {
+            return typeof this.guide.guideId !== 'undefined'
+        },
     },
     components: {
         GuideEditorPartsList,
