@@ -4,7 +4,6 @@
             ref="background"
             :tag-group="tagGroup"
             v-bind:class="tagGroup.gamerPosition.dataName"
-            v-bind:style="{'background-position-x': backgroundX + 'px', 'background-position-y': backgroundY+'px', 'background-size': 'auto '+(1000*backgroundScale)+'px'}"
     >
         <div class="invite-text">any<br/>
             <span v-bind:style="isTeammate ? 'font-size: .81em;' : ''">
@@ -29,17 +28,9 @@ export default {
     },
     data() {
         return {
-            backgroundX: 0,
-            backgroundY: 0,
         };
     },
     methods: {
-        adjustBackgroundPosition() {
-            const bgWidth = 2560
-            const coeff = this.backgroundScale;
-            this.backgroundX = -(this.$el.getBoundingClientRect().x + (bgWidth - document.documentElement.clientWidth) / 2) * coeff;
-            this.backgroundY = -this.$el.getBoundingClientRect().y * coeff;
-        }
     },
     computed: {
         isTeammate() {
@@ -48,12 +39,6 @@ export default {
         backgroundScale() {
             return  Math.max(window.innerHeight/1000, 1)
         }
-    },
-    mounted() {
-        this.adjustBackgroundPosition()
-        window.addEventListener('scroll', () => {
-            this.adjustBackgroundPosition()
-        })
     },
     components: {
         TagGroupBackground
@@ -74,6 +59,8 @@ export default {
     width: 3.32em;
     cursor: pointer;
     box-shadow: 0 .1em .3em -.05em $overwatch-panel-bg-color inset;
+    //box-shadow: 0 0.05em 0.35em -0.05em inset hsl(279, 29%, 30%);
+    background-color: hsl(338, 80%, 96%);
 }
 
 .invite-text {
@@ -90,8 +77,6 @@ export default {
 
 @mixin group($color) {
     color: rgba(81, 96, 148, 0.7);
-    //text-shadow: $overwatch-panel-bg-shadow;
-    background-image: url('/images/candy.jpg');
 }
 
 .player {
