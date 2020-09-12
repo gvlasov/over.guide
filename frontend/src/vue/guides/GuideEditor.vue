@@ -105,7 +105,6 @@ import Backend from "@/js/Backend";
 import axios from 'axios';
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
-import ParamsDescriptor from "@/js/ParamsDescriptor";
 import StoredGuideDraft from "@/js/StoredGuideDraft";
 import GuideVso from "@/js/vso/GuideVso";
 import debounce from 'lodash.debounce'
@@ -116,17 +115,25 @@ import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import GuideEditorPartsList from "@/vue/guides/GuideEditorPartsList";
+import ParamsDescriptorMixin from "@/js/ParamsDescriptorMixin";
 
 const backend = new Backend(axios);
 
 const draft = new StoredGuideDraft()
 export default {
     name: 'GuideEditor',
+    mixins: [ParamsDescriptorMixin],
     watch: {
         guide: {
             handler: debounce(function (newValue) {
                 if (this.isNewGuide) {
-                    draft.saveDraft(newValue);
+                    if (newValue.isEmpty) {
+                        console.log('reset')
+                        draft.reset();
+                    } else {
+                        console.log('save')
+                        draft.saveDraft(newValue);
+                    }
                 }
             }, 500),
             deep: true,
@@ -194,12 +201,11 @@ export default {
                 return null;
             }
             if (typeof guide === 'undefined') {
-                const params = new ParamsDescriptor(this.$route.params.descriptor);
                 guide =
                     new GuideVso({
                         id: undefined,
                         guideId: undefined,
-                        descriptor: params.compute(),
+                        descriptor: this.obtainParamsDescriptor(),
                         parts: [],
                     });
             }
@@ -244,7 +250,7 @@ export default {
             return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
         },
         isNewGuide() {
-            return typeof this.guide.guideId !== 'undefined'
+            return typeof this.guide.guideId === 'undefined'
         },
     },
     components: {

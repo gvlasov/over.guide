@@ -5,9 +5,10 @@
 <script>
 import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-import ParamsDescriptor from "@/js/ParamsDescriptor";
+import ParamsDescriptorMixin from "@/js/ParamsDescriptorMixin";
 
 export default {
+    mixins: [ParamsDescriptorMixin],
         model: {
             prop: 'descriptor',
             event: 'descriptorChange',
@@ -40,7 +41,7 @@ export default {
                 this.$emit(
                     'descriptorChange',
                     new GuideDescriptorVso(
-                        new ParamsDescriptor(paramsText).compute()
+                        this.obtainParamsDescriptor(paramsText)
                     )
                 );
             },

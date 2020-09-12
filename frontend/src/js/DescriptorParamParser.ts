@@ -7,6 +7,7 @@ import GamerPositionId from "data/GamerPositionId";
 import uniq from "lodash.uniq"
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import TagGroupVso from "@/js/vso/TagGroupVso";
+import DescriptorParseError from "@/js/DescriptorParseError";
 
 type DtoType = 'heroes' | 'maps' | 'thematicTags' | 'abilities';
 
@@ -42,7 +43,7 @@ class DtoMap {
     getByDataName(dataName: string): [DtoType, any] {
         const vso = this.vsos[dataName];
         if (typeof vso === 'undefined') {
-            throw new Error('No object with dataName = ' + dataName)
+            throw new DescriptorParseError('No object with dataName = ' + dataName)
         }
         return vso
     }
@@ -69,7 +70,7 @@ class DtoMap {
         } else if (type === 'thematicTags') {
             return 'thematicTags'
         }
-        throw new Error(
+        throw new DescriptorParseError(
             `Unidentified specifier: ${type} ${gamerPosition}`
         )
     }
@@ -144,8 +145,8 @@ export default class DescriptorParamParser {
         } else if (positionPart === 'enemies') {
             return GamerPositionId.Enemies
         } else {
-            throw new Error(
-                'Incorrent position part name ' + positionPart
+            throw new DescriptorParseError(
+                'Incorrect position part name ' + positionPart
             )
         }
     }

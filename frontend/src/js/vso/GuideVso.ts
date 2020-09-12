@@ -30,6 +30,10 @@ export default class GuideVso {
         return new GuideTopic(this.guideId)
     }
 
+    get isEmpty(): boolean {
+        return this.descriptor.isEmpty && this.parts.length === 0;
+    }
+
     toDto(): GuideHistoryEntryDto {
         return {
             guideId: this.guideId,
