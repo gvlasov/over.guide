@@ -7,7 +7,9 @@
                 type="default"
                 class="login-button"
         >
-            <BattlenetAuthButton/>
+            <BattlenetAuthButton
+                    v-hammer:tap="saveRedirectPath"
+            />
         </OverwatchButton>
         <div class="notice subnotice">
             <slot name="subnotice"/>
@@ -28,6 +30,11 @@ import LoginNotice from "@/vue/LoginNotice";
 
 export default {
     props: {},
+    methods: {
+        saveRedirectPath() {
+            localStorage.setItem('pathBeforeBnetAuth', this.$route.path)
+        }
+    },
     computed: {},
     components: {
         LoginNotice,

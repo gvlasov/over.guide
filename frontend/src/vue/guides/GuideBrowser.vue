@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 Feel like
-                <router-link v-bind:to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>
+                <router-link v-bind:to="tagLink(descriptor, '/guide-editor/new/')">creating one</router-link>
                 ?
             </WeakPanel>
             <WeakPanel slot="no-more" class="no-results">
@@ -58,7 +58,7 @@
                 </div>
                 <div>
                     Feel like
-                    <router-link :to="tagLink(descriptor, '/guide-editor/')">creating one</router-link>
+                    <router-link :to="tagLink(descriptor, '/guide-editor/new/')">creating one</router-link>
                     ?
                 </div>
             </WeakPanel>

@@ -50,8 +50,15 @@ export default {
                     if (!this.enabled){
                         return;
                     }
+                    const guideIdParam = this.$route.params.id
+                    let guideIdPart =
+                        (typeof guideIdParam !== 'undefined')
+                            ? guideIdParam + '/'
+                            : '';
                     const newPath = this.basePath
+                        + guideIdPart
                         + new DescriptorParamUnparser().unparseDescriptor(this.descriptor);
+                    console.log(guideIdPart)
                     if (this.$router.currentRoute.path !== newPath) {
                         await this.$router.push(newPath)
                     }

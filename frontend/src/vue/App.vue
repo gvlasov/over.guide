@@ -26,6 +26,13 @@ export default {
             this.resetScrollToTop();
         },
     },
+    mounted() {
+        const path = localStorage.getItem('pathBeforeBnetAuth');
+        if (path !== null) {
+            localStorage.removeItem('pathBeforeBnetAuth')
+            this.$router.replace(path)
+        }
+    },
     components: {
         Navigation,
         ScrollToTop,
