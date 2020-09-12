@@ -10,7 +10,7 @@
                     type="default"
                     class="markup-help-button"
                     v-hammer:tap="() => {showMarkdownGuide = true; widget.editing = false;}"
-            >Markup help</OverwatchButton>
+            >Formatting guide</OverwatchButton>
         </template>
         <template v-if="!showMarkdownGuide">
             <GuidePartTextEditor
@@ -164,10 +164,12 @@ export default {
 
     .markup-help-button {
         position: absolute;
-        right: 0;
+        left: 0;
         top: 0;
         font-size: 1.2em;
-        opacity: .5;
+        & ::v-deep .background {
+            background-color: rgba(81, 96, 148, 0.7)
+        }
     }
 
     .guide-part-buttons {
