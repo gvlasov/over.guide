@@ -85,13 +85,13 @@
             <div style="clear: both;"></div>
         </div>
         <OverwatchPanelButton
-                v-if="$asyncComputed.guidesWithSameVideo.success"
+                v-if="$asyncComputed.guidesWithSameVideo.success && intersectingGuides.length > 0"
                 type="default"
                 class="intersections"
                 v-bind:class="{'intersections-available': intersectingGuides.length > 0}"
                 v-hammer:tap="onSameVideoGuidesDropdownTap"
         >
-            {{ intersectingGuides.length || 'no' }} guides intersecting with your cut
+            {{ intersectingGuides.length }} guides intersecting with your cut
             <img
                     v-if="showSameVideoGuides"
                     src="/icons/arrow-up-white.svg"
@@ -513,6 +513,7 @@ export default {
         @include overwatch-futura;
         width: 100%;
         margin-bottom: 1em;
+        margin-top: 1em;
         font-weight: normal;
         font-size: 1.3em;
         & ::v-deep .background {
