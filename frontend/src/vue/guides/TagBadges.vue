@@ -20,19 +20,14 @@ import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
 import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
 export default {
-    model: {},
     props: {
         descriptor: {
             type: GuideDescriptorVso,
             required: true
         },
     },
-    methods: {},
     data() {
         return {}
-    },
-    computed: {},
-    mounted() {
     },
     components: {
         ThematicTagBadge,
