@@ -84,6 +84,36 @@
             </div>
             <div style="clear: both;"></div>
         </div>
+        <OverwatchPanelButton
+                v-if="$asyncComputed.guidesWithSameVideo.success"
+                type="default"
+                class="intersections"
+                v-bind:class="{'intersections-available': intersectingGuides.length > 0}"
+                v-hammer:tap="onSameVideoGuidesDropdownTap"
+        >
+            {{ intersectingGuides.length || 'no' }} guides intersecting with your cut
+            <img
+                    v-if="showSameVideoGuides"
+                    src="/icons/arrow-up-white.svg"
+            />
+            <img
+                    v-if="!showSameVideoGuides"
+                    src="/icons/arrow-down-white.svg"
+            />
+        </OverwatchPanelButton>
+        <div
+                v-if="showSameVideoGuides && intersectingGuides.length > 0"
+                class="same-video-guides"
+        >
+            <GuidePreviewBadge
+                    v-for="(guide, index) in intersectingGuides"
+                    :key="guide.guideId"
+                    :guide="guide"
+                    :order="index"
+                    :open="false"
+                    :ghost="false"
+            />
+        </div>
     </div>
 </template>
 
@@ -97,8 +127,12 @@ import OverwatchButton from "@/vue/OverwatchButton";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
+import GuideVso from "@/js/vso/GuideVso";
+import TrainingGoal from "@/vue/guides/TrainingGoal";
+import GuidePreviewBadge from "@/vue/guides/GuidePreviewBadge";
 
 const backend = new Backend(axios);
+const intersectionThresholdSeconds = .3
 export default {
   props: {
     videoId: {
@@ -115,7 +149,36 @@ export default {
                 type: String
             },
         },
-        data() {
+    asyncComputed:{
+        guidesWithSameVideo() {
+            return backend.getGuidesByVideoId(this.videoId)
+                .then(guides => guides.map(g => new GuideVso(g)))
+        },
+        intersectingGuides: {
+            get() {
+                if (this.guidesWithSameVideo === null) {
+                    return []
+                }
+                console.log('compute')
+                return this.guidesWithSameVideo
+                    .filter(
+                        guide => guide.parts.filter(
+                            part => {
+                                return part.part.kind === 'video' &&
+                                    part.part.excerpt.endSeconds >= (this.startSeconds + intersectionThresholdSeconds) &&
+                                    part.part.excerpt.startSeconds <= (this.endSeconds - intersectionThresholdSeconds)
+                            }
+                        )
+                            .length > 0
+                    )
+            },
+            watch: [
+                'startSeconds',
+                'endSeconds',
+            ],
+        }
+    },
+    data() {
             return {
                 startSeconds: this.initialStartSeconds,
                 endSeconds: this.initialEndSeconds,
@@ -128,9 +191,15 @@ export default {
                 pasteHandler: null,
                 isVideoLoaded: false,
                 preciseDurationAvailable: false,
+                showSameVideoGuides: false,
             }
         },
         methods: {
+      onSameVideoGuidesDropdownTap() {
+          if (this.intersectingGuides.length > 0) {
+              return this.showSameVideoGuides = !this.showSameVideoGuides;
+          }
+      },
             startCut() {
                 this.startSeconds = this.player.getCurrentTime();
             },
@@ -305,6 +374,8 @@ export default {
             }
         },
         components: {
+            GuidePreviewBadge,
+            TrainingGoal,
             VideoLoadingScreen,
             AspectRatioBox,
             OverwatchButton,
@@ -320,6 +391,7 @@ export default {
 <style lang="scss" scoped>
     @import "~@/assets/css/common.scss";
     @import "~@/assets/css/fonts.scss";
+    @import "~@/assets/css/overwatch-ui.scss";
     $start-color: hsl(230, 70%, 64%);
     $end-color: hsl(0, 70%, 64%);
 
@@ -421,6 +493,44 @@ export default {
     .left-shift-0, .left-shift-1, .left-shift-2 {
         margin-left: 0;
         margin-right: 0;
+    }
+
+    .intersections {
+        @include overwatch-futura;
+        width: 100%;
+        margin-bottom: 1em;
+        font-weight: normal;
+        font-size: 1.3em;
+        & ::v-deep .background {
+            background-color: transparent;
+        }
+        img {
+            height: 1em;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 1em;
+        }
+        pointer-events: none;
+        img {
+            display: none;
+        }
+    }
+    .intersections-available {
+        & ::v-deep .background {
+            background-color: hsla(55, 80%, 50%, .6);
+            pointer-events: auto;
+        }
+
+        img {
+            display: inline-block !important;
+        }
+    }
+
+    .same-video-guides {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
     }
 
 </style>

@@ -178,6 +178,15 @@ export default class Backend {
         )
     }
 
+    async getGuidesByVideoId(videoId: string): Promise<GuideHistoryEntryDto[]> {
+        return this.query(
+            'GET',
+            `/guide/search-by-video/${videoId}`,
+            {},
+            (response) => response.data,
+        )
+    }
+
     async saveGuide(guide: GuideHistoryEntryDto): Promise<number | null> {
         return this.query(
             'POST',

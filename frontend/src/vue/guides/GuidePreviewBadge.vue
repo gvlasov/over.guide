@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="guide-preview-badge">
         <div
                 v-if="open"
                 class="uncollapsed"
@@ -49,7 +49,10 @@
                         v-if="typeof firstTextWidget !== 'undefined'"
                         :part="firstTextWidget.part"
                 />
-                <div class="unclickable">
+                <div
+                        v-if="false"
+                        class="unclickable"
+                >
                     <AspectRatioBox>
                         <YoutubeVideo
                                 v-if="typeof firstVideoWidget !== 'undefined'"
@@ -150,7 +153,7 @@ export default {
 @import '~@/assets/css/overwatch-ui.scss';
 @import '~@/assets/css/common.scss';
 
-.wrap {
+.guide-preview-badge {
     $training-goal-height: 4em;
     @include overwatch-futura-no-smallcaps;
     --left-border-radius: .6rem;
