@@ -114,7 +114,7 @@ import Guide from "@/vue/guides/Guide";
 import UserVso from "@/js/vso/UserVso";
 import Authentication from "@/js/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
-import GuideEditorPartsList from "@/vue/guides/GuideEditorPartsList";
+import GuideEditorPartsList from "@/vue/guides/editor/GuideEditorPartsList";
 import ParamsDescriptorMixin from "@/js/ParamsDescriptorMixin";
 
 const backend = new Backend(axios);

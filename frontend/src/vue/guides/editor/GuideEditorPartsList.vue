@@ -38,7 +38,7 @@
 
 <script>
 import GuidePart from "@/vue/guides/GuidePart";
-import GuidePartSpawner from "@/vue/guides/GuidePartSpawner";
+import GuidePartSpawner from "@/vue/guides/editor/GuidePartSpawner";
 import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
 import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
 import GuideVso from "@/js/vso/GuideVso";

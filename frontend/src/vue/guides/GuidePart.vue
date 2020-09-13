@@ -70,10 +70,10 @@
 import GuidePartWidget from "@/js/vso/GuidePartWidget";
 import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
 import OverwatchButton from "@/vue/OverwatchButton";
-import GuidePartTextEditor from "@/vue/guides/GuidePartTextEditor";
-import GuidePartVideoEditor from "@/vue/guides/GuidePartVideoEditor";
+import GuidePartTextEditor from "@/vue/guides/editor/GuidePartTextEditor";
+import GuidePartVideoEditor from "@/vue/guides/editor/GuidePartVideoEditor";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
-import MarkdownGuide from "@/vue/guides/MarkdownGuide";
+import MarkdownGuide from "@/vue/guides/editor/MarkdownGuide";
 
 export default {
     props: {

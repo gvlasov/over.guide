@@ -5,7 +5,7 @@ import './utils/vue-array-replace'
 import VueRouter from 'vue-router';
 import CountersPractice from '@/vue/training/CountersPractice.vue';
 import PickSuggestion from "@/vue/training/PickSuggestion.vue";
-import GuideEditor from "@/vue/guides/GuideEditor.vue";
+import GuideEditor from "@/vue/guides/editor/GuideEditor.vue";
 import TestingGround from "@/vue/TestingGround";
 import GuideSearch from "@/vue/guides/GuideSearch";
 import AsyncComputed from 'vue-async-computed'
