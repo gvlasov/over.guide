@@ -106,12 +106,14 @@
                 class="same-video-guides"
         >
             <GuidePreviewBadge
-                    v-for="(guide, index) in intersectingGuides"
-                    :key="guide.guideId"
-                    :guide="guide"
-                    :order="index"
-                    :open="false"
+                    v-for="(widget, index) in intersectingGuides"
+                    :key="widget.guide.guideId"
+                    :guide="widget.guide"
+                    :order="widget.order"
+                    :open="widget.open"
                     :ghost="false"
+                    @open="() => {closeAllIntersectingGuides(); widget.open = true;}"
+                    @close="() => { widget.open = false}"
             />
         </div>
     </div>
@@ -130,6 +132,7 @@ import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 import GuideVso from "@/js/vso/GuideVso";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import GuidePreviewBadge from "@/vue/guides/GuidePreviewBadge";
+import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
 
 const backend = new Backend(axios);
 const intersectionThresholdSeconds = .3
@@ -171,6 +174,12 @@ export default {
                         )
                             .length > 0
                     )
+                .map((guide, index) => new TrainingGoalWidget(
+                    guide,
+                    index,
+                    false,
+                    false,
+                ))
             },
             watch: [
                 'startSeconds',
@@ -195,6 +204,11 @@ export default {
             }
         },
         methods: {
+      closeAllIntersectingGuides() {
+          for (let guide of this.intersectingGuides) {
+            guide.open = false
+          }
+      },
       onSameVideoGuidesDropdownTap() {
           if (this.intersectingGuides.length > 0) {
               return this.showSameVideoGuides = !this.showSameVideoGuides;
