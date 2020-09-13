@@ -30,20 +30,7 @@
                             class="hero-tag"
                             :descriptor="guide.descriptor"
                     />
-                    <div ref="badgeTagsWrap" class="badge-tags-wrap">
-                        <ThematicTagBadge
-                                v-for="thematicTag in guide.descriptor.thematicTags"
-                                ref="thematicTags"
-                                :tag="thematicTag"
-                                :key="thematicTag.dataName"
-                        />
-                        <ThematicTagBadge
-                                v-for="map in guide.descriptor.maps"
-                                ref="mapTags"
-                                :tag="map"
-                                :key="map.dataName"
-                        />
-                    </div>
+                    <TagBadges :descriptor="guide.descriptor"/>
                 </div>
                 <GuidePartText
                         v-if="typeof firstTextWidget !== 'undefined'"
@@ -86,6 +73,7 @@ import AspectRatioBox from "@/vue/AspectRatioBox";
 import GuidePartText from "@/vue/guides/GuidePartText";
 import GuideVso from "@/js/vso/GuideVso";
 import Guide from "@/vue/guides/Guide";
+import TagBadges from "@/vue/guides/TagBadges";
 
 const backend = new Backend(axios);
 
@@ -136,6 +124,7 @@ export default {
         }
     },
     components: {
+        TagBadges,
         GuidePartText,
         AspectRatioBox,
         Guide,
