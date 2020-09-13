@@ -68,46 +68,29 @@
 
 <script>
 import InfiniteLoading from 'vue-infinite-loading'
-import Backend from "@/js/Backend";
-import axios from 'axios';
 import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 import Guide from "@/vue/guides/Guide";
-import GuideVso from "@/js/vso/GuideVso";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 import Tag from "@/vue/guides/tags/hero/Tag";
 import TagBadges from "@/vue/guides/TagBadges";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import WeakPanel from "@/vue/guides/WeakPanel";
 import LoginRequirement from "@/vue/LoginRequirement";
+import InfiniteGuideSearchMixin
+    from "@/vue/guides/editor/InfiniteGuideSearchMixin";
 
-const backend = new Backend(axios);
 export default {
     mixins: [
         TagLinkMixin,
+        InfiniteGuideSearchMixin,
     ],
     model: {
         prop: 'descriptor',
         event: 'descriptorChange',
     },
-    props: {
-        descriptor: {
-            type: GuideDescriptorVso,
-            required: true
-        },
-    },
     methods: {
         async onSearch(newDescriptor) {
-            this.guides = [];
-            this.page = 0;
-            this.alreadyLoadedGuideIds = [];
-            if (this.$refs.infiniteLoading) {
-                this.$refs.infiniteLoading.stateChanger.reset();
-            }
             this.$emit('contentChange');
             this.$emit('descriptorChange', newDescriptor);
-        },
-        onDescriptorChange(newDescriptor) {
-            console.log('new desc')
         },
         onDeactivated(guideId) {
             const deactivated = this.guides.findIndex(g => g.guideId === guideId)
@@ -116,31 +99,6 @@ export default {
             }
             this.guides.splice(deactivated, 1)
         },
-        async infiniteHandler($state) {
-            await backend.searchGuidesPaginated({
-                playerHeroes: this.descriptor.players.heroes.map(it => it.id),
-                teammateHeroes: this.descriptor.teammates.heroes.map(it => it.id),
-                enemyHeroes: this.descriptor.enemies.heroes.map(it => it.id),
-                playerAbilities: this.descriptor.players.abilities.map(it => it.id),
-                teammateAbilities: this.descriptor.teammates.abilities.map(it => it.id),
-                enemyAbilities: this.descriptor.enemies.abilities.map(it => it.id),
-                mapTags: this.descriptor.maps.map(it => it.id),
-                thematicTags: this.descriptor.thematicTags.map(it => it.id),
-                pageNumber: this.pageNumber,
-                clientAlreadyHasGuideIds: this.alreadyLoadedGuideIds,
-            })
-                .then(page => {
-                    this.page = page.pageNumber;
-                    this.guides.push(...page.guides.map(guide => new GuideVso(guide)));
-                    this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideId))
-                    if (this.guides.length > 0) {
-                        $state.loaded()
-                    }
-                    if (page.hasNextPage === false) {
-                        $state.complete()
-                    }
-                })
-        }
     },
     watch: {
         descriptor(newValue) {
@@ -149,9 +107,6 @@ export default {
     },
     data() {
         return {
-            guides: [],
-            pageNumber: 0,
-            alreadyLoadedGuideIds: [],
             loginRequired: false,
         }
     },
