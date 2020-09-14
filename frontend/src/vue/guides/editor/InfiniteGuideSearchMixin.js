@@ -36,6 +36,7 @@ export default  {
                     if (page.hasNextPage === false) {
                         $state.complete()
                     }
+                    this.hasNextPage = page.hasNextPage
                 })
         },
         resetInfiniteLoading() {
@@ -45,6 +46,7 @@ export default  {
             if (this.$refs.infiniteLoading) {
                 this.$refs.infiniteLoading.stateChanger.reset();
             }
+            this.hasNextPage = null;
         },
     },
     data() {
@@ -52,6 +54,7 @@ export default  {
             guides: [],
             pageNumber: 0,
             alreadyLoadedGuideIds: [],
+            hasNextPage: null,
         };
     },
     watch: {
