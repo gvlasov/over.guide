@@ -3,11 +3,11 @@
         <slot/>
         <img
                 v-if="open"
-                src="/icons/arrow-up-white.svg"
+                src="/icons/arrow-down-white.svg"
         />
         <img
                 v-if="!open"
-                src="/icons/arrow-down-white.svg"
+                src="/icons/arrow-up-white.svg"
         />
     </OverwatchPanelButton>
 </template>
