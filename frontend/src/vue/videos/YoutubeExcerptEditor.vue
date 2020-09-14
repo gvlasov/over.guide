@@ -84,23 +84,14 @@
             </div>
             <div style="clear: both;"></div>
         </div>
-        <OverwatchPanelButton
+        <OverwatchDropdownButton
                 v-if="$asyncComputed.guidesWithSameVideo.success && intersectingGuides.length > 0"
-                type="default"
                 class="intersections"
                 v-bind:class="{'intersections-available': intersectingGuides.length > 0}"
                 v-hammer:tap="onSameVideoGuidesDropdownTap"
         >
             {{ intersectingGuides.length }} guides intersecting with your cut
-            <img
-                    v-if="showSameVideoGuides"
-                    src="/icons/arrow-up-white.svg"
-            />
-            <img
-                    v-if="!showSameVideoGuides"
-                    src="/icons/arrow-down-white.svg"
-            />
-        </OverwatchPanelButton>
+        </OverwatchDropdownButton>
         <div
                 v-if="showSameVideoGuides && intersectingGuides.length > 0"
                 class="same-video-guides"
@@ -133,6 +124,7 @@ import GuideVso from "@/js/vso/GuideVso";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import GuidePreviewBadge from "@/vue/guides/GuidePreviewBadge";
 import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
+import OverwatchDropdownButton from "@/vue/OverwatchDropdownButton";
 
 const backend = new Backend(axios);
 const intersectionThresholdSeconds = .3
@@ -388,6 +380,7 @@ export default {
             }
         },
         components: {
+            OverwatchDropdownButton,
             GuidePreviewBadge,
             TrainingGoal,
             VideoLoadingScreen,
@@ -510,31 +503,14 @@ export default {
     }
 
     .intersections {
-        @include overwatch-futura;
-        width: 100%;
         margin-bottom: 1em;
         margin-top: 1em;
-        font-weight: normal;
-        font-size: 1.3em;
+
         & ::v-deep .background {
-            background-color: transparent;
-        }
-        img {
-            height: 1em;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            right: 1em;
-        }
-        pointer-events: none;
-        img {
-            display: none;
-        }
-    }
-    .intersections-available {
-        & ::v-deep .background {
-            background-color: hsla(55, 80%, 50%, .6);
-            pointer-events: auto;
+
+            &:enabled {
+                background-color: hsla(55, 80%, 50%, .6);
+            }
         }
 
         img {
