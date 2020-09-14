@@ -86,6 +86,7 @@
         </div>
         <OverwatchDropdownButton
                 v-if="$asyncComputed.guidesWithSameVideo.success && intersectingGuides.length > 0"
+                :open="showSameVideoGuides"
                 class="intersections"
                 v-bind:class="{'intersections-available': intersectingGuides.length > 0}"
                 v-hammer:tap="onSameVideoGuidesDropdownTap"
