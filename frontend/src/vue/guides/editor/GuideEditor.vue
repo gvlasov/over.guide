@@ -38,7 +38,14 @@
                             class="descriptor-builder"
                             v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
                             @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
-                    />
+                    >
+                        <div class="similar-tag-guides-wrap">
+                            <SimilarTagGuides
+                                    v-if="!guide.descriptor.isEmpty"
+                                    :descriptor="guide.descriptor"
+                            />
+                        </div>
+                    </DescriptorBuilder>
                 </div>
                 <div
                         v-if="forceDescriptorSelection"
@@ -57,9 +64,7 @@
                     </OverwatchButton>
                 </div>
                 <div v-else>
-                    <GuideEditorPartsList
-                            :guide="guide"
-                    />
+                    <GuideEditorPartsList :guide="guide"/>
                     <div>
                         <OverwatchButton
                                 type="main"
@@ -116,6 +121,7 @@ import Authentication from "@/js/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import GuideEditorPartsList from "@/vue/guides/editor/GuideEditorPartsList";
 import ParamsDescriptorMixin from "@/js/ParamsDescriptorMixin";
+import SimilarTagGuides from "@/vue/guides/editor/SimilarTagGuides";
 
 const backend = new Backend(axios);
 
@@ -128,10 +134,8 @@ export default {
             handler: debounce(function (newValue) {
                 if (this.isNewGuide) {
                     if (newValue.isEmpty) {
-                        console.log('reset')
                         draft.reset();
                     } else {
-                        console.log('save')
                         draft.saveDraft(newValue);
                     }
                 }
@@ -254,6 +258,7 @@ export default {
         },
     },
     components: {
+        SimilarTagGuides,
         GuideEditorPartsList,
         LoginRequirement,
         ParameterDescriptorSynchronizer,
@@ -281,6 +286,22 @@ export default {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+
+        .similar-tag-guides-wrap {
+            flex-basis: 100%;
+            max-width: 100%;
+            flex-grow: 0;
+            flex-shrink: 0;
+            z-index: 1;
+            padding: 0 .4em;
+            box-sizing: border-box;
+            .similar-tag-guides {
+                max-width: 100%;
+                & ::v-deep button {
+                    border-radius: .2em;
+                }
+            }
+        }
 
         .guide-parts {
             display: flex;

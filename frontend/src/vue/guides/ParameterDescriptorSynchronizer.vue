@@ -50,15 +50,19 @@ export default {
                     if (!this.enabled){
                         return;
                     }
-                    const guideIdParam = this.$route.params.id
-                    let guideIdPart =
-                        (typeof guideIdParam !== 'undefined')
-                            ? guideIdParam + '/'
-                            : '';
+                    let guideIdPart;
+                    if (this.$route.params.hasOwnProperty('id')) {
+                        const guideIdParam = this.$route.params.id
+                        guideIdPart =
+                            ((typeof guideIdParam !== 'undefined')
+                                ? guideIdParam
+                                : 'new') + '/';
+                    } else {
+                        guideIdPart = '';
+                    }
                     const newPath = this.basePath
                         + guideIdPart
                         + new DescriptorParamUnparser().unparseDescriptor(this.descriptor);
-                    console.log(guideIdPart)
                     if (this.$router.currentRoute.path !== newPath) {
                         await this.$router.push(newPath)
                     }

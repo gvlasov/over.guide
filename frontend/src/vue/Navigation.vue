@@ -7,7 +7,7 @@
         ><div>Browse guides</div>
         </router-link>
         <router-link
-                to="/guide-editor"
+                to="/guide-editor/new"
                 v-bind:class="{active: currentRouteStartsWith('/guide-editor')}"
         ><div>Create guide</div>
         </router-link>

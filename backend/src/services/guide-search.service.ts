@@ -44,6 +44,8 @@ export class GuideSearchQuery implements GuideSearchQueryDto {
     @IsDefined({always: true})
     clientAlreadyHasGuideIds: number[];
 
+    exact: boolean
+
 }
 
 @Injectable()
@@ -91,10 +93,7 @@ export class GuideSearchService {
                     guideId: {
                         [Op.notIn]: query.clientAlreadyHasGuideIds
                     },
-                    descriptorId:
-                        (await this.guideDescriptorService
-                            .getIncluding(query))
-                            .map(descriptor => descriptor.id),
+                    descriptorId: await this.getDescriptorIds(query),
                 },
                 limit: GuideSearchService.pageSize + 1,
                 order: [['id', 'DESC']]
@@ -106,6 +105,25 @@ export class GuideSearchService {
             pageNumber: query.pageNumber + 1,
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         }
+    }
+
+    private async getDescriptorIds(query: GuideSearchQuery): Promise<number[]> {
+        let descriptors;
+        if (query.exact) {
+            descriptors = await this.guideDescriptorService.getExact(query).then(
+                descriptor => {
+                    if (descriptor === null) {
+                        return []
+                    } else {
+                        return [descriptor]
+                    }
+                }
+            );
+        } else {
+            descriptors = await this.guideDescriptorService.getIncluding(query)
+        }
+        return descriptors
+            .map(descriptor => descriptor.id);
     }
 
     async searchByCreator(creatorId: number, pageNumber: number): Promise<GuideSearchPageDto> {

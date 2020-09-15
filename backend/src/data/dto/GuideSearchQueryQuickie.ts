@@ -15,6 +15,7 @@ export default class GuideSearchQueryQuickie implements GuideSearchQueryDto {
     public thematicTags: GuideTheme[] = [];
     public pageNumber: number = 0;
     public clientAlreadyHasGuideIds: number[] = [];
+    public exact: boolean = false;
 
     constructor(
         dto: {
@@ -27,7 +28,8 @@ export default class GuideSearchQueryQuickie implements GuideSearchQueryDto {
             mapTags?: MapId[],
             thematicTags?: GuideTheme[],
             pageNumber?: number,
-            clientAlreadyHasGuideIds?: number[]
+            clientAlreadyHasGuideIds?: number[],
+            exact?: boolean
         }
     ) {
         this.playerHeroes = dto.playerHeroes || [];
@@ -40,6 +42,7 @@ export default class GuideSearchQueryQuickie implements GuideSearchQueryDto {
         this.thematicTags = dto.thematicTags || [];
         this.pageNumber = dto.pageNumber || 0;
         this.clientAlreadyHasGuideIds = dto.clientAlreadyHasGuideIds || [];
+        this.exact = dto.exact || false;
     }
 
 }

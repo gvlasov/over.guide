@@ -16,6 +16,7 @@
                 class="search-button"
         >Search
         </OverwatchButton>
+        <slot/>
     </div>
 </template>
 

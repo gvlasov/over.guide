@@ -25,6 +25,7 @@ export default  {
                 thematicTags: this.descriptor.thematicTags.map(it => it.id),
                 pageNumber: this.pageNumber,
                 clientAlreadyHasGuideIds: this.alreadyLoadedGuideIds,
+                exact: this.exact,
             })
                 .then(page => {
                     this.page = page.pageNumber;
@@ -55,6 +56,7 @@ export default  {
             pageNumber: 0,
             alreadyLoadedGuideIds: [],
             hasNextPage: null,
+            exact: false,
         };
     },
     watch: {

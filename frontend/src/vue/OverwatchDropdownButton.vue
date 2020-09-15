@@ -2,12 +2,12 @@
     <OverwatchPanelButton type="default">
         <slot/>
         <img
-                v-if="open"
-                src="/icons/arrow-down-white.svg"
+                v-if="open && $el && !$el.getAttribute('disabled')"
+                src="/icons/arrow-up-white.svg"
         />
         <img
-                v-if="!open"
-                src="/icons/arrow-up-white.svg"
+                v-if="!open && $el && !$el.getAttribute('disabled')"
+                src="/icons/arrow-down-white.svg"
         />
     </OverwatchPanelButton>
 </template>
@@ -56,7 +56,7 @@ export default {
     }
 
     & ::v-deep .background {
-        background-color: hsla(55, 80%, 50%, .6);
+        background-color: hsla(35, 100%, 50%, .7);
     }
 
 }

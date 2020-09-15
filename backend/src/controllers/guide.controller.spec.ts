@@ -959,6 +959,40 @@ describe(
                         expect(response.body).toHaveLength(0)
                     })
             })
+            it('searches for guides with exact descriptor', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
+                const user = await User.findOne();
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const wrongEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou1'}],
+                    descriptor: new Descriptor({
+                        playerHeroes: [HeroId.Ana, HeroId.Baptiste],
+                    }),
+                }, user) as GuideHistoryEntry
+                const correctEntry = await service.save({
+                    parts: [{kind: 'text', contentMd: 'hellou2'}],
+                    descriptor: new Descriptor({
+                        playerHeroes: [HeroId.Ana],
+                    }),
+                }, user) as GuideHistoryEntry
+                await request(ctx.app.getHttpServer())
+                    .post(`/guide/search`)
+                    .send(
+                        new GuideSearchQueryQuickie(
+                            {
+                                playerHeroes: [HeroId.Ana],
+                                exact: true,
+                            }
+                        )
+                    )
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.guides.length).toBe(1)
+                        expect(
+                            response.body.guides[0].guideId
+                        ).toBe(correctEntry.guideId)
+                    })
+            })
 
             afterAll(() => {
                 ctx.app.close()
