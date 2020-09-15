@@ -39,9 +39,11 @@
                             v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
                             @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
                     >
-                        <div class="similar-tag-guides-wrap">
+                        <div
+                                v-if="!guide.descriptor.isEmpty"
+                                class="similar-tag-guides-wrap"
+                        >
                             <SimilarTagGuides
-                                    v-if="!guide.descriptor.isEmpty"
                                     :descriptor="guide.descriptor"
                             />
                         </div>
