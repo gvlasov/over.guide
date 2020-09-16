@@ -53,11 +53,11 @@ export default {
         background-repeat: no-repeat;
         background-position: center center;
         &:hover .play-button {
-            background-color: hsla(0, 0, 20%, .6);
+            background-color: hsla(0, 0, 20%, .7);
         }
 
         .play-button {
-            background-color: hsla(0, 0, 20%, .8);
+            background-color: hsla(0, 0, 20%, .9);
             width: 1.5em;
             height: 1.5em;
             top: 50%;
