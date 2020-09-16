@@ -46,19 +46,12 @@
             <div class="text-guide-part" v-if="widget.part.kind === 'text'">
                 <GuidePartText :part="widget.part"/>
             </div>
-            <AspectRatioBox v-if="widget.part.kind === 'video'">
-                <VideoLoadingScreen/>
-                <YoutubeVideo
-                        :video-id="widget.part.excerpt.youtubeVideoId"
-                        :start="widget.part.excerpt.startSeconds"
-                        :end="widget.part.excerpt.endSeconds"
-                        :loop="true"
-                        :autoplay="false"
-                        :mute="true"
-                        :player-element-id="guide.guideId + '-' + index +'-'+ widget.part.excerpt.youtubeVideoId"
-                        class="video"
+            <GuideVideo
+                    :guide="guide"
+                    :part="widget.part"
+                    :index="index"
+                    :initial-show-preload="true"
                 />
-            </AspectRatioBox>
         </div>
         <OverwatchButton
                 v-if="canEdit && isStored"
@@ -94,6 +87,7 @@ import GuidePartText from "@/vue/guides/GuidePartText";
 import Authentication from "@/js/Authentication";
 import axios from 'axios'
 import Backend from "@/js/Backend";
+import GuideVideo from "@/vue/guides/GuideVideo";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -170,6 +164,7 @@ export default {
     mounted() {
     },
     components: {
+        GuideVideo,
         GuidePartText,
         TagBadges,
         VideoLoadingScreen,

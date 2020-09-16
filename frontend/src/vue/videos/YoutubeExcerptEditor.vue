@@ -1,7 +1,9 @@
 <template>
     <div class="wrap">
         <AspectRatioBox>
-            <VideoLoadingScreen/>
+            <VideoLoadingScreen
+                    :excerpt="null"
+            />
             <YoutubeVideo
                     :videoId="videoId"
                     :start="startSeconds"
