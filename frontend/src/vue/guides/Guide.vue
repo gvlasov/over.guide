@@ -47,11 +47,16 @@
                 <GuidePartText :part="widget.part"/>
             </div>
             <GuideVideo
+                    v-if="widget.part.kind === 'video'"
                     :guide="guide"
                     :part="widget.part"
                     :index="index"
                     :initial-show-preload="true"
-                />
+                    @comesIntoVision="(e) => $emit('comesIntoVision', e)"
+                    @comesOutOfVision="(e) => $emit('comesOutOfVision', e)"
+                    @play="(player) => $emit('play', player)"
+                    @playerReady="(player) => $emit('playerReady', player)"
+            />
         </div>
         <OverwatchButton
                 v-if="canEdit && isStored"

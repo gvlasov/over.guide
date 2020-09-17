@@ -1,21 +1,32 @@
 <template>
-        <AspectRatioBox v-if="part.kind === 'video'">
-            <VideoLoadingScreen
-                    :excerpt="part.excerpt"
-                    v-hammer:tap="() => showPreload = false"
-            />
-            <YoutubeVideo
-                    v-if="!showPreload"
-                    :video-id="part.excerpt.youtubeVideoId"
-                    :start="part.excerpt.startSeconds"
-                    :end="part.excerpt.endSeconds"
-                    :loop="true"
-                    :autoplay="true"
-                    :mute="false"
-                    :player-element-id="guide.guideId + '-' + index +'-'+ part.excerpt.youtubeVideoId"
-                    class="video"
-            />
-        </AspectRatioBox>
+    <AspectRatioBox
+            v-observe-visibility="{
+        callback: onVisibilityChanged,
+        intersection: {
+            rootMargin: '50px',
+            threshold: 1.0
+        }
+    }"
+    >
+        <VideoLoadingScreen
+                :excerpt="part.excerpt"
+                v-hammer:tap="() => showPreload = false"
+        />
+        <YoutubeVideo
+                v-if="!showPreload"
+                ref="video"
+                :video-id="part.excerpt.youtubeVideoId"
+                :start="part.excerpt.startSeconds"
+                :end="part.excerpt.endSeconds"
+                :loop="true"
+                :autoplay="true"
+                :mute="false"
+                :player-element-id="playerId"
+                @play="(player) => $emit('play', player)"
+                @playerReady="(player) => $emit('playerReady', player)"
+                class="video"
+        />
+    </AspectRatioBox>
 </template>
 
 <script>
@@ -44,14 +55,50 @@ export default {
         }
     },
     methods: {
-
+        onVisibilityChanged(isVisible, entry) {
+            if(isVisible) {
+                this.$emit('comesIntoVision', this.autoplayVideoHandle)
+            } else {
+                this.$emit('comesOutOfVision', this.autoplayVideoHandle)
+            }
+        },
     },
     data() {
         return {
             showPreload: this.initialShowPreload,
+            autoplayVideoHandle: {
+                playerId() {
+                    return this.playerId;
+                },
+                boundingClientRect: () => {
+                    return this.$el.getBoundingClientRect()
+                },
+                play: () => {
+                    if (this.showPreload) {
+                        this.showPreload = false;
+                    } else {
+                        this.$refs.video.player.playVideo()
+                    }
+                },
+                pause: () => {
+                    if (
+                        !this.showPreload
+                        && typeof this.$refs.video.player !== 'undefined'
+                    ) {
+                        try {
+                            this.$refs.video.player.pauseVideo()
+                        } catch(e) {
+                            console.log(this.$refs.video.player)
+                        }
+                    }
+                },
+            },
         }
     },
     computed: {
+        playerId() {
+            return this.guide.guideId + '-' + this.index +'-'+ this.part.excerpt.youtubeVideoId
+        },
     },
     components: {
         VideoLoadingScreen,

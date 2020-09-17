@@ -115,10 +115,10 @@
                                             self.player.pauseVideo();
                                         }
                                         self.rescheduleLooping();
-                                        self.$emit('play');
+                                        self.$emit('play', self.player);
                                     } else if (event.data === YT.PlayerState.PAUSED) {
                                         self.tryClearingLoopTimeout();
-                                        self.$emit('pause');
+                                        self.$emit('pause', self.player);
                                     }
                                 }
                             }

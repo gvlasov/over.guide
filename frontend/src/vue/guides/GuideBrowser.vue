@@ -21,6 +21,10 @@
                     :search-descriptor="descriptor"
                     @loginRequired="() => {loginRequired = true}"
                     @guideDeactivated="onDeactivated"
+                    @comesIntoVision="onComesIntoVision"
+                    @comesOutOfVision="onComesOutOfVision"
+                    @play="(player) => pauseOther(player)"
+                    @playerReady="(player) => players.push(player)"
             />
         </div>
         <InfiniteLoading
@@ -77,7 +81,10 @@ import WeakPanel from "@/vue/guides/WeakPanel";
 import LoginRequirement from "@/vue/LoginRequirement";
 import InfiniteGuideSearchMixin
     from "@/vue/guides/editor/InfiniteGuideSearchMixin";
+import ViewportPositionY from "@/js/ViewportPositionY";
+import minBy from 'lodash.minby'
 
+const playingZonePaddingPx = 50;
 export default {
     mixins: [
         TagLinkMixin,
@@ -91,6 +98,8 @@ export default {
         async onSearch(newDescriptor) {
             this.$emit('contentChange');
             this.$emit('descriptorChange', newDescriptor);
+            this.visibleVideos.slice(0, this.visibleVideos.length)
+            this.players.slice(0, this.players.length)
         },
         onDeactivated(guideId) {
             const deactivated = this.guides.findIndex(g => g.guideId === guideId)
@@ -98,6 +107,62 @@ export default {
                 throw new Error('Unknown guide deactivated')
             }
             this.guides.splice(deactivated, 1)
+        },
+        updatePlayingVideoIfNecessary() {
+            if (
+                this.currentlyPlayingVideo !== null
+                && !this.visibleVideos.includes(this.currentlyPlayingVideo)
+            ) {
+                this.currentlyPlayingVideo.pause()
+                this.currentlyPlayingVideo = null;
+            }
+            const videoThatMustBePlaying = minBy(
+                this.visibleVideos,
+                (video) => {
+                    return Math.abs(
+                        ViewportPositionY.center - (video.boundingClientRect().y - video.boundingClientRect().height / 2 + window.scrollY)
+                    );
+                }
+            )
+            if (
+                typeof videoThatMustBePlaying === 'undefined'
+                || videoThatMustBePlaying === this.currentlyPlayingVideo
+            ) {
+                return;
+            }
+            if (
+                this.currentlyPlayingVideo !== null
+                && videoThatMustBePlaying !== this.currentlyPlayingVideo
+            ) {
+                this.currentlyPlayingVideo.pause()
+                this.currentlyPlayingVideo = null;
+            }
+            this.currentlyPlayingVideo = videoThatMustBePlaying
+            videoThatMustBePlaying.play()
+        },
+        onComesIntoVision(video) {
+            this.visibleVideos.push(video)
+        },
+        onComesOutOfVision(video) {
+            const index = this.visibleVideos.findIndex(it => it.playerId === video.playerId)
+            if (index > -1) {
+                this.visibleVideos.splice(index, 1)
+            }
+        },
+        pauseOther(player) {
+            for (let otherPlayer of this.players) {
+                if (player !== otherPlayer) {
+                    otherPlayer.pauseVideo();
+                }
+            }
+        },
+    },
+    computed: {
+        viewportPositionY() {
+            return {
+                y: ViewportPositionY.y,
+                height: ViewportPositionY.height,
+            };
         },
     },
     watch: {
@@ -108,7 +173,19 @@ export default {
     data() {
         return {
             loginRequired: false,
+            visibleVideos: [],
+            bodyRect: document.body.getBoundingClientRect(),
+            currentlyPlayingVideo: null,
+            players: [],
         }
+    },
+    mounted() {
+        window.addEventListener('scroll', this.updatePlayingVideoIfNecessary)
+        window.addEventListener('resize', this.updatePlayingVideoIfNecessary)
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.updatePlayingVideoIfNecessary)
+        window.removeEventListener('resize', this.updatePlayingVideoIfNecessary)
     },
     components: {
         LoginRequirement,
