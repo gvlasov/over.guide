@@ -110,7 +110,6 @@ export default {
             this.guides.splice(deactivated, 1)
         },
         updatePlayingVideoIfNecessary() {
-            console.log(1)
             if (
                 this.currentlyPlayingVideo !== null
                 && !this.visibleVideos.includes(this.currentlyPlayingVideo)

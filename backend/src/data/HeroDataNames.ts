@@ -1,4 +1,4 @@
-const enum HeroDataNames {
+enum HeroDataNames {
     Ana = 'ana',
     Ashe = 'ashe',
     Baptiste = 'baptiste',

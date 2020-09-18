@@ -1,4 +1,4 @@
-const enum HeroId {
+enum HeroId {
     Ana = 1,
     Ashe = 2,
     Baptiste = 3,
