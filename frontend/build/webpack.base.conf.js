@@ -34,7 +34,11 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          appendTsSuffixTo: [/\.vue$/]
+        },
         exclude: /node_modules/,
       },
       {
