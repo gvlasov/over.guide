@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         onVisibilityChanged(isVisible, entry) {
-            if(isVisible) {
+            if (isVisible) {
                 this.$emit('comesIntoVision', this.autoplayVideoHandle)
             } else {
                 this.$emit('comesOutOfVision', this.autoplayVideoHandle)
@@ -76,14 +76,20 @@ export default {
                 play: () => {
                     if (this.showPreload) {
                         this.showPreload = false;
-                    } else {
+                    } else if (
+                        typeof this.$refs.video !== 'undefined'
+                        && typeof this.$refs.video.player !== 'undefined'
+                    ) {
+
                         this.$refs.video.player.playVideo()
                     }
                 },
                 pause: () => {
                     if (
                         !this.showPreload
+                        && typeof this.$refs.video !== 'undefined'
                         && typeof this.$refs.video.player !== 'undefined'
+                        && typeof this.$refs.video.player.pauseVideo !== 'undefined'
                     ) {
                         this.$refs.video.player.pauseVideo()
                     }
@@ -93,7 +99,7 @@ export default {
     },
     computed: {
         playerId() {
-            return this.guide.guideId + '-' + this.index +'-'+ this.part.excerpt.youtubeVideoId
+            return this.guide.guideId + '-' + this.index + '-' + this.part.excerpt.youtubeVideoId
         },
     },
     components: {

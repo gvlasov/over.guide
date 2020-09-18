@@ -83,6 +83,7 @@ import InfiniteGuideSearchMixin
     from "@/vue/guides/editor/InfiniteGuideSearchMixin";
 import ViewportPositionY from "@/js/ViewportPositionY";
 import minBy from 'lodash.minby'
+import {debounce} from "lodash/function";
 
 const playingZonePaddingPx = 50;
 export default {
@@ -109,6 +110,7 @@ export default {
             this.guides.splice(deactivated, 1)
         },
         updatePlayingVideoIfNecessary() {
+            console.log(1)
             if (
                 this.currentlyPlayingVideo !== null
                 && !this.visibleVideos.includes(this.currentlyPlayingVideo)
@@ -164,6 +166,11 @@ export default {
                 height: ViewportPositionY.height,
             };
         },
+        updatePlayingVideoIfNecessary_debounced() {
+            return debounce(() => {
+                this.updatePlayingVideoIfNecessary()
+            }, 100)
+        },
     },
     watch: {
         descriptor(newValue) {
@@ -180,12 +187,12 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('scroll', this.updatePlayingVideoIfNecessary)
-        window.addEventListener('resize', this.updatePlayingVideoIfNecessary)
+        window.addEventListener('scroll', this.updatePlayingVideoIfNecessary_debounced)
+        window.addEventListener('resize', this.updatePlayingVideoIfNecessary_debounced)
     },
     destroyed() {
-        window.removeEventListener('scroll', this.updatePlayingVideoIfNecessary)
-        window.removeEventListener('resize', this.updatePlayingVideoIfNecessary)
+        window.removeEventListener('scroll', this.updatePlayingVideoIfNecessary_debounced)
+        window.removeEventListener('resize', this.updatePlayingVideoIfNecessary_debounced)
     },
     components: {
         LoginRequirement,
