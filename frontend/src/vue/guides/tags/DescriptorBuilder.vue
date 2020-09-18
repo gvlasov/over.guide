@@ -44,7 +44,6 @@ export default {
         computed: {},
         methods: {
             onIndividualTagChange() {
-                console.log('ind t c')
                 this.$emit('descriptorChange', this.descriptor)
             },
             onSearch() {

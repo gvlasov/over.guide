@@ -157,7 +157,6 @@ export default {
                 if (this.guidesWithSameVideo === null) {
                     return []
                 }
-                console.log('compute')
                 return this.guidesWithSameVideo
                     .filter(
                         guide => guide.parts.filter(

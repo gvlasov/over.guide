@@ -85,11 +85,7 @@ export default {
                         !this.showPreload
                         && typeof this.$refs.video.player !== 'undefined'
                     ) {
-                        try {
-                            this.$refs.video.player.pauseVideo()
-                        } catch(e) {
-                            console.log(this.$refs.video.player)
-                        }
+                        this.$refs.video.player.pauseVideo()
                     }
                 },
             },
