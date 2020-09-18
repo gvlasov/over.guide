@@ -1,4 +1,4 @@
-const enum AbilityId {
+enum AbilityId {
     BioticRifle = 1,
     BioticRifleScoped = 2,
     SleepDart = 3,
