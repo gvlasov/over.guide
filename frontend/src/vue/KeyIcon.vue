@@ -2,21 +2,20 @@
     <div class="keycap">{{keyVso.name}}</div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-    export default {
-        name: 'KeyIcon',
-        props: {
-            'keyVso': {
-                type: Object,
-                required: true,
-            },
+@Component({
+    props: {
+        'keyVso': {
+            type: Object,
+            required: true,
         },
-        methods: {},
-        data() {
-            return {}
-        },
-    };
+    }
+})
+export default class KeyIcon extends Vue {
+};
 
 </script>
 
