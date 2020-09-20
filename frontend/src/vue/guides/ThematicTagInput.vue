@@ -1,13 +1,13 @@
 <template>
     <tags-input
-            :typeahead="true"
+            class="thematic-tag-input"
             :existing-tags="existingTags"
+            v-model="descriptor.individualTags"
+            :placeholder="placeholder"
+            :typeahead="true"
             :typeahead-hide-discard="true"
             :only-existing-tags="true"
             :typeahead-activation-threshold="0"
-            :placeholder="placeholder"
-            class="root"
-            v-model="descriptor.individualTags"
             :sort-search-results="false"
             :case-sensitive-tags="false"
     >
@@ -20,87 +20,82 @@
     </tags-input>
 </template>
 
-<script>
+<script lang="ts">
 import VoerroTagsInput from '@voerro/vue-tagsinput';
-import Tag from "@/vue/guides/tags/hero/Tag";
 import SeededShuffler from "data/generators/SeededShuffler";
-import GuideTheme from "data/GuideTheme";
-import ThematicTagVso from "@/js/vso/ThematicTagVso";
-import MapTagVso from "@/js/vso/MapTagVso";
-import thematicTags from "data/thematicTags";
+import ThematicTagVso from "@/ts/vso/ThematicTagVso";
+import MapTagVso from "@/ts/vso/MapTagVso";
 import maps from 'data/maps'
+import thematicTags from 'data/thematicTags'
 import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-        name: "ThematicTagInput",
-        props: {
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true,
-            }
-        },
-        data() {
-            return {
-                existingTags: this.getExistingTags(),
-            };
-        },
-        computed: {
-            /**
-             * @return {string}
-             */
-            placeholder() {
-                if (
-                    this.descriptor.individualTags.length === 0
-                ) {
-                    const shuffler = new SeededShuffler(new Date().toLocaleString());
-                    return shuffler
+import 'reflect-metadata'
+import IndividualTagVso from "../../js/vso/IndividualTagVso";
+
+@Component({
+    components: {
+        'tags-input': VoerroTagsInput,
+        ThematicTagBadge,
+    }
+})
+export default class ThematicTagInput extends Vue {
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
+
+    existingTags: IndividualTagVso[] = this.getExistingTags()
+
+
+    get placeholder(): string {
+        if (
+            this.descriptor.individualTags.length === 0
+        ) {
+            const shuffler = new SeededShuffler(new Date().getTime());
+            return shuffler
+                .shuffle(
+                    Array.from(thematicTags.values())
+                        .map(it => it.name)
+                )
+                .slice(0, 3)
+                .concat(
+                    shuffler
                         .shuffle(
-                            Object.values(GuideTheme)
-                                .filter(it => typeof it !== 'number')
+                            Array.from(maps.values())
                         )
                         .slice(0, 3)
-                        .concat(
-                            shuffler
-                                .shuffle(
-                                    Array.from(maps.values())
-                                )
-                                .slice(0, 3)
-                                .map(map => map.name)
-                        )
-                        .join(', ') + '...';
-                } else {
-                    return '';
-                }
-            },
-        },
-        methods: {
-            getExistingTags() {
-                return (
-                    Array.from(thematicTags.values())
-                        .map(theme => new ThematicTagVso(theme))
-                        .concat(
-                            Array.from(maps.values())
-                                .map(map => new MapTagVso(map))
-                        )
+                        .map(map => map.name)
                 )
-            },
-        },
-        components: {
-            Tag,
-            'tags-input': VoerroTagsInput,
-            ThematicTagBadge,
+                .join(', ') + '...';
+        } else {
+            return '';
         }
     }
+
+    getExistingTags(): IndividualTagVso[] {
+        return (
+            Array.from(thematicTags.values())
+                .map(theme => new ThematicTagVso(theme))
+                .concat(
+                    Array.from(maps.values())
+                        .map(map => new MapTagVso(map))
+                )
+        )
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/fonts.scss";
-    @import "~@voerro/vue-tagsinput/dist/style.css";
-    @import "~@/assets/css/tags.scss";
-    @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/fonts.scss";
+@import "~@voerro/vue-tagsinput/dist/style.css";
+@import "~@/assets/css/tags.scss";
+@import "~@/assets/css/overwatch-ui.scss";
 
-    .root ::v-deep .tags-input-badge {
+.thematic-tag-input {
+
+    & ::v-deep .tags-input-badge {
         padding: 0;
         margin: 0;
         font-size: 1.3em;
@@ -109,27 +104,19 @@ export default {
         line-height: 1em;
         cursor: pointer;
         font-weight: normal;
-    }
 
-    .root ::v-deep .tags-input {
-        & > .tags-input-badge:hover {
-            opacity: .3;
+        & ::v-deep .tags-input {
+            & > .tags-input-badge:hover {
+                opacity: .3;
+            }
+
+            span {
+                margin: 0;
+            }
         }
-
-        span {
-            margin: 0;
-        }
     }
 
-    ::v-deep .theme > *, ::v-deep .typeahead-badges .theme {
-        @include tag-bg-theme;
-    }
-
-    ::v-deep .map > *, ::v-deep .typeahead-badges .map {
-        @include tag-bg-map;
-    }
-
-    .root ::v-deep .typeahead-badges {
+    & ::v-deep .typeahead-badges {
         display: flex;
         gap: .2em;
         flex-wrap: wrap;
@@ -152,8 +139,8 @@ export default {
         overscroll-behavior: none contain;
     }
 
-    .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
-    .root ::v-deep .typeahead-badges > .tags-input-typeahead-item-highlighted-default {
+    & ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
+    & ::v-deep .typeahead-badges > .tags-input-typeahead-item-highlighted-default {
         font-size: 1.5em;
         padding: .18em .3em .3em .3em;
         border-radius: .2em;
@@ -163,7 +150,7 @@ export default {
         box-shadow: 0 0 .06em #111;
     }
 
-    .root ::v-deep .tags-input-wrapper-default {
+    & ::v-deep .tags-input-wrapper-default {
         display: flex;
         justify-content: flex-start;
         box-sizing: border-box;
@@ -183,14 +170,21 @@ export default {
         }
     }
 
-    .root ::v-deep .tags-input input[type=text] {
+    & ::v-deep .tags-input input[type=text] {
         display: inline-block;
         width: 2em;
         padding-right: .5em;
         height: 2em;
     }
+}
 
-    .root {
-    }
+
+::v-deep .theme > *, ::v-deep .typeahead-badges .theme {
+    @include tag-bg-theme;
+}
+
+::v-deep .map > *, ::v-deep .typeahead-badges .map {
+    @include tag-bg-map;
+}
 
 </style>

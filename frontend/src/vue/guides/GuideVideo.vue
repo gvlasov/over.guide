@@ -7,6 +7,7 @@
             threshold: 1.0
         }
     }"
+            ref="root"
     >
         <VideoLoadingScreen
                 :excerpt="part.excerpt"
@@ -29,85 +30,95 @@
     </AspectRatioBox>
 </template>
 
-<script>
+<script lang="ts">
 import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
-import GuideVso from "@/js/vso/GuideVso";
+import GuideVso from "@/ts/vso/GuideVso";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
+import Vue from 'vue'
+import {Prop, Ref} from "vue-property-decorator";
+import Component from "vue-class-component";
+import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 
-export default {
-    props: {
-        guide: {
-            type: GuideVso,
-            required: true
-        },
-        part: {
-            type: Object,
-            required: true,
-        },
-        index: {
-            type: Number,
-            required: true,
-        },
-        initialShowPreload: {
-            type: Boolean,
-            required: true,
-        }
-    },
-    methods: {
-        onVisibilityChanged(isVisible, entry) {
-            if (isVisible) {
-                this.$emit('comesIntoVision', this.autoplayVideoHandle)
-            } else {
-                this.$emit('comesOutOfVision', this.autoplayVideoHandle)
-            }
-        },
-    },
-    data() {
-        return {
-            showPreload: this.initialShowPreload,
-            autoplayVideoHandle: {
-                playerId() {
-                    return this.playerId;
-                },
-                boundingClientRect: () => {
-                    return this.$el.getBoundingClientRect()
-                },
-                play: () => {
-                    if (this.showPreload) {
-                        this.showPreload = false;
-                    } else if (
-                        typeof this.$refs.video !== 'undefined'
-                        && typeof this.$refs.video.player !== 'undefined'
-                    ) {
-
-                        this.$refs.video.player.playVideo()
-                    }
-                },
-                pause: () => {
-                    if (
-                        !this.showPreload
-                        && typeof this.$refs.video !== 'undefined'
-                        && typeof this.$refs.video.player !== 'undefined'
-                        && typeof this.$refs.video.player.pauseVideo !== 'undefined'
-                    ) {
-                        this.$refs.video.player.pauseVideo()
-                    }
-                },
-            },
-        }
-    },
-    computed: {
-        playerId() {
-            return this.guide.guideId + '-' + this.index + '-' + this.part.excerpt.youtubeVideoId
-        },
-    },
+@Component({
     components: {
         VideoLoadingScreen,
         AspectRatioBox,
         YoutubeVideo,
     },
-};
+})
+export default class GuideVideo extends Vue {
+    @Ref('video')
+    readonly video: YoutubeVideo
+
+    @Ref('root')
+    readonly root: HTMLElement
+
+    @Prop({required: true})
+    guide: GuideVso
+
+    @Prop({required: true})
+    part: GuidePartVideoDto
+
+    @Prop({required: true})
+    index: number
+
+    @Prop({required: true})
+    initialShowPreload: boolean
+
+    showPreload: boolean = true
+
+    declare $refs!: {
+        root: HTMLElement
+    }
+
+    autoplayVideoHandle: Object
+
+    created() {
+        this.autoplayVideoHandle = {
+            playerId() {
+                return this.playerId;
+            },
+            boundingClientRect: () => {
+                return this.$el.getBoundingClientRect()
+            },
+            play: () => {
+                if (this.showPreload) {
+                    this.showPreload = false;
+                } else if (
+                    this.video !== void 0
+                    && this.video.player !== void 0
+                ) {
+
+                    this.video.player.playVideo()
+                }
+            },
+            pause: () => {
+                if (
+                    !this.showPreload
+                    && this.video !== void 0
+                    && this.video.player !== void 0
+                    && this.video.player.pauseVideo !== void 0
+                ) {
+                    this.video.player.pauseVideo()
+                }
+            },
+        }
+    }
+
+
+    get playerId() {
+        return this.guide.guideId + '-' + this.index + '-' + this.part.excerpt.youtubeVideoId
+    }
+
+    onVisibilityChanged(isVisible, entry) {
+        if (isVisible) {
+            this.$emit('comesIntoVision', this.autoplayVideoHandle)
+        } else {
+            this.$emit('comesOutOfVision', this.autoplayVideoHandle)
+        }
+    }
+}
 
 </script>
 

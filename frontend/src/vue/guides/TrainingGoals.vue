@@ -20,7 +20,8 @@
             <WeakPanel
                     class="no-guides-notice"
             >
-                <router-link to="/search">Discover guides</router-link> and add those you plan to master to your training goals
+                <router-link to="/search">Discover guides</router-link>
+                and add those you plan to master to your training goals
             </WeakPanel>
         </div>
         <template v-else>
@@ -39,135 +40,145 @@
     </div>
 </template>
 
-<script>
-import Backend from "@/js/Backend";
+<script lang="ts">
+import Backend from "@/ts/Backend";
 import axios from 'axios';
 import Guide from "@/vue/guides/Guide";
-import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
-import GuideVso from "@/js/vso/GuideVso";
-import TrainingGoalWidget from "@/js/vso/TrainingGoalWidget";
+import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
+import GuideVso from "@/ts/vso/GuideVso";
+import TrainingGoalWidget from "@/ts/vso/TrainingGoalWidget";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import draggable from 'vuedraggable';
 import WeakPanel from "@/vue/guides/WeakPanel";
-import Authentication from "@/js/Authentication";
+import Authentication from "@/ts/Authentication";
 import LoginRequirement from "@/vue/LoginRequirement";
 import TestingGround from "@/vue/TestingGround";
+import Vue from 'vue'
+import {Watch} from "vue-property-decorator";
+import Component from "vue-class-component";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
-    export default {
-        props: {},
-        methods: {
-            onRemoveUndo(guideId) {
-                const guideIds = this.trainingGoals
-                    .filter(it => !it.deleted)
-                    .map(it => it.guide.guideId);
-                MyTrainingGoalsCache.instance()
-                    .addAndReorder(guideId, guideIds)
-            },
-            openOnly(goal) {
-                this.closeAll()
-                goal.open = true;
-            },
-            closeAll() {
-                this.trainingGoals.forEach(g => {g.open = false})
-            }
-        },
-        data() {
-            return {
-                trainingGoals: [],
-                cache: MyTrainingGoalsCache.instance(),
-                deliveredCount: 0,
-                authenticated: auth.authenticated,
-                draggable: true,
-            };
-        },
-        computed: {
-            synchronizing() {
-                return auth.authenticated && this.cache.pendingGoalIds.length > 0;
-            },
-            isAnyOpen() {
-                return !!this.trainingGoals.find(g => g.open);
-            }
-        },
-        async mounted() {
-            this.trainingGoals =
-                await this.cache.deliverPending(() => {
-                    this.deliveredCount++;
-                })
-                    .then(() =>
-                        MyTrainingGoalsCache.instance()
-                            .loadGoals()
-                            .then(goals =>
-                                goals.map(dto =>
-                                    new TrainingGoalWidget(
-                                        new GuideVso(dto.guide),
-                                        dto.order,
-                                        false
-                                    )
+@Component({
+    components: {
+        TestingGround,
+        LoginRequirement,
+        TrainingGoal,
+        Guide,
+        draggable,
+        WeakPanel,
+    },
+})
+export default class TrainingGoals extends Vue {
+
+    trainingGoals: TrainingGoalWidget[] = []
+    cache: MyTrainingGoalsCache = MyTrainingGoalsCache.instance()
+    deliveredCount: number = 0
+    authenticated: boolean = auth.authenticated
+    draggable: boolean = true
+
+    onRemoveUndo(guideId) {
+        const guideIds = this.trainingGoals
+            .filter(it => !it.deleted)
+            .map(it => it.guide.guideId);
+        MyTrainingGoalsCache.instance()
+            .addAndReorder(guideId, guideIds)
+    }
+
+    openOnly(goal) {
+        this.closeAll()
+        goal.open = true;
+    }
+
+    closeAll() {
+        this.trainingGoals.forEach(g => {
+            g.open = false
+        })
+    }
+
+    get synchronizing(): boolean {
+        return auth.authenticated && this.cache.pendingGoalIds.length > 0;
+    }
+
+    get isAnyOpen(): boolean {
+        return !!this.trainingGoals.find(g => g.open);
+    }
+
+    async created() {
+        this.trainingGoals =
+            await this.cache.deliverPending(() => {
+                this.deliveredCount++;
+            })
+                .then(() =>
+                    MyTrainingGoalsCache.instance()
+                        .loadGoals()
+                        .then(goals =>
+                            goals.map(dto =>
+                                new TrainingGoalWidget(
+                                    new GuideVso(dto.guide),
+                                    dto.order,
+                                    false
                                 )
                             )
-                    )
-        },
-        watch: {
-            trainingGoals(newValue, oldValue) {
-                const newGuideIds = newValue
-                    .filter(it => !it.deleted)
-                    .map(it => it.guide.guideId);
-                const oldGuideIds = oldValue
-                    .filter(it => !it.deleted)
-                    .map(it => it.guide.guideId);
-                for (let index in this.trainingGoals) {
-                    this.trainingGoals[index].order = this.trainingGoals.length - index - 1;
-                }
-                if (
-                    newGuideIds.toString() !== oldGuideIds.toString()
-                ) {
-                    MyTrainingGoalsCache.instance().saveGoalsOrder(newGuideIds)
-                }
-            },
-        },
-        components: {
-            TestingGround,
-            LoginRequirement,
-            TrainingGoal,
-            Guide,
-            draggable,
-            WeakPanel,
-        },
-    };
+                        )
+                )
+    }
+
+    @Watch('trainingGoals')
+    onTrainingGoalsChange(
+        newValue: TrainingGoalWidget[],
+        oldValue: TrainingGoalWidget[]
+    ) {
+        const newGuideIds = newValue
+            .filter(it => !it.deleted)
+            .map(it => it.guide.guideId);
+        const oldGuideIds = oldValue
+            .filter(it => !it.deleted)
+            .map(it => it.guide.guideId);
+        for (let index in this.trainingGoals) {
+            this.trainingGoals[index].order = this.trainingGoals.length - index - 1;
+        }
+        if (
+            newGuideIds.toString() !== oldGuideIds.toString()
+        ) {
+            MyTrainingGoalsCache.instance().saveGoalsOrder(newGuideIds)
+        }
+    }
+};
 
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/overwatch-ui.scss';
-    @import '~@/assets/css/common.scss';
+@import '~@/assets/css/overwatch-ui.scss';
+@import '~@/assets/css/common.scss';
 
-    .no-guides-notice {
-        @include overwatch-futura;
+.no-guides-notice {
+    @include overwatch-futura;
+}
+
+.training-goals {
+
+    .draggable {
+        display: inline-flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1em;
     }
 
-    .training-goals {
-
-        .draggable {
-            display: inline-flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            justify-content: center;
-            gap: 1em;
-        }
-        .sortable-ghost {
-            visibility: hidden;
-        }
-
-        & .training-goal {
-            flex-basis: 100%;
-        }
-
-        padding-bottom: 10em;
+    .sortable-ghost {
+        visibility: hidden;
     }
-    .synchronization {
-        font-family: BigNoodleTooOblique, sans-serif;
-        font-size: 4em;
+
+    & .training-goal {
+        flex-basis: 100%;
     }
+
+    padding-bottom: 10em;
+}
+
+.synchronization {
+    font-family: BigNoodleTooOblique, sans-serif;
+    font-size: 4em;
+}
 </style>

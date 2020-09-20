@@ -3,7 +3,7 @@
         <transition name="new-buttons-appear">
             <GuidePartSpawner
                     v-if="!beginningSpawnerHidden"
-                    where="beginning"
+                    :where="ListPosition.Beginning"
                     :initial-seeding="guide.parts.length === 0"
                     @addVideo="createNewVideoPart"
                     @addText="createNewTextPart"
@@ -27,7 +27,7 @@
         <transition name="new-buttons-appear">
             <GuidePartSpawner
                     v-if="endSpawnerEnabled"
-                    where="end"
+                    :where="ListPosition.Beginning"
                     :initial-seeding="false"
                     @addVideo="createNewVideoPart"
                     @addText="createNewTextPart"
@@ -36,83 +36,83 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import GuidePart from "@/vue/guides/GuidePart";
 import GuidePartSpawner from "@/vue/guides/editor/GuidePartSpawner";
-import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
-import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
-import GuideVso from "@/js/vso/GuideVso";
+import GuidePartTextWidget from "@/ts/vso/GuidePartTextWidget";
+import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
+import GuideVso from "@/ts/vso/GuideVso";
+import Vue from 'vue'
+import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
+import ListPosition from "@/ts/ListPosition";
 
-export default {
-    props: {
-        guide: {
-            type: GuideVso,
-            required: true,
-        },
-    },
-    methods: {
-        beforeEnter() {
-            this.beginningSpawnerHidden = false;
-            this.endSpawnerHidden = false
-        },
-        createNewTextPart(where) {
-            this.spawnPart(
-                () => new GuidePartTextWidget(
-                    {
-                        kind: 'text',
-                        contentMd: ''
-                    },
-                    true
-                ),
-                where
-            );
-        },
-        createNewVideoPart(where) {
-            this.spawnPart(
-                () =>
-                    new GuidePartVideoWidget(
-                        {
-                            kind: 'video',
-                            excerpt: null,
-                        },
-                        true
-                    ),
-                where
-            );
-        },
-        spawnPart(how, where) {
-            this[where + 'SpawnerHidden'] = true;
-            const widget = how();
-            this.enterToClass = (widget.part.kind === 'text')
-                ? 'appear-enter-to-text'
-                : 'appear-enter-to-video';
-            this.$nextTick(() => {
-                (
-                    (where === 'beginning')
-                        ? this.guide.parts.unshift
-                        : this.guide.parts.push
-                )
-                    .apply(this.guide.parts, [widget]);
-            })
-        },
-    },
-    data() {
-        return {
-            beginningSpawnerHidden: false,
-            endSpawnerHidden: false,
-            enterToClass: undefined,
-        }
-    },
-    computed: {
-        endSpawnerEnabled() {
-            return this.guide.parts.length > 0 && !this.endSpawnerHidden;
-        }
-    },
+@Component({
     components: {
         GuidePartSpawner,
         GuidePart,
     },
-};
+})
+export default class GuideEditorPartsList extends Vue {
+    ListPosition = ListPosition
+
+    @Prop({required: true})
+    guide: GuideVso
+
+    beginningSpawnerHidden: boolean = false
+    endSpawnerHidden: boolean = false
+    enterToClass: string = ''
+
+    beforeEnter() {
+        this.beginningSpawnerHidden = false;
+        this.endSpawnerHidden = false
+    }
+
+    createNewTextPart(where: ListPosition) {
+        this.spawnPart(
+            () => new GuidePartTextWidget(
+                {
+                    kind: 'text',
+                    contentMd: ''
+                },
+                true
+            ),
+            where
+        );
+    }
+
+    createNewVideoPart(where) {
+        this.spawnPart(
+            () =>
+                new GuidePartVideoWidget(
+                    {
+                        kind: 'video',
+                        excerpt: null,
+                    },
+                    true
+                ),
+            where
+        );
+    }
+
+    spawnPart(how: () => GuidePartTextWidget | GuidePartVideoWidget, where: ListPosition) {
+        this[`${where}SpawnerHidden`] = true;
+        const widget = how();
+        this.enterToClass = (widget.part.kind === 'text')
+            ? 'appear-enter-to-text'
+            : 'appear-enter-to-video';
+        (
+            (where === ListPosition.Beginning)
+                ? this.guide.parts.unshift
+                : this.guide.parts.push
+        )
+            .apply(this.guide.parts, [widget]);
+    }
+
+    get endSpawnerEnabled(): boolean {
+        return this.guide.parts.length > 0 && !this.endSpawnerHidden;
+    }
+}
 
 </script>
 

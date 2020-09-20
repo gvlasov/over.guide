@@ -1,9 +1,9 @@
 <template>
     <div
-            v-hammer:panstart="onMouseDown"
-            v-hammer:panend="onMouseUp"
-            v-hammer:pan="onMouseMove"
-            v-hammer:tap="onTap"
+            v-hammer:panstart="(e) => onMouseDown(e)"
+            v-hammer:panend="(e) => onMouseUp(e)"
+            v-hammer:pan="(e) => onMouseMove(e)"
+            v-hammer:tap="(e) => onTap(e)"
             class="excerpt-timebar"
             ref="wrap"
     >
@@ -15,140 +15,149 @@
     </div>
 </template>
 
-<script>
-import formatInterval from "@/js/utils/format-interval";
+<script lang="ts">
+import formatInterval from "@/ts/utils/format-interval";
+import Vue from 'vue'
+import {Prop, Ref} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    name: 'ExcerptTimebar',
-    props: {
-        startSeconds: {
-            type: Number,
-        },
-        currentSeconds: {
-            type: Number
-        },
-        endSeconds: {
-            type: Number,
-        },
-        durationSeconds: {
-            type: Number,
-        },
-        enableSliderLabel: {
-            type: Boolean,
-            default: false
+@Component({})
+export default class ExcerptTimebar extends Vue {
+    @Ref('wrap')
+    readonly wrap: HTMLElement
+
+    @Prop({required: true})
+    startSeconds: number
+
+    @Prop({required: true})
+    currentSeconds: number
+
+    @Prop({required: true})
+    endSeconds: number
+
+    @Prop({required: true})
+    durationSeconds: number
+    @Prop({default: false})
+
+    enableSliderLabel: boolean
+
+    currentDragPosition: number | null = null
+    dragStart: number | null = null
+    mousemove
+    mouseup
+    isMouseDown: boolean = false
+
+    onTap(e) {
+        this.onMouseDown(e)
+        this.onMouseUp(e)
+    }
+
+    onMouseDown(e: InputEvent) {
+        this.dragStart = this.dragPosition(e);
+        this.isMouseDown = true;
+    }
+
+    onMouseUp(e: InputEvent) {
+        this.isMouseDown = false;
+        this.currentDragPosition = null;
+        if (this.dragStart === this.dragPosition(e)) {
+            this.$emit('draglessClick', this.dragStart);
+        } else {
+            this.onDragEnd(e)
         }
-    },
-    methods: {
-        onTap(e) {
-            this.onMouseDown(e)
-            this.onMouseUp(e)
-        },
-        onMouseDown(e) {
-            this.dragStart = this.dragPosition(e);
-            this.isMouseDown = true;
-        },
-        onMouseUp(e) {
-            this.isMouseDown = false;
-            this.currentDragPosition = null;
-            if (this.dragStart === this.dragPosition(e)) {
-                this.$emit('draglessClick', this.dragStart);
-            } else {
-                this.onDragEnd(e)
-            }
-        },
-        onMouseMove(e) {
-            if (!this.isMouseDown) {
-                return;
-            }
-            if (this.currentDragPosition === null) {
-                this.onDragStart(e);
-            }
-            this.currentDragPosition = this.dragPosition(e);
-            this.$emit(
-                'dragContinue',
-                {
-                    start: this.dragStart,
-                    end: this.currentDragPosition
-                }
-            );
-        },
-        onDragStart(e) {
-            for (let element of document.getElementsByTagName('iframe')) {
-                element.style.pointerEvents = 'none';
-            }
-            this.$emit('dragStart', {
+    }
+
+    onMouseMove(e: InputEvent) {
+        if (!this.isMouseDown) {
+            return;
+        }
+        if (this.currentDragPosition === null) {
+            this.onDragStart(e);
+        }
+        this.currentDragPosition = this.dragPosition(e);
+        this.$emit(
+            'dragContinue',
+            {
                 start: this.dragStart,
-                end: this.dragStart,
-            });
-        },
-        onDragEnd(e) {
-            this.$emit(
-                'dragEnd',
-                {
-                    start: this.dragStart,
-                    end: this.dragPosition(e)
-                }
-            );
-            for (let element of document.getElementsByTagName('iframe')) {
-                element.style.pointerEvents = 'auto';
+                end: this.currentDragPosition
             }
-        },
-        dragPosition(e) {
-            const timebarRect = this.$refs.wrap.getBoundingClientRect();
-            const x = typeof e.clientX === 'undefined' ? e.center.x : e.clientX;
-            return Math.min(
-                Math.max(
-                    (x - timebarRect.x) / timebarRect.width,
-                    0
-                ),
-                1.0
-            )
-        },
-        formatTimeLabel(seconds) {
-            return formatInterval(seconds, this.durationSeconds > 3600, true);
-        },
-    },
-    computed: {
-        excerptWidthPercent() {
-            return (this.endSecondsVisual - this.startSecondsVisual) / this.durationSeconds * 100;
-        },
-        excerptStartPercent() {
-            return this.startSecondsVisual / this.durationSeconds * 100;
-        },
-        sliderPositionPercent() {
-            return this.currentSeconds / this.durationSeconds * 100;
-        },
-        /**
-         * @returns {number}
-         */
-        startSecondsVisual() {
-            if (this.isDragging) {
-                return Math.min(this.dragStart, this.currentDragPosition) * this.durationSeconds;
-            } else {
-                return this.startSeconds;
-            }
-        },
-        /**
-         * @returns {number}
-         */
-        endSecondsVisual() {
-            if (this.isDragging) {
-                return Math.max(this.dragStart, this.currentDragPosition) * this.durationSeconds;
-            } else {
-                return this.endSeconds;
-            }
-        },
-        /**
-         * @returns {boolean}
-         */
-        isDragging() {
-            return this.currentDragPosition !== null;
+        );
+    }
+
+    onDragStart(e) {
+        for (let element of document.getElementsByTagName('iframe')) {
+            element.style.pointerEvents = 'none';
         }
-    },
-    watch: {},
+        this.$emit('dragStart', {
+            start: this.dragStart,
+            end: this.dragStart,
+        });
+    }
+
+    onDragEnd(e) {
+        this.$emit(
+            'dragEnd',
+            {
+                start: this.dragStart,
+                end: this.dragPosition(e)
+            }
+        );
+        for (let element of document.getElementsByTagName('iframe')) {
+            element.style.pointerEvents = 'auto';
+        }
+    }
+
+    formatTimeLabel(seconds) {
+        return formatInterval(seconds, this.durationSeconds > 3600, true);
+    }
+
+    dragPosition(e): number {
+        const timebarRect = this.wrap.getBoundingClientRect();
+        const x = e.clientX === void 0 ? e.center.x : e.clientX;
+        return Math.min(
+            Math.max(
+                (x - timebarRect.x) / timebarRect.width,
+                0
+            ),
+            1.0
+        )
+    }
+
+    get excerptWidthPercent(): number {
+        return (this.endSecondsVisual - this.startSecondsVisual) / this.durationSeconds * 100;
+    }
+
+    get excerptStartPercent(): number {
+        return this.startSecondsVisual / this.durationSeconds * 100;
+    }
+
+    get sliderPositionPercent(): number {
+        return this.currentSeconds / this.durationSeconds * 100;
+    }
+
+    get startSecondsVisual(): number {
+        if (this.isDragging) {
+            return Math.min(this.dragStart, this.currentDragPosition) * this.durationSeconds;
+        } else {
+            return this.startSeconds;
+        }
+    }
+
+    get endSecondsVisual(): number {
+        if (this.isDragging) {
+            return Math.max(this.dragStart, this.currentDragPosition) * this.durationSeconds;
+        } else {
+            return this.endSeconds;
+        }
+    }
+
+    get isDragging(): boolean {
+        return this.currentDragPosition !== null;
+    }
+
     mounted() {
         const self = this;
-        this.mousemove = (e) => {
+        this.mousemove = (e: InputEvent) => {
             self.onMouseMove(e);
         };
         this.mouseup = (e) => {
@@ -159,20 +168,12 @@ export default {
         };
         window.addEventListener('mousemove', this.mousemove);
         window.addEventListener('mouseup', this.mouseup);
-    },
+    }
+
     beforeDestroy() {
         window.removeEventListener('mousemove', this.mousemove);
         window.removeEventListener('mouseup', this.mouseup);
-    },
-    data() {
-        return {
-            currentDragPosition: null,
-            dragStart: null,
-            mousemove: null,
-            mouseup: null,
-            isMouseDown: false,
-        }
-    },
+    }
 };
 </script>
 

@@ -10,34 +10,31 @@
     </div>
 </template>
 
-<script>
-    import HeroPortrait from "@/vue/HeroPortrait";
+<script lang="ts">
+import HeroPortrait from "@/vue/HeroPortrait";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import HeroDto from "../../../../../../backend/src/data/dto/HeroDto";
+import Component from "vue-class-component";
 
-    export default {
-        props: {
-            hero: {
-                type: Object,
-                required: true,
-            },
-        },
-        data() {
-            return {};
-        },
-        methods: {},
-        computed: {},
-        components: {
-            HeroPortrait,
-        },
-    };
+@Component({
+    components: {
+        HeroPortrait,
+    },
+})
+export default class TagPortrait extends Vue {
+    @Prop({required: true})
+    hero: HeroDto
+};
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/tags.scss';
+@import '~@/assets/css/tags.scss';
 
-    .portrait {
-        display: table-cell;
-        height: 100%;
-        width: auto;
-        vertical-align: middle;
-    }
+.portrait {
+    display: table-cell;
+    height: 100%;
+    width: auto;
+    vertical-align: middle;
+}
 </style>

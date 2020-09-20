@@ -2,79 +2,56 @@
     <div style="display: none;"></div>
 </template>
 
-<script>
-import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
-import ParamsDescriptorMixin from "@/js/ParamsDescriptorMixin";
+<script lang="ts">
+import DescriptorParamUnparser from "@/ts/DescriptorParamUnparser";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
+import ParamsDescriptorMixin from "@/ts/ParamsDescriptorMixin";
+import {Model, Prop, Watch} from "vue-property-decorator";
+import Component, {mixins} from "vue-class-component";
 
-export default {
-    mixins: [ParamsDescriptorMixin],
-        model: {
-            prop: 'descriptor',
-            event: 'descriptorChange',
-        },
-        props: {
-            basePath: {
-                type: String,
-                required: true,
-            },
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true,
-            },
-            enabled: {
-                type: Boolean,
-                default: true,
-            }
-        },
-        methods: {
-        },
-        data() {
-            return {
-            };
-        },
-        watch: {
-            '$route.params.descriptor'(paramsText) {
-                if (!this.enabled){
-                    return;
-                }
-                this.$emit(
-                    'descriptorChange',
-                    new GuideDescriptorVso(
-                        this.obtainParamsDescriptor(paramsText)
-                    )
-                );
-            },
-            descriptor: {
-                handler: async function (newValue) {
-                    if (!this.enabled){
-                        return;
-                    }
-                    let guideIdPart;
-                    if (this.$route.params.hasOwnProperty('id')) {
-                        const guideIdParam = this.$route.params.id
-                        guideIdPart =
-                            ((typeof guideIdParam !== 'undefined')
-                                ? guideIdParam
-                                : 'new') + '/';
-                    } else {
-                        guideIdPart = '';
-                    }
-                    const newPath = this.basePath
-                        + guideIdPart
-                        + new DescriptorParamUnparser().unparseDescriptor(this.descriptor);
-                    if (this.$router.currentRoute.path !== newPath) {
-                        await this.$router.push(newPath)
-                    }
-                },
-                deep: true,
-            }
-        },
-        mounted() {
-            this.$emit('descriptorChange', this.descriptor)
+@Component({
+
+})
+export default class ParameterDescriptorSynchronizer extends mixins( ParamsDescriptorMixin ) {
+    $router: any
+
+    @Model('descriptorChange', {required: true})
+    descriptor: GuideDescriptorVso
+
+    @Prop({required: true})
+    basePath: string
+
+    @Watch('$route.params.descriptor')
+    onRouteParamsDescriptorChange(paramsText?: string) {
+        this.$emit(
+            'descriptorChange',
+            new GuideDescriptorVso(
+                this.obtainParamsDescriptor(paramsText)
+            )
+        );
+    }
+
+    @Watch('descriptor', {deep: true})
+    onDescriptorChange() {
+        let guideIdPart;
+        if (this.$route.params.hasOwnProperty('id')) {
+            const guideIdParam = this.$route.params.id
+            guideIdPart =
+                ((typeof guideIdParam !== 'undefined')
+                    ? guideIdParam
+                    : 'new') + '/';
+        } else {
+            guideIdPart = '';
         }
-    };
+        const newPath = this.basePath
+            + guideIdPart
+            + new DescriptorParamUnparser().unparseDescriptor(this.descriptor);
+        if (this.$router.currentRoute.path !== newPath) {
+            this.$router.push(newPath)
+        }
+    }
 
+}
 </script>
 
 <style scoped>

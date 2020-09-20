@@ -10,7 +10,6 @@
             <DescriptorBuilder
                     :search-button-enabled="false"
                     :descriptor="descriptor"
-                    @descriptorChange="(newDesc) => onSearch(newDesc)"
             />
         </div>
         <div class="guide-feed root-content-panel-wrap">
@@ -41,7 +40,7 @@
                 <div v-else>
                     No guides about
                     <div class="inline-descriptor">
-                        <Tag :descriptor="descriptor"/>
+                        <HeroTag :descriptor="descriptor"/>
                         <TagBadges :descriptor="descriptor"/>
                     </div>
                 </div>
@@ -56,7 +55,7 @@
                 <div v-else>
                     No more guides about
                     <div class="inline-descriptor">
-                        <Tag :descriptor="descriptor"/>
+                        <HeroTag :descriptor="descriptor"/>
                         <TagBadges :descriptor="descriptor"/>
                     </div>
                 </div>
@@ -70,140 +69,142 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import InfiniteLoading from 'vue-infinite-loading'
 import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 import Guide from "@/vue/guides/Guide";
-import Tag from "@/vue/guides/tags/hero/Tag";
+import HeroTag from "@/vue/guides/tags/hero/HeroTag";
 import TagBadges from "@/vue/guides/TagBadges";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import WeakPanel from "@/vue/guides/WeakPanel";
 import LoginRequirement from "@/vue/LoginRequirement";
 import InfiniteGuideSearchMixin
     from "@/vue/guides/editor/InfiniteGuideSearchMixin";
-import ViewportPositionY from "@/js/ViewportPositionY";
+import ViewportPositionY from "@/ts/ViewportPositionY";
 import minBy from 'lodash.minby'
 import {debounce} from "lodash/function";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
+import {Model, Watch} from "vue-property-decorator";
+import Component, {mixins} from "vue-class-component";
 
 const playingZonePaddingPx = 50;
-export default {
-    mixins: [
-        TagLinkMixin,
-        InfiniteGuideSearchMixin,
-    ],
-    model: {
-        prop: 'descriptor',
-        event: 'descriptorChange',
-    },
-    methods: {
-        async onSearch(newDescriptor) {
-            this.$emit('contentChange');
-            this.$emit('descriptorChange', newDescriptor);
-            this.visibleVideos.slice(0, this.visibleVideos.length)
-            this.players.slice(0, this.players.length)
-        },
-        onDeactivated(guideId) {
-            const deactivated = this.guides.findIndex(g => g.guideId === guideId)
-            if (deactivated === -1) {
-                throw new Error('Unknown guide deactivated')
-            }
-            this.guides.splice(deactivated, 1)
-        },
-        updatePlayingVideoIfNecessary() {
-            if (
-                this.currentlyPlayingVideo !== null
-                && !this.visibleVideos.includes(this.currentlyPlayingVideo)
-            ) {
-                this.currentlyPlayingVideo.pause()
-                this.currentlyPlayingVideo = null;
-            }
-            const videoThatMustBePlaying = minBy(
-                this.visibleVideos,
-                (video) => {
-                    return Math.abs(
-                        ViewportPositionY.center - (video.boundingClientRect().y - video.boundingClientRect().height / 2 + window.scrollY)
-                    );
-                }
-            )
-            if (
-                typeof videoThatMustBePlaying === 'undefined'
-                || videoThatMustBePlaying === this.currentlyPlayingVideo
-            ) {
-                return;
-            }
-            if (
-                this.currentlyPlayingVideo !== null
-                && videoThatMustBePlaying !== this.currentlyPlayingVideo
-            ) {
-                this.currentlyPlayingVideo.pause()
-                this.currentlyPlayingVideo = null;
-            }
-            this.currentlyPlayingVideo = videoThatMustBePlaying
-            videoThatMustBePlaying.play()
-        },
-        onComesIntoVision(video) {
-            this.visibleVideos.push(video)
-        },
-        onComesOutOfVision(video) {
-            const index = this.visibleVideos.findIndex(it => it.playerId === video.playerId)
-            if (index > -1) {
-                this.visibleVideos.splice(index, 1)
-            }
-        },
-        pauseOther(player) {
-            for (let otherPlayer of this.players) {
-                if (player !== otherPlayer) {
-                    otherPlayer.pauseVideo();
-                }
-            }
-        },
-    },
-    computed: {
-        viewportPositionY() {
-            return {
-                y: ViewportPositionY.y,
-                height: ViewportPositionY.height,
-            };
-        },
-        updatePlayingVideoIfNecessary_debounced() {
-            return debounce(() => {
-                this.updatePlayingVideoIfNecessary()
-            }, 100)
-        },
-    },
-    watch: {
-        descriptor(newValue) {
-            this.onSearch(newValue)
-        },
-    },
-    data() {
-        return {
-            loginRequired: false,
-            visibleVideos: [],
-            bodyRect: document.body.getBoundingClientRect(),
-            currentlyPlayingVideo: null,
-            players: [],
-        }
-    },
-    mounted() {
-        window.addEventListener('scroll', this.updatePlayingVideoIfNecessary_debounced)
-        window.addEventListener('resize', this.updatePlayingVideoIfNecessary_debounced)
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.updatePlayingVideoIfNecessary_debounced)
-        window.removeEventListener('resize', this.updatePlayingVideoIfNecessary_debounced)
-    },
+@Component({
     components: {
         LoginRequirement,
         TagBadges,
-        Tag,
+        HeroTag,
         DescriptorBuilder,
         InfiniteLoading,
         Guide,
         WeakPanel,
     },
-};
+})
+export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSearchMixin) {
+    @Model('descriptorChange', {required: true})
+    descriptor: GuideDescriptorVso
 
+    loginRequired: boolean = false
+    visibleVideos: any = []
+    bodyRect: DOMRect = document.body.getBoundingClientRect()
+    currentlyPlayingVideo: any = null
+    players: YT.Player[] = []
+
+    async onSearch(newDescriptor) {
+        this.$emit('contentChange');
+        this.$emit('descriptorChange', newDescriptor);
+        this.visibleVideos.slice(0, this.visibleVideos.length)
+        this.players.slice(0, this.players.length)
+    }
+
+    onDeactivated(guideId) {
+        const deactivated = this.guides.findIndex(g => g.guideId === guideId)
+        if (deactivated === -1) {
+            throw new Error('Unknown guide deactivated')
+        }
+        this.guides.splice(deactivated, 1)
+    }
+
+    updatePlayingVideoIfNecessary() {
+        if (
+            this.currentlyPlayingVideo !== null
+            && !this.visibleVideos.includes(this.currentlyPlayingVideo)
+        ) {
+            this.currentlyPlayingVideo.pause()
+            this.currentlyPlayingVideo = null;
+        }
+        const videoThatMustBePlaying = minBy(
+            this.visibleVideos,
+            (video) => {
+                return Math.abs(
+                    ViewportPositionY.center - (video.boundingClientRect().y - video.boundingClientRect().height / 2 + window.scrollY)
+                );
+            }
+        )
+        if (
+            videoThatMustBePlaying === void 0
+            || videoThatMustBePlaying === this.currentlyPlayingVideo
+        ) {
+            return;
+        }
+        if (
+            this.currentlyPlayingVideo !== null
+            && videoThatMustBePlaying !== this.currentlyPlayingVideo
+        ) {
+            this.currentlyPlayingVideo.pause()
+            this.currentlyPlayingVideo = null;
+        }
+        this.currentlyPlayingVideo = videoThatMustBePlaying
+        videoThatMustBePlaying.play()
+    }
+
+    onComesIntoVision(video) {
+        this.visibleVideos.push(video)
+    }
+
+    onComesOutOfVision(video) {
+        const index = this.visibleVideos.findIndex(it => it.playerId === video.playerId)
+        if (index > -1) {
+            this.visibleVideos.splice(index, 1)
+        }
+    }
+
+    pauseOther(player) {
+        for (let otherPlayer of this.players) {
+            if (player !== otherPlayer) {
+                otherPlayer.pauseVideo();
+            }
+        }
+    }
+
+    get viewportPositionY() {
+        return {
+            y: ViewportPositionY.y,
+            height: ViewportPositionY.height,
+        };
+    }
+
+    get updatePlayingVideoIfNecessary_debounced() {
+        return debounce(() => {
+            this.updatePlayingVideoIfNecessary()
+        }, 100)
+    }
+
+    @Watch('descriptor', {deep: true})
+    onDescriptorChange(newValue: GuideDescriptorVso) {
+        (InfiniteGuideSearchMixin as any).options.methods.onDescriptorChange.call(this, newValue)
+        this.onSearch(newValue)
+    }
+
+    mounted() {
+        window.addEventListener('scroll', this.updatePlayingVideoIfNecessary_debounced)
+        window.addEventListener('resize', this.updatePlayingVideoIfNecessary_debounced)
+    }
+
+    destroyed() {
+        window.removeEventListener('scroll', this.updatePlayingVideoIfNecessary_debounced)
+        window.removeEventListener('resize', this.updatePlayingVideoIfNecessary_debounced)
+    }
+}
 </script>
 
 <style lang="scss" scoped>

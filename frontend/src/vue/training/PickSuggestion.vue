@@ -47,12 +47,12 @@
 
 <script>
 import Picks from '@/vue/training/Picks.vue';
-import Backend from '@/js/Backend';
+import Backend from '@/ts/Backend';
 import axios from "axios";
 import SuggestionRoster from "./SuggestionRoster.vue";
 import SelectionRoster from "./SelectionRoster.vue";
-import PickContextGenerator from "@/js/PickContextGenerator";
-import TeamComp from "@/js/TeamComp";
+import PickContextGenerator from "@/ts/PickContextGenerator";
+import TeamComp from "@/ts/TeamComp";
 import SeededShuffler from "data/generators/SeededShuffler";
 
 const backend = new Backend(axios);

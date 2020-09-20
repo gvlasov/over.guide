@@ -3,12 +3,12 @@
         <div
                 v-if="seeding"
                 class="seed"
-                v-bind:style="{order: where === 'beginning' ? 2 : 1}"
+                v-bind:style="{order: where === ListPosition.Beginning ? 2 : 1}"
         >
             <OverwatchButton
                     type="default"
                     class="button-add-text"
-                    v-hammer:tap="() => $emit('addText', where)"
+                    v-hammer:tap="() => {$emit('addText', where); seeding = false}"
                     data-type="text"
             >text
             </OverwatchButton>
@@ -21,14 +21,14 @@
                     type="default"
                     class="button-add-video"
                     data-type="video"
-                    v-hammer:tap="() => $emit('addVideo', where)"
+                    v-hammer:tap="() => {$emit('addVideo', where); seeding = false}"
             >video
             </OverwatchButton>
         </div>
             <div
                     v-if="!seeding"
                     class="new-buttons"
-                    v-bind:style="{order: where === 'beginning' ? 1 : 2}"
+                    v-bind:style="{order: where === ListPosition.Beginning ? 1 : 2}"
             >
                 <OverwatchButton
                         type="default"
@@ -39,41 +39,38 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import OverwatchButton from "@/vue/OverwatchButton";
 import GuidePart from "@/vue/guides/GuidePart";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import {Prop, Watch} from "vue-property-decorator";
+import ListPosition from "@/ts/ListPosition";
 
 
-export default {
-    props: {
-        initialSeeding: {
-            type: Boolean,
-            required: true,
-        },
-        where: {
-            type: String,
-            require: true,
-        }
-    },
-    methods: {
-    },
-    data() {
-        return {
-            seeding: this.initialSeeding,
-        };
-    },
-    watch: {
-        initialSeeding(newValue) {
-            this.seeding = newValue;
-        }
-    },
-    computed: {},
+@Component({
     components: {
         GuidePart,
         OverwatchButton,
     },
-};
+})
+export default class GuidePartSpawner extends Vue {
 
+    ListPosition = ListPosition
+
+    @Prop({required: true})
+    initialSeeding: boolean
+
+    @Prop({required: true})
+    where: ListPosition
+
+    seeding: boolean = this.initialSeeding
+
+    @Watch('initialSeeding')
+    onInitialSeedingChange(newValue) {
+        this.seeding = newValue;
+    }
+}
 </script>
 
 <style lang="scss" scoped>

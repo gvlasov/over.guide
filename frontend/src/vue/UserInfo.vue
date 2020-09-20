@@ -59,54 +59,67 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import OverwatchButton from "@/vue/OverwatchButton";
 import axios from 'axios';
-import Backend from "@/js/Backend";
+import Backend from "@/ts/Backend";
 import Guide from "@/vue/guides/Guide";
-import UserInfoVso from "@/js/vso/UserInfoVso";
+import UserInfoVso from "@/ts/vso/UserInfoVso";
 import UsernameInput from "@/vue/UsernameInput";
-import Authentication from "@/js/Authentication";
+import Authentication from "@/ts/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import LogoutDangerNotice from "@/vue/LogoutDangerNotice";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
-export default {
-    props: {},
-    computed: {
-        isThisMe() {
-            const cookie = auth.userId;
-            if (typeof cookie === 'undefined') {
-                return false;
-            }
-            return Number.parseInt(cookie) === this.userInfo.user.id;
-        },
-        battleNetLogoutUrl() {
-            return auth.battleNetLogoutUrl;
-        },
+@Component({
+    components: {
+        LogoutDangerNotice,
+        BackgroundHeading,
+        Guide,
+        OverwatchButton,
+        TrainingGoal,
+        UsernameInput,
     },
-    data() {
-        return {
-            userId: this.$route.params.id,
-            changingUsername: false,
-            userInfo: undefined,
-            promptLogoutDanger: false,
-        };
-    },
-    methods: {
-        logout() {
-            const img = document.createElement('img');
-            img.src = auth.battleNetLogoutUrl;
-            img.style.display = 'none';
-            img.onerror = () => {
-                auth.logoutSite()
-            }
-            this.$el.append(img)
-        },
-    },
-    async mounted() {
+})
+export default class UserInfo extends Vue {
+
+    declare $route: any
+
+    userId: number = this.$route.params.id
+    changingUsername: boolean = false
+    userInfo: UserInfoVso | null = null
+    promptLogoutDanger: boolean = false
+
+    get isThisMe(): boolean {
+        const cookie = auth.userId;
+        if (typeof cookie === 'undefined') {
+            return false;
+        }
+        if (this.userInfo === null) {
+            throw new Error('Null user info')
+        }
+        return cookie === this.userInfo.user.id;
+    }
+
+    get battleNetLogoutUrl(): string {
+        return auth.battleNetLogoutUrl;
+    }
+
+    logout() {
+        const img = document.createElement('img');
+        img.src = auth.battleNetLogoutUrl;
+        img.style.display = 'none';
+        img.onerror = () => {
+            auth.logoutSite()
+        }
+        this.$el.append(img)
+    }
+
+    created() {
         backend.getUserInfo(this.userId)
             .then(dto => {
                 this.userInfo = new UserInfoVso(dto);
@@ -116,16 +129,8 @@ export default {
                     this.userInfo = null;
                 }
             })
-    },
-    components: {
-        LogoutDangerNotice,
-        BackgroundHeading,
-        Guide,
-        OverwatchButton,
-        TrainingGoal,
-        UsernameInput,
-    },
-};
+    }
+}
 
 </script>
 

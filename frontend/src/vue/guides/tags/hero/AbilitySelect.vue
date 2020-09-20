@@ -1,76 +1,62 @@
 <template>
-    <div class="grid">
+    <div class="ability-select">
         <AbilityCheckbox
                 v-for="ability in abilities"
                 :model-value="selectedAbilities"
                 @change="($event)=>$emit('selectedAbilitiesChange', $event)"
                 :value="ability"
                 :key="ability.id"
-                class="ability"
         />
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import abilities from 'data/abilities';
 import AbilityCheckbox from "@/vue/guides/tags/hero/AbilityCheckbox";
-import AbilityVso from "@/js/vso/AbilityVso";
+import AbilityVso from "@/ts/vso/AbilityVso";
+import Vue from 'vue'
+import Component from "vue-class-component";
+import {Model, Prop} from "vue-property-decorator";
+import HeroDto from "data/dto/HeroDto";
 
+@Component({
+    components: {
+        AbilityCheckbox,
+    },
+})
+export default class AbilitySelect extends Vue {
+    @Model('selectedAbilitiesChange', {required: true})
+    selectedAbilities: AbilityVso[]
 
-export default {
-        model: {
-            prop: 'selectedAbilities',
-            event: 'selectedAbilitiesChange',
-        },
-        props: {
-            selectedAbilities: {
-                type: Array,
-                required: true,
-            },
-            heroes: {
-                type: Array,
-                required: true,
-            }
-        },
-        data() {
-            return {};
-        },
-        methods: {
-        },
-        computed: {
-            /**
-             * @return {AbilityVso[]}
-             */
-            abilities() {
-                const allAbilities = Array.from(abilities.values());
-                return this.heroes.flatMap(
-                    hero => allAbilities.filter(ability => ability.heroId === hero.id)
-                )
-                    .map(it => new AbilityVso(it))
-            }
-        },
-        components: {
-            AbilityCheckbox,
-        },
-    };
+    @Prop({required: true})
+    heroes: HeroDto[]
 
+    get abilities(): AbilityVso[] {
+        const allAbilities = Array.from(abilities.values());
+        return this.heroes.flatMap(
+            hero => allAbilities.filter(ability => ability.heroId === hero.id)
+        )
+            .map(it => new AbilityVso(it))
+    }
+}
 </script>
 
-<style scoped>
-    @import "~@/assets/css/fonts.scss";
+<style lang="scss" scoped>
+@import "~@/assets/css/fonts.scss";
 
-    /*.grid {*/
-    /*    display: grid;*/
-    /*    grid-template-columns: repeat(4, max-content);*/
-    /*}*/
-    .grid {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+/*.grid {*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(4, max-content);*/
+/*}*/
+.ability-select {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 
-    .ability {
+    .ability-checkbox {
         margin: .2rem;
     }
+
+}
 
 </style>

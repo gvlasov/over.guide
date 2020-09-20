@@ -23,24 +23,26 @@
     </LoginNotice>
 </template>
 
-<script>
+<script lang="ts">
 import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 import OverwatchButton from "@/vue/OverwatchButton";
 import LoginNotice from "@/vue/LoginNotice";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-export default {
-    props: {},
-    methods: {
-        saveRedirectPath() {
-            localStorage.setItem('pathBeforeBnetAuth', this.$route.path)
-        }
-    },
-    computed: {},
+@Component({
     components: {
         LoginNotice,
         OverwatchButton,
         BattlenetAuthButton,
     },
+})
+export default class Loginrequirement extends Vue {
+    declare $route: any
+
+    saveRedirectPath() {
+        localStorage.setItem('pathBeforeBnetAuth', this.$route.path)
+    }
 };
 
 </script>
@@ -51,6 +53,7 @@ export default {
 .notice {
     font-size: 1.1em;
     @include overwatch-futura;
+
     &.subnotice {
         font-size: .8em;
         margin-bottom: 1.6rem;

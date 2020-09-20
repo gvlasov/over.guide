@@ -8,35 +8,40 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import Navigation from "@/vue/Navigation";
 import ScrollToTop from "@/vue/ScrollToTop";
+import Vue from 'vue'
+import {Ref, Watch} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    methods: {
-        resetScrollToTop() {
-            this.$refs.scrollToTop.reset();
-        },
+@Component({
+    components: {
+        Navigation,
+        ScrollToTop,
     },
-    data() {
-        return {};
-    },
-    watch: {
-        $route() {
-            this.resetScrollToTop();
-        },
-    },
+})
+export default class App extends Vue {
+    @Ref('scrollToTop') scrollToTop: any
+    declare $router: any
+
+    resetScrollToTop() {
+        this.scrollToTop.reset();
+    }
+
+    @Watch('$route')
+    onRouteChange() {
+        this.resetScrollToTop();
+    }
+
     mounted() {
         const path = localStorage.getItem('pathBeforeBnetAuth');
         if (path !== null) {
             localStorage.removeItem('pathBeforeBnetAuth')
             this.$router.replace(path)
         }
-    },
-    components: {
-        Navigation,
-        ScrollToTop,
-    },
+    }
+
 }
 </script>
 

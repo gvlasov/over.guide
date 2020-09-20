@@ -15,23 +15,21 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
 
-export default {
-    props: {
-        descriptor: {
-            type: GuideDescriptorVso,
-            required: true
-        },
-    },
-    data() {
-        return {}
-    },
+@Component({
     components: {
         ThematicTagBadge,
     },
+})
+export default class TagBadges extends Vue {
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
 };
 
 </script>
@@ -42,6 +40,7 @@ export default {
     .tag-custom-badge {
         margin-right: .3em;
     }
+
     display: inline-block;
 }
 

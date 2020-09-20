@@ -14,7 +14,7 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/js/main.js'
+    app: './src/ts/main.ts'
   },
   output: {
     path: config.build.assetsRoot,
@@ -35,6 +35,10 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          appendTsSuffixTo: [/\.vue$/],
+        },
         exclude: /node_modules/,
       },
       {

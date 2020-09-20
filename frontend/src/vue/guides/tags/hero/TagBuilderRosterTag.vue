@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="tag-builder-roster-tag">
         <TagGroupFrame
                 v-hammer:tap="() => $emit('playerTap')"
                 :tag-group="descriptor.players"
@@ -66,56 +66,49 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import GamerPositionVso from "@/ts/vso/GamerPositionVso";
 import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-        props: {
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true,
-            },
-            selectedPosition: {
-                type: GamerPositionVso,
-                required: true,
-            }
-        },
-        data() {
-            return {};
-        },
-        mounted() {
-        },
-        methods: {},
-        computed: {},
-        components: {
-            TagGroupBackground,
-            TagGroupFrame,
-            TagGroupInvite,
-            TagGroupHeroes,
-        },
-    };
+@Component({
+    components: {
+        TagGroupBackground,
+        TagGroupFrame,
+        TagGroupInvite,
+        TagGroupHeroes,
+    },
+})
+export default class TagBuilderRosterTag extends Vue {
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
+
+    @Prop({required: true})
+    selectedPosition: GamerPositionVso
+};
 
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/tags.scss";
+@import "~@/assets/css/tags.scss";
 
-    .wrap {
-        font-size: 0;
+.tag-builder-roster-tag {
+    font-size: 0;
 
-        & > * {
-            font-size: 1rem;
-        }
+    & > * {
+        font-size: 1rem;
     }
 
     .invite, .tag-type-background {
         cursor: pointer;
     }
+
     .invite {
         opacity: .8;
     }
@@ -126,19 +119,15 @@ export default {
         @keyframes selected-group-animation {
             0% {
                 box-shadow: 0 0 .2em .2em $animation-main-color,
-                0 0 .3em .35em white
-            ;
+                0 0 .3em .35em white;
             }
             50% {
-                box-shadow:
-                        0 0 .2em .15em $animation-main-color,
-                        0 0 .3em .2em white
-            ;
+                box-shadow: 0 0 .2em .15em $animation-main-color,
+                0 0 .3em .2em white;
             }
             100% {
                 box-shadow: 0 0 .2em .2em $animation-main-color,
-                0 0 .3em .35em white
-            ;
+                0 0 .3em .35em white;
             }
         }
     }
@@ -146,4 +135,6 @@ export default {
     ::v-deep .tag-type-infix {
         color: white;
     }
+}
+
 </style>

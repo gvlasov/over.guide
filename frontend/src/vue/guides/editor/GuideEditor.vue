@@ -37,7 +37,6 @@
                             :search-button-enabled="false"
                             class="descriptor-builder"
                             v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
-                            @descriptorChange="(newDescriptor) => {guide.descriptor = newDescriptor}"
                     >
                         <div
                                 v-if="!guide.descriptor.isEmpty"
@@ -105,135 +104,158 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import DescriptorBuilder from "@/vue/guides/tags/DescriptorBuilder";
 import OverwatchButton from "@/vue/OverwatchButton";
-import Backend from "@/js/Backend";
+import Backend from "@/ts/Backend";
 import axios from 'axios';
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
-import StoredGuideDraft from "@/js/StoredGuideDraft";
-import GuideVso from "@/js/vso/GuideVso";
-import debounce from 'lodash.debounce'
+import StoredGuideDraft from "@/ts/StoredGuideDraft";
+import GuideVso from "@/ts/vso/GuideVso";
 import LoginRequirement from "@/vue/LoginRequirement";
-import DescriptorParamUnparser from "@/js/DescriptorParamUnparser";
+import DescriptorParamUnparser from "@/ts/DescriptorParamUnparser";
 import Guide from "@/vue/guides/Guide";
-import UserVso from "@/js/vso/UserVso";
-import Authentication from "@/js/Authentication";
+import UserVso from "@/ts/vso/UserVso";
+import Authentication from "@/ts/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import GuideEditorPartsList from "@/vue/guides/editor/GuideEditorPartsList";
-import ParamsDescriptorMixin from "@/js/ParamsDescriptorMixin";
+import ParamsDescriptorMixin from "@/ts/ParamsDescriptorMixin";
 import SimilarTagGuides from "@/vue/guides/editor/SimilarTagGuides";
+import Component, {mixins} from "vue-class-component";
+import {Watch} from "vue-property-decorator";
+
+const Debounce = require('debounce-decorator').default
 
 const backend = new Backend(axios);
 
 const draft = new StoredGuideDraft()
-export default {
-    name: 'GuideEditor',
-    mixins: [ParamsDescriptorMixin],
-    watch: {
-        guide: {
-            handler: debounce(function (newValue) {
-                if (this.isNewGuide) {
-                    if (newValue.isEmpty) {
-                        draft.reset();
-                    } else {
-                        draft.saveDraft(newValue);
-                    }
-                }
-            }, 500),
-            deep: true,
-        },
+
+@Component({
+    components: {
+        SimilarTagGuides,
+        GuideEditorPartsList,
+        LoginRequirement,
+        ParameterDescriptorSynchronizer,
+        OverwatchButton,
+        DescriptorBuilder,
+        Guide,
+        BackgroundHeading,
     },
-    methods: {
-        onDone() {
-            if (this.guide.descriptor.isEmpty) {
-                this.forceDescriptorSelection = true;
+})
+export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
+
+    guide: GuideVso = this.readGuide()
+    loginRequired: boolean = false
+    preview: boolean = false
+    forceDescriptorSelection: boolean = false
+    guideNotFound: boolean = false
+
+    $scrollTo: any
+
+
+    @Watch('guide', {deep: true})
+    @Debounce(500)
+    onGuideChange(newValue: GuideVso) {
+        if (this.isNewGuide) {
+            if (newValue.isEmpty) {
+                draft.reset();
             } else {
-                this.wipeEmptyParts();
-                this.preview = true;
+                draft.saveDraft(newValue);
             }
-            this.$scrollTo(this.$el, {
-                force: true,
-            })
-        },
-        async publish() {
-            const guideId = await backend.saveGuide(this.guide.toDto())
-                .then(() => {
-                    this.$router.push(
-                        '/search/' +
-                        new DescriptorParamUnparser().unparseDescriptor(
-                            this.guide.descriptor
-                        )
-                    )
-                    draft.reset()
-                })
-                .catch(error => {
-                    if (error.response.status === 403) {
-                        this.loginRequired = true;
-                    }
-                })
-            if (guideId !== null) {
-                this.guide.guideId = guideId
-            }
-        },
-        wipeEmptyParts() {
-            const emptyIndices = [];
-            for (let index in this.guide.parts) {
-                if (!this.guide.parts.hasOwnProperty(index)) {
-                    continue;
-                }
-                const part = this.guide.parts[index];
-                if (part.isEmpty) {
-                    emptyIndices.push(index)
-                }
-            }
-            let shift = 0;
-            for (let index of emptyIndices) {
-                this.guide.parts.splice(index - shift, 1);
-                shift++;
-            }
-        },
-        readGuide() {
-            let guide;
-            let guideId;
-            if (typeof this.$route.params.id === "undefined" || this.$route.params.id === 'new') {
-                guideId = undefined;
-                const draftGuide = draft.guide;
-                if (draftGuide !== null && draftGuide.parts.length !== 0) {
-                    guide = draftGuide;
-                }
-            } else {
-                return null;
-            }
-            if (typeof guide === 'undefined') {
-                guide =
-                    new GuideVso({
-                        id: undefined,
-                        guideId: undefined,
-                        descriptor: this.obtainParamsDescriptor(),
-                        parts: [],
-                    });
-            }
-            if (typeof guide !== 'undefined') {
-                guide.createdAt = new Date().toISOString();
-                guide.author = new UserVso({
-                    id: new Authentication().userId || 0,
-                    name: new Authentication().username || 'you',
-                });
-            }
-            return guide;
-        },
-    },
-    data() {
-        return {
-            guide: this.readGuide(),
-            loginRequired: false,
-            preview: false,
-            forceDescriptorSelection: false,
-            guideNotFound: false,
         }
-    },
+    }
+
+    onDone() {
+        if (this.guide.descriptor.isEmpty) {
+            this.forceDescriptorSelection = true;
+        } else {
+            this.wipeEmptyParts();
+            this.preview = true;
+        }
+        this.$scrollTo(this.$el, {
+            force: true,
+        })
+    }
+
+    publish() {
+        backend.saveGuide(this.guide.toDto())
+            .then((guideId: number | null) => {
+                this.$router.push(
+                    '/search/' +
+                    new DescriptorParamUnparser().unparseDescriptor(
+                        this.guide.descriptor
+                    )
+                )
+                draft.reset()
+                if (guideId !== null) {
+                    this.guide.guideId = guideId
+                }
+            })
+            .catch(error => {
+                if (error.response.status === 403) {
+                    this.loginRequired = true;
+                }
+            })
+    }
+
+    wipeEmptyParts() {
+        const emptyIndices = [];
+        for (let index in this.guide.parts) {
+            if (!this.guide.parts.hasOwnProperty(index)) {
+                continue;
+            }
+            const part = this.guide.parts[index];
+            if (part.isEmpty) {
+                emptyIndices.push(index)
+            }
+        }
+        let shift = 0;
+        for (let index of emptyIndices) {
+            this.guide.parts.splice(index - shift, 1);
+            shift++;
+        }
+    }
+
+    readGuide(): GuideVso {
+        let guide;
+        let guideId;
+        if (typeof this.$route.params.id === "undefined" || this.$route.params.id === 'new') {
+            guideId = undefined;
+            const draftGuide = draft.guide;
+            if (draftGuide !== null && draftGuide.parts.length !== 0) {
+                guide = draftGuide;
+            }
+        } else {
+            return null;
+        }
+        if (typeof guide === 'undefined') {
+            guide =
+                new GuideVso({
+                    id: undefined,
+                    guideId: undefined,
+                    descriptor: this.obtainParamsDescriptor(),
+                    parts: [],
+                });
+        }
+        if (typeof guide !== 'undefined') {
+            guide.createdAt = new Date().toISOString();
+            guide.author = new UserVso({
+                id: new Authentication().userId || 0,
+                name: new Authentication().username || 'you',
+            });
+        }
+        return guide;
+    }
+
+    get isDoneButtonEnabled(): boolean {
+        return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
+    }
+
+    get isNewGuide(): boolean {
+        return typeof this.guide.guideId === 'undefined'
+    }
+
     mounted() {
         if (this.guide === null) {
             backend.getGuide(
@@ -250,27 +272,8 @@ export default {
                     }
                 });
         }
-    },
-    computed: {
-        isDoneButtonEnabled() {
-            return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
-        },
-        isNewGuide() {
-            return typeof this.guide.guideId === 'undefined'
-        },
-    },
-    components: {
-        SimilarTagGuides,
-        GuideEditorPartsList,
-        LoginRequirement,
-        ParameterDescriptorSynchronizer,
-        OverwatchButton,
-        DescriptorBuilder,
-        Guide,
-        BackgroundHeading,
-    },
-};
-
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -297,8 +300,10 @@ export default {
             z-index: 1;
             padding: 0 .4em;
             box-sizing: border-box;
+
             .similar-tag-guides {
                 max-width: 100%;
+
                 & ::v-deep button {
                     border-radius: .2em;
                 }

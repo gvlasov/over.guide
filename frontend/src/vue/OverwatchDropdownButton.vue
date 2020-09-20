@@ -12,19 +12,20 @@
     </OverwatchPanelButton>
 </template>
 
-<script>
+<script lang="ts">
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    props: {
-        open: {
-            type: Boolean,
-            required: true,
-        },
-    },
+@Component({
     components: {
         OverwatchPanelButton,
     }
+})
+export default class OverwatchDropdownButton extends Vue {
+    @Prop({required: true})
+    open: boolean
 };
 
 </script>
@@ -38,15 +39,18 @@ export default {
     font-weight: normal;
     font-size: 1.3rem;
     text-align: center;
+
     &:disabled ::v-deep .background {
         background-color: transparent;
         pointer-events: none;
     }
+
     &:disabled ::v-deep img {
         img {
             display: none;
         }
     }
+
     img {
         height: 1em;
         position: absolute;

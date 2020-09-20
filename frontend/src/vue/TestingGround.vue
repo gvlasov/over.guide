@@ -4,27 +4,24 @@
     </div>
 </template>
 
-<script>
-    import Backend from "@/js/Backend";
-    import axios from 'axios';
-    import TrainingGoals from "@/vue/guides/TrainingGoals";
+<script lang="ts">
+import Backend from "@/ts/Backend";
+import axios from 'axios';
+import TrainingGoals from "@/vue/guides/TrainingGoals";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-    const backend = new Backend(axios);
+const backend = new Backend(axios);
 
-    export default {
-        props: {},
-        methods: {
-        },
-        data() {
-            return {
-            };
-        },
-        components: {
-            TrainingGoals,
-        },
-    };
+@Component({
+    components: {
+        TrainingGoals,
+    },
+})
+export default class TestingGround extends Vue {
+};
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 </style>

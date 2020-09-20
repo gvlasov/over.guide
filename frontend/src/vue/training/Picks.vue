@@ -10,11 +10,11 @@
 </template>
 
 <script>
-    import HeroPortrait from "@/vue/HeroPortrait.vue";
-    import PlayerPick from "@/vue/training/PlayerPick.vue";
-    import TeamComp from "@/js/TeamComp";
+import HeroPortrait from "@/vue/HeroPortrait.vue";
+import PlayerPick from "@/vue/training/PlayerPick.vue";
+import TeamComp from "@/ts/TeamComp";
 
-    export default {
+export default {
         props: {
             teamComp: {
                 type: TeamComp,

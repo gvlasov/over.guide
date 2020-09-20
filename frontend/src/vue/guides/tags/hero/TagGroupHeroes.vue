@@ -29,38 +29,33 @@
     </div>
 </template>
 
-<script>
-import TagGroupVso from "@/js/vso/TagGroupVso";
+<script lang="ts">
+import TagGroupVso from "@/ts/vso/TagGroupVso";
 import AbilityIcon from "@/vue/AbilityIcon";
 import TagPortrait from "@/vue/guides/tags/hero/TagPortrait";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    props: {
-        tagGroup: {
-            type: TagGroupVso,
-            required: true,
-        }
+@Component({
+    components: {
+        AbilityIcon,
+        TagPortrait,
     },
-    data() {
-        return {};
-    },
-    methods: {},
-        computed: {},
-        components: {
-            AbilityIcon,
-            TagPortrait,
-        },
-    };
+})
+export default class TagGroupHeroes extends Vue {
+    @Prop({required: true})
+    tagGroup: TagGroupVso
+};
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/tags.scss';
+@import '~@/assets/css/tags.scss';
 
-    .tag-group {
-        display: flex;
-        gap: .25em;
-        max-height: 3em;
-    }
+.tag-group {
+    display: flex;
+    gap: .25em;
+    max-height: 3em;
 
     .selected-hero-wrap {
         display: flex;
@@ -70,10 +65,8 @@ export default {
         border-radius: .4em;
 
         .ability-icons-wrap {
-            /*writing-mode: vertical-lr;*/
             display: grid;
             direction: rtl;
-            /*grid-template-columns: auto auto auto;*/
             grid-auto-flow: column dense;
             grid-template-rows: auto auto;
             grid-template-columns: auto auto auto auto;
@@ -106,5 +99,6 @@ export default {
             border-radius: 0 .3em .3em 0;
         }
     }
+}
 
 </style>

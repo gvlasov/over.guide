@@ -51,11 +51,11 @@
 
 <script>
 import Picks from '@/vue/training/Picks.vue';
-import Backend from '@/js/Backend';
-import PickContextGenerator from "@/js/PickContextGenerator";
+import Backend from '@/ts/Backend';
+import PickContextGenerator from "@/ts/PickContextGenerator";
 import axios from "axios";
 import Keypress from 'vue-keypress'
-import PickContext from "@/js/PickContext";
+import PickContext from "@/ts/PickContext";
 import SuggestionRoster from "@/vue/training/SuggestionRoster.vue";
 import SelectionRoster from "@/vue/training/SelectionRoster.vue";
 import RoleSelection from "@/vue/training/RoleSelection.vue";

@@ -15,52 +15,55 @@
                 type="default"
                 class="back-button"
                 v-hammer:tap="() => $emit('back')"
-        >Back</OverwatchButton>
+        >Back
+        </OverwatchButton>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import marked from 'marked'
 import Markdown from "@/vue/guides/Markdown";
 import OverwatchButton from "@/vue/OverwatchButton";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-export default {
-    components: {OverwatchButton, Markdown},
-    methods: {
-        md(code)  {
-            return marked(code)
-        },
-        linesInCode(code) {
-            return code.split(/\r\n|\r|\n/).length
-        }
-    },
-    data() {
-        return {
-            items: [
-                'just text',
-                '[Link](https://youtube.com) or just https://youtube.com',
-                '![image with alt text](https://d1u1mce87gyfbn.cloudfront.net/hero/genji/icon-portrait.png)',
-                '- Widowmaker\n- Hanzo\n- Ashe\n- Ana',
-                "1. List\n2. Of\n3. Several\n  - Possibly\n  - Nested\n4. Items",
-                '**bold text**',
-                '*italic text*',
-                '`monospaced text`',
-                '|heading 1 | heading 2|\n|---|---|\n|row 1 col a|row 1 col b|\n|row 2 col a|row 2 col b|',
-                '# Huge header',
-                '## Big header',
-                '### Regular header',
-                '#### Smaller header',
-                '##### Tiny header',
-                '###### Teeny-weeny header',
-                '> quote',
-                '- [x] dart\n- [ ] nade\n- [ ] nano',
-                'horizontal\n\n---\n\nline',
-            ]
-
-        }
+@Component({
+    components: {
+        OverwatchButton,
+        Markdown,
     }
-};
+})
+export default class MarkdownGuide extends Vue {
 
+    items: string[] = [
+        'just text',
+        '[Link](https://youtube.com) or just https://youtube.com',
+        '![image with alt text](https://d1u1mce87gyfbn.cloudfront.net/hero/genji/icon-portrait.png)',
+        '- Widowmaker\n- Hanzo\n- Ashe\n- Ana',
+        "1. List\n2. Of\n3. Several\n  - Possibly\n  - Nested\n4. Items",
+        '**bold text**',
+        '*italic text*',
+        '`monospaced text`',
+        '|heading 1 | heading 2|\n|---|---|\n|row 1 col a|row 1 col b|\n|row 2 col a|row 2 col b|',
+        '# Huge header',
+        '## Big header',
+        '### Regular header',
+        '#### Smaller header',
+        '##### Tiny header',
+        '###### Teeny-weeny header',
+        '> quote',
+        '- [x] dart\n- [ ] nade\n- [ ] nano',
+        'horizontal\n\n---\n\nline',
+    ]
+
+    md(code) {
+        return marked(code)
+    }
+
+    linesInCode(code) {
+        return code.split(/\r\n|\r|\n/).length
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -81,9 +84,11 @@ export default {
     table {
         width: 100%;
         border-spacing: .3em;
+
         td {
             //background-color: hsla(209, 18%, 20%, .8);
             padding: .5em;
+
             textarea {
                 max-width: 20em;
                 min-height: 5em;
@@ -92,10 +97,12 @@ export default {
                 overflow-y: scroll;
                 font-size: .8em;
             }
+
             &.code-example {
                 text-align: left;
             }
         }
+
         .markdown {
             display: table-cell;
             text-align: left;

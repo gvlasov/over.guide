@@ -16,83 +16,84 @@
     </div>
 </template>
 
-<script>
-import GuidePartTextWidget from "@/js/vso/GuidePartTextWidget";
+<script lang="ts">
+import GuidePartTextWidget from "@/ts/vso/GuidePartTextWidget";
 import GuidePartText from "@/vue/guides/GuidePartText";
 import OverwatchButton from "@/vue/OverwatchButton";
+import Vue from 'vue'
+import Component from "vue-class-component"
+import {Prop} from "vue-property-decorator";
+import GuidePartTextDto from "data/dto/GuidePartTextDto"
+import env from '@/env/dev.ts'
 
-export default {
-        model: {},
-        props: {
-            widget: {
-                type: GuidePartTextWidget,
-                required: true,
-            }
-        },
-        methods: {
-            onKeypress(e) {
-                if (e.key === 'Enter' && e.ctrlKey){
-                    this.$emit('save')
-                }
-            },
-            onTextPaste(part) {
-                return (pasteEvent) => {
-                    let paste = (pasteEvent.clipboardData || pasteEvent.originalEvent.clipboardData || window.clipboardData).items;
-                    const uploadingText = '![Uploading...]()';
-                    for (let item of paste) {
-                        if (item.kind === 'file') {
-                            pasteEvent.preventDefault();
-                            var blob = item.getAsFile();
-                            var reader = new FileReader();
-                            reader.onload = async function (fileEvent) {
-                                const formData = new FormData();
-                                formData.append('image', fileEvent.target.result)
-                                await fetch('https://api.imgur.com/3/image', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Authorization': 'Client-ID 546c25a59c58ad7'
-                                    },
-                                    body: fileEvent.target.result.substr(22)
-                                }).then(
-                                    async response => {
-                                        const responseJson = await response.json();
-                                        part.contentMd =
-                                            pasteEvent.target.value.replace(
-                                                uploadingText,
-                                                `![](${responseJson.data.link})`
-                                            )
-                                    }
-                                )
-                            };
-                            pasteEvent.target.value += "\n" + uploadingText;
-                            reader.readAsDataURL(blob);
+@Component({
+    components: {
+        OverwatchButton,
+        GuidePartText,
+    },
+})
+export default class GuidePartTextEditor extends Vue {
+
+    @Prop({required: true})
+    widget: GuidePartTextWidget
+
+    onKeypress(e: KeyboardEvent) {
+        if (e.key === 'Enter' && e.ctrlKey) {
+            this.$emit('save')
+        }
+    }
+
+    onTextPaste(part: GuidePartTextDto) {
+        return (pasteEvent) => {
+            let paste = (pasteEvent.clipboardData || pasteEvent.originalEvent.clipboardData).items;
+            const uploadingText = '![Uploading...]()';
+            for (let item of paste) {
+                if (item.kind === 'file') {
+                    pasteEvent.preventDefault();
+                    var blob = item.getAsFile();
+                    var reader = new FileReader();
+                    reader.onload = async function (fileEvent: ProgressEvent<FileReader>) {
+                        const formData = new FormData();
+                        let result = fileEvent.target.result;
+                        if (result instanceof ArrayBuffer) {
+                            // https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
+                            result = String.fromCharCode.apply(null, new Uint16Array(result)) as string
                         }
-                    }
-                };
-            },
-        },
-        data() {
-            return {
-                fixOverscroll: true,
+                        formData.append('image', result)
+                        await fetch('https://api.imgur.com/3/image', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Client-ID ${env.IMGUR_CLIENT_ID}`
+                            },
+                            body: result.substr(22)
+                        }).then(
+                            async response => {
+                                const responseJson = await response.json();
+                                part.contentMd =
+                                    pasteEvent.target.value.replace(
+                                        uploadingText,
+                                        `![](${responseJson.data.link})`
+                                    )
+                            }
+                        )
+                    };
+                    pasteEvent.target.value += "\n" + uploadingText;
+                    reader.readAsDataURL(blob);
+                }
             }
-        },
-        components: {
-            OverwatchButton,
-            GuidePartText,
-        },
-    };
-
+        };
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-    @import '~@/assets/css/fonts.scss';
+@import '~@/assets/css/fonts.scss';
 
-    .text-guide-part {
-        padding-top:1em;
-        max-width: 100%;
-    }
+.text-guide-part {
+    padding-top: 1em;
+    max-width: 100%;
 
-    .text-guide-part ::v-deep img {
+    & ::v-deep img {
         max-width: 100%;
         margin: 0 auto;
         display: block;
@@ -100,12 +101,14 @@ export default {
 
     textarea {
         outline: none;
+
+        &.guide-part-text-editor {
+            width: 100%;
+            font-size: 1em;
+            // As in Github issue editing
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+        }
     }
 
-    textarea.guide-part-text-editor {
-        width: 100%;
-        font-size: 1em;
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-    }
-
+}
 </style>

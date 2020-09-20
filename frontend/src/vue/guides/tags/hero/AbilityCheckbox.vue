@@ -2,7 +2,7 @@
     <div
             v-hammer:tap="updateInput"
             v-bind:class="{ checked: shouldBeChecked }"
-            class="ability"
+            class="ability-checkbox"
     >
         <HeroPortrait
                 :hero="value.hero"
@@ -30,68 +30,103 @@
             />
         </div>
         <div class="ability-name">
-            <div class="ability-name-align">{{value.name}}</div>
+            <div class="ability-name-align">{{ value.name }}</div>
         </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import AbilityIcon from "@/vue/AbilityIcon";
 import KeyIcon from "@/vue/KeyIcon";
 import HeroPortrait from "@/vue/HeroPortrait";
+import Vue from 'vue'
+import {Model, Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
+import AbilityDto from "data/dto/AbilityDto";
 
-export default {
-        model: {
-            prop: 'modelValue',
-            event: 'change',
-        },
-        props: {
-            modelValue: {
-                default: () => [],
-            },
-            value: {
-                type: Object,
-                required: true
-            },
-        },
-        methods: {
-            updateInput(event) {
-                let isChecked = !this.$refs.checkbox.checked;
+@Component({
+    components: {
+        HeroPortrait,
+        KeyIcon,
+        AbilityIcon,
+    },
+})
+export default class AbilityCheckbox extends Vue {
+    @Model('change', {default: () => []})
+    modelValue: AbilityDto[]
 
-                let newValue = [...this.modelValue];
+    @Prop({required: true})
+    value: any
 
-                if (isChecked) {
-                    newValue.push(this.value)
-                } else {
-                    const index = newValue.findIndex(elem => elem.id === this.value.id);
-                    if (index === -1) {
-                        throw new Error('Element not found');
-                    }
-                    newValue.splice(index, 1)
-                }
-                this.$refs.checkbox.checked = !this.$refs.checkbox.checked;
-                this.$emit('change', newValue);
+    updateInput(event) {
+        const checkbox = this.$refs.checkbox as HTMLInputElement;
+        let isChecked = !checkbox.checked;
+
+        let newValue = [...this.modelValue];
+
+        if (isChecked) {
+            newValue.push(this.value)
+        } else {
+            const index = newValue.findIndex(elem => elem.id === this.value.id);
+            if (index === -1) {
+                throw new Error('Element not found');
             }
-        },
-        computed: {
-            shouldBeChecked() {
-                return this.modelValue.find(elem => elem.id === this.value.id);
-            },
-        },
-        data() {
-            return {}
-        },
-        components: {
-            HeroPortrait,
-            KeyIcon,
-            AbilityIcon,
-        },
-    };
+            newValue.splice(index, 1)
+        }
+        checkbox.checked = !checkbox.checked;
+        this.$emit('change', newValue);
+    }
 
+    get shouldBeChecked() {
+        return this.modelValue.find(elem => elem.id === this.value.id);
+    }
+
+}
 </script>
 
-<style scoped>
-    @import '~@/assets/css/fonts.scss';
+<style lang="scss" scoped>
+@import '~@/assets/css/fonts.scss';
+
+
+.ability-checkbox {
+    cursor: pointer;
+    background-color: hsl(200, 40%, 25%);
+    min-width: 5em;
+    justify-content: space-around;
+    gap: .2em;
+    padding: .4em;
+    position: relative;
+
+    &.checked {
+        background-color: hsl(200, 80%, 35%);
+        box-shadow: 0 0 .11em .11em white;
+    }
+
+    .icon-row {
+        display: flex;
+        width: 100%;
+        gap: .3em;
+        justify-content: space-evenly;
+
+        .hidden-checkbox {
+            display: none;
+        }
+
+        .ability-icon {
+            max-height: 3em;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            max-width: 6em;
+            vertical-align: middle;
+            z-index: 2;
+        }
+
+        .key-icon {
+            vertical-align: middle;
+            z-index: 2;
+        }
+    }
 
     .ability-name {
         display: block;
@@ -100,56 +135,14 @@ export default {
         font-size: 1.4em;
         font-variant: all-small-caps;
         min-width: 3em;
-    }
-
-    .ability-name-align {
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-        z-index: 2;
-        position: relative;
-        margin-right: 1.1em;
-    }
-
-    .ability {
-        cursor: pointer;
-        background-color: hsl(200, 40%, 25%);
-        min-width: 5em;
-        justify-content: space-around;
-        gap: .2em;
-        padding: .4em;
-        position: relative;
-    }
-
-    .ability-icon {
-        max-height: 3em;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        max-width: 6em;
-        vertical-align: middle;
-        z-index: 2;
-    }
-
-    .key-icon {
-        vertical-align: middle;
-        z-index: 2;
-    }
-
-    .checked {
-        background-color: hsl(200, 80%, 35%);
-        box-shadow: 0 0 .11em .11em white;
-    }
-
-    .hidden-checkbox {
-        display: none;
-    }
-
-    .icon-row {
-        display: flex;
-        width: 100%;
-        gap: .3em;
-        justify-content: space-evenly;
+        .ability-name-align {
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            z-index: 2;
+            position: relative;
+            margin-right: 1.1em;
+        }
     }
 
     .hero-portrait {
@@ -160,5 +153,7 @@ export default {
         bottom: 0;
         z-index: 1;
     }
+
+}
 
 </style>

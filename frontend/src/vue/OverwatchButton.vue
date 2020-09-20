@@ -10,56 +10,54 @@
     </button>
 </template>
 
-<script>
+<script lang="ts">
 
-    export default {
-        name: 'OverwatchButton',
-        props: {
-            type: {
-                type: String,
-                required: true,
-            }
-        },
-        methods: {},
-        data() {
-            return {}
-        },
-    };
+import Vue from 'vue'
+import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
+
+@Component({})
+export default class OverwatchButton extends Vue {
+    @Prop({required: true})
+    type: string
+};
 
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/fonts.scss";
-    @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/fonts.scss";
+@import "~@/assets/css/overwatch-ui.scss";
 
-    .overwatch-button {
-        @include overwatch-inline-button;
-        background-color: transparent;
-        z-index: 1;
-    }
+.overwatch-button {
+    @include overwatch-inline-button;
+    background-color: transparent;
+    z-index: 1;
+}
 
-    .overwatch-button > .content {
-        position: relative;
-        overflow: hidden;
-        padding: .05em 1.07em .19em 1.07em;
-    }
+.overwatch-button > .content {
+    position: relative;
+    overflow: hidden;
+    padding: .05em 1.07em .19em 1.07em;
+}
 
-    button {
-        outline: 0;
-        font-size: 2rem;
-        &[disabled] {
-            pointer-events: none;
-            & ::v-deep .background {
-                background-color: transparent;
-            }
+button {
+    outline: 0;
+    font-size: 2rem;
+
+    &[disabled] {
+        pointer-events: none;
+
+        & ::v-deep .background {
+            background-color: transparent;
         }
     }
+}
 
-    .overwatch-main-button > .background {
-        @include overwatch-button-bg-main;
-    }
+.overwatch-main-button > .background {
+    @include overwatch-button-bg-main;
+}
 
-    .overwatch-default-button > .background {
-        @include overwatch-button-bg-default;
-    }
+.overwatch-default-button > .background {
+    @include overwatch-button-bg-default;
+}
 </style>

@@ -9,28 +9,24 @@
     </a>
 </template>
 
-<script>
+<script lang="ts">
 import env from '../env/dev'
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-export default {
-    props: {},
-    methods: {},
-    computed: {
-        url() {
-            return 'https://eu.battle.net/oauth/authorize?access_type=online&client_id='
-                + this.clientId
-                + '&redirect_uri='
-                + encodeURI(this.redirectUri)
-                + '&response_type=code&state=';
-        }
-    },
-    data() {
-        return {
-            redirectUri: env.BATTLE_NET_REDIRECT_URI,
-            clientId: env.BATTLE_NET_CLIENT_ID,
-        }
-    },
-    components: {},
+@Component({})
+export default class BattlenetAuthButton extends Vue {
+
+    redirectUri: string = env.BATTLE_NET_REDIRECT_URI
+    clientId: string = env.BATTLE_NET_CLIENT_ID
+
+    get url(): string {
+        return 'https://eu.battle.net/oauth/authorize?access_type=online&client_id='
+            + this.clientId
+            + '&redirect_uri='
+            + encodeURI(this.redirectUri)
+            + '&response_type=code&state=';
+    }
 };
 
 </script>

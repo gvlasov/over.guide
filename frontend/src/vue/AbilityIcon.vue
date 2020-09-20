@@ -6,31 +6,26 @@
     />
 </template>
 
-<script>
-    import AbilityVso from "@/js/vso/AbilityVso";
+<script lang="ts">
+import AbilityVso from "@/ts/vso/AbilityVso";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-    export default {
-        name: 'AbilityIcon',
-        props: {
-            ability: {
-                type: AbilityVso,
-                required: true,
-            },
-        },
-        computed: {
-            imgSrc() {
-                return '/images/abilities/' + this.ability.hero.dataName + '/' + this.ability.dataName + '.png';
-            },
-        },
-        data() {
-            return {}
-        },
-    };
+@Component({})
+export default class AbilityIcon extends Vue {
+    @Prop({required: true})
+    ability: AbilityVso
+
+    get imgSrc() {
+        return '/images/abilities/' + this.ability.hero.dataName + '/' + this.ability.dataName + '.png';
+    }
+};
 
 </script>
 
 <style scoped>
-    img {
-        width: 100%;
-    }
+img {
+    width: 100%;
+}
 </style>

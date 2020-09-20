@@ -7,30 +7,29 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 
-    export default {
-        props: {
-            width: {
-                type: Number,
-                default: 468,
-            },
-            height: {
-                type: Number,
-                default: 60,
-            }
-        }
-    };
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
+
+@Component({})
+export default class AdsensePlaceholder extends Vue {
+    @Prop({default: 480})
+    width: number
+    @Prop({default: 60})
+    height: number
+};
 
 </script>
 
 <style scoped>
-    .adsense-placeholder {
-        border: 1px solid grey;
-        box-sizing: border-box;
-        display: inline-block;
-        line-height: 100%;
-        text-align: center;
-        max-width: 100%;
-    }
+.adsense-placeholder {
+    border: 1px solid grey;
+    box-sizing: border-box;
+    display: inline-block;
+    line-height: 100%;
+    text-align: center;
+    max-width: 100%;
+}
 </style>

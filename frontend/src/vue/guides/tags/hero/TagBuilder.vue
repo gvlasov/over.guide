@@ -1,6 +1,6 @@
 <template>
-    <div class="root">
-        <div class="wrap">
+    <div class="tag-builder">
+        <div class="selected-tags">
             <TagGroupFrame :tag-group="descriptor.players">
                 <template slot="infix"></template>
                 <template slot="frame-content">
@@ -87,33 +87,19 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
 import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
 import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
-import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import GamerPositionVso from "@/ts/vso/GamerPositionVso";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    props: {
-        descriptor: {
-            type: GuideDescriptorVso,
-            required: true,
-        }
-    },
-    data() {
-        return {
-            selecting: null,
-            gamerPositions: {
-                players: GamerPositionVso.Players,
-                teammates: GamerPositionVso.Teammates,
-                enemies: GamerPositionVso.Enemies,
-            },
-        };
-    },
-    computed: {},
+@Component({
     components: {
         TagGroupInvite,
         TagGroupBackground,
@@ -121,12 +107,22 @@ export default {
         TagBuilderRoster,
         TagGroupHeroes,
     },
-};
+})
+export default class TagBuilder extends Vue {
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
 
+    selecting: GamerPositionVso = null
+    gamerPositions = {
+        players: GamerPositionVso.Players,
+        teammates: GamerPositionVso.Teammates,
+        enemies: GamerPositionVso.Enemies,
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-.wrap {
+.selected-tags {
     display: inline-flex;
     padding: 0 .5rem 0 .5rem;
 

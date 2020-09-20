@@ -19,53 +19,60 @@
     </div>
 </template>
 
-<script>
-    import HeroPortrait from "./HeroPortrait.vue";
+<script lang="ts">
+import HeroPortrait from "@/vue/HeroPortrait";
+import Vue from 'vue'
+import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
+import HeroDto from "../../../backend/src/data/dto/HeroDto";
 
-    export default {
-        name: 'HeroPortraitSkewed',
-        props: {
-            'hero': Object,
-            banned: {
-                type: Boolean,
-                default: false
-            },
-            selectedOut: {
-                type: Boolean,
-                default: false
-            },
-            selected: {
-                type: Boolean,
-                default: false,
-            }
-        },
-        methods: {
-            onPortraitTap() {
-                this.$emit('portraitTap', this.hero)
-            }
-        },
-        data() {
-            return {}
-        },
-        components: {
-            HeroPortrait: HeroPortrait,
-        },
-    };
+@Component({
+    components: {
+        HeroPortrait: HeroPortrait,
+    },
+})
+export default class HeroPortraitSkewed extends Vue {
+    @Prop({required: true})
+    hero: HeroDto
+    @Prop({default: false})
+    banned: boolean
+    @Prop({default: false})
+    selectedOut: boolean
+    @Prop({default: false})
+    selected: boolean
+
+    onPortraitTap() {
+        this.$emit('portraitTap', this.hero)
+    }
+};
 
 </script>
 
-<style scoped>
-    .skew {
-        position: relative;
-        display: inline-block;
-        -ms-transform: skew(-25deg, 0deg);
-        -webkit-transform: skew(-25deg, 0deg);
-        transform: skew(-25deg, 0deg);
-        overflow: hidden;
-        border-radius: .4vw;
-        margin-right: .4vw;
-        border: .14vw solid white;
-        cursor: pointer;
+<style lang="scss" scoped>
+.skew {
+    position: relative;
+    display: inline-block;
+    -ms-transform: skew(-25deg, 0deg);
+    -webkit-transform: skew(-25deg, 0deg);
+    transform: skew(-25deg, 0deg);
+    overflow: hidden;
+    border-radius: .4vw;
+    margin-right: .4vw;
+    border: .14vw solid white;
+    cursor: pointer;
+
+
+    &.banned > .skew-underlying {
+        opacity: .3;
+        filter: hue-rotate(-60deg);
+    }
+
+    &.banned {
+        cursor: not-allowed !important;
+    }
+
+    &.selected-out > .skew-underlying {
+        opacity: .3;
     }
 
     .skew-underlying {
@@ -96,17 +103,5 @@
         height: 100% !important;
         left: -3rem;
     }
-
-    .banned > .skew-underlying {
-        opacity: .3;
-        filter: hue-rotate(-60deg);
-    }
-
-    .banned {
-        cursor: not-allowed !important;
-    }
-
-    .selected-out > .skew-underlying {
-        opacity: .3;
-    }
+}
 </style>

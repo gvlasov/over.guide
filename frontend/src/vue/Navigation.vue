@@ -1,52 +1,58 @@
 <template>
     <div class="root-content-panel-wrap">
-    <div class="navigation">
-        <router-link
-                to="/search"
-                v-bind:class="{active: currentRouteStartsWith('/search')}"
-        ><div>Browse guides</div>
-        </router-link>
-        <router-link
-                to="/guide-editor/new"
-                v-bind:class="{active: currentRouteStartsWith('/guide-editor')}"
-        ><div>Create guide</div>
-        </router-link>
-        <router-link
-                to="/training-goals"
-                v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
-        ><div>Training goals</div>
-        </router-link>
-        <!--        <router-link to="/testing-ground">Testing ground</router-link>-->
-        <BattlenetAuthButton v-if="typeof username === 'undefined'" />
-        <a
-                v-else
-                v-bind:href="`/#/user/${userId}`"
-                v-bind:class="{active: typeof userId !== 'undefined' && currentRouteStartsWith(`/user/${userId}`)}"
-        ><div>{{username}}</div></a>
-    </div>
+        <div class="navigation">
+            <router-link
+                    to="/search"
+                    v-bind:class="{active: currentRouteStartsWith('/search')}"
+            >
+                <div>Browse guides</div>
+            </router-link>
+            <router-link
+                    to="/guide-editor/new"
+                    v-bind:class="{active: currentRouteStartsWith('/guide-editor')}"
+            >
+                <div>Create guide</div>
+            </router-link>
+            <router-link
+                    to="/training-goals"
+                    v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
+            >
+                <div>Training goals</div>
+            </router-link>
+            <!--        <router-link to="/testing-ground">Testing ground</router-link>-->
+            <BattlenetAuthButton v-if="username === null"/>
+            <a
+                    v-else
+                    v-bind:href="`/#/user/${userId}`"
+                    v-bind:class="{active: userId !== null && currentRouteStartsWith(`/user/${userId}`)}"
+            >
+                <div>{{ username }}</div>
+            </a>
+        </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
-import Authentication from "@/js/Authentication";
+import Authentication from "@/ts/Authentication";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
 const auth = new Authentication()
-export default {
-    methods: {
-        currentRouteStartsWith(path) {
-            return this.$route.path.startsWith(path);
-        }
-    },
-    data() {
-        return {
-            username: auth.username,
-            userId: auth.userId,
-        }
-    },
+@Component({
     components: {
         BattlenetAuthButton,
     },
+})
+export default class Navigation extends Vue {
+    declare $route: any
+
+    username: string = auth.username || null
+    userId: number = auth.userId || null
+
+    currentRouteStartsWith(path) {
+        return this.$route.path.startsWith(path);
+    }
 }
 </script>
 
@@ -80,6 +86,7 @@ export default {
         div {
             flex-grow: 0;
         }
+
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -93,6 +100,7 @@ export default {
         &:hover {
             background-color: hsla(227, 29%, 45%, 1);
         }
+
         border-bottom: $underline-width solid transparent;
     }
 }

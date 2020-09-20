@@ -13,36 +13,31 @@
     </TagGroupBackground>
 </template>
 
-<script>
+<script lang="ts">
 
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-import TagGroupVso from "@/js/vso/TagGroupVso";
-import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import TagGroupVso from "@/ts/vso/TagGroupVso";
+import GamerPositionVso from "@/ts/vso/GamerPositionVso";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    props: {
-        tagGroup: {
-            type: TagGroupVso,
-            required: true,
-        },
-    },
-    data() {
-        return {
-        };
-    },
-    methods: {
-    },
-    computed: {
-        isTeammate() {
-            return this.tagGroup.gamerPosition.id === GamerPositionVso.Teammates.id;
-        },
-        backgroundScale() {
-            return  Math.max(window.innerHeight/1000, 1)
-        }
-    },
+@Component({
     components: {
         TagGroupBackground
     },
+})
+export default class TagGroupInvite extends Vue {
+    @Prop({required: true})
+    tagGroup: TagGroupVso
+
+    get isTeammate(): boolean {
+        return this.tagGroup.gamerPosition.id === GamerPositionVso.Teammates.id;
+    }
+
+    get backgroundScale(): number {
+        return Math.max(window.innerHeight / 1000, 1)
+    }
 };
 
 </script>
@@ -61,14 +56,14 @@ export default {
     box-shadow: 0 .1em .3em -.05em $overwatch-panel-bg-color inset;
     //box-shadow: 0 0.05em 0.35em -0.05em inset hsl(279, 29%, 30%);
     background-color: hsl(338, 80%, 96%);
-}
 
-.invite-text {
-    display: inline-block;
-    line-height: 70%;
-    padding-bottom: .25em;
-    vertical-align: middle;
-    font-variant: all-small-caps;
+    .invite-text {
+        display: inline-block;
+        line-height: 70%;
+        padding-bottom: .25em;
+        vertical-align: middle;
+        font-variant: all-small-caps;
+    }
 }
 
 @function invitify($color) {

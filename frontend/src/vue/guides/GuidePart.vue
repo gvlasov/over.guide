@@ -10,7 +10,8 @@
                     type="default"
                     class="markup-help-button"
                     v-hammer:tap="() => {showMarkdownGuide = true; widget.editing = false;}"
-            >Formatting guide</OverwatchButton>
+            >Formatting guide
+            </OverwatchButton>
         </template>
         <template v-if="!showMarkdownGuide">
             <GuidePartTextEditor
@@ -66,79 +67,22 @@
     </div>
 </template>
 
-<script>
-import GuidePartWidget from "@/js/vso/GuidePartWidget";
+<script lang="ts">
+import GuidePartWidget from "@/ts/vso/GuidePartWidget";
 import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
 import OverwatchButton from "@/vue/OverwatchButton";
 import GuidePartTextEditor from "@/vue/guides/editor/GuidePartTextEditor";
 import GuidePartVideoEditor from "@/vue/guides/editor/GuidePartVideoEditor";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import MarkdownGuide from "@/vue/guides/editor/MarkdownGuide";
+import Vue from 'vue'
+import Component from "vue-class-component";
+import {Prop, Watch} from "vue-property-decorator";
+import GuidePartTextDto from "data/dto/GuidePartTextDto";
+import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 
-export default {
-    props: {
-        widget: {
-            type: GuidePartWidget,
-            required: true,
-        },
-        parts: {
-            type: Array,
-            required: true,
-        },
-        index: {
-            type: Number,
-            required: true,
-        }
-    },
-    methods: {
-        onMarkdownGuideBack() {
-            this.showMarkdownGuide = false;
-            this.widget.editing = true;
-            this.$scrollTo(this.$el, 150, {
-                offset: -100,
-                onDone: ()  => {
-                    this.$refs.textarea.focus();
-                }
-            });
-        },
-        movePartUp(index) {
-            this.movePart(index, -1)
-        },
-        movePartDown(index) {
-            this.movePart(index, 1)
-        },
-        movePart(index, d) {
-            const elem = this.parts[index]
-            this.parts.splice(index, 1)
-            this.parts.splice(index + d, 0, elem)
-            this.$scrollTo(this.$el)
-        },
-        deletePart(index) {
-            this.parts.splice(index, 1);
-        },
-        partHasContent(part) {
-            if (part.kind === 'text') {
-                return part.contentMd !== '';
-            } else if (part.kind === 'video') {
-                return part.excerpt !== null;
-            } else {
-                throw new Error('Unknown part type ' + part.kind)
-            }
-        }
-    },
-    watch: {
-        'widget.editing'(newValue) {
-            if (newValue) {
-                this.showMarkdownGuide = false;
-            }
-        }
-    },
-    data() {
-        return {
-            showMarkdownGuide: false,
-        }
-    },
-    computed: {},
+
+@Component({
     components: {
         OverwatchPanelButton,
         GuidePartVideoEditor,
@@ -147,8 +91,72 @@ export default {
         GuidePartTextEditor,
         MarkdownGuide,
     },
-};
+})
+export default class GuidePart extends Vue {
+    @Prop({required: true})
+    widget: GuidePartWidget
 
+    @Prop({required: true})
+    parts: (GuidePartTextDto | GuidePartVideoDto)[]
+
+    @Prop({required: true})
+    index: number
+
+    declare $scrollTo: any
+
+    showMarkdownGuide: boolean = false
+
+    onMarkdownGuideBack() {
+        this.showMarkdownGuide = false;
+        this.widget.editing = true;
+        this.$scrollTo(
+            this.$el,
+            150,
+            {
+                offset: -100,
+                onDone: () => {
+                    (this.$refs.textarea as HTMLInputElement).focus();
+                },
+            }
+        );
+    }
+
+    movePartUp(index) {
+        this.movePart(index, -1)
+    }
+
+    movePartDown(index) {
+        this.movePart(index, 1)
+    }
+
+    movePart(index, d) {
+        const elem = this.parts[index]
+        this.parts.splice(index, 1)
+        this.parts.splice(index + d, 0, elem)
+        this.$scrollTo(this.$el)
+    }
+
+    deletePart(index) {
+        this.parts.splice(index, 1);
+    }
+
+    partHasContent(part) {
+        if (part.kind === 'text') {
+            return part.contentMd !== '';
+        } else if (part.kind === 'video') {
+            return part.excerpt !== null;
+        } else {
+            throw new Error('Unknown part type ' + part.kind)
+        }
+    }
+
+    @Watch('widget.editing')
+    onWidgetEditingChange(newValue) {
+        if (newValue) {
+            this.showMarkdownGuide = false;
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -167,6 +175,7 @@ export default {
         left: 0;
         top: 0;
         font-size: 1.2em;
+
         & ::v-deep .background {
             background-color: rgba(81, 96, 148, 0.7)
         }

@@ -2,26 +2,21 @@
     <div class="markdown" v-html="md"></div>
 </template>
 
-<script>
+<script lang="ts">
 import marked from 'marked'
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-    props: {
-        code: {
-            type: String,
-            required: true,
-        }
-    },
-    methods: {},
-    computed: {
-        md() {
-            return marked(this.code)
-        },
-    },
-    data() {
-        return {}
+@Component({})
+export default class Markdown extends Vue {
+    @Prop({required: true})
+    code: string
+
+    get md(): string {
+        return marked(this.code)
     }
-};
+}
 
 </script>
 
@@ -45,14 +40,17 @@ export default {
         display: block;
     }
 
-    & ::v-deep table  {
+    & ::v-deep table {
         margin: 0 auto;
+
         td, th {
             padding: .4em;
         }
+
         td {
             background-color: hsla(209, 18%, 45%, .8);
         }
+
         th {
             background-color: hsla(250, 18%, 45%, .8);
         }

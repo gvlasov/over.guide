@@ -22,77 +22,73 @@
     </form>
 </template>
 
-<script>
+<script lang="ts">
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import OverwatchButton from "@/vue/OverwatchButton";
 import axios from 'axios';
-import Backend from "@/js/Backend";
+import Backend from "@/ts/Backend";
 import Guide from "@/vue/guides/Guide";
-import Authentication from "@/js/Authentication";
+import Authentication from "@/ts/Authentication";
+import Vue from 'vue'
+import {Model} from "vue-property-decorator";
+import Component from "vue-class-component";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
-export default {
-    model: {
-        prop: 'username',
-        event: 'input'
-    },
-    props: {
-        username: {
-            type: String,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            initialUsername: undefined,
-            validationEnabled: false,
-            takenUsernames: [],
-        };
-    },
-    computed: {
-        isLengthValid() {
-            return this.username.length >= 3 && this.username.length <= 12;
-        },
-        isUsernameAvailable() {
-            return !this.takenUsernames.includes(this.username);
-        },
-        valid() {
-            return this.isLengthValid && this.isUsernameAvailable;
-        }
-    },
-    methods: {
-        onInput(e) {
-            this.$emit('input', e.target.value)
-            if (e.target.value.length > 3) {
-                this.validationEnabled = true;
-            }
-        },
-        onFormSubmit(e) {
-            e.preventDefault();
-            if (this.valid) {
-                backend.changeUsername(this.username)
-                    .then(result => {
-                        auth.setUsername(this.username)
-                        this.initialUsername = this.username
-                        window.location.reload();
-                    })
-                    .catch(e => {
-                        this.takenUsernames.push(this.username);
-                        this.$emit('usernameRevert', this.initialUsername);
-                    });
-            }
-            return false
-        },
-    },
-    async mounted() {
-        this.initialUsername = this.username;
-    },
+@Component({
     components: {
         Guide,
         OverwatchButton,
         TrainingGoal,
     },
+})
+export default class UsernameInput extends Vue {
+    @Model('input', {required: true})
+    username: string
+
+    initialUsername: string | null = null
+    validationEnabled: boolean = false
+    takenUsernames: string[] = []
+
+    get isLengthValid(): boolean {
+        return this.username.length >= 3 && this.username.length <= 12;
+    }
+
+    get isUsernameAvailable(): boolean {
+        return !this.takenUsernames.includes(this.username);
+    }
+
+    get valid(): boolean {
+        return this.isLengthValid && this.isUsernameAvailable;
+    }
+
+    onInput(e) {
+        this.$emit('input', e.target.value)
+        if (e.target.value.length > 3) {
+            this.validationEnabled = true;
+        }
+    }
+
+    onFormSubmit(e : InputEvent) {
+        e.preventDefault();
+        if (this.valid) {
+            backend.changeUsername(this.username)
+                .then(result => {
+                    auth.setUsername(this.username)
+                    this.initialUsername = this.username
+                    window.location.reload();
+                })
+                .catch(e => {
+                    this.takenUsernames.push(this.username);
+                    this.$emit('usernameRevert', this.initialUsername);
+                });
+        }
+        return false
+    }
+
+    created() {
+        this.initialUsername = this.username;
+    }
 };
 
 </script>

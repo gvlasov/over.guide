@@ -1,91 +1,71 @@
 <template>
-    <div class="searchbox">
+    <div class="descriptor-builder">
         <TagBuilder
                 :descriptor="descriptor"
                 @done="() => $emit('descriptorChange', this.descriptor)"
         />
         <ThematicTagInput
-                style="display: block; min-width: 17em; flex-grow: 1;"
-                :descriptor="descriptor"
-                @tagChange="onIndividualTagChange"
+            :descriptor="descriptor"
         />
-        <OverwatchButton
-                v-if="searchButtonEnabled"
-                :type="'main'"
-                v-hammer:tap="onSearch"
-                class="search-button"
-        >Search
-        </OverwatchButton>
         <slot/>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
 import ThematicTagInput from "@/vue/guides/ThematicTagInput";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import OverwatchButton from "@/vue/OverwatchButton";
+import Component from "vue-class-component";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
 
-export default {
-        props: {
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true,
-            },
-            searchButtonEnabled: {
-                type: Boolean,
-                default: true,
-            }
-        },
-        data() {
-            return {};
-        },
-        watch: {},
-        computed: {},
-        methods: {
-            onIndividualTagChange() {
-                this.$emit('descriptorChange', this.descriptor)
-            },
-            onSearch() {
-                this.$emit('search', this.descriptor)
-            },
-        },
-        components: {
-            OverwatchButton,
-            TagBuilder,
-            ThematicTagInput,
-        }
-    }
+@Component({
+    components: {
+        OverwatchButton,
+        TagBuilder,
+        ThematicTagInput,
+    },
+})
+export default class DescriptorBuilder extends Vue {
+
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
+
+    @Prop({
+        default: true,
+        type: Boolean,
+    })
+    searchButtonEnabled: boolean
+}
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/overwatch-ui.scss";
 
-    .search-button {
-        font-size: 2.8em;
-        margin-right: .5rem;
 
-        & ::v-deep .background {
-            opacity: .8;
-        }
+.descriptor-builder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4em;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: .5rem 0 .5rem 0;
+    background: #fff;
+    border-radius: .4em;
+    border-color: #dbdbdb;
+    box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
+    .thematic-tag-input {
+        display: block;
+        min-width: 17em;
+        flex-grow: 1;
     }
 
-    .searchbox {
-        display: flex;
-        flex-wrap: wrap;
-        gap: .4em;
-        justify-content: center;
-        box-sizing: border-box;
-        padding: .5rem 0 .5rem 0;
-        background: #fff;
-        border-radius: .4em;
-        border-color: #dbdbdb;
-        box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .4);
-    }
-
-    .searchbox.active {
+    &.active {
         border: 1px solid #8bbafe;
         box-shadow: 0 0 0 0.2em rgba(13, 110, 253, 0.25);
         outline: 0 none;
     }
+}
+
 </style>

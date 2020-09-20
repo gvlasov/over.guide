@@ -25,7 +25,7 @@
                     v-hammer:tap="() => {$emit('open')}"
             >
                 <div class="tags">
-                    <Tag
+                    <HeroTag
                             v-if="guide.descriptor.hasHeroes"
                             class="hero-tag"
                             :descriptor="guide.descriptor"
@@ -61,78 +61,65 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
 import OverwatchButton from "@/vue/OverwatchButton";
-import Backend from "@/js/Backend";
+import Backend from "@/ts/Backend";
 import axios from 'axios';
-import Tag from "@/vue/guides/tags/hero/Tag";
+import HeroTag from "@/vue/guides/tags/hero/HeroTag";
 import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
-import MyTrainingGoalsCache from "@/js/MyTrainingGoalsCache";
+import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import GuidePartText from "@/vue/guides/GuidePartText";
-import GuideVso from "@/js/vso/GuideVso";
+import GuideVso from "@/ts/vso/GuideVso";
 import Guide from "@/vue/guides/Guide";
 import TagBadges from "@/vue/guides/TagBadges";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import GuidePartTextWidget from "../../js/vso/GuidePartTextWidget";
+import GuidePartVideoWidget from "../../js/vso/GuidePartVideoWidget";
+import Component from "vue-class-component";
 
 const backend = new Backend(axios);
 
-export default {
-    model: {},
-    props: {
-        guide: {
-            type: GuideVso,
-            required: true
-        },
-        open: {
-            type: Boolean,
-            default: false,
-        },
-        order: {
-            type: Number,
-            required: true,
-        },
-        ghost: {
-            type: Boolean,
-            default: false,
-        }
-    },
-    methods: {
-        removeTrainingGoal() {
-            MyTrainingGoalsCache.instance()
-                .removeGoal(this.guide.guideId)
-                .then(() => {
-                    this.deleted = true;
-                })
-        },
-        readdTrainingGoal() {
-            this.deleted = false;
-            this.$emit('removeUndo', this.guide.guideId)
-        }
-    },
-    computed: {
-        firstVideoWidget() {
-            return this.guide.parts.find(widget => widget.part.kind === 'video')
-
-        },
-        firstTextWidget() {
-            return this.guide.parts.find(widget => widget.part.kind === 'text')
-        },
-    },
-    data() {
-        return {
-        }
-    },
+@Component({
     components: {
         TagBadges,
         GuidePartText,
         AspectRatioBox,
         Guide,
         ThematicTagBadge,
-        Tag,
+        HeroTag,
         OverwatchButton,
         YoutubeVideo,
     },
+})
+export default class GuidePreviewBadge extends Vue {
+    @Prop({required: true})
+    guide: GuideVso
+
+    @Prop({default: false})
+    open: boolean
+
+    @Prop({required: true})
+    order: number
+
+    @Prop({default: false})
+    ghost: boolean
+
+    removeTrainingGoal() {
+        MyTrainingGoalsCache.instance()
+            .removeGoal(this.guide.guideId)
+    }
+
+    get firstVideoWidget(): GuidePartVideoWidget {
+        return this.guide.parts.find(widget => widget.part.kind === 'video') as GuidePartVideoWidget
+
+    }
+
+    get firstTextWidget(): GuidePartTextWidget {
+        return this.guide.parts.find(widget => widget.part.kind === 'text') as GuidePartTextWidget
+    }
 };
 
 </script>
@@ -154,6 +141,80 @@ export default {
         cursor: pointer;
         box-shadow: $overwatch-panel-bg-shadow;
         border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
+
+
+        &.deleted {
+            box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .5);
+
+            .opacity {
+                opacity: .3;
+            }
+        }
+
+        .opacity {
+            flex-grow: 1;
+            display: flex;
+            overflow: hidden;
+            @include overwatch-panel-bg;
+            border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
+
+            .tags {
+                margin-left: .3rem;
+                display: flex;
+                flex-grow: 1;
+                align-items: center;
+
+                .hero-tag {
+                    margin-right: .5em;
+                    text-wrap: none;
+                    white-space: nowrap;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    gap: .25rem
+                }
+
+                .badge-tags-wrap {
+                    display: inline-block;
+                    text-wrap: none;
+                    white-space: nowrap;
+                }
+            }
+
+            .text-guide-part-content {
+                flex-direction: column;
+                justify-content: center;
+                text-align: left;
+                font-size: 1em;
+                white-space: nowrap;
+                overflow: hidden;
+                margin: 1em;
+                flex-grow: 999;
+                font-family: $body-font;
+                height: 2em;
+                //& > *:not() {
+                //
+                //}
+
+                & ::v-deep * {
+                    margin: 0;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+
+            .unclickable {
+                pointer-events: none;
+                display: flex;
+                flex-direction: row;
+                height: $training-goal-height;
+                width: $training-goal-height/9*16;
+
+                .aspect-ratio-box {
+                    width: $training-goal-height/9*16;
+                }
+            }
+        }
     }
 
     .uncollapsed {
@@ -174,78 +235,6 @@ export default {
         }
     }
 
-    .deleted {
-        box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .5);
-
-        .opacity {
-            opacity: .3;
-        }
-    }
-
-    .opacity {
-        flex-grow: 1;
-        display: flex;
-        overflow: hidden;
-        @include overwatch-panel-bg;
-        border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
-
-        .tags {
-            margin-left: .3rem;
-            display: flex;
-            flex-grow: 1;
-            align-items: center;
-
-            .hero-tag {
-                margin-right: .5em;
-                text-wrap: none;
-                white-space: nowrap;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                gap: .25rem
-            }
-
-            .badge-tags-wrap {
-                display: inline-block;
-                text-wrap: none;
-                white-space: nowrap;
-            }
-        }
-
-        .text-guide-part-content {
-            flex-direction: column;
-            justify-content: center;
-            text-align: left;
-            font-size: 1em;
-            white-space: nowrap;
-            overflow: hidden;
-            margin: 1em;
-            flex-grow: 999;
-            font-family: $body-font;
-            height:2em;
-            //& > *:not() {
-            //
-            //}
-
-            & ::v-deep * {
-                margin: 0;
-                text-overflow: ellipsis;
-                overflow: hidden;
-            }
-        }
-
-        .unclickable {
-            pointer-events: none;
-            display: flex;
-            flex-direction: row;
-            height: $training-goal-height;
-            width: $training-goal-height/9*16;
-
-            .aspect-ratio-box {
-                width: $training-goal-height/9*16;
-            }
-        }
-    }
 }
 
 </style>

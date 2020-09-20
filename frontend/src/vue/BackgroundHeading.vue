@@ -1,10 +1,15 @@
 <template>
-    <div class="background-heading"><slot/></div>
+    <div class="background-heading">
+        <slot/>
+    </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-export default {
+@Component({})
+export default class BackgroundHeading extends Vue {
 };
 
 </script>

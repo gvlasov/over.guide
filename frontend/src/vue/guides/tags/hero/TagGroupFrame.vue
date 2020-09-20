@@ -1,5 +1,5 @@
 <template>
-    <span class="tag-type-group-wrap">
+    <span class="tag-group-frame">
         <div class="tag-type-infix"
              v-bind:class="{'infix-teammate': tagGroup.gamerPosition.isTeammate, 'infix-enemy' : tagGroup.gamerPosition.isEnemy}"
         >
@@ -9,31 +9,25 @@
     </span>
 </template>
 
-<script>
-import TagGroupVso from "@/js/vso/TagGroupVso";
+<script lang="ts">
+import TagGroupVso from "@/ts/vso/TagGroupVso";
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import Component from "vue-class-component";
 
-export default {
-        props: {
-            tagGroup: {
-                type: TagGroupVso,
-                required: true,
-            }
-        },
-        data() {
-            return {};
-        },
-        methods: {},
-        computed: {},
-        components: {},
-    };
+@Component({})
+export default class TagGroupFrame extends Vue {
+    @Prop({required: true})
+    tagGroup: TagGroupVso
+};
 </script>
 
 <style lang="scss" scoped>
 
-    .tag-type-group-wrap {
-        display: inline-table;
-        border-spacing: 0;
-    }
+.tag-group-frame {
+    display: inline-table;
+    border-spacing: 0;
+
 
     .tag-type-infix {
         display: table-cell;
@@ -55,4 +49,5 @@ export default {
         font-size: $infix-teammate-font-size;
         min-width: #{$infix-width/$infix-teammate-font-size}em;
     }
+}
 </style>

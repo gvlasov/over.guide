@@ -8,7 +8,7 @@
                         v-bind:style="{visibility: tagGroup.heroes.length > 0 ? 'visible' : 'hidden'}"
                         v-hammer:tap="() => selectingSkills = !selectingSkills"
                 >
-                    <div class="aside-content">{{selectingSkills ? 'Heroes' : 'Skills'}}</div>
+                    <div class="aside-content">{{ selectingSkills ? 'Heroes' : 'Skills' }}</div>
                     <div class="background"></div>
                 </div>
                 <div class="tag-builder-roster-content">
@@ -89,7 +89,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
 import TagBuilderRosterPortrait
@@ -97,108 +97,130 @@ import TagBuilderRosterPortrait
 import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
 import Roster_SelectedHeroesMixin
     from "@/vue/roster/Roster_SelectedHeroesMixin";
-import HeroGroupsByRole from "@/js/HeroGroupsByRole";
+import HeroGroupsByRole from "@/ts/HeroGroupsByRole";
 import AbilityIcon from "@/vue/AbilityIcon";
-import GuideDescriptorVso from "@/js/vso/GuideDescriptorVso";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
 import OverwatchButton from "@/vue/OverwatchButton";
 import Role from "data/Role";
-import GamerPositionVso from "@/js/vso/GamerPositionVso";
+import GamerPositionVso from "@/ts/vso/GamerPositionVso";
+import Component, {mixins} from "vue-class-component";
+import {Prop} from "vue-property-decorator";
+import HeroDto from "data/dto/HeroDto";
+import TagGroupVso from "@/ts/vso/TagGroupVso";
 
+@Component({
+    components: {
+        OverwatchButton,
+        AbilityIcon,
+        AbilitySelect,
+        TagBuilderRosterPortrait,
+        TagGroupBackground,
+        TagGroupFrame,
+        TagBuilderRosterTag,
+    },
+})
+export default class TagBuilderRoster extends mixins(Roster_SelectedHeroesMixin) {
+    @Prop({required: true})
+    gamerPosition: GamerPositionVso
 
-export default {
-        mixins: [
-            Roster_SelectedHeroesMixin,
-        ],
-        props: {
-            gamerPosition: {
-                type: GamerPositionVso,
-                required: true,
-            },
-            descriptor: {
-                type: GuideDescriptorVso,
-                required: true,
-            },
-        },
-        data() {
-            return {
-                selectingSkills: false,
-                heroGroups: HeroGroupsByRole.ALL,
-            };
-        },
-        methods: {
-            onDoneTap() {
-                this.$emit('save')
-            },
-            selectedHeroAbilities(hero) {
-                return this.descriptor
-                    .getGroupByGamerPosition(this.gamerPosition)
-                    .abilities
-                    .filter(ability => ability.hero.id === hero.id)
-            },
-            selectedHeroesInGroup() {
-                return this.selectedHeroes.filter(h => this.tagGroup.heroes.find(gh => gh.id === h.id));
-            },
-            shouldHaveClearButtonOnGroupRow(group) {
-                return group[0].role === Role.Support;
-            },
-        },
-        computed: {
-            /**
-             * @see Roster_SelectedHeroesMixin
-             */
-            selectedHeroes() {
-                return this.tagGroup.heroes;
-            },
-            tagGroup() {
-                return this.descriptor.getGroupByGamerPosition(this.gamerPosition);
-            }
-        },
-        beforeMount() {
-            if (typeof window.orientation !== 'undefined') {
-                document.documentElement.requestFullscreen()
-            }
-        },
-        components: {
-            OverwatchButton,
-            AbilityIcon,
-            AbilitySelect,
-            TagBuilderRosterPortrait,
-            TagGroupBackground,
-            TagGroupFrame,
-            TagBuilderRosterTag,
-        },
-    };
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
 
+    selectingSkills: boolean = false
+    heroGroups: HeroGroupsByRole = HeroGroupsByRole.ALL
+
+    onDoneTap() {
+        this.$emit('save')
+    }
+
+    selectedHeroAbilities(hero) {
+        return this.descriptor
+            .getGroupByGamerPosition(this.gamerPosition)
+            .abilities
+            .filter(ability => ability.hero.id === hero.id)
+    }
+
+    selectedHeroesInGroup() {
+        return this.selectedHeroes.filter(h => this.tagGroup.heroes.find(gh => gh.id === h.id));
+    }
+
+    shouldHaveClearButtonOnGroupRow(group) {
+        return group[0].role === Role.Support;
+    }
+
+    /**
+     * @see Roster_SelectedHeroesMixin#selectedHeroes
+     */
+    get selectedHeroes(): HeroDto[] {
+        return this.tagGroup.heroes;
+    }
+
+    get tagGroup(): TagGroupVso {
+        return this.descriptor.getGroupByGamerPosition(this.gamerPosition);
+    }
+
+    beforeMount() {
+        if (typeof window.orientation !== 'undefined') {
+            document.documentElement.requestFullscreen()
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/overwatch-ui.scss";
 
-    .roster-fixedbox {
+.roster-fixedbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    text-align: center;
+
+    .roster-fixedbox-bg {
+        opacity: .9;
+        background-color: hsl(40, 70%, 3%);
         position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 3;
-        text-align: center;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
     }
 
-    .tag-builder-roster {
-        display: inline-flex;
-        justify-content: space-evenly;
-        align-content: center;
-        flex-direction: row;
-        flex-wrap: nowrap;
+
+    .tag-builder-roster-wrap {
         width: 100vw;
         height: 100vh;
-        position: relative;
-        max-width: 73em;
-        max-height: 35em;
-        line-height: 1em;
+        line-height: 100vh;
+        vertical-align: top;
+        .tag-builder-roster {
+            display: inline-flex;
+            justify-content: space-evenly;
+            align-content: center;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            max-width: 73em;
+            max-height: 35em;
+            line-height: 1em;
+
+            .aside-button {
+                @include overwatch-button;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                flex-basis: 9rem;
+                font-size: 2em;
+                flex-shrink: 0;
+                z-index: 2;
+            }
+        }
     }
 
     .tag-builder-roster-content {
@@ -219,6 +241,44 @@ export default {
             flex-direction: column;
             justify-content: end;
             margin: 0 auto;
+
+            .role-group {
+                display: flex;
+                justify-content: center;
+
+                .clear-button-wrap {
+                    display: inline-block;
+                    position: relative;
+                    /* https://stackoverflow.com/a/14896313/1542343 */
+                    transform: skew(-25deg);
+                    vertical-align: bottom;
+                    width: 9.4%;
+
+
+                    .clear-button {
+                        margin-left: .3em;
+                        height: 100%;
+                        vertical-align: top;
+                        font-size: .9em;
+                        border-radius: .3em;
+                        width: 100%;
+                        border: .08vw solid transparent;
+                    }
+
+                    .clear-button ::v-deep .content {
+                        padding-left: 12%;
+                        padding-right: 12%;
+                    }
+
+                    .clear-button ::v-deep .background {
+                        border-radius: .3em;
+                    }
+
+                    .unskew-clear-button {
+                        transform: skew(25deg);
+                    }
+                }
+            }
         }
 
         .ability-select-wrap {
@@ -243,24 +303,6 @@ export default {
         }
     }
 
-    .tag-builder-roster-wrap {
-        width: 100vw;
-        height: 100vh;
-        line-height: 100vh;
-        vertical-align: top;
-    }
-
-    .aside-button {
-        @include overwatch-button;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        flex-basis: 9rem;
-        font-size: 2em;
-        flex-shrink: 0;
-        z-index: 2;
-    }
-
     .aside-button-mode > .background {
         @include overwatch-button-bg-default;
     }
@@ -276,15 +318,6 @@ export default {
     .ability-select {
         z-index: 2;
         position: relative;
-    }
-
-    .roster-fixedbox-bg {
-        opacity: .9;
-        background-color: hsl(40, 70%, 3%);
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
     }
 
     .tag-portrait {
@@ -339,50 +372,13 @@ export default {
         white-space: nowrap
     }
 
-    .role-group {
-        display: flex;
-        justify-content: center;
-    }
-
-    .clear-button-wrap {
-        display: inline-block;
-        position: relative;
-        /* https://stackoverflow.com/a/14896313/1542343 */
-        transform: skew(-25deg);
-        vertical-align: bottom;
-        width: 9.4%;
-    }
-
-    .unskew-clear-button {
-        transform: skew(25deg);
-    }
-
-    .clear-button {
-        margin-left: .3em;
-        height: 100%;
-        vertical-align: top;
-        font-size: .9em;
-        border-radius: .3em;
-        width: 100%;
-        border: .08vw solid transparent;
-    }
-
-    .clear-button ::v-deep .content {
-        padding-left: 12%;
-        padding-right: 12%;
-    }
-
-    .clear-button ::v-deep .background {
-        border-radius: .3em;
-    }
-
     @media screen and (orientation: portrait) {
-        .tag-builder-roster {
-            flex-direction: column;
-            min-height: 100vh;
-        }
         .tag-builder-roster-wrap {
             line-height: normal;
+            .tag-builder-roster {
+                flex-direction: column;
+                min-height: 100vh;
+            }
         }
 
         .navigation-arrow {
@@ -399,5 +395,6 @@ export default {
             flex-basis: 7rem;
         }
     }
+}
 
 </style>

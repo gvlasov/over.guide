@@ -9,22 +9,19 @@
     </transition>
 </template>
 
-<script>
+<script lang="ts">
 import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 import OverwatchButton from "@/vue/OverwatchButton";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-export default {
-    props: {},
-    methods: {
-        asdf() {
-            alert('start')
-        }
-    },
-    computed: {},
+@Component({
     components: {
         OverwatchButton,
         BattlenetAuthButton,
     },
+})
+export default class LoginNotice extends Vue {
 };
 
 </script>

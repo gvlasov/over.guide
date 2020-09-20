@@ -1,12 +1,11 @@
 <template>
     <div class="weak-panel root-content-panel-wrap">
-            <slot></slot>
+        <slot></slot>
     </div>
 </template>
 
 <script>
-export default {
-};
+export default {};
 
 </script>
 

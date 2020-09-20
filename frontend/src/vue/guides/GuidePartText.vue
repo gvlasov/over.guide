@@ -1,22 +1,26 @@
 <template>
     <div class="text-guide-part-content">
         <Markdown
-            :code="part.contentMd"
+                :code="part.contentMd"
         />
     </div>
 </template>
 
-<script>
-import Markdown from "@/vue/guides/Markdown";
+<script lang="ts">
+import Vue from 'vue'
+import {Prop} from "vue-property-decorator";
+import GuidePartTextDto from "data/dto/GuidePartTextDto";
+import Component from "vue-class-component";
+import Markdown from '@/vue/guides/Markdown'
 
-export default {
-    props: {
-        part: {
-            type: Object,
-            required: true,
-        }
+@Component({
+    components: {
+        Markdown,
     },
-    components: {Markdown},
+})
+export default class GuidePartText extends Vue {
+    @Prop({required: true})
+    part: GuidePartTextDto
 };
 
 </script>

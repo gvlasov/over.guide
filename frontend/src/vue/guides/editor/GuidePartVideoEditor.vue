@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="guide-part-video-editor">
         <div
                 v-if="widget.part.excerpt === null"
                 class="youtube-video-link-form"
@@ -32,137 +32,122 @@
             />
         </div>
         <div v-else-if="!widget.editing" key="video">
-            <YoutubeVideo
-                    :video-id="widget.part.excerpt.youtubeVideoId"
-                    :start="widget.part.excerpt.startSeconds"
-                    :end="widget.part.excerpt.endSeconds"
-                    :loop="true"
-                    :autoplay="false"
-                    :mute="true"
-                    :player-element-id="index +'-'+ widget.part.excerpt.youtubeVideoId"
-                    class="video"
-                    v-bind:style="{width: '100%', height: '22rem'}"
-            />
+            <AspectRatioBox>
+                <YoutubeVideo
+                        :video-id="widget.part.excerpt.youtubeVideoId"
+                        :start="widget.part.excerpt.startSeconds"
+                        :end="widget.part.excerpt.endSeconds"
+                        :loop="true"
+                        :autoplay="false"
+                        :mute="true"
+                        :player-element-id="index +'-'+ widget.part.excerpt.youtubeVideoId"
+                        class="video"
+                />
+            </AspectRatioBox>
         </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
 import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
-import GuidePartVideoWidget from "@/js/vso/GuidePartVideoWidget";
-import YoutubeUrlVso from "@/js/vso/YoutubeUrlVso";
-import EmbeddableCache from "@/js/EmbeddableCache";
+import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
+import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
+import EmbeddableCache from "@/ts/EmbeddableCache";
+import Vue from 'vue'
+import Component from 'vue-class-component'
+import {Prop, Watch} from "vue-property-decorator";
+import AsyncComputedProp from 'vue-async-computed-decorator'
+import AspectRatioBox from "@/vue/AspectRatioBox.vue";
 
-export default {
-        model: {},
-        props: {
-            widget: {
-                type: GuidePartVideoWidget,
-                required: true,
-            },
-            index: {
-                type: Number,
-                required: true,
-            },
-        },
-        asyncComputed: {
-            validations() {
-                return this.validate(this.youtubeVideoUrl)
-            }
-        },
-        methods: {
-            onStartSecondsChangeHacky(widget, newValue) {
-                widget.part.excerpt.startSeconds = newValue;
-            },
-            onEndSecondsChangeHacky(widget, newValue) {
-                widget.part.excerpt.endSeconds = newValue;
-            },
-            async validate(inputText) {
-                const validations = {
-                    isUrl: false,
-                    isValidYoutubeVideoUrl: false,
-                    isEmbeddingAllowed: false,
-                    videoExists: false,
-                };
-                let url;
-                try {
-                    url = new URL(inputText);
-                    validations.isUrl = true;
-                } catch (e) {
-                    return validations;
-                }
-                let youtubeUrl;
-                try {
-                    youtubeUrl = new YoutubeUrlVso(url);
-                    validations.isValidYoutubeVideoUrl = true;
-                } catch (e) {
-                    return validations
-                }
-                /*
-                "Embedding allowed" is checked before "Video exists" because
-                embedding can be cached and checking if video exists is expensive
-                 */
-                if (EmbeddableCache.isEmbeddable(youtubeUrl.videoId)) {
-                    validations.isEmbeddingAllowed = true
-                } else {
-                    return validations;
-                }
-                const videoInfo = await youtubeUrl.apiJson();
-                if (videoInfo.pageInfo.totalResults > 0) {
-                    validations.videoExists = true;
-                } else {
-                    return validations;
-                }
-                return validations;
-            },
-        },
-        watch: {
-            async youtubeVideoUrl(newValue) {
-                const validations = await this.validate(newValue);
-                for (let validation in validations) {
-                    if (!validations[validation]) {
-                        return false;
-                    }
-                }
-                const youtubeUrl = new YoutubeUrlVso(new URL(this.youtubeVideoUrl));
-                this.$emit('videoSelection', youtubeUrl.videoId)
-            },
-        },
-        data() {
-            return {
-                youtubeVideoUrl: '',
-            }
-        },
-        components: {
-            YoutubeExcerptEditor,
-            YoutubeVideo,
-        },
-    };
+@Component({
+    components: {
+        AspectRatioBox,
+        YoutubeExcerptEditor,
+        YoutubeVideo,
+    },
+})
+export default class GuidePartVideoEditor extends Vue {
+    @Prop({required: true})
+    widget: GuidePartVideoWidget
 
+    @Prop({required: true})
+    index: number
+
+    youtubeVideoUrl: string = ''
+
+    @AsyncComputedProp()
+    validations() {
+        return this.validate(this.youtubeVideoUrl)
+    }
+
+    onStartSecondsChangeHacky(widget: GuidePartVideoWidget, newValue) {
+        widget.part.excerpt.startSeconds = newValue
+    }
+
+    onEndSecondsChangeHacky(widget: GuidePartVideoWidget, newValue) {
+        widget.part.excerpt.endSeconds = newValue
+    }
+
+    async validate(inputText) {
+        const validations = {
+            isUrl: false,
+            isValidYoutubeVideoUrl: false,
+            isEmbeddingAllowed: false,
+            videoExists: false,
+        };
+        let url;
+        try {
+            url = new URL(inputText)
+            validations.isUrl = true
+        } catch (e) {
+            return validations;
+        }
+        let youtubeUrl: YoutubeUrlVso;
+        try {
+            youtubeUrl = new YoutubeUrlVso(url)
+            validations.isValidYoutubeVideoUrl = true
+        } catch (e) {
+            return validations
+        }
+        /*
+        "Embedding allowed" is checked before "Video exists" because
+        embedding can be cached and checking if video exists is expensive
+         */
+        if (EmbeddableCache.isEmbeddable(youtubeUrl.videoId)) {
+            validations.isEmbeddingAllowed = true
+        } else {
+            return validations;
+        }
+        const videoInfo = await youtubeUrl.apiJson();
+        if (videoInfo.pageInfo.totalResults > 0) {
+            validations.videoExists = true;
+        } else {
+            return validations;
+        }
+        return validations;
+    }
+
+
+    @Watch('youtubeVideoUrl')
+    async onYoutubeVideoUrlChange(newValue) {
+        const validations = await this.validate(newValue);
+        for (let validation in validations) {
+            if (!validations[validation]) {
+                return false;
+            }
+        }
+        const youtubeUrl = new YoutubeUrlVso(new URL(this.youtubeVideoUrl));
+        this.$emit('videoSelection', youtubeUrl.videoId)
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-    @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/overwatch-ui.scss";
 
-    .video {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .video-editor {
-        display: block;
-    }
-
-    .youtube-video-link-errors {
-        color: #ff0000;
-        @include overwatch-futura;
-        font-size: 1.3em;
-    }
-
-    .youtube-video-link-form {
-        margin-bottom: 2em;
-    }
+.youtube-video-link-form {
+    margin-bottom: 2em;
 
     .youtube-video-link-input {
         outline: 0;
@@ -182,4 +167,21 @@ export default {
             color: transparent;
         }
     }
+
+    .youtube-video-link-errors {
+        @include overwatch-futura;
+        text-shadow: 0 0 .18em #ff6600;
+        font-size: 1.3em;
+    }
+}
+
+.video {
+    max-width: 100%;
+    width: 100%;
+}
+
+.video-editor {
+    display: block;
+}
+
 </style>

@@ -14,17 +14,17 @@
 </template>
 
 <script>
-    import PickContext from "@/js/PickContext";
-    import heroes from "data/heroes";
-    import RosterFrame from '@/vue/roster/RosterFrame.vue'
-    import Roster_SelectedHeroesMixin
-        from "@/vue/roster/Roster_SelectedHeroesMixin";
-    import Roster_SelectedOutHeroesMixin
-        from "@/vue/roster/Roster_SelectedOutHeroesMixin";
-    import RosterPortrait from "@/vue/RosterPortrait";
-    import Roster_BansMixin from "@/vue/roster/Roster_BansMixin";
+import PickContext from "@/ts/PickContext";
+import heroes from "data/heroes";
+import RosterFrame from '@/vue/roster/RosterFrame.vue'
+import Roster_SelectedHeroesMixin
+    from "@/vue/roster/Roster_SelectedHeroesMixin";
+import Roster_SelectedOutHeroesMixin
+    from "@/vue/roster/Roster_SelectedOutHeroesMixin";
+import RosterPortrait from "@/vue/RosterPortrait";
+import Roster_BansMixin from "@/vue/roster/Roster_BansMixin";
 
-    export default {
+export default {
         mixins: [
             Roster_SelectedHeroesMixin,
             Roster_SelectedOutHeroesMixin,

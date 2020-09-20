@@ -18,15 +18,19 @@
     </LoginNotice>
 </template>
 
-<script>
+<script lang="ts">
 import OverwatchButton from "@/vue/OverwatchButton";
 import LoginNotice from "@/vue/LoginNotice";
+import Vue from 'vue'
+import Component from "vue-class-component";
 
-export default {
+@Component({
     components: {
         LoginNotice,
         OverwatchButton,
     },
+})
+export default class LogoutDangerNotice extends Vue {
 };
 
 </script>
