@@ -22,6 +22,7 @@ import {ContentHashService} from "src/services/content-hash.service";
 import {GuideSearchService} from "src/services/guide-search.service";
 import {TrainingGoalController} from "src/controllers/training-goal.controller";
 import {UserController} from "src/controllers/user.controller";
+import {CommentController} from "src/controllers/comment.controller";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -36,6 +37,7 @@ import {UserController} from "src/controllers/user.controller";
         FixtureController,
         TrainingGoalController,
         UserController,
+        CommentController,
     ],
     providers: [
         AppService,

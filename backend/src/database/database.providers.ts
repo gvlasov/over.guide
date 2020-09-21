@@ -27,6 +27,8 @@ import {GuideDescriptor2PlayerAbility} from "src/database/models/GuideDescriptor
 import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescriptor2TeammateAbility";
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
+import {Comment} from "src/database/models/Comment";
+import {CommentVote} from "src/database/models/CommentVote";
 
 const Umzug = require('umzug')
 
@@ -60,6 +62,8 @@ export const databaseProviders = [
             )
 
             sequelize.addModels([
+                Comment,
+                CommentVote,
                 Hero,
                 Patch,
                 Ability,
