@@ -1,6 +1,5 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {User} from "src/database/models/User";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import {Guide} from "src/database/models/Guide";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {GuidePartText} from "src/database/models/GuidePartText";
@@ -14,6 +13,9 @@ import {GuideHistoryEntry2GuidePartVideo} from "src/database/models/GuideHistory
 import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
 import {ContentHashService} from "src/services/content-hash.service";
+import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
+import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 
 export enum SaveResult {
     SavingDuplicateRejected
@@ -29,20 +31,38 @@ export class GuideHistoryEntryService {
     ) {
     }
 
-    async save(gheDto: GuideHistoryEntryDto, saver: User): Promise<GuideHistoryEntry | SaveResult> {
+    async create(
+        gheDto: GuideHistoryEntryCreateDto,
+        saver: User
+    ) {
+        return this.save(
+            gheDto,
+            () => Guide.create({authorId: saver.id}),
+            saver
+        )
+    }
+
+    async append(
+        gheDto: GuideHistoryEntryAppendDto,
+        saver: User
+    ) {
+
+        return this.save(
+            gheDto,
+            () => Guide.findOne({ where: {id: gheDto.guideId} }),
+            saver
+        )
+    }
+
+    private async save(
+        gheDto: GuideHistoryEntryDto,
+        obtainModel: () => Promise<Guide>,
+        saver: User
+    ): Promise<GuideHistoryEntry | SaveResult> {
         return this.sequelize.transaction(async (t) => {
             const descriptor = await
                 this.guideDescriptorService.obtainExact(gheDto.descriptor);
-            const guide =
-                await (
-                    typeof gheDto.guideId === 'undefined'
-                        ? Guide.create({
-                            creatorId: saver.id
-                        })
-                        : Guide.findOne({
-                            where: {id: gheDto.guideId},
-                        })
-                )
+            const guide = await obtainModel()
             const oldEntry = await GuideHistoryEntry.findOne({
                 include: [{all: true}],
                 where: {

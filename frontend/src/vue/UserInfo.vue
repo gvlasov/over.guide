@@ -49,7 +49,7 @@
                         class="root-content-panel-wrap"
                 >
                     <Guide
-                            :guide="guide"
+                            head="guide"
                             :show-training-goal-button="true"
                             :search-descriptor="null"
                     />

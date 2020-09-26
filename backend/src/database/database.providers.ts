@@ -29,6 +29,9 @@ import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import {Comment} from "src/database/models/Comment";
 import {CommentVote} from "src/database/models/CommentVote";
+import {GuideVote} from "src/database/models/GuideVote";
+import {GuideHeadLink} from "src/database/models/GuideHeadLink";
+import EntityTypeId from "data/EntityTypeId";
 
 const Umzug = require('umzug')
 
@@ -64,6 +67,7 @@ export const databaseProviders = [
             sequelize.addModels([
                 Comment,
                 CommentVote,
+                GuideVote,
                 Hero,
                 Patch,
                 Ability,
@@ -88,13 +92,15 @@ export const databaseProviders = [
                 Map,
                 ThematicTag,
                 GuideHead,
+                GuideHeadLink,
                 User2TrainingGoal,
             ]);
             const umzug = new Umzug({
                 migrations: {
                     path: 'src/database/migrations',
                     params: [
-                        sequelize.getQueryInterface()
+                        sequelize.getQueryInterface(),
+                        EntityTypeId.Guide
                     ]
                 },
                 storage: 'sequelize',

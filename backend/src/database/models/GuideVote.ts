@@ -9,11 +9,11 @@ import {
     Table
 } from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
-import {Comment} from "src/database/models/Comment";
 import {User} from "src/database/models/User";
+import {Guide} from "src/database/models/Guide";
 
 @Table
-export class CommentVote extends Model<CommentVote> {
+export class GuideVote extends Model<GuideVote> {
 
     @PrimaryKey
     @AutoIncrement
@@ -21,12 +21,12 @@ export class CommentVote extends Model<CommentVote> {
     public id: number
 
     @AllowNull(false)
-    @ForeignKey(() => Comment)
+    @ForeignKey(() => Guide)
     @Column({type: new DataTypes.INTEGER()})
-    commentId: number
+    guideId: number
 
-    @BelongsTo(() => Comment, 'commentId')
-    comment: Comment
+    @BelongsTo(() => Guide, 'guideId')
+    guide: Guide
 
     @AllowNull(false)
     @ForeignKey(() => User)

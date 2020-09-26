@@ -3,7 +3,7 @@ import DescriptorParseError from "@/ts/DescriptorParseError";
 import Vue from 'vue'
 import Component from "vue-class-component";
 
-@Component
+@Component({})
 export default class ParamsDescriptorMixin extends Vue {
     $route: any
     $router: any
@@ -17,7 +17,8 @@ export default class ParamsDescriptorMixin extends Vue {
             paramsText = this.$route.params.descriptor
         }
         try {
-            return new ParamsDescriptor(paramsText).compute();
+            const dto = new ParamsDescriptor(paramsText).compute();
+            return dto;
         } catch (e) {
             if (e instanceof DescriptorParseError) {
                 this.$router.push(

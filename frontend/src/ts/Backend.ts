@@ -4,15 +4,18 @@ import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 import {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
 import HeroDto from "data/dto/HeroDto"
-import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto";
+import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto";
 import env from '../env/dev'
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
-import TrainingGoalDto from "data/dto/TrainingGoalDto";
 import UserInfoDto from "data/dto/UserInfoDto";
 import UsernameOccupiedException from "@/ts/UsernameOccupiedException";
 import Authentication from "@/ts/Authentication";
+import OrderedGuideHeadDto from "data/dto/OrderedGuideHeadDto";
+import GuideHeadDto, {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
+import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 
 const querystring = require('query-string')
 
@@ -86,16 +89,16 @@ export default class Backend {
         )
     };
 
-    async getMyTrainingGoals(): Promise<TrainingGoalDto[]> {
+    async getMyTrainingGoals(): Promise<OrderedGuideHeadDto[]> {
         return this.query(
             'GET',
             '/my-training-goals',
             {},
-            response => response.data as TrainingGoalDto[]
+            response => response.data as OrderedGuideHeadDto[]
         )
     };
 
-    async addTrainingGoal(guideId: number, order?: number): Promise<GuideHistoryEntryDto[]> {
+    async addTrainingGoal(guideId: number, order?: number): Promise<GuideHistoryEntryReadDto[]> {
         return this.query(
             'POST',
             '/my-training-goals/' + guideId,
@@ -106,7 +109,7 @@ export default class Backend {
         )
     }
 
-    async removeTrainingGoal(guideId: number): Promise<GuideHistoryEntryDto[]> {
+    async removeTrainingGoal(guideId: number): Promise<GuideHistoryEntryReadDto[]> {
         return this.query(
             'DELETE',
             '/my-training-goals/' + guideId,
@@ -154,7 +157,7 @@ export default class Backend {
         )
     };
 
-    async saveVideoExcerpt(excerpt: YoutubeVideoExcerpsDto): Promise<number | null> {
+    async saveVideoExcerpt(excerpt: YoutubeVideoExcerptDto): Promise<number | null> {
         return this.query(
             'PUT',
             '/youtube-video-excerpt',
@@ -169,7 +172,7 @@ export default class Backend {
         )
     };
 
-    async getGuide(guideId: number): Promise<GuideHistoryEntryDto> {
+    async getGuide(guideId: number): Promise<GuideHeadDto<GuideHistoryEntryReadDto>> {
         return this.query(
             'GET',
             `/guide/${guideId}`,
@@ -178,7 +181,7 @@ export default class Backend {
         )
     }
 
-    async getGuidesByVideoId(videoId: string): Promise<GuideHistoryEntryDto[]> {
+    async getGuidesByVideoId(videoId: string): Promise<ExistingGuideHeadDto[]> {
         return this.query(
             'GET',
             `/guide/search-by-video/${videoId}`,
@@ -187,10 +190,10 @@ export default class Backend {
         )
     }
 
-    async saveGuide(guide: GuideHistoryEntryDto): Promise<number | null> {
+    async createGuide(guide: GuideHistoryEntryCreateDto): Promise<number> {
         return this.query(
             'POST',
-            '/guide',
+            '/guide/create',
             guide,
             (response) => {
                 if (response.status === 201) {
@@ -198,6 +201,15 @@ export default class Backend {
                 } else {
                     return null;
                 }
+            }
+        )
+    }
+    async updateGuide(guide: GuideHistoryEntryAppendDto): Promise<void> {
+        return this.query(
+            'POST',
+            '/guide/update',
+            guide,
+            (response) => {
             }
         )
     }

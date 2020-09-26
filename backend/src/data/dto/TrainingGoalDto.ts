@@ -1,6 +1,6 @@
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
 
 export default interface TrainingGoalDto {
-    readonly guide: GuideHistoryEntryDto
+    readonly guide: GuideHistoryEntryReadDto
     readonly order: number
 }

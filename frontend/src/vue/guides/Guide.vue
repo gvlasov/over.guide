@@ -1,71 +1,24 @@
 <template>
     <div class="guide">
-        <div class="meta">
-            <div
-                    class="tags"
-                    v-hammer:tap="() => $router.push(tagLink(guide.descriptor)).catch(()=>{})"
-                    v-bind:class="{'same-as-search': guide.descriptor.equals(searchDescriptor)}"
-            >
-                <HeroTag
-                        v-if="guide.descriptor.hasHeroes"
-                        class="hero-tag"
-                        :descriptor="guide.descriptor"
-                />
-                <TagBadges
-                        v-if="guide.descriptor.individualTags.length > 0"
-                        :descriptor="guide.descriptor"
-                />
-            </div>
-            <div class="authorship">
-                <div class="creation-date" v-bind:title="absoluteDateText()">{{ creationTimeRelative() }} ago</div>
-                <div class="author">by
-                    <a v-bind:href="`/#/user/${guide.author.id}`">{{ guide.author.name }}</a>
-                </div>
-            </div>
-        </div>
-        <div
-                v-if="showTrainingGoalButton"
-                class="training-goal-buttons"
-        >
-            <OverwatchButton
-                    v-if="trainingGoalAdded"
-                    type="main"
-                    class="training-goal-button remove-training-goal-button"
-                    v-hammer:tap="removeTrainingGoal"
-            >Your training goal
-            </OverwatchButton>
-            <OverwatchButton
-                    v-else
-                    type="default"
-                    class="training-goal-button add-training-goal-button"
-                    v-hammer:tap="addTrainingGoal"
-            >Add training goal
-            </OverwatchButton>
-        </div>
-        <div v-for="(widget, index) in guide.parts" :key="index" class="guide-part">
-            <div class="text-guide-part" v-if="widget.part.kind === 'text'">
-                <GuidePartText :part="widget.part"/>
-            </div>
-            <GuideVideo
-                    v-if="widget.part.kind === 'video'"
-                    :guide="guide"
-                    :part="widget.part"
-                    :index="index"
-                    :initial-show-preload="true"
-                    @comesIntoVision="(e) => $emit('comesIntoVision', e)"
-                    @comesOutOfVision="(e) => $emit('comesOutOfVision', e)"
-                    @play="(player) => $emit('play', player)"
-                    @playerReady="(player) => $emit('playerReady', player)"
-            />
-        </div>
+        <GuideMeta
+                :entry="head.entry"
+                :search-descriptor="searchDescriptor"
+                :creation-time="creationTime"
+        />
+        <TrainingGoalToggle
+                :entry="head.entry"
+        />
+        <GuideContent
+                :entry="head.entry"
+        />
         <OverwatchButton
-                v-if="canEdit && isStored"
+                v-if="canEdit"
                 type="default"
                 v-hammer:tap="edit"
         >Edit
         </OverwatchButton>
         <OverwatchButton
-                v-if="canEdit && isStored"
+                v-if="canEdit"
                 type="default"
                 v-hammer:tap="deactivate"
         >Delete
@@ -75,20 +28,20 @@
 
 <script lang="ts">
 import OverwatchButton from "@/vue/OverwatchButton";
-import GuideVso from "@/ts/vso/GuideVso";
-import HeroTag from "@/vue/guides/tags/hero/HeroTag";
-import formatDistance from 'date-fns/formatDistance'
 import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
-import TagBadges from "@/vue/guides/TagBadges";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
-import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import GuidePartText from "@/vue/guides/GuidePartText";
 import Authentication from "@/ts/Authentication";
 import axios from 'axios'
 import Backend from "@/ts/Backend";
 import GuideVideo from "@/vue/guides/GuideVideo";
-import Component, {mixins} from "vue-class-component";
+import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import GuideMeta from "@/vue/guides/GuideMeta.vue";
+import Vue from 'vue'
+import GuideContent from "@/vue/guides/GuideContent.vue";
+import TrainingGoalToggle from "@/vue/guides/TrainingGoalToggle.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -96,23 +49,17 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        TrainingGoalToggle,
+        GuideContent,
+        GuideMeta,
         GuideVideo,
         GuidePartText,
-        TagBadges,
-        HeroTag,
         OverwatchButton,
     },
 })
-export default class Guide extends mixins(TagLinkMixin) {
+export default class Guide extends Vue {
     @Prop({required: true})
-    guide: GuideVso
-
-    @Prop({default: true})
-    showTrainingGoalButton: boolean
-
-    @Prop({
-        required: true,
-    })
+    head: ExistingGuideHeadVso
 
     @Prop()
     searchDescriptor: GuideDescriptorVso | null
@@ -123,31 +70,23 @@ export default class Guide extends mixins(TagLinkMixin) {
     cache: MyTrainingGoalsCache = myTrainingGoalsCache
 
     edit() {
-        this.$router.push(`/guide-editor/${this.guide.guideId}`)
+        this.$router.push(`/guide-editor/${this.head.entry.guideId}`)
     }
 
     async deactivate(): Promise<void> {
-        return backend.deactivateGuide(this.guide.guideId)
+        return backend.deactivateGuide(this.head.entry.guideId)
             .then(() => {
-                this.$emit('guideDeactivated', this.guide.guideId)
+                this.$emit('guideDeactivated', this.head.entry.guideId)
             })
     }
 
-    creationTimeRelative(): string {
-        return formatDistance(new Date(this.guide.createdAt), new Date());
-    }
-
-    absoluteDateText(): string {
-        return new Date(this.guide.createdAt).toLocaleString();
-    }
-
     addTrainingGoal(): void {
-        this.cache.addGoal(this.guide.guideId)
+        this.cache.addGoal(this.head.entry.guideId)
     }
 
     removeTrainingGoal() {
-        const hadItPending = this.cache.pendingGoalIds.includes(this.guide.guideId)
-        this.cache.removeGoal(this.guide.guideId)
+        const hadItPending = this.cache.pendingGoalIds.includes(this.head.entry.guideId)
+        this.cache.removeGoal(this.head.entry.guideId)
             .catch(() => {
                 if (!hadItPending) {
                     this.$emit('loginRequired')
@@ -156,16 +95,17 @@ export default class Guide extends mixins(TagLinkMixin) {
     }
 
     get trainingGoalAdded(): boolean {
-        return this.cache.goalIds.includes(this.guide.guideId) || this.cache.pendingGoalIds.includes(this.guide.guideId);
+        return this.cache.goalIds.includes(this.head.entry.guideId) || this.cache.pendingGoalIds.includes(this.head.entry.guideId);
     }
 
     get canEdit(): boolean {
-        return auth.canEditGuide(this.guide)
+        return auth.canEditGuide(this.head)
     }
 
-    get isStored(): boolean {
-        return this.guide.guideId !== undefined;
+    get creationTime(): Date {
+        return new Date(this.head.entry.createdAt)
     }
+
 };
 
 </script>
@@ -182,80 +122,6 @@ export default class Guide extends mixins(TagLinkMixin) {
     color: white;
     padding: 1em;
 
-    .meta {
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        color: white;
-        justify-content: space-between;
-        margin: .3em 0 .3em 0;
-
-        .tags {
-            display: flex;
-            gap: .5em;
-            align-items: center;
-            text-align: left;
-            cursor: pointer;
-            padding-left: 0;
-            transition: padding-left .13s;
-
-            &:hover {
-                padding-left: 1em;
-                transition: padding-left .13s;
-            }
-
-            .hero-tag {
-                display: inline-block;
-            }
-
-            &.same-as-search:hover {
-                transform: translateX(0) rotateY(0deg);
-                transition: transform .13s ease-in-out !important;
-            }
-
-            &.same-as-search:active {
-                transform: rotate3d(1, 0, 0, 90deg);
-                transition: transform .13s step-start !important;
-            }
-
-        }
-    }
-
-
-    a {
-        font-family: 'BigNoodleTooOblique', 'sans-serif';
-        color: white;
-        font-size: 1.3em;
-        text-decoration: none;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
-    .guide-part {
-        box-sizing: border-box;
-        /*background-color: rgba(43, 55, 83, 0.8);*/
-        color: white;
-        position: relative;
-    }
-
-    .text-guide-part {
-        max-width: 100%;
-        font-family: $body-font;
-    }
-
-    .text-guide-part-content {
-        text-align: left;
-        font-size: 1.5em;
-        word-break: break-word;
-    }
-
-    .video {
-        max-width: 100%;
-        width: 100%;
-    }
-
     .descriptor-builder {
         z-index: 1;
         position: relative;
@@ -264,11 +130,6 @@ export default class Guide extends mixins(TagLinkMixin) {
         /* For it to be positioned above everything else,
                which is important when the dropdown is displayed
                */
-    }
-
-    .authorship {
-        white-space: nowrap;
-        @include overwatch-futura-no-smallcaps;
     }
 
     .training-goal-buttons {

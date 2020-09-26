@@ -19,6 +19,7 @@ import {User} from "src/database/models/User";
 import {GuideSearchService} from "src/services/guide-search.service";
 import UsernameChangeDto from "data/dto/UsernameChangeDto";
 import {ValidationError} from "sequelize";
+import UserInfoDto from "data/dto/UserInfoDto";
 
 @Controller('user')
 export class UserController {
@@ -50,8 +51,8 @@ export class UserController {
                     response.send(
                         {
                             user: user.toDto(),
-                            lastAuthoredGuides: await this.searchService.searchByCreator(userId, 0),
-                        }
+                            lastAuthoredGuides: await this.searchService.searchByAuthor(userId, 0),
+                        } as UserInfoDto
                     )
                 }
             });

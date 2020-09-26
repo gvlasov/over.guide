@@ -18,17 +18,12 @@ import {Guide} from "src/database/models/Guide";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import {Sequelize} from "sequelize-typescript";
 import {SEQUELIZE} from "src/constants";
-import {QueryTypes} from "sequelize";
-import {User} from "src/database/models/User";
-import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
-import {GuideDescriptor} from "src/database/models/GuideDescriptor";
-import {GuidePartText} from "src/database/models/GuidePartText";
-import {GuidePartVideo} from "src/database/models/GuidePartVideo";
-import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
-import TrainingGoalDto from "data/dto/TrainingGoalDto";
+import {Op, QueryTypes} from "sequelize";
 import AddAndReorderTrainingGoalDto
     from "data/dto/AddAndReorderTrainingGoalDto";
 import arrayXor from 'lodash.xor';
+import {GuideHead} from "src/database/models/GuideHead";
+import OrderedGuideHeadDto from "data/dto/OrderedGuideHeadDto";
 
 @Controller('my-training-goals')
 export class TrainingGoalController {
@@ -44,66 +39,37 @@ export class TrainingGoalController {
     @UseGuards(AuthenticatedGuard)
     async myTrainingGoals(
         @Req() request: Request
-    ) {
+    ): Promise<OrderedGuideHeadDto[]> {
         const user = await this.authService.getUser(request)
-        const userWithGoals = await User.findOne({
-            where: {
-                id: user.id
-            },
+        return GuideHead.findAll({
             include: [
+                ...GuideHead.includesForDto(),
                 {
-                    model: Guide,
-                    as: 'trainingGoals',
-                    include: [
-                        {
-                            model: GuideHistoryEntry,
-                            as: 'heads',
-                            include: [
-                                {
-                                    model: Guide,
-                                    as: 'guide',
-                                    include: [
-                                        {
-                                            model: User,
-                                            as: 'creator',
-                                        }
-                                    ]
-                                },
-                                {
-                                    model: GuideDescriptor,
-                                    as: 'descriptor',
-                                    include: [{all: true}]
-                                },
-                                {
-                                    model: GuidePartText,
-                                    as: 'guidePartTexts',
-                                },
-                                {
-                                    model: GuidePartVideo,
-                                    as: 'guidePartVideos',
-                                    include: [
-                                        {
-                                            model: YoutubeVideoExcerpt,
-                                            as: 'excerpt',
-                                        }
-                                    ]
-                                },
-                            ]
+                    model: User2TrainingGoal,
+                    as: 'user2TrainingGoal',
+                    required: true,
+                    on: {
+                        '$user2TrainingGoal.guideId$': {
+                            [Op.col]: 'GuideHead.guideId'
                         }
-                    ]
-                }
+                    },
+                    where: {
+                        userId: user.id
+                    }
+                },
+            ],
+            order: [
+                ['user2TrainingGoal', 'order', 'DESC']
             ]
         })
-        return userWithGoals.trainingGoals
-            .map(goal => {
-                return {
-                    guide: goal.head.toDto(),
-                    order: goal.User2TrainingGoal.order,
-                } as TrainingGoalDto
-            })
-            .sort((a, b) => {
-                return -(a.order - b.order);
-            })
+            .then(guideHeads =>
+                guideHeads.map(h => {
+                    return {
+                        ...h.toDto(),
+                        order: h.user2TrainingGoal.order
+                    } as OrderedGuideHeadDto
+                })
+            )
     }
 
     @Delete(':id')

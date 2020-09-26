@@ -10,6 +10,7 @@ import {DataTypes} from "sequelize";
 import {Guide} from "src/database/models/Guide";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import UserDto from "data/dto/UserDto";
+import {GuideHead} from "src/database/models/GuideHead";
 
 @Table({
     name: {
@@ -39,6 +40,23 @@ export class User extends Model<User> {
         }
     )
     trainingGoals: Array<Guide & { User2TrainingGoal: User2TrainingGoal }>;
+
+
+    @BelongsToMany(
+        () => GuideHead,
+        {
+
+            through: {
+                model: () => User2TrainingGoal,
+            },
+            foreignKey: 'userId',
+            otherKey: 'guideId',
+            targetKey: 'guideId',
+            sourceKey: 'id',
+            constraints: false,
+        }
+    )
+    trainingGoalsHeads: Array<GuideHead & { User2TrainingGoal: User2TrainingGoal }>;
 
     toDto(): UserDto {
         return {

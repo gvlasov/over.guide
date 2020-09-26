@@ -1,12 +1,12 @@
 <template>
     <div class="guide-part">
-        <template v-if="widget.part.kind === 'text'">
+        <template v-if="widget.isText">
             <MarkdownGuide
-                    v-if="showMarkdownGuide && !widget.editing && widget.part.kind === 'text'"
+                    v-if="showMarkdownGuide && !widget.editing && widget.isText"
                     @back="onMarkdownGuideBack"
             />
             <OverwatchButton
-                    v-if="!showMarkdownGuide && widget.editing && widget.part.kind === 'text'"
+                    v-if="!showMarkdownGuide && widget.editing && widget.isText"
                     type="default"
                     class="markup-help-button"
                     v-hammer:tap="() => {showMarkdownGuide = true; widget.editing = false;}"
@@ -15,12 +15,12 @@
         </template>
         <template v-if="!showMarkdownGuide">
             <GuidePartTextEditor
-                    v-if="widget.part.kind === 'text'"
+                    v-if="widget.isText"
                     :widget="widget"
                     @save="() => widget.editing = false"
             />
             <GuidePartVideoEditor
-                    v-if="widget.part.kind === 'video'"
+                    v-if="widget.isVideo"
                     :widget="widget"
                     :index="index"
                     @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
@@ -138,16 +138,6 @@ export default class GuidePart extends Vue {
 
     deletePart(index) {
         this.parts.splice(index, 1);
-    }
-
-    partHasContent(part) {
-        if (part.kind === 'text') {
-            return part.contentMd !== '';
-        } else if (part.kind === 'video') {
-            return part.excerpt !== null;
-        } else {
-            throw new Error('Unknown part type ' + part.kind)
-        }
     }
 
     @Watch('widget.editing')

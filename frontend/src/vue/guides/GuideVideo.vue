@@ -32,14 +32,15 @@
 
 <script lang="ts">
 import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
-import GuideVso from "@/ts/vso/GuideVso";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
 import Vue from 'vue'
 import {Prop, Ref} from "vue-property-decorator";
 import Component from "vue-class-component";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
+import GuideHistoryEntryVso from "@/ts/vso/GuideHistoryEntryVso";
 
+let guideVideoUid = 0;
 @Component({
     components: {
         VideoLoadingScreen,
@@ -55,7 +56,7 @@ export default class GuideVideo extends Vue {
     readonly root: HTMLElement
 
     @Prop({required: true})
-    guide: GuideVso
+    entry: GuideHistoryEntryVso
 
     @Prop({required: true})
     part: GuidePartVideoDto
@@ -75,8 +76,9 @@ export default class GuideVideo extends Vue {
     autoplayVideoHandle: Object
 
     created() {
+        guideVideoUid++;
         this.autoplayVideoHandle = {
-            playerId() {
+            playerId: () => {
                 return this.playerId;
             },
             boundingClientRect: () => {
@@ -108,7 +110,7 @@ export default class GuideVideo extends Vue {
 
 
     get playerId() {
-        return this.guide.guideId + '-' + this.index + '-' + this.part.excerpt.youtubeVideoId
+        return 'GuideVideo' + guideVideoUid + '-' + this.index + '-' + this.part.excerpt.youtubeVideoId
     }
 
     onVisibilityChanged(isVisible, entry) {

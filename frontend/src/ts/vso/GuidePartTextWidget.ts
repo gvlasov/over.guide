@@ -11,4 +11,12 @@ export default class GuidePartTextWidget extends GuidePartWidget {
         return this.part.contentMd.trim() === '';
     }
 
+    get isText() : boolean {
+        return true
+    }
+
+    get isVideo(): boolean {
+        return false
+    }
+
 }

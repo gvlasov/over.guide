@@ -1,10 +1,10 @@
-import GuideVso from "@/ts/vso/GuideVso";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import axios from 'axios';
 import Backend from "@/ts/Backend";
 import Vue from 'vue'
-import {Prop, Watch} from "vue-property-decorator";
+import {Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 
 const backend = new Backend(axios);
 
@@ -17,10 +17,9 @@ type InfiniteHandlerState = {
 @Component({})
 export default class InfiniteGuideSearchMixin extends Vue {
 
-    @Prop({required: true})
-    descriptor!: GuideDescriptorVso
+    declare descriptor: GuideDescriptorVso
 
-    guides: GuideVso[] = []
+    guides: ExistingGuideHeadVso[] = []
     page: number = 0
     alreadyLoadedGuideIds: number[] = []
     hasNextPage: boolean | null = null
@@ -42,12 +41,12 @@ export default class InfiniteGuideSearchMixin extends Vue {
         })
             .then(page => {
                 this.page = page.pageNumber;
-                this.guides.push(...page.guides.map(guide => new GuideVso(guide)));
+                this.guides.push(...page.guides.map(head => new ExistingGuideHeadVso(head)));
                 this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideId as number))
                 if (this.guides.length > 0) {
                     $state.loaded()
                 }
-                if (page.hasNextPage === false) {
+                if (!page.hasNextPage) {
                     $state.complete()
                 }
                 this.hasNextPage = page.hasNextPage

@@ -45,7 +45,7 @@ describe(
                     })
                 await Guide.findOne({})
                     .then(guide => {
-                        guide.creatorId = user.id
+                        guide.authorId = user.id
                         return guide.save()
                     })
                 await request(ctx.app.getHttpServer())

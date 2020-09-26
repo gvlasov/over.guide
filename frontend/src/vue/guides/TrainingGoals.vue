@@ -45,7 +45,8 @@ import Backend from "@/ts/Backend";
 import axios from 'axios';
 import Guide from "@/vue/guides/Guide";
 import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
-import GuideVso from "@/ts/vso/GuideVso";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import TrainingGoalWidget from "@/ts/vso/TrainingGoalWidget";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import draggable from 'vuedraggable';
@@ -115,7 +116,7 @@ export default class TrainingGoals extends Vue {
                         .then(goals =>
                             goals.map(dto =>
                                 new TrainingGoalWidget(
-                                    new GuideVso(dto.guide),
+                                    new ExistingGuideHistoryEntryVso(dto.guideHistoryEntry),
                                     dto.order,
                                     false
                                 )

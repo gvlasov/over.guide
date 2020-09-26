@@ -19,11 +19,12 @@ import {Op} from "sequelize";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import HeroId from "data/HeroId";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import AddAndReorderTrainingGoalDto
     from "data/dto/AddAndReorderTrainingGoalDto";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
+import GuideHeadDto from "data/dto/GuideHeadDto";
 
 describe(
     TrainingGoalController,
@@ -212,7 +213,7 @@ describe(
                 await user.reload()
                 expect(user.trainingGoals).toHaveLength(0)
             });
-            it('lists user\'s guides', async () => {
+            it('lists user\'s training goals in correct order', async () => {
                 await ctx.fixtures(
                     singleUserFixture,
                     heroesFixture,
@@ -222,25 +223,40 @@ describe(
                     smallGuideTestingFixture
                 )
                 const user = await User.findOne({
-                    include: [{
-                        model: Guide,
-                        as: 'trainingGoals'
-                    }]
+                    include: ['trainingGoals']
                 });
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                const guide1 = await Guide.findOne()
+                const guides = await Guide.findAll()
                 await User2TrainingGoal.create({
                     userId: user.id,
-                    guideId: guide1.id,
+                    guideId: guides[0].id,
                     order: 1
+                })
+                await User2TrainingGoal.create({
+                    userId: user.id,
+                    guideId: guides[1].id,
+                    order: 3
+                })
+                await User2TrainingGoal.create({
+                    userId: user.id,
+                    guideId: guides[2].id,
+                    order: 2
                 })
                 await request(ctx.app.getHttpServer())
                     .get(`/my-training-goals`)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(async response => {
-                        expect(response.body.length).toBe(1)
+                        expect(response.body.length).toBe(3)
+                        expect(
+                            response.body
+                                .map(
+                                    (dto: GuideHeadDto) =>
+                                        dto.guideHistoryEntry.guide.id
+                                )
+                        )
+                            .toStrictEqual([guides[1].id, guides[2].id, guides[0].id])
                     })
             });
             it('doesn\'t allow access for unauthenticated users', async () => {
@@ -326,7 +342,7 @@ describe(
                     })
                 })
                 const newGuide = await ctx.app.get(GuideHistoryEntryService)
-                    .save({
+                    .create({
                             descriptor: new GuideDescriptorQuickie({
                                 playerHeroes: [HeroId.Genji],
                             }),
@@ -336,7 +352,7 @@ describe(
                                     kind: 'text'
                                 } as GuidePartTextDto
                             ]
-                        } as GuideHistoryEntryDto,
+                        } as GuideHistoryEntryCreateDto,
                         user
                     ) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
@@ -388,8 +404,9 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
+                        console.log(response.body)
                         expect(
-                            response.body.map(item => item.guide.guideId)
+                            response.body.map(item => item.guideHistoryEntry.guide.id)
                         ).toStrictEqual([2, 1, 3])
                     })
             });

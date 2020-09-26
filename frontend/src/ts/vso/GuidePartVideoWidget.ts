@@ -11,7 +11,15 @@ export default class GuidePartVideoWidget extends GuidePartWidget {
     }
 
     get isEmpty() {
-        return this.part.excerpt === null;
+        return this.part.excerpt.youtubeVideoId === ''
+    }
+
+    get isText(): boolean {
+        return false;
+    }
+
+    get isVideo(): boolean {
+        return true;
     }
 
 }

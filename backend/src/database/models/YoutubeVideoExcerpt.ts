@@ -1,7 +1,7 @@
 import {AllowNull, Column, Model, Table} from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
-import IYoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerpsDto"
-import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto"
+import IYoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerptDto"
+import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto"
 
 @Table
 export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> implements IYoutubeVideoExcerpt {
@@ -18,12 +18,12 @@ export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> implements I
     @Column({type: new DataTypes.FLOAT(8, 3)})
     endSeconds: number
 
-    toDto(): YoutubeVideoExcerpsDto {
+    toDto(): YoutubeVideoExcerptDto {
         return {
             youtubeVideoId: this.youtubeVideoId,
             startSeconds: this.startSeconds,
             endSeconds: this.endSeconds,
-        } as YoutubeVideoExcerpsDto
+        } as YoutubeVideoExcerptDto
     }
 
 }

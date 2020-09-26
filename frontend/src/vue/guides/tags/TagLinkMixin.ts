@@ -1,6 +1,6 @@
 import DescriptorParamUnparser from "@/ts/DescriptorParamUnparser";
 import Vue from 'vue'
-import GuideDescriptorVso from "../../../js/vso/GuideDescriptorVso";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import Component from "vue-class-component";
 
 const unparser = new DescriptorParamUnparser();

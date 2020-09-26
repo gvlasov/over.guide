@@ -2,7 +2,6 @@ import {
     AllowNull,
     AutoIncrement,
     BelongsTo,
-    BelongsToMany,
     Column,
     ForeignKey,
     HasMany,
@@ -14,7 +13,7 @@ import {User} from "src/database/models/User";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {DataTypes} from "sequelize";
 import {utcDate} from "@hamroctopus/utc-date";
-import {GuideHead} from "src/database/models/GuideHead";
+import GuideDto from "data/dto/GuideDto";
 
 @Table({
     name: {
@@ -33,10 +32,10 @@ export class Guide extends Model<Guide> {
     @ForeignKey(() => User)
     @AllowNull(false)
     @Column
-    creatorId: number
+    authorId: number
 
-    @BelongsTo(() => User, 'creatorId')
-    creator: User
+    @BelongsTo(() => User, 'authorId')
+    author: User
 
     @HasMany(() => GuideHistoryEntry)
     historyEntries: Array<GuideHistoryEntry>
@@ -57,18 +56,11 @@ export class Guide extends Model<Guide> {
         return this.deactivatedById === null && this.deactivatedAt === null
     }
 
-    @BelongsToMany(() => GuideHistoryEntry, () => GuideHead)
-    heads: Array<GuideHistoryEntry>
-
-    get head(): GuideHistoryEntry {
-        return this.heads[0]
-    }
-
     deactivate(user: User): Promise<Guide> {
-        if (this.deactivatedById !== null) {
-            throw new Error('Already inactive')
-        }
-        if (this.deactivatedAt !== null) {
+        if (
+            this.deactivatedById !== null
+            ||this.deactivatedAt !== null
+        ) {
             throw new Error('Already inactive')
         }
         return this.update({
@@ -78,16 +70,24 @@ export class Guide extends Model<Guide> {
     }
 
     activate(user: User): Promise<Guide> {
-        if (this.deactivatedById === null) {
-            throw new Error('Already active')
-        }
-        if (this.deactivatedAt === null) {
+        if (
+            this.deactivatedById === null
+            || this.deactivatedAt === null
+        ) {
             throw new Error('Already active')
         }
         return this.update({
             deactivatedById: null,
             deactivatedAt: null,
         })
+    }
+
+    toDto(): GuideDto {
+        return {
+            id: this.id,
+            author: this.author.toDto(),
+            createdAt: this.createdAt
+        } as GuideDto
     }
 
 }

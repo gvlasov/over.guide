@@ -7,6 +7,7 @@ import DescriptorGenerator from "data/generators/DescriptorGenerator";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import abilities from 'data/abilities'
 import {ContentHashService} from "src/services/content-hash.service";
+import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 
 export default async (moduleRef: ModuleRef) => {
     const entryService = moduleRef.get(GuideHistoryEntryService)
@@ -23,7 +24,7 @@ export default async (moduleRef: ModuleRef) => {
     const contentHashService = moduleRef.get(ContentHashService)
     for (let i = 0; i < 100; i++) {
         const guide = await Guide.create({
-            creatorId: user.id,
+            authorId: user.id,
         })
         const parts = [];
         if (Math.random() * 10 < 3) {
@@ -49,10 +50,10 @@ export default async (moduleRef: ModuleRef) => {
             } as GuidePartTextDto)
         }
         const descriptor = generator.generate(i);
-        await entryService.save({
+        await entryService.append({
             guideId: guide.id,
             parts: parts,
             descriptor: descriptor,
-        }, user)
+        } as GuideHistoryEntryAppendDto, user)
     }
 }

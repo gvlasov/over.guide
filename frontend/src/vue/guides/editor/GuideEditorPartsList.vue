@@ -4,7 +4,7 @@
             <GuidePartSpawner
                     v-if="!beginningSpawnerHidden"
                     :where="ListPosition.Beginning"
-                    :initial-seeding="guide.parts.length === 0"
+                    :initial-seeding="entry.parts.length === 0"
                     @addVideo="createNewVideoPart"
                     @addText="createNewTextPart"
             />
@@ -16,11 +16,11 @@
                 :enter-to-class="enterToClass"
         >
             <GuidePart
-                    v-for="(widget, index) in guide.parts"
+                    v-for="(widget, index) in entry.parts"
                     :key="widget.id"
                     ref="guideParts"
                     :widget="widget"
-                    :parts="guide.parts"
+                    :parts="entry.parts"
                     :index="index"
             />
         </transition-group>
@@ -41,7 +41,8 @@ import GuidePart from "@/vue/guides/GuidePart";
 import GuidePartSpawner from "@/vue/guides/editor/GuidePartSpawner";
 import GuidePartTextWidget from "@/ts/vso/GuidePartTextWidget";
 import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
-import GuideVso from "@/ts/vso/GuideVso";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
@@ -57,7 +58,7 @@ export default class GuideEditorPartsList extends Vue {
     ListPosition = ListPosition
 
     @Prop({required: true})
-    guide: GuideVso
+    entry: ExistingGuideHistoryEntryVso
 
     beginningSpawnerHidden: boolean = false
     endSpawnerHidden: boolean = false
@@ -87,7 +88,11 @@ export default class GuideEditorPartsList extends Vue {
                 new GuidePartVideoWidget(
                     {
                         kind: 'video',
-                        excerpt: null,
+                        excerpt: {
+                            youtubeVideoId: '',
+                            startSeconds: 0,
+                            endSeconds: 0,
+                        },
                     },
                     true
                 ),
@@ -98,19 +103,19 @@ export default class GuideEditorPartsList extends Vue {
     spawnPart(how: () => GuidePartTextWidget | GuidePartVideoWidget, where: ListPosition) {
         this[`${where}SpawnerHidden`] = true;
         const widget = how();
-        this.enterToClass = (widget.part.kind === 'text')
+        this.enterToClass = (widget.isText)
             ? 'appear-enter-to-text'
             : 'appear-enter-to-video';
         (
             (where === ListPosition.Beginning)
-                ? this.guide.parts.unshift
-                : this.guide.parts.push
+                ? this.entry.parts.unshift
+                : this.entry.parts.push
         )
-            .apply(this.guide.parts, [widget]);
+            .apply(this.entry.parts, [widget]);
     }
 
     get endSpawnerEnabled(): boolean {
-        return this.guide.parts.length > 0 && !this.endSpawnerHidden;
+        return this.entry.parts.length > 0 && !this.endSpawnerHidden;
     }
 }
 

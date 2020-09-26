@@ -120,7 +120,6 @@ import OverwatchButton from "@/vue/OverwatchButton";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import VideoLoadingScreen from "@/vue/VideoLoadingScreen";
-import GuideVso from "@/ts/vso/GuideVso";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import GuidePreviewBadge from "@/vue/guides/GuidePreviewBadge";
 import TrainingGoalWidget from "@/ts/vso/TrainingGoalWidget";
@@ -129,6 +128,7 @@ import Vue from 'vue'
 import {Prop, Watch} from "vue-property-decorator";
 import AsyncComputedProp from 'vue-async-computed-decorator'
 import Component from "vue-class-component";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 
 const backend = new Backend(axios);
 const intersectionThresholdSeconds = .3
@@ -173,12 +173,14 @@ export default class YoutubeExcerptEditor extends Vue {
     preciseDurationAvailable: boolean = false
     showSameVideoGuides: boolean = false
 
-    interval: number
+    interval: number | null
+
+    declare guidesWithSameVideo: ExistingGuideHeadVso[]
 
     @AsyncComputedProp()
-    async guidesWithSameVideo(): Promise<GuideVso[]> {
+    async guidesWithSameVideo() {
         return backend.getGuidesByVideoId(this.videoId)
-            .then(guides => guides.map(g => new GuideVso(g)))
+            .then(guides => guides.map(g => new ExistingGuideHeadVso(g)))
     }
 
     @AsyncComputedProp({
@@ -191,9 +193,9 @@ export default class YoutubeExcerptEditor extends Vue {
         if (this.guidesWithSameVideo === null) {
             return []
         }
-        return (await this.guidesWithSameVideo)
+        return this.guidesWithSameVideo
             .filter(
-                guide => guide.parts.filter(
+                guide => guide.entry.parts.filter(
                     part => {
                         return part.part.kind === 'video' &&
                             part.part.excerpt.endSeconds >= (this.startSeconds + intersectionThresholdSeconds) &&
@@ -203,7 +205,7 @@ export default class YoutubeExcerptEditor extends Vue {
                     .length > 0
             )
             .map((guide, index) => new TrainingGoalWidget(
-                guide,
+                guide.entry,
                 index,
                 false,
                 false,

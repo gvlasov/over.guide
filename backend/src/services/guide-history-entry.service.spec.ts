@@ -18,7 +18,8 @@ import {ContentHashService} from "src/services/content-hash.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 
 describe(
     GuideHistoryEntryService,
@@ -30,9 +31,9 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
-                const entry = <GuideHistoryEntry>await ctx.service.save(
+                const entry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -44,7 +45,7 @@ describe(
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(entry.guideId).toBe(guide.id)
@@ -65,9 +66,9 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
-                await ctx.service.save(
+                await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -83,7 +84,7 @@ describe(
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 const descriptor = (await GuideDescriptor.findOne({
@@ -104,7 +105,7 @@ describe(
                 )
                 const user = await User.findOne()
                 expect(await Guide.findOne()).toBe(null)
-                const entry = <GuideHistoryEntry>await ctx.service.save(
+                const entry = <GuideHistoryEntry>await ctx.service.create(
                     {
                         descriptor: new Descriptor({
                             teammateHeroes: [HeroId.WreckingBall],
@@ -115,7 +116,7 @@ describe(
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
-                    },
+                    } as GuideHistoryEntryCreateDto,
                     user
                 )
                 expect(await Guide.findOne()).not.toBe(null)
@@ -135,10 +136,10 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
                 const descriptorService = ctx.app.get(GuideDescriptorService)
-                const entry = await ctx.service.save(
+                const entry = await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor:
@@ -152,13 +153,13 @@ describe(
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto,
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(
                     (await guide.$get('historyEntries')).length
                 ).toBe(1)
-                const newEntry = await ctx.service.save(
+                const newEntry = await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -170,7 +171,7 @@ describe(
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 guide.reload()
@@ -189,9 +190,9 @@ describe(
                     battleNetUserId: '79023670347'
                 })
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
-                const firstEntry = <GuideHistoryEntry>await ctx.service.save(
+                const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -203,13 +204,13 @@ describe(
                                 contentMd: 'asdfasdfeed'
                             } as GuidePartTextDto
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(
                     (await guide.$get('historyEntries')).length
                 ).toBe(1)
-                const newEntry = <GuideHistoryEntry>await ctx.service.save(
+                const newEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -221,7 +222,7 @@ describe(
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     anotherUser
                 )
                 expect(
@@ -235,9 +236,9 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
-                const firstEntry = <GuideHistoryEntry>await ctx.service.save(
+                const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -253,7 +254,7 @@ describe(
                                 contentMd: 'house'
                             } as GuidePartTextDto,
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(
@@ -262,7 +263,7 @@ describe(
                 expect(
                     (await GuideHistoryEntry.findAndCountAll()).count
                 ).toBe(1)
-                const secondEntry = await ctx.service.save(
+                const secondEntry = await ctx.service.append(
                     {
                         guideId: firstEntry.guideId,
                         descriptor: new Descriptor({
@@ -278,7 +279,7 @@ describe(
                                 contentMd: 'mouse'
                             } as GuidePartTextDto,
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(
@@ -298,9 +299,9 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
-                const firstEntry = <GuideHistoryEntry>await ctx.service.save(
+                const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -324,7 +325,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(
@@ -333,7 +334,7 @@ describe(
                 expect(
                     (await GuideHistoryEntry.findAndCountAll()).count
                 ).toBe(1)
-                const secondEntry = <GuideHistoryEntry>await ctx.service.save(
+                const secondEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: firstEntry.guideId,
                         descriptor: new Descriptor({
@@ -357,7 +358,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(secondEntry)
@@ -376,9 +377,9 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    creatorId: user.id
+                    authorId: user.id
                 })
-                const firstEntry = <GuideHistoryEntry>await ctx.service.save(
+                const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -402,7 +403,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(
@@ -414,7 +415,7 @@ describe(
                 expect(
                     (await firstEntry.$get('guidePartVideos')).length
                 ).toBe(2)
-                const secondEntry = <GuideHistoryEntry>await ctx.service.save(
+                const secondEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
                         guideId: firstEntry.guideId,
                         descriptor: new Descriptor({
@@ -430,7 +431,7 @@ describe(
                                 }
                             } as GuidePartVideoDto,
                         ]
-                    },
+                    } as GuideHistoryEntryAppendDto,
                     user
                 )
                 expect(

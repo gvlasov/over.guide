@@ -21,7 +21,7 @@ export default async (moduleRef: ModuleRef) => {
     })
     for (let i = 0; i < 3; i++) {
         const guide = await Guide.create({
-            creatorId: user.id,
+            authorId: user.id,
         })
         const parts = [];
         if (Math.random() * 10 < 3) {
@@ -47,7 +47,7 @@ export default async (moduleRef: ModuleRef) => {
             } as GuidePartTextDto)
         }
         const descriptor = generator.generate(i);
-        await entryService.save({
+        await entryService.append({
             guideId: guide.id,
             parts: parts,
             descriptor: descriptor,

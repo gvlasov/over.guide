@@ -1,15 +1,16 @@
 import UserInfoDto from "data/dto/UserInfoDto";
 import UserVso from "@/ts/vso/UserVso";
-import GuideVso from "@/ts/vso/GuideVso";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 
 export default class UserInfoVso {
 
     readonly user: UserVso;
-    private readonly lastAuthoredGuides: GuideVso[];
+    private readonly lastAuthoredGuides: ExistingGuideHistoryEntryVso[];
 
     constructor(dto: UserInfoDto) {
         this.user = new UserVso(dto.user);
-        this.lastAuthoredGuides = dto.lastAuthoredGuides.guides.map(g => new GuideVso(g))
+        this.lastAuthoredGuides = dto.lastAuthoredGuides.guides.map(g => new ExistingGuideHistoryEntryVso(g))
     }
 
 }

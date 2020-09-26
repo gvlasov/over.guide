@@ -1,10 +1,11 @@
 import Backend from "@/ts/Backend";
-import TrainingGoalDto from "data/dto/TrainingGoalDto";
 import axios, {AxiosResponse} from "axios";
+import OrderedGuideHeadDto from "data/dto/OrderedGuideHeadDto";
 
 export default class MyTrainingGoalsCache {
 
     private static _instance: MyTrainingGoalsCache;
+
     public static instance(): MyTrainingGoalsCache {
         if (typeof MyTrainingGoalsCache._instance === 'undefined') {
             MyTrainingGoalsCache._instance = new MyTrainingGoalsCache(new Backend(axios));
@@ -33,13 +34,13 @@ export default class MyTrainingGoalsCache {
         }
     }
 
-    async loadGoals(): Promise<TrainingGoalDto[]> {
+    async loadGoals(): Promise<OrderedGuideHeadDto[]> {
         return this.backend.getMyTrainingGoals()
             .then((goals) => {
                 this._goalIds.splice(
                     0,
                     this._goalIds.length,
-                    ...goals.map(g => g.guide.guideId as number)
+                    ...goals.map((g: OrderedGuideHeadDto) => g.guideHistoryEntry.guide.id as number)
                 );
                 this.cacheGoals();
                 return goals;
@@ -52,6 +53,7 @@ export default class MyTrainingGoalsCache {
             JSON.stringify(this._goalIds)
         );
     }
+
     private cacheNotSentGoals() {
         localStorage.setItem(
             MyTrainingGoalsCache.pendingGoalsLocalStorageKey,

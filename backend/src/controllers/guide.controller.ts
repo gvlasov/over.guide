@@ -4,14 +4,12 @@ import {
     Get,
     HttpCode,
     HttpStatus,
-    NotFoundException,
     Param,
     Post,
     Req,
     Res,
     UseGuards
 } from '@nestjs/common';
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import {AuthService} from "src/services/auth.service";
 import {Request, Response} from "express";
 import {AuthenticatedGuard} from "src/services/authenticated.guard";
@@ -27,12 +25,10 @@ import {
     GuideSearchService
 } from "src/services/guide-search.service";
 import EmptyDescriptorException from "src/services/EmptyDescriptorException";
-import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
-import {User} from "src/database/models/User";
-import {GuideDescriptor} from "src/database/models/GuideDescriptor";
-import {GuidePartVideo} from "src/database/models/GuidePartVideo";
-import {GuidePartText} from "src/database/models/GuidePartText";
-import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
+import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
+import {GuideHead} from "src/database/models/GuideHead";
+import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 
 @Controller('guide')
 export class GuideController {
@@ -50,109 +46,79 @@ export class GuideController {
         @Res() response: Response,
         @Param('id') id: number
     ) {
-        Guide.findOne({
+        GuideHead.findOne({
             where: {
-                id: id,
-                deactivatedById: null,
+                guideId: id,
             },
-            include: [
-                {
-                    model: GuideHistoryEntry,
-                    as: 'heads',
-                    include: [
-                        {
-                            all: true,
-                        },
-                        {
-                            model: Guide,
-                            as: 'guide',
-                            include: [
-                                {
-                                    model: User,
-                                    as: 'creator'
-                                }
-                            ]
-                        },
-                        {
-                            model: GuideDescriptor,
-                            as: 'descriptor',
-                            include: [
-                                {all: true},
-                            ],
-                        },
-                        {
-                            model: GuidePartText,
-                            as: 'guidePartTexts',
-                        },
-                        {
-                            model: GuidePartVideo,
-                            as: 'guidePartVideos',
-
-                            include: [
-                                {
-                                    model: YoutubeVideoExcerpt,
-                                    as: 'excerpt'
-                                },
-                            ],
-                        }
-                    ],
-                }
-            ]
+            include: GuideHead.includesForDto()
         })
-            .then(guide => {
-                if (guide === null) {
-                    throw new NotFoundException()
-                }
-                return guide.head
-            })
             .then(head => {
-                response.status(HttpStatus.OK)
-                response.send(head.toDto())
-            })
-            .catch(e => {
-                if (e instanceof NotFoundException) {
+                if (head === null) {
                     response.status(HttpStatus.NOT_FOUND)
                     response.send()
                 } else {
-                    throw e
+                    response.status(HttpStatus.OK)
+                    response.send(head.toDto())
                 }
             })
     }
 
-    @Post()
+    @Post('create')
     @UseGuards(AuthenticatedGuard)
-    async save(
+    async create(
         @Res() response: Response,
         @Req() request: Request,
-        @Body() guideHistoryEntryDto: GuideHistoryEntryDto,
+        @Body() dto: GuideHistoryEntryCreateDto,
     ) {
         const user = await this.authService.getUser(request)
-        const updating = typeof guideHistoryEntryDto.guideId !== 'undefined';
+        try {
+            const entry = await this.guideHistoryEntryService.create(dto, user)
+            if (entry === SaveResult.SavingDuplicateRejected) {
+                response.status(HttpStatus.ACCEPTED)
+                response.send()
+            } else {
+                response.status(HttpStatus.CREATED)
+                response.send({
+                    guideId: entry.guideId
+                })
+            }
+        } catch (e) {
+            if (e instanceof EmptyDescriptorException) {
+                response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                response.send()
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    @Post('update')
+    @UseGuards(AuthenticatedGuard)
+    async update(
+        @Res() response: Response,
+        @Req() request: Request,
+        @Body() dto: GuideHistoryEntryAppendDto,
+    ) {
+        const user = await this.authService.getUser(request)
         if (
-            updating
-            && (
+            (
                 await Guide.findOne(
-                    {where: {id: guideHistoryEntryDto.guideId}}
+                    {where: {id: dto.guideId}}
                 )
-            ).creatorId !== user.id
+            ).authorId !== user.id
             && !this.moderationService.isModerator(user)
         ) {
             response.status(HttpStatus.FORBIDDEN)
             response.send()
         } else {
             try {
-                const entry = await this.guideHistoryEntryService.save(guideHistoryEntryDto, user)
+                const entry = await this.guideHistoryEntryService.append(dto, user)
                 if (entry === SaveResult.SavingDuplicateRejected) {
                     response.status(HttpStatus.ACCEPTED)
                     response.send()
-                } else if (updating) {
+                } else {
                     response.status(HttpStatus.OK)
                     response.send()
-                } else {
-                    response.status(HttpStatus.CREATED)
-                    response.send({
-                        guideId: entry.guideId
-                    })
                 }
             } catch (e) {
                 if (e instanceof EmptyDescriptorException) {
@@ -179,7 +145,7 @@ export class GuideController {
         if (guide === null) {
             response.status(HttpStatus.NOT_FOUND)
         } else if (
-            guide.creatorId !== user.id
+            guide.authorId !== user.id
             && !this.moderationService.isModerator(user)
         ) {
             response.status(HttpStatus.FORBIDDEN)
@@ -208,7 +174,7 @@ export class GuideController {
         if (guide === null) {
             response.status(HttpStatus.NOT_FOUND)
         } else if (
-            guide.creatorId !== user.id
+            guide.authorId !== user.id
             && !this.moderationService.isModerator(user)
         ) {
             response.status(HttpStatus.FORBIDDEN)
@@ -234,44 +200,19 @@ export class GuideController {
     @Get('search-by-video/:videoId')
     async searchByVideo(
         @Param('videoId') videoId: string
-    ): Promise<GuideHistoryEntryDto[]> {
-        return GuideHistoryEntry.findAll({
-            include: [
-                {
-                    model: GuidePartVideo,
-                    as: 'guidePartVideos',
-                    include: [
-                        {
-                            model: YoutubeVideoExcerpt,
-                            as: 'excerpt',
-                            where: {
-                                youtubeVideoId: videoId
-                            },
-                            required: true,
-                        }
-                    ],
+    ): Promise<ExistingGuideHeadDto[]> {
+        return GuideHead.findAll({
+            include: GuideHead.includesForDto({
+                excerpt: {
+                    where: {
+                        youtubeVideoId: videoId,
+                    },
                     required: true,
                 },
-                {
-                    model: GuidePartText,
-                    as: 'guidePartTexts',
+                guidePartVideos: {
+                    required: true,
                 },
-                {
-                    model: Guide,
-                    as: 'guide',
-                    include: [
-                        {
-                            model: User,
-                            as: 'creator',
-                        }
-                    ],
-                },
-                {
-                    model: GuideDescriptor,
-                    as: 'descriptor',
-                    include: [{ all: true }]
-                }
-            ]
+            })
         })
             .then(guides => guides.map(g => g.toDto()))
     }

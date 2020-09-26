@@ -1,7 +1,7 @@
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 
 export default interface GuideSearchPageDto {
-    guides: GuideHistoryEntryDto[]
+    guides: ExistingGuideHeadDto[]
     hasNextPage: boolean
     pageNumber: number
 }

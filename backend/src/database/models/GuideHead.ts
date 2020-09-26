@@ -3,12 +3,20 @@ import {
     Column,
     ForeignKey,
     Model,
+    PrimaryKey,
     Table
 } from 'sequelize-typescript';
-import {DataTypes} from "sequelize";
+import {DataTypes, Includeable, IncludeOptions} from "sequelize";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
-import {Guide} from "src/database/models/Guide";
 import {ActuallyNotTableButView} from "src/services/fixture.service";
+import GuideHeadDto from "data/dto/GuideHeadDto";
+import {Guide} from "src/database/models/Guide";
+import {User} from "src/database/models/User";
+import {GuidePartText} from "src/database/models/GuidePartText";
+import {GuidePartVideo} from "src/database/models/GuidePartVideo";
+import {GuideDescriptor} from "src/database/models/GuideDescriptor";
+import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
+import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 
 @Table(
     {
@@ -19,6 +27,10 @@ import {ActuallyNotTableButView} from "src/services/fixture.service";
 @ActuallyNotTableButView
 export class GuideHead extends Model<GuideHead> {
 
+    @PrimaryKey
+    @Column
+    guideId: number
+
     @ForeignKey(() => GuideHistoryEntry)
     @Column({type: new DataTypes.INTEGER()})
     guideHistoryEntryId: number
@@ -26,11 +38,79 @@ export class GuideHead extends Model<GuideHead> {
     @BelongsTo(() => GuideHistoryEntry, 'guideHistoryEntryId')
     guideHistoryEntry: GuideHistoryEntry
 
+    @Column({type: new DataTypes.INTEGER()})
+    votesCount: number
 
-    @ForeignKey(() => Guide)
-    @Column({type: new DataTypes.INTEGER(), primaryKey: true})
-    guideId: number
+    @Column({type: new DataTypes.INTEGER()})
+    commentsCount: number
 
-    @BelongsTo(() => Guide, 'guideId')
-    guide: Guide
+    order: number
+
+    @BelongsTo(
+        () => User2TrainingGoal,
+        {
+            foreignKey: 'guideId',
+            targetKey: 'guideId'
+        }
+    )
+    user2TrainingGoal: User2TrainingGoal
+
+    toDto(): GuideHeadDto {
+        return {
+            guideHistoryEntry: this.guideHistoryEntry.toDto(),
+            commentsCount: this.commentsCount,
+            votesCount: this.votesCount,
+        } as GuideHeadDto
+    }
+
+    static includesForDto(options?: {
+        author?: IncludeOptions
+        guideHistoryEntry?: IncludeOptions
+        descriptor?: IncludeOptions
+        excerpt?: IncludeOptions
+        guidePartVideos?: IncludeOptions
+    }): Includeable[] {
+        return [
+            {
+                model: GuideHistoryEntry,
+                as: 'guideHistoryEntry',
+                required: true,
+                ...options?.guideHistoryEntry,
+                include: [
+                    {
+                        model: Guide,
+                        as: 'guide',
+                        where: {
+                            deactivatedById: null,
+                            deactivatedAt: null,
+                        },
+                        include: [{
+                            model: User,
+                            as: 'author',
+                            ...options?.author,
+                        }]
+                    },
+                    {
+                        model: GuidePartText, as: 'guidePartTexts',
+                        include: [{all: true}],
+                    },
+                    {
+                        model: GuidePartVideo, as: 'guidePartVideos',
+                        include: [{
+                            model: YoutubeVideoExcerpt,
+                            as: 'excerpt',
+                            ...options?.excerpt
+                        }],
+                        ...options?.guidePartVideos
+                    },
+                    {
+                        model: GuideDescriptor,
+                        as: 'descriptor',
+                        include: [{all: true}],
+                        ...options?.descriptor,
+                    },
+                ]
+            },
+        ]
+    }
 }

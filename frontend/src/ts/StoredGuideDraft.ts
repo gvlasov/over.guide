@@ -1,27 +1,30 @@
-import GuideVso from "@/ts/vso/GuideVso";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
+import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
 
 
 export default class StoredGuideDraft {
 
-    get guide(): GuideVso | null {
-        const item = localStorage.getItem('guide-editor-draft');
+    private static readonly storageKey = 'guide-editor-draft';
+
+    get guide(): GuideHistoryEntryCreateDto | null {
+        const item = localStorage.getItem(StoredGuideDraft.storageKey);
         if (item === null) {
             return null
         } else {
-            return new GuideVso(JSON.parse(item))
+            return JSON.parse(item)
         }
     }
 
-    saveDraft(guide: GuideVso) {
+    saveDraft(guide: NewGuideHistoryEntryVso) {
         localStorage.setItem(
-            'guide-editor-draft',
+            StoredGuideDraft.storageKey,
             JSON.stringify(guide.toDto())
         );
     }
 
     reset() {
         localStorage.removeItem(
-            'guide-editor-draft'
+            StoredGuideDraft.storageKey
         )
     }
 }

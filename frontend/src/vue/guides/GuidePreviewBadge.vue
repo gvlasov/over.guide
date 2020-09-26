@@ -10,7 +10,7 @@
             >Close
             </OverwatchButton>
             <Guide
-                    :guide="guide"
+                    head="guide"
                     :show-training-goal-button="false"
                     :search-descriptor="null"
             />
@@ -71,7 +71,8 @@ import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
 import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import GuidePartText from "@/vue/guides/GuidePartText";
-import GuideVso from "@/ts/vso/GuideVso";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import Guide from "@/vue/guides/Guide";
 import TagBadges from "@/vue/guides/TagBadges";
 import Vue from 'vue'
@@ -96,7 +97,7 @@ const backend = new Backend(axios);
 })
 export default class GuidePreviewBadge extends Vue {
     @Prop({required: true})
-    guide: GuideVso
+    guide: ExistingGuideHistoryEntryVso
 
     @Prop({default: false})
     open: boolean
@@ -113,12 +114,12 @@ export default class GuidePreviewBadge extends Vue {
     }
 
     get firstVideoWidget(): GuidePartVideoWidget {
-        return this.guide.parts.find(widget => widget.part.kind === 'video') as GuidePartVideoWidget
+        return this.guide.parts.find(widget => widget.isVideo) as GuidePartVideoWidget
 
     }
 
     get firstTextWidget(): GuidePartTextWidget {
-        return this.guide.parts.find(widget => widget.part.kind === 'text') as GuidePartTextWidget
+        return this.guide.parts.find(widget => widget.isText) as GuidePartTextWidget
     }
 };
 

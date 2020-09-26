@@ -15,4 +15,8 @@ export default abstract class GuidePartWidget {
 
     abstract get isEmpty(): boolean;
 
+    abstract get isText(): boolean
+
+    abstract get isVideo(): boolean
+
 }

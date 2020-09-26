@@ -5,24 +5,21 @@ import {
     BelongsToMany,
     Column,
     ForeignKey,
-    HasOne,
     Model,
     PrimaryKey,
     Table,
     UpdatedAt
 } from 'sequelize-typescript';
-import {Hero} from "src/database/models/Hero";
-import {User} from "src/database/models/User";
 import {Guide} from "src/database/models/Guide";
-import {GuideHistoryEntry2GuidePartText} from "src/database/models/GuideHistoryEntry2GuidePartText";
+import {User} from "src/database/models/User";
+import {Hero} from "src/database/models/Hero";
+import {GuideDescriptor} from "src/database/models/GuideDescriptor";
+import {DataTypes} from "sequelize";
 import {GuidePartText} from "src/database/models/GuidePartText";
+import {GuideHistoryEntry2GuidePartText} from "src/database/models/GuideHistoryEntry2GuidePartText";
 import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {GuideHistoryEntry2GuidePartVideo} from "src/database/models/GuideHistoryEntry2GuidePartVideo";
-import {DataTypes} from "sequelize";
-import {GuideDescriptor} from "src/database/models/GuideDescriptor";
-import {GuideHead} from "src/database/models/GuideHead";
-import UserDto from "data/dto/UserDto";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
 
 @Table({
     name: {
@@ -45,9 +42,6 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
 
     @BelongsTo(() => Guide, 'guideId')
     guide: Guide
-
-    @HasOne(() => GuideHead)
-    headRecord: GuideHead | null
 
     @AllowNull(false)
     @ForeignKey(() => User)
@@ -114,16 +108,12 @@ export class GuideHistoryEntry extends Model<GuideHistoryEntry> {
         })
     }
 
-    toDto(): GuideHistoryEntryDto {
+    toDto(): GuideHistoryEntryReadDto {
         return {
-            author: {
-                id: this.guide.creator.id,
-                name: this.guide.creator.name,
-            } as UserDto,
-            createdAt: this.guide.createdAt,
+            guide: this.guide.toDto(),
+            updatedAt: this.updatedOn.toISOString(),
             descriptor: this.descriptor.toDto(),
-            guideId: this.guideId,
             parts: this.partsOrdered.map(part => part.toDto()),
-        } as GuideHistoryEntryDto
+        } as GuideHistoryEntryReadDto
     }
 }

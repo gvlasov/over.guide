@@ -1,9 +1,11 @@
-async function up(database) {
+
+
+async function up(database, guideEntityTypeId) {
     await
         database.sequelize.query(
                 `
-                    DROP TABLE IF EXISTS GuideHead;
-                    CREATE VIEW GuideHead
+                    DROP TABLE IF EXISTS GuideHeadLink;
+                    CREATE VIEW GuideHeadLink
                     AS
                     select guideHistoryEntryId,
                            guideId
@@ -20,6 +22,24 @@ async function up(database) {
                     where __row_number = __row_count
             `
         );
+    await database.sequelize.query(
+        `
+                DROP TABLE IF EXISTS GuideHead;
+                CREATE VIEW GuideHead
+                AS
+                select guideHistoryEntryId,
+                       GHL.guideId,
+                       count(C.id) as commentsCount,
+                       count(GV.upvoterId) as votesCount
+                from GuideHeadLink GHL
+left join Comment C
+on GHL.guideId = C.parentId
+and C.parentType = ${guideEntityTypeId}
+left join GuideVote GV 
+on GV.guideId = GHL.guideId
+group by GHL.guideId
+        `
+    );
 }
 
 async function down(queryInterface) {

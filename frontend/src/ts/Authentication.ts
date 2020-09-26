@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import GuideVso from "@/ts/vso/GuideVso";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 
 
 export default class Authentication {
@@ -44,11 +44,11 @@ export default class Authentication {
         return 'https://account.blizzard.com/api/logout';
     }
 
-    canEditGuide(guide: GuideVso): boolean {
-        if (guide.author === undefined) {
+    canEditGuide(guide: ExistingGuideHeadVso): boolean {
+        if (guide.entry.author === undefined) {
             throw new Error('Guide doesn\'t have author')
         }
-        return this.userId === guide.author.id;
+        return this.userId === guide.entry.author.id;
     }
 
 }

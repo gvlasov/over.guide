@@ -1,15 +1,17 @@
 <template>
     <div class="wrap root-content-sizer">
-        <div v-if="guideNotFound">
-            <BackgroundHeading>Guide not found</BackgroundHeading>
-        </div>
-        <div v-else-if="guide === null">
+        <div v-if="$asyncComputed.guide.updating">
+            {{ $asyncComputed.guide.state }}
             <BackgroundHeading>Loading</BackgroundHeading>
+            {{ JSON.stringify($asyncComputed.guide) }}
+        </div>
+        <div v-else-if="guideNotFound">
+            <BackgroundHeading>Guide not found</BackgroundHeading>
         </div>
         <template v-else>
             <ParameterDescriptorSynchronizer
                     v-if="isNewGuide"
-                    v-model="guide.descriptor"
+                    v-model="guide.entry.descriptor"
                     base-path="/guide-editor/"
             />
             <LoginRequirement
@@ -33,17 +35,17 @@
                         class="root-content-panel-wrap"
                 >
                     <DescriptorBuilder
-                            :descriptor="guide.descriptor"
+                            :descriptor="guide.entry.descriptor"
                             :search-button-enabled="false"
                             class="descriptor-builder"
                             v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
                     >
                         <div
-                                v-if="!guide.descriptor.isEmpty"
+                                v-if="!guide.entry.descriptor.isEmpty"
                                 class="similar-tag-guides-wrap"
                         >
                             <SimilarTagGuides
-                                    :descriptor="guide.descriptor"
+                                    :descriptor="guide.entry.descriptor"
                             />
                         </div>
                     </DescriptorBuilder>
@@ -59,13 +61,13 @@
                     </OverwatchButton>
                     <OverwatchButton
                             type="main"
-                            :disabled="guide.descriptor.isEmpty"
+                            :disabled="guide.entry.descriptor.isEmpty"
                             v-hammer:tap="() => {forceDescriptorSelection = false; preview = true}"
                     >Done
                     </OverwatchButton>
                 </div>
                 <div v-else>
-                    <GuideEditorPartsList :guide="guide"/>
+                    <GuideEditorPartsList :entry="guide.entry"/>
                     <div>
                         <OverwatchButton
                                 type="main"
@@ -85,8 +87,8 @@
             >
                 <BackgroundHeading>Preview</BackgroundHeading>
                 <Guide
-                        :guide="guide"
-                        :search-descriptor="guide.descriptor"
+                        head="guide"
+                        :search-descriptor="guide.entry.descriptor"
                         :show-training-goal-button="false"
                 />
                 <OverwatchButton
@@ -112,7 +114,6 @@ import axios from 'axios';
 import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
 import StoredGuideDraft from "@/ts/StoredGuideDraft";
-import GuideVso from "@/ts/vso/GuideVso";
 import LoginRequirement from "@/vue/LoginRequirement";
 import DescriptorParamUnparser from "@/ts/DescriptorParamUnparser";
 import Guide from "@/vue/guides/Guide";
@@ -124,6 +125,12 @@ import ParamsDescriptorMixin from "@/ts/ParamsDescriptorMixin";
 import SimilarTagGuides from "@/vue/guides/editor/SimilarTagGuides";
 import Component, {mixins} from "vue-class-component";
 import {Watch} from "vue-property-decorator";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import NewGuideHeadVso from "@/ts/vso/NewGuideHeadVso";
+import AsyncComputedProp from "vue-async-computed-decorator";
+import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
+import {NewGuideHeadDto} from "data/dto/GuideHeadDto";
+import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
 
 const Debounce = require('debounce-decorator').default
 
@@ -145,7 +152,6 @@ const draft = new StoredGuideDraft()
 })
 export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
-    guide: GuideVso = this.readGuide()
     loginRequired: boolean = false
     preview: boolean = false
     forceDescriptorSelection: boolean = false
@@ -156,18 +162,18 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     @Watch('guide', {deep: true})
     @Debounce(500)
-    onGuideChange(newValue: GuideVso) {
-        if (this.isNewGuide) {
-            if (newValue.isEmpty) {
+    onGuideChange(newValue: NewGuideHeadVso | ExistingGuideHeadVso) {
+        if (newValue.entry instanceof NewGuideHistoryEntryVso) {
+            if (newValue.entry.isEmpty) {
                 draft.reset();
             } else {
-                draft.saveDraft(newValue);
+                draft.saveDraft(newValue.entry);
             }
         }
     }
 
     onDone() {
-        if (this.guide.descriptor.isEmpty) {
+        if (this.guide.entry.descriptor.isEmpty) {
             this.forceDescriptorSelection = true;
         } else {
             this.wipeEmptyParts();
@@ -179,18 +185,19 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     }
 
     publish() {
-        backend.saveGuide(this.guide.toDto())
-            .then((guideId: number | null) => {
+        (
+            this.guide instanceof ExistingGuideHeadVso
+                ? backend.updateGuide(this.guide.entry.toDto())
+                : backend.createGuide(this.guide.entry.toDto())
+        )
+            .then(() => {
                 this.$router.push(
                     '/search/' +
                     new DescriptorParamUnparser().unparseDescriptor(
-                        this.guide.descriptor
+                        this.guide.entry.descriptor
                     )
                 )
                 draft.reset()
-                if (guideId !== null) {
-                    this.guide.guideId = guideId
-                }
             })
             .catch(error => {
                 if (error.response.status === 403) {
@@ -201,68 +208,65 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     wipeEmptyParts() {
         const emptyIndices = [];
-        for (let index in this.guide.parts) {
-            if (!this.guide.parts.hasOwnProperty(index)) {
+        for (let index in this.guide.entry.parts) {
+            if (!this.guide.entry.parts.hasOwnProperty(index)) {
                 continue;
             }
-            const part = this.guide.parts[index];
+            const part = this.guide.entry.parts[index];
             if (part.isEmpty) {
                 emptyIndices.push(index)
             }
         }
         let shift = 0;
         for (let index of emptyIndices) {
-            this.guide.parts.splice(index - shift, 1);
+            this.guide.entry.parts.splice(index - shift, 1);
             shift++;
         }
     }
 
-    readGuide(): GuideVso {
-        let guide;
-        let guideId;
-        if (typeof this.$route.params.id === "undefined" || this.$route.params.id === 'new') {
-            guideId = undefined;
+    get isRouteForNewGuide(): boolean {
+        return this.$route.params.id === void 0 || this.$route.params.id === 'new'
+    }
+
+    declare guide: NewGuideHeadVso | ExistingGuideHeadVso
+
+    @AsyncComputedProp()
+    async guide() {
+        if (this.isRouteForNewGuide) {
             const draftGuide = draft.guide;
-            if (draftGuide !== null && draftGuide.parts.length !== 0) {
-                guide = draftGuide;
+            if (draftGuide !== null) {
+                const newGuideHeadVso = new NewGuideHeadVso(
+                    {
+                        guideHistoryEntry: {
+                            ...draftGuide,
+                            createdAt: new Date().toISOString(),
+                            author: new UserVso({
+                                id: new Authentication().userId || 0,
+                                name: new Authentication().username || 'you',
+                            })
+                        },
+                        commentsCount: 0,
+                        votesCount: 0
+                    } as NewGuideHeadDto
+                );
+                if (!newGuideHeadVso.entry.isEmpty) {
+                    return newGuideHeadVso
+                }
             }
-        } else {
-            return null;
-        }
-        if (typeof guide === 'undefined') {
-            guide =
-                new GuideVso({
-                    id: undefined,
-                    guideId: undefined,
+            return new NewGuideHeadVso({
+                guideHistoryEntry: {
                     descriptor: this.obtainParamsDescriptor(),
                     parts: [],
-                });
-        }
-        if (typeof guide !== 'undefined') {
-            guide.createdAt = new Date().toISOString();
-            guide.author = new UserVso({
-                id: new Authentication().userId || 0,
-                name: new Authentication().username || 'you',
+                },
+                commentsCount: 0,
+                votesCount: 0,
             });
-        }
-        return guide;
-    }
-
-    get isDoneButtonEnabled(): boolean {
-        return typeof this.guide.parts.find(widget => !widget.isEmpty) !== 'undefined';
-    }
-
-    get isNewGuide(): boolean {
-        return typeof this.guide.guideId === 'undefined'
-    }
-
-    mounted() {
-        if (this.guide === null) {
-            backend.getGuide(
+        } else {
+            return await backend.getGuide(
                 Number.parseInt(this.$route.params.id)
             )
                 .then(dto => {
-                    this.guide = new GuideVso(dto)
+                    return new ExistingGuideHeadVso(dto)
                 })
                 .catch(e => {
                     if (e.response.status === 404) {
@@ -270,8 +274,24 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                     } else {
                         throw e;
                     }
+                    return new NewGuideHeadVso({
+                        guideHistoryEntry: {
+                            descriptor: new GuideDescriptorQuickie({}),
+                            parts: [],
+                        },
+                        votesCount: 0,
+                        commentsCount: 0,
+                    })
                 });
         }
+    }
+
+    get isDoneButtonEnabled(): boolean {
+        return this.guide.entry.parts.find(widget => !widget.isEmpty) !== void 0;
+    }
+
+    get isNewGuide(): boolean {
+        return this.guide instanceof NewGuideHeadVso
     }
 }
 </script>

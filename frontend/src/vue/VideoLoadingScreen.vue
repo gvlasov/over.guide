@@ -18,12 +18,12 @@ import formatInterval from "@/ts/utils/format-interval";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import YoutubeVideoExcerpsDto from "data/dto/YoutubeVideoExcerpsDto";
+import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto";
 
 @Component({})
 export default class VideoLoadingScreen extends Vue {
     @Prop({required: true})
-    excerpt: YoutubeVideoExcerpsDto
+    excerpt: YoutubeVideoExcerptDto
 
     get thumbnailUrl(): string {
         return `https://i3.ytimg.com/vi/${this.excerpt.youtubeVideoId}/mqdefault.jpg`

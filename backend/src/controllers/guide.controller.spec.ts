@@ -12,7 +12,6 @@ import thematicTagsFixture from "@fixtures/thematicTags";
 import {GuideController} from "src/controllers/guide.controller";
 import request from "supertest";
 import {HttpStatus} from "@nestjs/common";
-import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import HeroId from "data/HeroId";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
@@ -26,6 +25,9 @@ import {ContentHashService} from "src/services/content-hash.service";
 import {GuideSearchService} from "src/services/guide-search.service";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
 import GuideSearchQueryQuickie from "data/dto/GuideSearchQueryQuickie";
+import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
+import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
+import GuideHeadDto from "data/dto/GuideHeadDto";
 
 describe(
     GuideController,
@@ -48,7 +50,8 @@ describe(
                     .get(`/guide/${guide.id}`)
                     .expect(HttpStatus.OK)
                     .then(res => {
-                        expect(res.body.guideId).toBe(guide.id)
+                        console.log(res.body)
+                        expect(res.body.guideHistoryEntry.guide.id).toBe(guide.id)
                     })
             });
             it('returns 404 if guide doesn\'t exist', async () => {
@@ -69,7 +72,7 @@ describe(
                     include: [
                         {
                             model: User,
-                            as: 'creator',
+                            as: 'author',
                         }
                     ]
                 })
@@ -77,9 +80,9 @@ describe(
                     .get(`/guide/${guide.id}`)
                     .expect(HttpStatus.OK)
                     .then(res => {
-                        expect(res.body.guideId).toBe(guide.id)
+                        expect(res.body.guideHistoryEntry.guide.id).toBe(guide.id)
                     })
-                await guide.deactivate(guide.creator)
+                await guide.deactivate(guide.author)
                 await request(ctx.app.getHttpServer())
                     .get(`/guide/${guide.id}`)
                     .expect(HttpStatus.NOT_FOUND)
@@ -91,7 +94,7 @@ describe(
                 const token = tokenService.getToken(user)
                 expect((await Guide.findAll()).length).toBe(0)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/create')
                     .send({
                         descriptor: new Descriptor({
                             teammateHeroes: [HeroId.Baptiste],
@@ -104,7 +107,7 @@ describe(
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryCreateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.CREATED)
                     .then(res => {
@@ -119,7 +122,7 @@ describe(
                 const token = tokenService.getToken(user)
                 expect((await Guide.findAll()).length).toBe(0)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/create')
                     .send({
                         descriptor: new Descriptor({
                             teammateHeroes: [HeroId.Baptiste],
@@ -132,14 +135,14 @@ describe(
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryCreateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.CREATED)
                 expect((await Guide.findAll()).length).toBe(1)
                 const guide = await Guide.findOne()
                 expect((await GuideHistoryEntry.findAll()).length).toBe(1)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/update')
                     .send({
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -152,7 +155,7 @@ describe(
                                 contentMd: 'asdfm',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryAppendDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                 expect((await Guide.findAll()).length).toBe(1)
@@ -165,16 +168,16 @@ describe(
                 const token = tokenService.getToken(user)
                 expect((await Guide.findAll()).length).toBe(0)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/create')
                     .send({
-                        descriptor: new Descriptor({ }),
+                        descriptor: new Descriptor({}),
                         parts: [
                             {
                                 kind: 'text',
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryCreateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                 ;
@@ -192,7 +195,7 @@ describe(
                 const token = tokenService.getToken(user)
                 expect((await Guide.findAll()).length).toBe(0)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/create')
                     .send({
                         descriptor: new Descriptor({
                             teammateHeroes: [HeroId.Baptiste],
@@ -207,14 +210,14 @@ describe(
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryCreateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.CREATED)
                 expect((await Guide.findAll()).length).toBe(1)
                 const guide = await Guide.findOne()
                 expect((await GuideHistoryEntry.findAll()).length).toBe(1)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/update')
                     .send({
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -230,7 +233,7 @@ describe(
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryAppendDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.ACCEPTED)
                 expect((await Guide.findAll()).length).toBe(1)
@@ -247,7 +250,7 @@ describe(
                 const user1Token = tokenService.getToken(user1)
                 const user2Token = tokenService.getToken(user2)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/create')
                     .send({
                         descriptor:
                             new Descriptor({
@@ -261,14 +264,14 @@ describe(
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryCreateDto)
                     .set({Authorization: `Bearer ${user1Token}`})
                     .expect(HttpStatus.CREATED)
                 const guide = await Guide.findOne()
                 expect((await Guide.findAll()).length).toBe(1)
                 expect((await GuideHistoryEntry.findAll()).length).toBe(1)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/update')
                     .send({
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -281,7 +284,7 @@ describe(
                                 contentMd: 'asdfm',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryAppendDto)
                     .set({Authorization: `Bearer ${user2Token}`})
                     .expect(HttpStatus.FORBIDDEN)
                 expect((await Guide.findAll()).length).toBe(1)
@@ -301,7 +304,7 @@ describe(
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -311,10 +314,10 @@ describe(
                     descriptor: new Descriptor({
                         mapTags: [MapId.Dorado],
                     }),
-                }, regularUser)
+                } as GuideHistoryEntryCreateDto, regularUser)
                 const guide = await Guide.findOne()
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/update')
                     .send({
                         guideId: guide.id,
                         descriptor: new Descriptor({
@@ -327,7 +330,7 @@ describe(
                                 contentMd: 'asdfm',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryAppendDto)
                     .set({Authorization: `Bearer ${moderatorToken}`})
                     .expect(HttpStatus.OK)
                 expect((await Guide.findAll()).length).toBe(1)
@@ -347,7 +350,7 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -357,7 +360,7 @@ describe(
                     descriptor: new Descriptor({
                         teammateHeroes: [HeroId.Mei],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
                 expect(guide.deactivatedAt).toBe(null)
@@ -384,7 +387,7 @@ describe(
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -394,7 +397,7 @@ describe(
                     descriptor: new Descriptor({
                         teammateHeroes: [HeroId.Ashe],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
                 expect(guide.deactivatedAt).toBe(null)
@@ -416,7 +419,7 @@ describe(
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const user2Token = tokenService.getToken(user2)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -426,7 +429,7 @@ describe(
                     descriptor: new Descriptor({
                         thematicTags: [GuideTheme.Psychology],
                     }),
-                }, user1)
+                } as GuideHistoryEntryCreateDto, user1)
                 const guide = await Guide.findOne()
                 await request(ctx.app.getHttpServer())
                     .post('/guide/deactivate')
@@ -442,7 +445,7 @@ describe(
                 const user = await User.findOne();
                 expect((await Guide.findAll()).length).toBe(0)
                 await request(ctx.app.getHttpServer())
-                    .post('/guide')
+                    .post('/guide/create')
                     .send({
                         descriptor: new Descriptor({
                             teammateHeroes: [HeroId.Baptiste],
@@ -455,7 +458,7 @@ describe(
                                 contentMd: 'asdf',
                             } as GuidePartTextDto
                         ]
-                    } as GuideHistoryEntryDto)
+                    } as GuideHistoryEntryCreateDto)
                     .expect(HttpStatus.FORBIDDEN)
                 expect((await Guide.findAll()).length).toBe(0)
             });
@@ -464,7 +467,7 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -474,7 +477,7 @@ describe(
                     descriptor: new Descriptor({
                         mapTags: [MapId.Hanamura],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const existingGuide = await Guide.findOne()
                 expect(existingGuide.deactivatedById).toBe(null)
                 expect(existingGuide.deactivatedAt).toBe(null)
@@ -493,7 +496,7 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -503,7 +506,7 @@ describe(
                     descriptor: new Descriptor({
                         mapTags: [MapId.Eichenwalde],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
                 expect(guide.deactivatedAt).toBe(null)
@@ -542,7 +545,7 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -552,7 +555,7 @@ describe(
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const guide = await Guide.findOne()
                 expect(guide.deactivatedById).toBe(null)
                 expect(guide.deactivatedAt).toBe(null)
@@ -570,7 +573,7 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -580,7 +583,7 @@ describe(
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const guide = await Guide.findOne()
                 await guide.deactivate(user)
                 expect(guide.deactivatedById).toBe(user.id)
@@ -608,7 +611,7 @@ describe(
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -618,7 +621,7 @@ describe(
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 const guide = await Guide.findOne()
                 await guide.deactivate(user)
                 expect(guide.deactivatedById).toBe(user.id)
@@ -635,7 +638,7 @@ describe(
             it('searches for guides that have given tags', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
-                await ctx.app.get(GuideHistoryEntryService).save({
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -646,8 +649,8 @@ describe(
                         mapTags: [MapId.Havana],
                         thematicTags: [GuideTheme['Game sense']],
                     }),
-                }, user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                } as GuideHistoryEntryCreateDto, user)
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -658,8 +661,8 @@ describe(
                         mapTags: [MapId.Havana],
                         thematicTags: [GuideTheme.Positioning],
                     }),
-                }, user)
-                await ctx.app.get(GuideHistoryEntryService).save({
+                } as GuideHistoryEntryCreateDto, user)
+                await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -673,7 +676,7 @@ describe(
                         teammateHeroes: [HeroId.Zarya, HeroId.Zenyatta],
                         playerHeroes: [HeroId.Dva],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 await request(ctx.app.getHttpServer())
                     .post('/guide/search')
                     .send(new GuideSearchQueryQuickie({
@@ -705,7 +708,7 @@ describe(
                 await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
-                const entry = await ctx.app.get(GuideHistoryEntryService).save({
+                const entry = await ctx.app.get(GuideHistoryEntryService).create({
                     parts: [
                         {
                             kind: 'text',
@@ -716,7 +719,7 @@ describe(
                         mapTags: [MapId.Havana],
                         thematicTags: [GuideTheme['Game sense']],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .post('/guide/search')
                     .send(new GuideSearchQueryQuickie({
@@ -745,37 +748,38 @@ describe(
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
                 const service = ctx.app.get(GuideHistoryEntryService);
-                const entry = await service.save({
+                const entry = await service.create({
                     parts: [{kind: 'text', contentMd: 'not head'}],
                     descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 const guide = await entry.$get('guide');
-                await service.save({
+                await service.append({
                     parts: [{kind: 'text', contentMd: 'HEAD'}],
                     guideId: guide.id,
                     descriptor: new Descriptor({
                         mapTags: [MapId.Havana],
                     }),
-                }, user)
-                await service.save({
+                } as GuideHistoryEntryAppendDto, user)
+                await service.create({
                     parts: [{kind: 'text', contentMd: 'HEAD'}],
                     descriptor: new Descriptor({
                         mapTags: [MapId.Eichenwalde],
                     }),
-                }, user)
+                } as GuideHistoryEntryCreateDto, user)
                 await request(ctx.app.getHttpServer())
                     .post(`/guide/search`)
-                    .send(new GuideSearchQueryQuickie({
-
-                    }))
+                    .send(new GuideSearchQueryQuickie({}))
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(response.body.guides.length).toBe(2)
                         expect(
-                            response.body.guides.map((guide: GuideHistoryEntryDto) => (guide.parts[0] as GuidePartTextDto).contentMd)
+                            response.body.guides.map(
+                                (guide: GuideHeadDto) =>
+                                    (guide.guideHistoryEntry.parts[0] as GuidePartTextDto).contentMd
+                            )
                                 .filter(it => it === 'HEAD')
                         ).toHaveLength(2)
                     })
@@ -785,24 +789,24 @@ describe(
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
                 const service = ctx.app.get(GuideHistoryEntryService);
-                const correctEntry = await service.save({
+                const correctEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'not head'}],
                     descriptor: new Descriptor({
                         thematicTags: [GuideTheme.Communication],
                     }),
-                }, user) as GuideHistoryEntry
-                const wrongEntry = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const wrongEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou'}],
                     descriptor: new Descriptor({
                         thematicTags: [GuideTheme.Aim],
                     }),
-                }, user) as GuideHistoryEntry
-                const anotherEntry = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const anotherEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou'}],
                     descriptor: new Descriptor({
                         mapTags: [MapId.Busan],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .post('/guide/search')
                     .send(
@@ -815,7 +819,7 @@ describe(
                     .then(response => {
                         expect(response.body.guides.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideId
+                            response.body.guides[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -824,22 +828,21 @@ describe(
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
                 const service = ctx.app.get(GuideHistoryEntryService);
-                const wrongEntry = await service.save({
+                const wrongEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou'}],
                     descriptor: new Descriptor({
                         thematicTags: [GuideTheme.Aim],
                     }),
-                }, user) as GuideHistoryEntry
-                const correctEntry = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const correctEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou'}],
                     descriptor: new Descriptor({
                         mapTags: [MapId.Busan],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .post('/guide/search')
                     .send(
-
                         new GuideSearchQueryQuickie(
                             {
                                 mapTags: [MapId.Busan],
@@ -851,7 +854,7 @@ describe(
                     .then(response => {
                         expect(response.body.guides.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideId
+                            response.body.guides[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -860,18 +863,18 @@ describe(
                 const user = await User.findOne();
                 const token = ctx.app.get(TokenService).getToken(user)
                 const service = ctx.app.get(GuideHistoryEntryService);
-                const wrongEntry = await service.save({
+                const wrongEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou'}],
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana, HeroId.Baptiste],
                     }),
-                }, user) as GuideHistoryEntry
-                const correctEntry = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const correctEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou'}],
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana, HeroId.Reinhardt],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .post(`/guide/search`)
                     .send(
@@ -886,7 +889,7 @@ describe(
                     .then(response => {
                         expect(response.body.guides.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideId
+                            response.body.guides[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -901,7 +904,7 @@ describe(
                 const user = await User.findOne();
                 const service = ctx.app.get(GuideHistoryEntryService);
                 const commonVideoId = 'asdf';
-                const guide1 = await service.save({
+                const guide1 = await service.create({
                     parts: [{
                         kind: 'video',
                         excerpt: {
@@ -913,8 +916,8 @@ describe(
                     descriptor: new Descriptor({
                         mapTags: [MapId.Busan],
                     }),
-                }, user) as GuideHistoryEntry
-                const guide2 = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const guide2 = await service.create({
                     parts: [{
                         kind: 'video',
                         excerpt: {
@@ -926,8 +929,8 @@ describe(
                     descriptor: new Descriptor({
                         mapTags: [MapId.Busan],
                     }),
-                }, user) as GuideHistoryEntry
-                const guide3 = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const guide3 = await service.create({
                     parts: [{
                         kind: 'video',
                         excerpt: {
@@ -939,14 +942,15 @@ describe(
                     descriptor: new Descriptor({
                         mapTags: [MapId.Busan],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .get(`/guide/search-by-video/${commonVideoId}`)
                     .send()
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(response.body).toHaveLength(2)
-                        const foundGuideIds = response.body.map(ghe => ghe.guideId);
+                        console.log(response.body)
+                        const foundGuideIds = response.body.map(head => head.guideHistoryEntry.guide.id);
                         expect(foundGuideIds).toContain(guide1.id)
                         expect(foundGuideIds).toContain(guide2.id)
                         expect(foundGuideIds).not.toContain(guide3.id)
@@ -963,18 +967,18 @@ describe(
                 await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
                 const user = await User.findOne();
                 const service = ctx.app.get(GuideHistoryEntryService);
-                const wrongEntry = await service.save({
+                const wrongEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou1'}],
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana, HeroId.Baptiste],
                     }),
-                }, user) as GuideHistoryEntry
-                const correctEntry = await service.save({
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
+                const correctEntry = await service.create({
                     parts: [{kind: 'text', contentMd: 'hellou2'}],
                     descriptor: new Descriptor({
                         playerHeroes: [HeroId.Ana],
                     }),
-                }, user) as GuideHistoryEntry
+                } as GuideHistoryEntryCreateDto, user) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
                     .post(`/guide/search`)
                     .send(
@@ -989,7 +993,7 @@ describe(
                     .then(response => {
                         expect(response.body.guides.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideId
+                            response.body.guides[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })

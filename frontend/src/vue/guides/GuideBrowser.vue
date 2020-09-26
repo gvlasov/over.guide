@@ -16,7 +16,7 @@
             <Guide
                     v-for="guide in guides"
                     :key="guide.guideId"
-                    :guide="guide"
+                    :head="guide"
                     :search-descriptor="descriptor"
                     @loginRequired="() => {loginRequired = true}"
                     @guideDeactivated="onDeactivated"
@@ -86,6 +86,8 @@ import {debounce} from "lodash/function";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import {Model, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 
 const playingZonePaddingPx = 50;
 @Component({
@@ -109,14 +111,16 @@ export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSear
     currentlyPlayingVideo: any = null
     players: YT.Player[] = []
 
-    async onSearch(newDescriptor) {
+    declare guides: ExistingGuideHistoryEntryVso[]
+
+    async onSearch(newDescriptor: GuideDescriptorVso) {
         this.$emit('contentChange');
         this.$emit('descriptorChange', newDescriptor);
         this.visibleVideos.slice(0, this.visibleVideos.length)
         this.players.slice(0, this.players.length)
     }
 
-    onDeactivated(guideId) {
+    onDeactivated(guideId: number) {
         const deactivated = this.guides.findIndex(g => g.guideId === guideId)
         if (deactivated === -1) {
             throw new Error('Unknown guide deactivated')
