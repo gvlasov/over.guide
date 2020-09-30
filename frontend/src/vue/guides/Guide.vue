@@ -23,6 +23,18 @@
                 v-hammer:tap="deactivate"
         >Delete
         </OverwatchButton>
+        <div class="comments">
+            <CommentsSection
+                    v-if="showCommentsSection"
+                    :post="head"
+                    @close="() => showCommentsSection = false"
+            />
+            <CommentsButton
+                    v-else
+                    :comments-count="head.commentsCount"
+                    v-hammer:tap="() => showCommentsSection = !showCommentsSection"
+            />
+        </div>
     </div>
 </template>
 
@@ -42,6 +54,8 @@ import GuideMeta from "@/vue/guides/GuideMeta.vue";
 import Vue from 'vue'
 import GuideContent from "@/vue/guides/GuideContent.vue";
 import TrainingGoalToggle from "@/vue/guides/TrainingGoalToggle.vue";
+import CommentsButton from "@/vue/guides/CommentsButton.vue";
+import CommentsSection from "@/vue/comments/CommentsSection.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -49,6 +63,8 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        CommentsSection,
+        CommentsButton,
         TrainingGoalToggle,
         GuideContent,
         GuideMeta,
@@ -65,6 +81,8 @@ export default class Guide extends Vue {
     searchDescriptor: GuideDescriptorVso | null
 
     declare $router: any
+
+    showCommentsSection: boolean = false
 
     trainingGoalButtonHover: boolean = false
     cache: MyTrainingGoalsCache = myTrainingGoalsCache
@@ -153,6 +171,12 @@ export default class Guide extends Vue {
             &:hover ::v-deep .background {
                 background-color: $training-goal-color;
             }
+        }
+    }
+    .comments {
+        text-align: right;
+        button {
+            font-size: 1.5em;
         }
     }
 }

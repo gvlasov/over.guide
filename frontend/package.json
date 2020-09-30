@@ -41,6 +41,7 @@
     "vue-keypress": "~2.1.1",
     "vue-observe-visibility": "^0.4.6",
     "vue-property-decorator": "^9.0.0",
+    "vue-resize-observer": "^1.0.32",
     "vue-router": "^3.3.4",
     "vue-scrollto": "^2.18.2",
     "vue2-hammer": "^2.1.2",

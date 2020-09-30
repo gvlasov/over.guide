@@ -6,9 +6,10 @@
         <OverwatchButton
                 type="default"
                 class="login-button"
+                v-hammer:tap="saveRedirectPath"
         >
             <BattlenetAuthButton
-                    v-hammer:tap="saveRedirectPath"
+                    ref="battle-net-auth-button"
             />
         </OverwatchButton>
         <div class="notice subnotice">
@@ -29,6 +30,7 @@ import OverwatchButton from "@/vue/OverwatchButton";
 import LoginNotice from "@/vue/LoginNotice";
 import Vue from 'vue'
 import Component from "vue-class-component";
+import {Ref} from "vue-property-decorator";
 
 @Component({
     components: {
@@ -38,10 +40,13 @@ import Component from "vue-class-component";
     },
 })
 export default class Loginrequirement extends Vue {
+    @Ref('battle-net-auth-button') bnetButton
+
     declare $route: any
 
     saveRedirectPath() {
         localStorage.setItem('pathBeforeBnetAuth', this.$route.path)
+        window.location.href = this.bnetButton.url
     }
 };
 

@@ -1,7 +1,8 @@
-import EntityTypeId from "data/EntityTypeId";
+import PostTypeId from "data/PostTypeId";
 
 export default interface CommentCreateDto {
-    readonly parentId: number;
-    readonly parentType: EntityTypeId;
+    readonly postId: number
+    readonly postType: PostTypeId
+    readonly parentId: number|null
     readonly content: string
 }

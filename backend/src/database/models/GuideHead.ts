@@ -17,6 +17,7 @@ import {GuidePartVideo} from "src/database/models/GuidePartVideo";
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
+import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
 
 @Table(
     {
@@ -55,12 +56,12 @@ export class GuideHead extends Model<GuideHead> {
     )
     user2TrainingGoal: User2TrainingGoal
 
-    toDto(): GuideHeadDto {
+    toDto(): GuideHeadDto<GuideHistoryEntryReadDto> {
         return {
             guideHistoryEntry: this.guideHistoryEntry.toDto(),
             commentsCount: this.commentsCount,
             votesCount: this.votesCount,
-        } as GuideHeadDto
+        } as GuideHeadDto<GuideHistoryEntryReadDto>
     }
 
     static includesForDto(options?: {

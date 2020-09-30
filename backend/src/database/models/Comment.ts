@@ -9,8 +9,9 @@ import {
     Table
 } from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
-import EntityTypeId from "data/EntityTypeId";
+import PostTypeId from "data/PostTypeId";
 import {User} from "src/database/models/User";
+import CommentReadDto from "data/dto/CommentReadDto";
 
 @Table
 export class Comment extends Model<Comment> {
@@ -20,13 +21,21 @@ export class Comment extends Model<Comment> {
     @Column
     public id: number
 
-    @AllowNull(false)
+    @AllowNull(true)
+    @ForeignKey(() => Comment)
     @Column({type: new DataTypes.INTEGER()})
-    parentId: number
+    parentId: number|null
+
+    @BelongsTo(() => Comment)
+    parent: Comment|null
 
     @AllowNull(false)
     @Column({type: new DataTypes.INTEGER()})
-    parentType: EntityTypeId
+    postId: number
+
+    @AllowNull(false)
+    @Column({type: new DataTypes.INTEGER()})
+    postType: PostTypeId
 
     @AllowNull(false)
     @Column({type: new DataTypes.TEXT()})
@@ -56,5 +65,22 @@ export class Comment extends Model<Comment> {
     @ForeignKey(() => User)
     @Column
     deactivatedById: number
+
+    @BelongsTo(() => User, 'deactivatedById')
+    deactivatedBy: User
+
+    toDto(votes: number): CommentReadDto {
+        return {
+            id: this.id,
+            author: this.author.toDto(),
+            content: this.content,
+            createdAt: this.createdAt.toISOString(),
+            parentId: this.parentId,
+            postId: this.postId,
+            postType: this.postType,
+            updatedAt: this.updatedAt.toISOString(),
+            votes,
+        }
+    }
 
 }

@@ -1,11 +1,13 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpStatus,
     Inject,
     Param,
     Post,
+    Put,
     Req,
     Res,
     UseGuards
@@ -21,6 +23,8 @@ import CommentUpdateDto from "data/dto/CommentUpdateDto";
 import {CommentVote} from "src/database/models/CommentVote";
 import CommentVoteDto from "data/dto/CommentVoteDto";
 import {QueryTypes} from "sequelize";
+import CommentReadDto from "data/dto/CommentReadDto";
+import {User} from "src/database/models/User";
 
 @Controller('comment')
 export class CommentController {
@@ -31,37 +35,49 @@ export class CommentController {
     ) {
     }
 
-    @Get(':parentType/:parentId')
+    @Get(':postType/:postId')
     async getComments(
-        @Param('parentType') parentType: number,
-        @Param('parentId') parentId: number
-    ) {
-
-        return this.sequelize.query(
+        @Param('postType') postType: number,
+        @Param('postId') postId: number
+    ): Promise<CommentReadDto[]> {
+        return this.sequelize.query<any>(
                 `
                     select Comment.id,
-                           Comment.parentType,
+                           Comment.postType,
+                           Comment.postId,
                            Comment.parentId,
                            Comment.content,
                            Comment.createdAt,
                            Comment.updatedAt,
+                           U.id         as authorId,
+                           U.name       as authorName,
                            count(CV.id) as votes
                     from Comment
                              left join CommentVote CV on Comment.id = CV.commentId
                              left join User U on Comment.authorId = U.id
-                    where Comment.parentId = :parentId
-                      and Comment.parentType = :parentType
+                    where Comment.postId = :postId
+                      and Comment.postType = :postType
                       and Comment.deactivatedAt is null
                     group by Comment.id
             `,
             {
                 replacements: {
-                    parentId: parentId,
-                    parentType: parentType,
+                    postId: postId,
+                    postType: postType,
                 },
                 type: QueryTypes.SELECT,
             }
         )
+            .then(comments => {
+                return comments.map(comment => {
+                    comment.author = {}
+                    comment.author.id = comment.authorId
+                    comment.author.name = comment.authorName
+                    delete comment.authorId
+                    delete comment.authorName
+                    return comment
+                })
+            })
     }
 
     @Post('create')
@@ -78,9 +94,19 @@ export class CommentController {
             updatedAt: new Date().toISOString(),
             authorId: user.id,
         })
+            .then((comment: Comment) =>
+                comment.reload({
+                    include: [
+                        {
+                            model: User,
+                            as: 'author'
+                        }
+                    ]
+                })
+            )
             .then(comment => {
                 response.status(HttpStatus.CREATED)
-                response.send()
+                response.send(comment.toDto(0))
             })
     }
 
@@ -115,42 +141,59 @@ export class CommentController {
             })
     }
 
-    @Post('upvote')
+    @Put('upvote')
     @UseGuards(AuthenticatedGuard)
     async upvote(
         @Res() response: Response,
         @Req() request: Request,
         @Body() dto: CommentVoteDto,
     ) {
-        const user = await this.authService.getUser(request)
-        CommentVote.create({
-            ...dto,
-            createdAt: new Date().toISOString(),
-            upvoterId: user.id,
-        })
+        this.authService.getUser(request)
+            .then(user =>
+                CommentVote.create({
+                    ...dto,
+                    createdAt: new Date().toISOString(),
+                    upvoterId: user.id,
+                })
+            )
             .then(comment => {
-                response.status(HttpStatus.CREATED)
+                response.status(HttpStatus.OK)
                 response.send()
+            })
+            .catch(e => {
+                if (e.errors[0].type === 'unique violation') {
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    response.send()
+                } else {
+                    throw e
+                }
             })
     }
 
-    @Post('remove-upvote')
+    @Delete('upvote')
     @UseGuards(AuthenticatedGuard)
     async removeUpvote(
         @Res() response: Response,
         @Req() request: Request,
         @Body() dto: CommentVoteDto,
     ) {
-        const user = await this.authService.getUser(request)
-        CommentVote.destroy({
-            where: {
-                ...dto,
-                upvoterId: user.id,
-            },
-        })
-            .then(result => {
-                response.status(HttpStatus.ACCEPTED)
-                response.send()
+        this.authService.getUser(request)
+            .then(user =>
+                CommentVote.destroy({
+                    where: {
+                        ...dto,
+                        upvoterId: user.id,
+                    },
+                })
+            )
+            .then(count => {
+                if (count === 0) {
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    response.send()
+                } else {
+                    response.status(HttpStatus.OK)
+                    response.send()
+                }
             })
     }
 

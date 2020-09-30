@@ -12,7 +12,10 @@ import {DataTypes} from "sequelize";
 import {Comment} from "src/database/models/Comment";
 import {User} from "src/database/models/User";
 
-@Table
+@Table({
+    createdAt: false,
+    updatedAt: false,
+})
 export class CommentVote extends Model<CommentVote> {
 
     @PrimaryKey
@@ -20,9 +23,14 @@ export class CommentVote extends Model<CommentVote> {
     @Column
     public id: number
 
+    private static readonly uniqueKeyName = 'comment_vote_unique';
+
     @AllowNull(false)
     @ForeignKey(() => Comment)
-    @Column({type: new DataTypes.INTEGER()})
+    @Column({
+        type: new DataTypes.INTEGER(),
+        unique: CommentVote.uniqueKeyName,
+    })
     commentId: number
 
     @BelongsTo(() => Comment, 'commentId')
@@ -30,7 +38,9 @@ export class CommentVote extends Model<CommentVote> {
 
     @AllowNull(false)
     @ForeignKey(() => User)
-    @Column
+    @Column({
+        unique: CommentVote.uniqueKeyName,
+    })
     upvoterId: number
 
     @BelongsTo(() => User, 'upvoterId')

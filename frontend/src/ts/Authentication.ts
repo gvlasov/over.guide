@@ -4,6 +4,16 @@ import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 
 export default class Authentication {
 
+    private static _instance: Authentication
+
+    static get instance(): Authentication {
+        if (Authentication._instance === void 0) {
+
+            Authentication._instance = new Authentication()
+        }
+        return Authentication._instance;
+    }
+
     get authenticated(): boolean {
         return typeof this.authToken !== "undefined";
     }
@@ -29,6 +39,10 @@ export default class Authentication {
         }
     }
 
+    get loggedIn(): boolean {
+        return this.userId !== void 0
+    }
+
     logoutSite(): void {
         Cookies.remove('auth-token')
         Cookies.remove('username')
@@ -40,7 +54,7 @@ export default class Authentication {
         window.location.href = this.battleNetLogoutUrl;
     }
 
-    get battleNetLogoutUrl() : string {
+    get battleNetLogoutUrl(): string {
         return 'https://account.blizzard.com/api/logout';
     }
 

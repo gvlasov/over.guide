@@ -31,7 +31,7 @@ import {Comment} from "src/database/models/Comment";
 import {CommentVote} from "src/database/models/CommentVote";
 import {GuideVote} from "src/database/models/GuideVote";
 import {GuideHeadLink} from "src/database/models/GuideHeadLink";
-import EntityTypeId from "data/EntityTypeId";
+import PostTypeId from "data/PostTypeId";
 
 const Umzug = require('umzug')
 
@@ -100,7 +100,7 @@ export const databaseProviders = [
                     path: 'src/database/migrations',
                     params: [
                         sequelize.getQueryInterface(),
-                        EntityTypeId.Guide
+                        PostTypeId.Guide
                     ]
                 },
                 storage: 'sequelize',

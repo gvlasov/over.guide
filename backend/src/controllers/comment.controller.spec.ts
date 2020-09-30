@@ -7,7 +7,7 @@ import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import {HttpStatus} from "@nestjs/common";
 import {CommentController} from "src/controllers/comment.controller";
-import EntityTypeId from "data/EntityTypeId";
+import PostTypeId from "data/PostTypeId";
 import abilitiesFixture from "@fixtures/abilities";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
@@ -50,35 +50,39 @@ describe(
                     },
                 })
                 await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: '1a',
                     authorId: user.id,
                     createdAt: new Date().toISOString(),
                 })
                 await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: '1b',
                     authorId: user.id,
                     createdAt: new Date().toISOString(),
                 })
                 await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: '1c',
                     authorId: user.id,
                     createdAt: new Date().toISOString(),
                 })
                 await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide2.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide2.id,
+                    parentId: null,
                     content: '2a',
                     authorId: user.id,
                     createdAt: new Date().toISOString(),
                 })
                 await request(ctx.app.getHttpServer())
-                    .get(`/comment/${EntityTypeId.Guide}/${guide.id}`)
+                    .get(`/comment/${PostTypeId.Guide}/${guide.id}`)
                     .send()
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -90,7 +94,7 @@ describe(
                         ).toBe(0)
                     })
                 await request(ctx.app.getHttpServer())
-                    .get(`/comment/${EntityTypeId.Guide}/${guide2.id}`)
+                    .get(`/comment/${PostTypeId.Guide}/${guide2.id}`)
                     .send()
                     .expect(HttpStatus.OK)
                     .then(response => {
@@ -116,8 +120,8 @@ describe(
                 await request(ctx.app.getHttpServer())
                     .post(`/comment/create`)
                     .send({
-                        parentId: guide.id,
-                        parentType: EntityTypeId.Guide,
+                        postId: guide.id,
+                        postType: PostTypeId.Guide,
                         content: commentText,
                     } as CommentCreateDto)
                     .set({Authorization: `Bearer ${token}`})
@@ -125,8 +129,9 @@ describe(
                     .then(response =>
                         Comment.findAll({
                             where: {
-                                parentId: guide.id,
-                                parentType: EntityTypeId.Guide,
+                                postId: guide.id,
+                                postType: PostTypeId.Guide,
+                                parentId: null,
                                 content: commentText,
                             }
                         })
@@ -150,8 +155,9 @@ describe(
                 const token = tokenService.getToken(user)
                 const oldCommentText = 'hello';
                 const comment = await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: oldCommentText,
                     authorId: user.id,
                     createdAt: new Date().toISOString(),
@@ -196,8 +202,9 @@ describe(
                 const token = tokenService.getToken(user)
                 const oldCommentText = 'hello';
                 const comment = await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: oldCommentText,
                     authorId: otherUser.id,
                     createdAt: new Date().toISOString(),
@@ -241,26 +248,100 @@ describe(
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
                 const comment = await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: 'hello',
                     authorId: otherUser.id,
                     createdAt: new Date().toISOString(),
                 })
                 await request(ctx.app.getHttpServer())
-                    .post(`/comment/upvote`)
+                    .put(`/comment/upvote`)
                     .send({
                         commentId: comment.id,
                     } as CommentVoteDto)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.CREATED)
+                    .expect(HttpStatus.OK)
                 await request(ctx.app.getHttpServer())
-                    .post(`/comment/remove-upvote`)
+                    .delete(`/comment/upvote`)
                     .send({
                         commentId: comment.id,
                     } as CommentVoteDto)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.ACCEPTED)
+                    .expect(HttpStatus.OK)
+            });
+            it('returns unprocessable entity if comment is already upvoted', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne();
+                const otherUser = await User.create({
+                    name: 'another user',
+                    battleNetUserId: '32145235',
+                })
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'hello',
+                    authorId: otherUser.id,
+                    createdAt: new Date().toISOString(),
+                })
+                await request(ctx.app.getHttpServer())
+                    .put(`/comment/upvote`)
+                    .send({
+                        commentId: comment.id,
+                    } as CommentVoteDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                await request(ctx.app.getHttpServer())
+                    .put(`/comment/upvote`)
+                    .send({
+                        commentId: comment.id,
+                    } as CommentVoteDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+            });
+            it('returns unprocessable entity when removing non-existent upvote', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne();
+                const otherUser = await User.create({
+                    name: 'another user',
+                    battleNetUserId: '32145235',
+                })
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'hello',
+                    authorId: otherUser.id,
+                    createdAt: new Date().toISOString(),
+                })
+                await request(ctx.app.getHttpServer())
+                    .delete(`/comment/upvote`)
+                    .send({
+                        commentId: comment.id,
+                    } as CommentVoteDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
             });
             it('can\'t remove other user\'s upvote', async () => {
                 await ctx.fixtures(
@@ -280,8 +361,9 @@ describe(
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
                 const comment = await Comment.create({
-                    parentType: EntityTypeId.Guide,
-                    parentId: guide.id,
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
                     content: 'hello',
                     authorId: user.id,
                     createdAt: new Date().toISOString(),
@@ -294,16 +376,61 @@ describe(
                 CommentVote.findAndCountAll()
                     .then(rows => expect(rows.count).toBe(1))
                 await request(ctx.app.getHttpServer())
-                    .post(`/comment/remove-upvote`)
+                    .delete(`/comment/upvote`)
                     .send({
                         commentId: comment.id,
                     } as CommentVoteDto)
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.ACCEPTED)
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
                     .then(response => {
                         CommentVote.findAndCountAll()
                             .then(rows => expect(rows.count).toBe(1))
                     })
+            });
+            it('unauthorized users can\'t create comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                await request(ctx.app.getHttpServer())
+                    .post(`/comment/create`)
+                    .send({
+                        postId: guide.id,
+                        postType: PostTypeId.Guide,
+                        content: 'asdf',
+                    } as CommentCreateDto)
+                    .expect(HttpStatus.FORBIDDEN)
+            });
+            it('unauthorized users can\'t upvote comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne();
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'hello',
+                    authorId: user.id,
+                    createdAt: new Date().toISOString(),
+                })
+                await request(ctx.app.getHttpServer())
+                    .put(`/comment/upvote`)
+                    .send({
+                        commentId: comment.id,
+                    } as CommentVoteDto)
+                    .expect(HttpStatus.FORBIDDEN)
             });
         }
     )

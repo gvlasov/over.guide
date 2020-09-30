@@ -32,9 +32,8 @@ import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import Vue from 'vue'
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
-
 import 'reflect-metadata'
-import IndividualTagVso from "../../js/vso/IndividualTagVso";
+import IndividualTagVso from "@/ts/vso/IndividualTagVso";
 
 @Component({
     components: {
@@ -161,7 +160,7 @@ export default class ThematicTagInput extends Vue {
         height: 100%;
         box-shadow: 0 .05em .35em -.05em inset hsl(279, 30%, 30%);
         border-radius: .5em;
-        margin: 0 .4em 0 0;
+        margin: 0 .4em 0 .4em;
         background-color: hsl(338, 80%, 96%);
 
         input[type=text] {

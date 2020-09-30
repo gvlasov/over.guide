@@ -1,7 +1,7 @@
 import AlternativeDto from "data/dto/AlternativeDto";
 import PickSuggestion from "./PickSuggestion";
 import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
-import {AxiosResponse, AxiosStatic, Method} from "axios";
+import axios, {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
 import HeroDto from "data/dto/HeroDto"
 import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto";
@@ -16,6 +16,10 @@ import OrderedGuideHeadDto from "data/dto/OrderedGuideHeadDto";
 import GuideHeadDto, {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
+import CommentReadDto from "data/dto/CommentReadDto";
+import PostVso from "@/ts/vso/PostVso";
+import CommentCreateDto from "data/dto/CommentCreateDto";
+import CommentVoteDto from "data/dto/CommentVoteDto";
 
 const querystring = require('query-string')
 
@@ -23,6 +27,15 @@ const auth = new Authentication()
 export default class Backend {
     private readonly axios: AxiosStatic;
     private readonly rootUrl: string;
+
+    private static _instance: Backend
+
+    static get instance(): Backend {
+        if (Backend._instance === void 0) {
+            Backend._instance = new Backend(axios)
+        }
+        return Backend._instance;
+    }
 
     constructor(axios: AxiosStatic) {
         this.axios = axios;
@@ -258,6 +271,46 @@ export default class Backend {
             }
         )
     };
+
+    async getComments(host: PostVso): Promise<CommentReadDto[]> {
+        return this.query(
+            'GET',
+            `/comment/${host.postType}/${host.postId}`,
+            {},
+            response => response.data
+        )
+    }
+
+    async createComment(dto: CommentCreateDto): Promise<CommentReadDto> {
+        return this.query(
+            'POST',
+            `/comment/create`,
+            dto,
+            response => response.data
+        )
+    }
+
+    async upvote(commentId: number): Promise<AxiosResponse> {
+        return this.query(
+            'PUT',
+            `/comment/upvote`,
+            {
+                commentId,
+            } as CommentVoteDto,
+            response => response
+        )
+    }
+
+    async removeUpvote(commentId: number): Promise<void> {
+        return this.query(
+            'DELETE',
+            `/comment/upvote`,
+            {
+                commentId,
+            } as CommentVoteDto,
+            response => {}
+        )
+    }
 
 }
 

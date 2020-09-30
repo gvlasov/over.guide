@@ -14,8 +14,9 @@ import TrainingGoals from "@/vue/guides/TrainingGoals.vue";
 import UserInfo from "@/vue/UserInfo.vue";
 import VueScrollTo from 'vue-scrollto';
 import VueObserveVisibility from 'vue-observe-visibility'
-
 import '@/ts/utils/vue-array-replace'
+
+const VueResizeObserver = require('vue-resize-observer')
 
 const router = new VueRouter({
     routes: [
@@ -36,6 +37,7 @@ Vue.use(VueAxios, axios);
 Vue.use(AsyncComputed)
 Vue.use(VueHammer);
 Vue.use(VueObserveVisibility)
+Vue.use(VueResizeObserver);
 VueHammer.config.pan = {
     threshold: 5
 };

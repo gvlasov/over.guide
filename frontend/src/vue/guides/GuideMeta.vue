@@ -16,9 +16,11 @@
             />
         </div>
         <div class="authorship">
-            <div class="creation-date" v-bind:title="absoluteDateText()">{{ creationTimeRelative() }} ago</div>
-            <div class="author">by
-                <a v-bind:href="`/#/user/${entry.author.id}`">{{ entry.author.name }}</a>
+            <RelativeTime :time="creationTime"/>
+            <div class="author">
+                by <UserLink
+                        :user="entry.author"
+                />
             </div>
         </div>
     </div>
@@ -33,19 +35,24 @@ import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import Authentication from "@/ts/Authentication";
 import Component, {mixins} from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import GuideHistoryEntryVso from "../../ts/vso/GuideHistoryEntryVso";
+import RelativeTime from "@/vue/guides/RelativeTime.vue";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import UserLink from "@/vue/guides/UserLink.vue";
 
 const auth = new Authentication();
 
 @Component({
     components: {
+        UserLink,
+        RelativeTime,
         TagBadges,
         HeroTag,
     },
 })
 export default class Guide extends mixins(TagLinkMixin) {
     @Prop({required: true})
-    entry: GuideHistoryEntryVso
+    entry: ExistingGuideHistoryEntryVso
 
     @Prop({required: true})
     creationTime: Date
@@ -78,9 +85,11 @@ export default class Guide extends mixins(TagLinkMixin) {
     color: white;
     justify-content: space-between;
     margin: .3em 0 .3em 0;
+    gap: .5em;
 
 
     .tags {
+        overflow: hidden;
         display: flex;
         gap: .5em;
         align-items: center;
@@ -114,16 +123,6 @@ export default class Guide extends mixins(TagLinkMixin) {
         white-space: nowrap;
         @include overwatch-futura-no-smallcaps;
 
-        a {
-            font-family: 'BigNoodleTooOblique', 'sans-serif';
-            color: white;
-            font-size: 1.3em;
-            text-decoration: none;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
     }
 }
 </style>

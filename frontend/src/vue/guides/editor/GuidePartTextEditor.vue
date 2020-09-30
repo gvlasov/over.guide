@@ -106,7 +106,7 @@ export default class GuidePartTextEditor extends Vue {
             width: 100%;
             font-size: 1em;
             // As in Github issue editing
-            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+            @include standard-textarea;
         }
     }
 
