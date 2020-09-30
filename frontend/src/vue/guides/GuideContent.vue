@@ -25,7 +25,7 @@ import GuideVideo from "@/vue/guides/GuideVideo";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
 import Vue from 'vue'
-import GuideHistoryEntryVso from "../../ts/vso/GuideHistoryEntryVso";
+import GuideHistoryEntryVso from "@/ts/vso/GuideHistoryEntryVso";
 
 @Component({
     components: {
@@ -33,7 +33,7 @@ import GuideHistoryEntryVso from "../../ts/vso/GuideHistoryEntryVso";
         GuidePartText,
     },
 })
-export default class Guide extends Vue {
+export default class GuideContent extends Vue {
     @Prop({required: true})
     entry: GuideHistoryEntryVso
 };

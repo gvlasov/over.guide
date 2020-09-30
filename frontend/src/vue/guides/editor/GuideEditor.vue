@@ -86,10 +86,9 @@
                     class="preview root-content-panel-wrap"
             >
                 <BackgroundHeading>Preview</BackgroundHeading>
-                <Guide
-                        head="guide"
+                <GuidePreview
+                        :head="guide"
                         :search-descriptor="guide.entry.descriptor"
-                        :show-training-goal-button="false"
                 />
                 <OverwatchButton
                         type="default"
@@ -117,8 +116,6 @@ import StoredGuideDraft from "@/ts/StoredGuideDraft";
 import LoginRequirement from "@/vue/LoginRequirement";
 import DescriptorParamUnparser from "@/ts/DescriptorParamUnparser";
 import Guide from "@/vue/guides/Guide";
-import UserVso from "@/ts/vso/UserVso";
-import Authentication from "@/ts/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import GuideEditorPartsList from "@/vue/guides/editor/GuideEditorPartsList";
 import ParamsDescriptorMixin from "@/ts/ParamsDescriptorMixin";
@@ -129,8 +126,8 @@ import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import NewGuideHeadVso from "@/ts/vso/NewGuideHeadVso";
 import AsyncComputedProp from "vue-async-computed-decorator";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
-import {NewGuideHeadDto} from "data/dto/GuideHeadDto";
 import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
+import GuidePreview from "@/vue/guides/GuidePreview.vue";
 
 const Debounce = require('debounce-decorator').default
 
@@ -140,6 +137,7 @@ const draft = new StoredGuideDraft()
 
 @Component({
     components: {
+        GuidePreview,
         SimilarTagGuides,
         GuideEditorPartsList,
         LoginRequirement,
@@ -239,15 +237,10 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                     {
                         guideHistoryEntry: {
                             ...draftGuide,
-                            createdAt: new Date().toISOString(),
-                            author: new UserVso({
-                                id: new Authentication().userId || 0,
-                                name: new Authentication().username || 'you',
-                            })
                         },
                         commentsCount: 0,
                         votesCount: 0
-                    } as NewGuideHeadDto
+                    }
                 );
                 if (!newGuideHeadVso.entry.isEmpty) {
                     return newGuideHeadVso
@@ -369,7 +362,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     }
 
     .preview {
-        .guide {
+        .guide-preview {
             min-width: 100%;
             max-width: 100vw;
             margin-top: 2em;

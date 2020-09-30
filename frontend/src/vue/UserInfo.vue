@@ -44,12 +44,12 @@
             <div class="guide-feed">
                 <div
 
-                        v-for="guide in userInfo.lastAuthoredGuides"
-                        :key="guide.guideId"
+                        v-for="head in userInfo.lastAuthoredGuides"
+                        :key="head.guideId"
                         class="root-content-panel-wrap"
                 >
                     <Guide
-                            head="guide"
+                            :head="head"
                             :show-training-goal-button="true"
                             :search-descriptor="null"
                     />

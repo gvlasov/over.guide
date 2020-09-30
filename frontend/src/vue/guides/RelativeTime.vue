@@ -13,7 +13,7 @@ import Vue from 'vue'
     components: {
     },
 })
-export default class Guide extends Vue {
+export default class RelativeTime extends Vue {
     @Prop({required: true})
     time: Date
 

@@ -8,15 +8,15 @@ import GuideHistoryEntryVso from "@/ts/vso/GuideHistoryEntryVso";
 export default class ExistingGuideHistoryEntryVso extends NewGuideHistoryEntryVso implements GuideHistoryEntryVso<GuideHistoryEntryAppendDto>{
     public guideId: number;
     public author: UserVso;
-    public createdAt: string;
-    public updatedAt: string;
+    public createdAt: Date;
+    public updatedAt: Date;
 
     constructor(entry: GuideHistoryEntryReadDto) {
         super(entry)
         this.guideId = entry.guide.id;
         this.author = entry.guide.author && new UserVso(entry.guide.author as UserDto);
-        this.createdAt = entry.guide.createdAt;
-        this.updatedAt = entry.updatedAt;
+        this.createdAt = new Date(entry.guide.createdAt)
+        this.updatedAt = new Date(entry.updatedAt)
     }
 
     toDto(): GuideHistoryEntryAppendDto {

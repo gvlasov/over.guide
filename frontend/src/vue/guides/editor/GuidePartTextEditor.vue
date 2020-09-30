@@ -22,7 +22,7 @@ import GuidePartText from "@/vue/guides/GuidePartText";
 import OverwatchButton from "@/vue/OverwatchButton";
 import Vue from 'vue'
 import Component from "vue-class-component"
-import {Prop} from "vue-property-decorator";
+import {Prop, Ref, Watch} from "vue-property-decorator";
 import GuidePartTextDto from "data/dto/GuidePartTextDto"
 import env from '@/env/dev.ts'
 
@@ -33,6 +33,7 @@ import env from '@/env/dev.ts'
     },
 })
 export default class GuidePartTextEditor extends Vue {
+    @Ref('textarea') textarea: HTMLInputElement
 
     @Prop({required: true})
     widget: GuidePartTextWidget
@@ -40,6 +41,15 @@ export default class GuidePartTextEditor extends Vue {
     onKeypress(e: KeyboardEvent) {
         if (e.key === 'Enter' && e.ctrlKey) {
             this.$emit('save')
+        }
+    }
+
+    @Watch('widget.editing')
+    onEditStart(editing: boolean) {
+        if (editing) {
+            this.$nextTick(() => {
+                this.textarea.focus()
+            })
         }
     }
 
@@ -83,6 +93,14 @@ export default class GuidePartTextEditor extends Vue {
             }
         };
     }
+    mounted() {
+        if (this.widget.editing) {
+            this.$nextTick(() => {
+                this.textarea.focus()
+            })
+        }
+    }
+
 }
 </script>
 

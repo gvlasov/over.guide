@@ -1,19 +1,19 @@
 <template>
     <div class="training-goal-buttons">
-        <OverwatchButton
+        <TrainingGoalButton
                 v-if="trainingGoalAdded"
                 type="main"
-                class="training-goal-button remove-training-goal-button"
+                class="remove-training-goal-button"
                 v-hammer:tap="removeTrainingGoal"
         >Your training goal
-        </OverwatchButton>
-        <OverwatchButton
+        </TrainingGoalButton>
+        <TrainingGoalButton
                 v-else
                 type="default"
-                class="training-goal-button add-training-goal-button"
+                class="add-training-goal-button"
                 v-hammer:tap="addTrainingGoal"
         >Add training goal
-        </OverwatchButton>
+        </TrainingGoalButton>
     </div>
 </template>
 
@@ -27,11 +27,11 @@ import Backend from "@/ts/Backend";
 import GuideVideo from "@/vue/guides/GuideVideo";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import GuideMeta from "@/vue/guides/GuideMeta.vue";
 import Vue from 'vue'
 import GuideContent from "@/vue/guides/GuideContent.vue";
 import ExistingGuideHistoryEntryVso
-    from "../../ts/vso/ExistingGuideHistoryEntryVso";
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -39,14 +39,14 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        TrainingGoalButton,
         GuideContent,
-        GuideMeta,
         GuideVideo,
         GuidePartText,
         OverwatchButton,
     },
 })
-export default class Guide extends Vue {
+export default class TrainingGoalToggle extends Vue {
     @Prop({required: true})
     entry: ExistingGuideHistoryEntryVso
 
@@ -76,13 +76,10 @@ export default class Guide extends Vue {
 
 <style lang="scss" scoped>
 @import "~@/assets/css/overwatch-ui.scss";
+
 .training-goal-buttons {
     text-align: right;
     margin-bottom: 1rem;
-
-    .training-goal-button {
-        font-size: 1.5rem;
-    }
 
     $training-goal-color: #edad4c;
 

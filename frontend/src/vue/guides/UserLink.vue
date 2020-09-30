@@ -9,7 +9,7 @@ import UserVso from "@/ts/vso/UserVso";
 import Vue from 'vue'
 
 @Component({})
-export default class Guide extends Vue {
+export default class UserLink extends Vue {
 
     @Prop({required: true})
     user: UserVso

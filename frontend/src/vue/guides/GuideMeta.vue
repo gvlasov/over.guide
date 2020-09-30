@@ -18,9 +18,8 @@
         <div class="authorship">
             <RelativeTime :time="creationTime"/>
             <div class="author">
-                by <UserLink
-                        :user="entry.author"
-                />
+                by
+                <UserLink :user="entry.author"/>
             </div>
         </div>
     </div>
@@ -50,7 +49,7 @@ const auth = new Authentication();
         HeroTag,
     },
 })
-export default class Guide extends mixins(TagLinkMixin) {
+export default class GuideMeta extends mixins(TagLinkMixin) {
     @Prop({required: true})
     entry: ExistingGuideHistoryEntryVso
 
@@ -64,11 +63,7 @@ export default class Guide extends mixins(TagLinkMixin) {
 
 
     creationTimeRelative(): string {
-        return formatDistance(this.creationTime, new Date());
-    }
-
-    absoluteDateText(): string {
-        return this.creationTime.toLocaleString();
+        return formatDistance(this.entry.createdAt, new Date());
     }
 
 };

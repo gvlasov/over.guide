@@ -1,37 +1,22 @@
 <template>
-    <div class="guide">
+    <div class="guide-preview">
         <GuideMeta
-                :entry="head.entry"
+                :entry="metaEntry"
                 :search-descriptor="searchDescriptor"
+                :creation-time="creationTime"
         />
-        <TrainingGoalToggle
-                :entry="head.entry"
-        />
+        <div style="text-align: right;">
+            <TrainingGoalButton
+                    type="default"
+            >Add training goal
+            </TrainingGoalButton>
+        </div>
         <GuideContent
                 :entry="head.entry"
         />
-        <OverwatchButton
-                v-if="canEdit"
-                type="default"
-                v-hammer:tap="edit"
-        >Edit
-        </OverwatchButton>
-        <OverwatchButton
-                v-if="canEdit"
-                type="default"
-                v-hammer:tap="deactivate"
-        >Delete
-        </OverwatchButton>
         <div class="comments">
-            <CommentsSection
-                    v-if="showCommentsSection"
-                    :post="head"
-                    @close="() => showCommentsSection = false"
-            />
             <CommentsButton
-                    v-else
                     :comments-count="head.commentsCount"
-                    v-hammer:tap="() => showCommentsSection = !showCommentsSection"
             />
         </div>
     </div>
@@ -39,32 +24,30 @@
 
 <script lang="ts">
 import OverwatchButton from "@/vue/OverwatchButton";
-import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import GuidePartText from "@/vue/guides/GuidePartText";
-import Authentication from "@/ts/Authentication";
-import axios from 'axios'
-import Backend from "@/ts/Backend";
 import GuideVideo from "@/vue/guides/GuideVideo";
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import GuideMeta from "@/vue/guides/GuideMeta.vue";
 import Vue from 'vue'
 import GuideContent from "@/vue/guides/GuideContent.vue";
-import TrainingGoalToggle from "@/vue/guides/TrainingGoalToggle.vue";
 import CommentsButton from "@/vue/guides/CommentsButton.vue";
 import CommentsSection from "@/vue/comments/CommentsSection.vue";
+import NewGuideHeadVso from "../../ts/vso/NewGuideHeadVso";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import GuideDto from "data/dto/GuideDto";
+import UserDto from "data/dto/UserDto";
+import Authentication from "@/ts/Authentication";
+import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 
-const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
-const auth = new Authentication();
-const backend = new Backend(axios)
 
 @Component({
     components: {
+        TrainingGoalButton,
         CommentsSection,
         CommentsButton,
-        TrainingGoalToggle,
         GuideContent,
         GuideMeta,
         GuideVideo,
@@ -72,52 +55,29 @@ const backend = new Backend(axios)
         OverwatchButton,
     },
 })
-export default class Guide extends Vue {
+export default class GuidePreview extends Vue {
     @Prop({required: true})
-    head: ExistingGuideHeadVso
+    head: NewGuideHeadVso
+
+    get metaEntry(): ExistingGuideHistoryEntryVso {
+        return new ExistingGuideHistoryEntryVso({
+            ...this.head.entry.toDto(),
+            guide: {
+                createdAt: new Date().toISOString(),
+                author: {
+                    id: new Authentication().userId || 0,
+                    name: new Authentication().username || 'you',
+                } as UserDto,
+                id: 0,
+            } as GuideDto,
+            updatedAt: new Date().toISOString()
+        })
+    }
 
     @Prop()
     searchDescriptor: GuideDescriptorVso | null
 
-    declare $router: any
-
     showCommentsSection: boolean = false
-
-    trainingGoalButtonHover: boolean = false
-    cache: MyTrainingGoalsCache = myTrainingGoalsCache
-
-    edit() {
-        this.$router.push(`/guide-editor/${this.head.entry.guideId}`)
-    }
-
-    async deactivate(): Promise<void> {
-        return backend.deactivateGuide(this.head.entry.guideId)
-            .then(() => {
-                this.$emit('guideDeactivated', this.head.entry.guideId)
-            })
-    }
-
-    addTrainingGoal(): void {
-        this.cache.addGoal(this.head.entry.guideId)
-    }
-
-    removeTrainingGoal() {
-        const hadItPending = this.cache.pendingGoalIds.includes(this.head.entry.guideId)
-        this.cache.removeGoal(this.head.entry.guideId)
-            .catch(() => {
-                if (!hadItPending) {
-                    this.$emit('loginRequired')
-                }
-            })
-    }
-
-    get trainingGoalAdded(): boolean {
-        return this.cache.goalIds.includes(this.head.entry.guideId) || this.cache.pendingGoalIds.includes(this.head.entry.guideId);
-    }
-
-    get canEdit(): boolean {
-        return auth.canEditGuide(this.head)
-    }
 
     get creationTime(): Date {
         return new Date()
@@ -132,7 +92,7 @@ export default class Guide extends Vue {
 @import '~@/assets/css/overwatch-ui.scss';
 @import '~@/assets/css/tags.scss';
 
-.guide {
+.guide-preview {
     @include overwatch-panel;
     display: inline-block;
     box-sizing: border-box;
@@ -172,8 +132,10 @@ export default class Guide extends Vue {
             }
         }
     }
+
     .comments {
         text-align: right;
+
         button {
             font-size: 1.5em;
         }
