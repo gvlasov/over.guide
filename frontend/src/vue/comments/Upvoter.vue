@@ -14,7 +14,7 @@
             />
             <img
                     v-else
-                    src="/icons/endorsement.png"
+                    src="/icons/endorsement-white.png"
             />
         </OverwatchButton>
     </div>
@@ -24,7 +24,6 @@
 import Vue from 'vue'
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
-import CommentVso from "@/ts/vso/CommentVso";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import Backend from "@/ts/Backend";
 import Authentication from "@/ts/Authentication";
@@ -39,7 +38,10 @@ export default class Upvoter extends Vue {
     initialUpvoted: boolean
 
     @Prop({required: true})
-    comment: CommentVso
+    postId: number
+
+    @Prop({required: true})
+    postTypeId: PostTypeId
 
     tappable: boolean = true
 
@@ -56,7 +58,7 @@ export default class Upvoter extends Vue {
             this.upvoted = false
             this.$emit('upvoteRemoved')
             Backend.instance
-                .removeUpvote(PostTypeId.Comment, this.comment.id)
+                .removeUpvote(this.postTypeId, this.postId)
                 .catch(e => {
                     if (e.status === 422) {
                         this.$emit('upvote')
@@ -69,7 +71,7 @@ export default class Upvoter extends Vue {
             this.upvoted = true
             this.$emit('upvote')
             Backend.instance
-                .upvote(PostTypeId.Comment, this.comment.id)
+                .upvote(this.postTypeId, this.postId)
                 .catch(e => {
                     if (e.response.status === 422) {
                         this.$emit('upvoteRemoved')
@@ -108,15 +110,12 @@ $body-size: 1.2em;
         font-size: 2em;
         @include overwatch-button;
         @include overwatch-futura;
-        border-radius: 50%;
         width: $body-size;
         height: $body-size;
         position: relative;
 
         & ::v-deep .background {
-            border-radius: 50%;
             background-color: $overwatch-button-default-bg-color;
-            opacity: .5;
         }
 
         &:hover ::v-deep .background {

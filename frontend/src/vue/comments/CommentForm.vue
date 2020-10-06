@@ -111,19 +111,19 @@ export default class CommentForm extends Vue {
 
 .comment-form {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: .5em;
 
     .textarea-wrap {
         position: relative;
         box-sizing: border-box;
-        width: 100%;
+        flex-shrink: 0;
+        flex-grow: 1;
+        flex-basis: 17em;
 
         textarea {
             @include standard-textarea;
             box-sizing: border-box;
-            flex-grow: 1;
-            flex-shrink: 0;
             width: 100%;
             resize: vertical;
         }

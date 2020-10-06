@@ -6,7 +6,8 @@
         >
             <div class="aside">
                 <Upvoter
-                        :comment="comment"
+                        :post-id="comment.id"
+                        :post-type-id="PostTypeId.Comment"
                         :initial-upvoted="false"
                         @upvote="() => comment.votes++"
                         @upvoteRemoved="() => comment.votes--"
@@ -50,6 +51,7 @@ import PostVso from "@/ts/vso/PostVso";
 import CommentHider from "@/vue/comments/CommentHider.vue";
 import Upvoter from "@/vue/comments/Upvoter.vue";
 import HiddenCommentsDropdown from "@/vue/comments/HiddenCommentsDropdown.vue";
+import PostTypeId from "data/PostTypeId";
 
 @Component({
     components: {
@@ -62,6 +64,8 @@ import HiddenCommentsDropdown from "@/vue/comments/HiddenCommentsDropdown.vue";
     }
 })
 export default class CommentsLevel extends Vue {
+
+    PostTypeId = PostTypeId
 
     @Prop({required: true})
     comments: CommentVso[]

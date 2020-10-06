@@ -9,24 +9,38 @@
         <GuideContent
                 :entry="head.entry"
         />
-        <div class="comments">
-            <CommentsSection
-                    v-if="showCommentsSection"
-                    :post="head"
-                    @close="() => showCommentsSection = false"
-            />
-            <CommentsButton
-                    v-else
-                    :comments-count="head.commentsCount"
-                    v-hammer:tap="() => showCommentsSection = !showCommentsSection"
-            />
+        <div class="footer">
+            <div class="guide-upvoter">
+                <Upvoter
+                        :post-id="head.entry.guideId"
+                        :post-type-id="PostTypeId.Guide"
+                        :initial-upvoted="false"
+                        @upvote="() => head.votesCount++"
+                        @upvoteRemoved="() => head.votesCount--"
+                />
+                <div class="votes-count">{{ head.votesCount }}</div>
+            </div>
+            <div
+                    class="comments"
+                    v-bind:class="{uncollapsed: showCommentsSection}"
+            >
+                <CommentsSection
+                        v-if="showCommentsSection"
+                        :post="head"
+                        @close="() => showCommentsSection = false"
+                />
+                <CommentsButton
+                        v-else
+                        :comments-count="head.commentsCount"
+                        v-hammer:tap="() => showCommentsSection = !showCommentsSection"
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import OverwatchButton from "@/vue/OverwatchButton";
-import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import GuidePartText from "@/vue/guides/GuidePartText";
 import Authentication from "@/ts/Authentication";
@@ -42,13 +56,15 @@ import GuideContent from "@/vue/guides/GuideContent.vue";
 import CommentsButton from "@/vue/guides/CommentsButton.vue";
 import CommentsSection from "@/vue/comments/CommentsSection.vue";
 import GuideButtons from "@/vue/guides/GuideButtons.vue";
+import PostTypeId from "data/PostTypeId";
+import Upvoter from "@/vue/comments/Upvoter.vue";
 
-const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
 const backend = new Backend(axios)
 
 @Component({
     components: {
+        Upvoter,
         GuideButtons,
         CommentsSection,
         CommentsButton,
@@ -60,6 +76,9 @@ const backend = new Backend(axios)
     },
 })
 export default class Guide extends Vue {
+
+    PostTypeId = PostTypeId
+
     @Prop({required: true})
     head: ExistingGuideHeadVso
 
@@ -83,6 +102,45 @@ export default class Guide extends Vue {
     box-sizing: border-box;
     color: white;
     padding: 1em;
+
+    .footer {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 1em;
+
+        .guide-upvoter {
+            flex-grow: 1;
+            text-align: left;
+            display: flex;
+            align-items: center;
+
+            .votes-count {
+                padding-left: .5em;
+                font-weight: bold;
+                font-size: 1.4em;
+                @include overwatch-futura;
+            }
+
+            .upvoter {
+
+            }
+        }
+
+        .comments {
+            text-align: right;
+            flex-grow: 1;
+            flex-basis: auto;
+
+            &.uncollapsed {
+                flex-basis: 100%;
+            }
+
+
+            button {
+                font-size: 1.5em;
+            }
+        }
+    }
 
     .descriptor-builder {
         z-index: 1;
@@ -111,15 +169,6 @@ export default class Guide extends Vue {
             &:hover ::v-deep .background {
                 background-color: $training-goal-color;
             }
-        }
-    }
-
-    .comments {
-        padding-top: 1em;
-        text-align: right;
-
-        button {
-            font-size: 1.5em;
         }
     }
 }
