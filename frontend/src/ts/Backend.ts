@@ -19,7 +19,8 @@ import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 import CommentReadDto from "data/dto/CommentReadDto";
 import PostVso from "@/ts/vso/PostVso";
 import CommentCreateDto from "data/dto/CommentCreateDto";
-import CommentVoteDto from "data/dto/CommentVoteDto";
+import PostTypeId from "data/PostTypeId";
+import VoteDto from "data/dto/VoteDto";
 
 const querystring = require('query-string')
 
@@ -292,24 +293,26 @@ export default class Backend {
         )
     }
 
-    async upvote(commentId: number): Promise<AxiosResponse> {
+    async upvote(postTypeId: PostTypeId, postId: number): Promise<AxiosResponse> {
         return this.query(
             'PUT',
-            `/comment/upvote`,
+            `/vote`,
             {
-                commentId,
-            } as CommentVoteDto,
+                postId,
+                postTypeId,
+            } as VoteDto,
             response => response
         )
     }
 
-    async removeUpvote(commentId: number): Promise<void> {
+    async removeUpvote(postTypeId: PostTypeId, postId: number): Promise<void> {
         return this.query(
             'DELETE',
-            `/comment/upvote`,
+            `/vote`,
             {
-                commentId,
-            } as CommentVoteDto,
+                postId,
+                postTypeId,
+            } as VoteDto,
             response => {
             }
         )

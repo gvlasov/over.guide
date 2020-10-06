@@ -1,13 +1,11 @@
 import {
     Body,
     Controller,
-    Delete,
     Get,
     HttpStatus,
     Inject,
     Param,
     Post,
-    Put,
     Req,
     Res,
     UseGuards
@@ -20,11 +18,10 @@ import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
-import {CommentVote} from "src/database/models/CommentVote";
-import CommentVoteDto from "data/dto/CommentVoteDto";
 import {QueryTypes} from "sequelize";
 import CommentReadDto from "data/dto/CommentReadDto";
 import {User} from "src/database/models/User";
+import PostTypeId from "data/PostTypeId";
 
 @Controller('comment')
 export class CommentController {
@@ -51,9 +48,9 @@ export class CommentController {
                            Comment.updatedAt,
                            U.id         as authorId,
                            U.name       as authorName,
-                           count(CV.id) as votes
+                           count(V.id) as votes
                     from Comment
-                             left join CommentVote CV on Comment.id = CV.commentId
+                             left join Vote V on Comment.id = V.postId and V.postTypeId = ${PostTypeId.Comment}
                              left join User U on Comment.authorId = U.id
                     where Comment.postId = :postId
                       and Comment.postType = :postType
@@ -136,61 +133,6 @@ export class CommentController {
                     response.send()
                 } else {
                     response.status(HttpStatus.ACCEPTED)
-                    response.send()
-                }
-            })
-    }
-
-    @Put('upvote')
-    @UseGuards(AuthenticatedGuard)
-    async upvote(
-        @Res() response: Response,
-        @Req() request: Request,
-        @Body() dto: CommentVoteDto,
-    ) {
-        this.authService.getUser(request)
-            .then(user =>
-                CommentVote.create({
-                    ...dto,
-                    upvoterId: user.id,
-                })
-            )
-            .then(comment => {
-                response.status(HttpStatus.OK)
-                response.send()
-            })
-            .catch(e => {
-                if (e.errors[0].type === 'unique violation') {
-                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    response.send()
-                } else {
-                    throw e
-                }
-            })
-    }
-
-    @Delete('upvote')
-    @UseGuards(AuthenticatedGuard)
-    async removeUpvote(
-        @Res() response: Response,
-        @Req() request: Request,
-        @Body() dto: CommentVoteDto,
-    ) {
-        this.authService.getUser(request)
-            .then(user =>
-                CommentVote.destroy({
-                    where: {
-                        ...dto,
-                        upvoterId: user.id,
-                    },
-                })
-            )
-            .then(count => {
-                if (count === 0) {
-                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    response.send()
-                } else {
-                    response.status(HttpStatus.OK)
                     response.send()
                 }
             })

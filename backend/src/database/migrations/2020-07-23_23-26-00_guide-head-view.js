@@ -1,5 +1,3 @@
-
-
 async function up(database, postTypeId) {
     await
         database.sequelize.query(
@@ -30,13 +28,13 @@ async function up(database, postTypeId) {
                 select guideHistoryEntryId,
                        GHL.guideId,
                        count(C.id) as commentsCount,
-                       count(GV.upvoterId) as votesCount
+                       count(V.upvoterId) as votesCount
                 from GuideHeadLink GHL
 left join Comment C
 on GHL.guideId = C.postId
 and C.postType = ${postTypeId}
-left join GuideVote GV 
-on GV.guideId = GHL.guideId
+left join Vote V 
+on V.postId = GHL.guideId and V.postTypeId = ${postTypeId}
 group by GHL.guideId
         `
     );

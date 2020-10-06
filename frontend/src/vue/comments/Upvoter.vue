@@ -28,6 +28,7 @@ import CommentVso from "@/ts/vso/CommentVso";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import Backend from "@/ts/Backend";
 import Authentication from "@/ts/Authentication";
+import PostTypeId from "data/PostTypeId";
 
 @Component({
     components: {OverwatchButton}
@@ -55,7 +56,7 @@ export default class Upvoter extends Vue {
             this.upvoted = false
             this.$emit('upvoteRemoved')
             Backend.instance
-                .removeUpvote(this.comment.id)
+                .removeUpvote(PostTypeId.Comment, this.comment.id)
                 .catch(e => {
                     if (e.status === 422) {
                         this.$emit('upvote')
@@ -68,7 +69,7 @@ export default class Upvoter extends Vue {
             this.upvoted = true
             this.$emit('upvote')
             Backend.instance
-                .upvote(this.comment.id)
+                .upvote(PostTypeId.Comment, this.comment.id)
                 .catch(e => {
                     if (e.response.status === 422) {
                         this.$emit('upvoteRemoved')

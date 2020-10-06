@@ -23,6 +23,7 @@ import {GuideSearchService} from "src/services/guide-search.service";
 import {TrainingGoalController} from "src/controllers/training-goal.controller";
 import {UserController} from "src/controllers/user.controller";
 import {CommentController} from "src/controllers/comment.controller";
+import {VoteController} from "src/controllers/vote.controller";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -38,6 +39,7 @@ import {CommentController} from "src/controllers/comment.controller";
         TrainingGoalController,
         UserController,
         CommentController,
+        VoteController,
     ],
     providers: [
         AppService,

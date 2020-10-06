@@ -9,37 +9,40 @@ import {
     Table
 } from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
-import {Comment} from "src/database/models/Comment";
 import {User} from "src/database/models/User";
+import PostTypeId from "data/PostTypeId";
 
 @Table({
     createdAt: false,
     updatedAt: false,
 })
-export class CommentVote extends Model<CommentVote> {
+export class Vote extends Model<Vote> {
 
     @PrimaryKey
     @AutoIncrement
     @Column
     public id: number
 
-    private static readonly uniqueKeyName = 'comment_vote_unique';
+    private static readonly uniqueKeyName = 'vote_unique';
 
     @AllowNull(false)
-    @ForeignKey(() => Comment)
     @Column({
         type: new DataTypes.INTEGER(),
-        unique: CommentVote.uniqueKeyName,
+        unique: Vote.uniqueKeyName,
     })
-    commentId: number
+    postId: number
 
-    @BelongsTo(() => Comment, 'commentId')
-    comment: Comment
+    @AllowNull(false)
+    @Column({
+        type: new DataTypes.INTEGER(),
+        unique: Vote.uniqueKeyName,
+    })
+    postTypeId: PostTypeId
 
     @AllowNull(false)
     @ForeignKey(() => User)
     @Column({
-        unique: CommentVote.uniqueKeyName,
+        unique: Vote.uniqueKeyName,
     })
     upvoterId: number
 

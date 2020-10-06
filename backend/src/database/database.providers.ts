@@ -28,8 +28,7 @@ import {GuideDescriptor2TeammateAbility} from "src/database/models/GuideDescript
 import {GuideDescriptor2EnemyAbility} from "src/database/models/GuideDescriptor2EnemyAbility";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import {Comment} from "src/database/models/Comment";
-import {CommentVote} from "src/database/models/CommentVote";
-import {GuideVote} from "src/database/models/GuideVote";
+import {Vote} from "src/database/models/Vote";
 import {GuideHeadLink} from "src/database/models/GuideHeadLink";
 import PostTypeId from "data/PostTypeId";
 
@@ -66,8 +65,6 @@ export const databaseProviders = [
 
             sequelize.addModels([
                 Comment,
-                CommentVote,
-                GuideVote,
                 Hero,
                 Patch,
                 Ability,
@@ -94,6 +91,7 @@ export const databaseProviders = [
                 GuideHead,
                 GuideHeadLink,
                 User2TrainingGoal,
+                Vote,
             ]);
             const umzug = new Umzug({
                 migrations: {
