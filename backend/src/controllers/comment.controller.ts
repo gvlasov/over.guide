@@ -152,7 +152,6 @@ export class CommentController {
             .then(user =>
                 CommentVote.create({
                     ...dto,
-                    createdAt: new Date().toISOString(),
                     upvoterId: user.id,
                 })
             )
