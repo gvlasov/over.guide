@@ -28,15 +28,14 @@ export default class CommentVso {
     }
 
     get recursiveChildren(): CommentVso[] {
-        const cs = this.children.flatMap(
+        return this.children.flatMap(
             c => {
                 if (c.children.length === 0) {
-                    return []
+                    return [c]
                 }
-                return [...c.children, ...c.recursiveChildren]
+                return [c, ...c.recursiveChildren]
             }
-        );
-        return cs
+        )
     }
 
 

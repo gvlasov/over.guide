@@ -141,7 +141,6 @@ export default class CommentsLevel extends Vue {
         gap: .5em;
 
         .comment-branch {
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             flex-grow: 0;
