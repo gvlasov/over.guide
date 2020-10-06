@@ -12,6 +12,7 @@ import AsyncComputed from 'vue-async-computed'
 import {VueHammer} from 'vue2-hammer'
 import TrainingGoals from "@/vue/guides/TrainingGoals.vue";
 import UserInfo from "@/vue/UserInfo.vue";
+import GuidePage from "@/vue/guides/GuidePage.vue";
 import VueScrollTo from 'vue-scrollto';
 import VueObserveVisibility from 'vue-observe-visibility'
 import '@/ts/utils/vue-array-replace'
@@ -27,8 +28,9 @@ const router = new VueRouter({
         {path: '/search/:descriptor?', component: GuideSearch},
         {path: '/training-goals', component: TrainingGoals},
         {path: '/user/:id', component: UserInfo},
+        {path: '/guide/:id', component: GuidePage},
     ],
-    scrollBehavior(){
+    scrollBehavior() {
         return {x: 0, y: 0}
     }
 });

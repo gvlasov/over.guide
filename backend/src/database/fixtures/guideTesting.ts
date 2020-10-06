@@ -25,6 +25,7 @@ export default async (moduleRef: ModuleRef) => {
     for (let i = 0; i < 100; i++) {
         const guide = await Guide.create({
             authorId: user.id,
+            isPublic: 1,
         })
         const parts = [];
         if (Math.random() * 10 < 3) {
@@ -54,6 +55,7 @@ export default async (moduleRef: ModuleRef) => {
             guideId: guide.id,
             parts: parts,
             descriptor: descriptor,
+            isPublic: true,
         } as GuideHistoryEntryAppendDto, user)
     }
 }

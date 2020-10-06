@@ -23,8 +23,7 @@ import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import AddAndReorderTrainingGoalDto
     from "data/dto/AddAndReorderTrainingGoalDto";
-import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
-import GuideHeadDto from "data/dto/GuideHeadDto";
+import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 
 describe(
     TrainingGoalController,
@@ -252,7 +251,7 @@ describe(
                         expect(
                             response.body
                                 .map(
-                                    (dto: GuideHeadDto) =>
+                                    (dto: ExistingGuideHeadDto) =>
                                         dto.guideHistoryEntry.guide.id
                                 )
                         )
@@ -342,7 +341,8 @@ describe(
                     })
                 })
                 const newGuide = await ctx.app.get(GuideHistoryEntryService)
-                    .create({
+                    .create(
+                        {
                             descriptor: new GuideDescriptorQuickie({
                                 playerHeroes: [HeroId.Genji],
                             }),
@@ -351,8 +351,9 @@ describe(
                                     contentMd: 'asdf89877',
                                     kind: 'text'
                                 } as GuidePartTextDto
-                            ]
-                        } as GuideHistoryEntryCreateDto,
+                            ],
+                            isPublic: true,
+                        },
                         user
                     ) as GuideHistoryEntry
                 await request(ctx.app.getHttpServer())
@@ -404,7 +405,6 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        console.log(response.body)
                         expect(
                             response.body.map(item => item.guideHistoryEntry.guide.id)
                         ).toStrictEqual([2, 1, 3])

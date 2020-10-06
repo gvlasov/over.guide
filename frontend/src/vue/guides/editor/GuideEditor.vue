@@ -67,6 +67,25 @@
                     </OverwatchButton>
                 </div>
                 <div v-else>
+                    <div class="public-private-buttons">
+                        <transition name="public-private">
+                            <OverwatchButton
+                                    v-if="guide.entry.isPublic"
+                                    key="public"
+                                    type="default"
+                                    v-hammer:tap="() => guide.entry.isPublic = false"
+                            >public
+                            </OverwatchButton>
+                            <OverwatchButton
+                                    v-else
+                                    key="private"
+                                    type="default"
+                                    class="private"
+                                    v-hammer:tap="() => guide.entry.isPublic = true"
+                            >private
+                            </OverwatchButton>
+                        </transition>
+                    </div>
                     <GuideEditorPartsList :entry="guide.entry"/>
                     <div>
                         <OverwatchButton
@@ -114,7 +133,6 @@ import ParameterDescriptorSynchronizer
     from "@/vue/guides/ParameterDescriptorSynchronizer";
 import StoredGuideDraft from "@/ts/StoredGuideDraft";
 import LoginRequirement from "@/vue/LoginRequirement";
-import DescriptorParamUnparser from "@/ts/DescriptorParamUnparser";
 import Guide from "@/vue/guides/Guide";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import GuideEditorPartsList from "@/vue/guides/editor/GuideEditorPartsList";
@@ -188,13 +206,8 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                 ? backend.updateGuide(this.guide.entry.toDto())
                 : backend.createGuide(this.guide.entry.toDto())
         )
-            .then(() => {
-                this.$router.push(
-                    '/search/' +
-                    new DescriptorParamUnparser().unparseDescriptor(
-                        this.guide.entry.descriptor
-                    )
-                )
+            .then((guideId) => {
+                this.$router.push(`/guide/${guideId}`)
                 draft.reset()
             })
             .catch(error => {
@@ -250,6 +263,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                 guideHistoryEntry: {
                     descriptor: this.obtainParamsDescriptor(),
                     parts: [],
+                    isPublic: true,
                 },
                 commentsCount: 0,
                 votesCount: 0,
@@ -271,6 +285,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                         guideHistoryEntry: {
                             descriptor: new GuideDescriptorQuickie({}),
                             parts: [],
+                            isPublic: true,
                         },
                         votesCount: 0,
                         commentsCount: 0,
@@ -304,6 +319,53 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+
+        .public-private-buttons {
+            position: relative;
+            height: 3em;
+            padding: 1em 0;
+
+            button {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translateX(-50%) translateX(0) translateY(-50%);
+                opacity: 1;
+            }
+
+            button.private ::v-deep .background {
+                background-color: hsl(0, 0%, 40%, .88);
+            }
+
+            .public-private-leave-active {
+                transition: transform .13s ease-in, opacity .13s ease-in;
+            }
+
+            .public-private-leave {
+                opacity: 1;
+                transform: translateX(-50%) translateX(0) translateY(-50%);
+            }
+
+            .public-private-leave-to {
+                opacity: 0;
+                transform: translateX(-50%) translateX(-8em) translateY(-50%);
+            }
+
+            .public-private-enter-active {
+                transition: transform .13s ease-in, opacity .13s ease-in;
+            }
+
+            .public-private-enter {
+                opacity: 0;
+                transform: translateX(-50%) translateX(8em) translateY(-50%);
+            }
+
+            .public-private-enter-to {
+                opacity: 1;
+                transform: translateX(-50%) translateX(0) translateY(-50%);
+            }
+        }
+
 
         .similar-tag-guides-wrap {
             flex-basis: 100%;

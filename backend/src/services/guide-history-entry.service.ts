@@ -37,7 +37,10 @@ export class GuideHistoryEntryService {
     ) {
         return this.save(
             gheDto,
-            () => Guide.create({authorId: saver.id}),
+            () => Guide.create({
+                authorId: saver.id,
+                isPublic: gheDto.isPublic
+            }),
             saver
         )
     }
@@ -46,10 +49,16 @@ export class GuideHistoryEntryService {
         gheDto: GuideHistoryEntryAppendDto,
         saver: User
     ) {
-
         return this.save(
             gheDto,
-            () => Guide.findOne({ where: {id: gheDto.guideId} }),
+            () => Guide.findOne({where: {id: gheDto.guideId}})
+                .then(guide => {
+                    if (!!guide.isPublic !== gheDto.isPublic) {
+                        return guide.update({isPublic: !!gheDto.isPublic === true ? 1 : 0})
+                    } else {
+                        return guide
+                    }
+                }),
             saver
         )
     }

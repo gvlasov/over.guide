@@ -13,7 +13,7 @@ import UserInfoDto from "data/dto/UserInfoDto";
 import UsernameOccupiedException from "@/ts/UsernameOccupiedException";
 import Authentication from "@/ts/Authentication";
 import OrderedGuideHeadDto from "data/dto/OrderedGuideHeadDto";
-import GuideHeadDto, {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
+import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 import CommentReadDto from "data/dto/CommentReadDto";
@@ -185,7 +185,7 @@ export default class Backend {
         )
     };
 
-    async getGuide(guideId: number): Promise<GuideHeadDto<GuideHistoryEntryReadDto>> {
+    async getGuide(guideId: number): Promise<ExistingGuideHeadDto> {
         return this.query(
             'GET',
             `/guide/${guideId}`,
@@ -217,6 +217,7 @@ export default class Backend {
             }
         )
     }
+
     async updateGuide(guide: GuideHistoryEntryAppendDto): Promise<void> {
         return this.query(
             'POST',
@@ -232,7 +233,8 @@ export default class Backend {
             'POST',
             `/guide/deactivate`,
             {id: guideId},
-            () => {}
+            () => {
+            }
         )
     }
 
@@ -264,7 +266,7 @@ export default class Backend {
             `/user/change-username`,
             {newUsername: newUsername},
             response => {
-                if (response.status === 422){
+                if (response.status === 422) {
                     throw new UsernameOccupiedException(newUsername)
                 }
                 return null;
@@ -308,7 +310,8 @@ export default class Backend {
             {
                 commentId,
             } as CommentVoteDto,
-            response => {}
+            response => {
+            }
         )
     }
 

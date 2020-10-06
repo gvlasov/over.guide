@@ -48,19 +48,23 @@ describe(
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
+                const patch = await Patch.create({
+                    version: '1.3.21',
+                    date: '2020-01-01 12:00:00',
+                    title: 'fuck off',
+                })
                 MatchupEvaluation.create({
                     id: 1,
                     subjectId: (await Hero.findOne({where: {dataName: 'ana'}})).id,
                     objectId: (await Hero.findOne({where: {dataName: 'pharah'}})).id,
                     score: 4,
+                    ip: '127.0.0.1',
+                    patchId: patch.id,
                 })
             });
-            it('fails to create matchup evaluation as not logged in user', async () => {
-                await ctx.fixtures(singleUserFixture)
-            });
-            afterAll(() => {
-                ctx.app.close()
-            })
+            // it('fails to create matchup evaluation as not logged in user', async () => {
+            //     await ctx.fixtures(singleUserFixture)
+            // });
         }
     )
 )

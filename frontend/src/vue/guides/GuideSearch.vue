@@ -3,6 +3,8 @@
         <ParameterDescriptorSynchronizer
                 v-model="descriptor"
                 base-path="/search/"
+                :write-descriptor-to-params="true"
+                :write-params-to-descriptor="true"
         />
         <GuideBrowser v-model="descriptor"/>
     </div>

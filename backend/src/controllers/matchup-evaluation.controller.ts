@@ -65,7 +65,6 @@ export class MatchupEvaluationController {
                 objectId: objectId
             }
         });
-        console.log(request.ip)
         const patch = await Patch.findOne({
             order: [['date', 'DESC']]
         })

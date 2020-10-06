@@ -1,5 +1,17 @@
 <template>
-    <div class="training-goal-buttons">
+    <div class="guide-buttons">
+        <OverwatchButton
+                v-if="canEdit"
+                type="default"
+                v-hammer:tap="edit"
+        >Edit
+        </OverwatchButton>
+        <OverwatchButton
+                v-if="canEdit"
+                type="default"
+                v-hammer:tap="deactivate"
+        >Delete
+        </OverwatchButton>
         <TrainingGoalButton
                 v-if="trainingGoalAdded"
                 type="main"
@@ -46,7 +58,7 @@ const backend = new Backend(axios)
         OverwatchButton,
     },
 })
-export default class TrainingGoalToggle extends Vue {
+export default class GuideButtons extends Vue {
     @Prop({required: true})
     entry: ExistingGuideHistoryEntryVso
 
@@ -70,6 +82,21 @@ export default class TrainingGoalToggle extends Vue {
         return this.cache.goalIds.includes(this.entry.guideId) || this.cache.pendingGoalIds.includes(this.entry.guideId);
     }
 
+    edit() {
+        this.$router.push(`/guide-editor/${this.entry.guideId}`)
+    }
+
+    async deactivate(): Promise<void> {
+        return backend.deactivateGuide(this.entry.guideId)
+            .then(() => {
+                this.$emit('guideDeactivated', this.entry.guideId)
+            })
+    }
+
+    get canEdit(): boolean {
+        return auth.canEditGuide(this.entry)
+    }
+
 };
 
 </script>
@@ -77,9 +104,13 @@ export default class TrainingGoalToggle extends Vue {
 <style lang="scss" scoped>
 @import "~@/assets/css/overwatch-ui.scss";
 
-.training-goal-buttons {
+.guide-buttons {
     text-align: right;
     margin-bottom: 1rem;
+
+    button {
+        font-size: 1.5rem;
+    }
 
     $training-goal-color: #edad4c;
 

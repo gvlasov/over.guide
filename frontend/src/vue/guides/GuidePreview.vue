@@ -3,7 +3,7 @@
         <GuideMeta
                 :entry="metaEntry"
                 :search-descriptor="searchDescriptor"
-                :creation-time="creationTime"
+                :creation-time="nowTime"
         />
         <div style="text-align: right;">
             <TrainingGoalButton
@@ -79,7 +79,7 @@ export default class GuidePreview extends Vue {
 
     showCommentsSection: boolean = false
 
-    get creationTime(): Date {
+    get nowTime(): Date {
         return new Date()
     }
 

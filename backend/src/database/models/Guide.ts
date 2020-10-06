@@ -52,6 +52,10 @@ export class Guide extends Model<Guide> {
     @BelongsTo(() => User, 'deactivatedById')
     deactivatedBy: User
 
+    @AllowNull(false)
+    @Column({type: new DataTypes.TINYINT({length: 1, unsigned: true})})
+    isPublic: number
+
     isActive(): boolean {
         return this.deactivatedById === null && this.deactivatedAt === null
     }

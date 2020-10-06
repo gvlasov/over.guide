@@ -112,7 +112,8 @@ export default class TagBuilder extends Vue {
     @Prop({required: true})
     descriptor: GuideDescriptorVso
 
-    selecting: GamerPositionVso = null
+    selecting: GamerPositionVso | null = null
+
     gamerPositions = {
         players: GamerPositionVso.Players,
         teammates: GamerPositionVso.Teammates,

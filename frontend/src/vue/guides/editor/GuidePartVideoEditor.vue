@@ -1,7 +1,7 @@
 <template>
     <div class="guide-part-video-editor">
         <div
-                v-if="widget.part.excerpt === null"
+                v-if="widget.part.excerpt.youtubeVideoId === ''"
                 class="youtube-video-link-form"
         >
             <input

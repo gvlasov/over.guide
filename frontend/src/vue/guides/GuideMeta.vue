@@ -90,7 +90,7 @@ export default class GuideMeta extends mixins(TagLinkMixin) {
         align-items: center;
         text-align: left;
         cursor: pointer;
-        padding-left: 0;
+        padding: .13em;
         transition: padding-left .13s;
 
         &:hover {

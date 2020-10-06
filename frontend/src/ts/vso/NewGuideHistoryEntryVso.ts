@@ -25,7 +25,8 @@ export default class NewGuideHistoryEntryVso extends GuideHistoryEntryVso<GuideH
                 mapTags: this.descriptor.maps.map(vso => vso.id),
                 thematicTags: this.descriptor.thematicTags.map(vso => vso.id),
             },
-            parts: this.parts.map(widget => widget.part)
+            parts: this.parts.map(widget => widget.part),
+            isPublic: this.isPublic,
         } as GuideHistoryEntryCreateDto
     }
 }

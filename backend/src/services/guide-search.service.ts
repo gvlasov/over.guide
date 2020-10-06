@@ -63,6 +63,13 @@ export class GuideSearchService {
                             where: {
                                 descriptorId: await this.getDescriptorIds(query),
                             }
+                        },
+                        guide: {
+                            where: {
+                                isPublic: true,
+                                deactivatedAt: null,
+                                deactivatedById: null,
+                            }
                         }
                     }),
                     where: {

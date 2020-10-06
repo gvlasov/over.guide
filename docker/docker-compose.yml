@@ -32,6 +32,8 @@ services:
       - "3306"
     ports:
       - 4306:3306
+    volumes:
+      - ./mariadb/utf8mb4.cnf:/etc/mysql/conf.d/utf8mb4.cnf
     environment:
       MYSQL_ROOT_PASSWORD: "1"
       MYSQL_DATABASE: "overwatch"

@@ -42,7 +42,7 @@ export default class InfiniteGuideSearchMixin extends Vue {
             .then(page => {
                 this.page = page.pageNumber;
                 this.guides.push(...page.guides.map(head => new ExistingGuideHeadVso(head)));
-                this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideId as number))
+                this.alreadyLoadedGuideIds.push(...page.guides.map(guide => guide.guideHistoryEntry.guide.id as number))
                 if (this.guides.length > 0) {
                     $state.loaded()
                 }

@@ -66,6 +66,7 @@ export class GuideHead extends Model<GuideHead> {
 
     static includesForDto(options?: {
         author?: IncludeOptions
+        guide?: IncludeOptions
         guideHistoryEntry?: IncludeOptions
         descriptor?: IncludeOptions
         excerpt?: IncludeOptions
@@ -85,6 +86,7 @@ export class GuideHead extends Model<GuideHead> {
                             deactivatedById: null,
                             deactivatedAt: null,
                         },
+                        ...options?.guide,
                         include: [{
                             model: User,
                             as: 'author',

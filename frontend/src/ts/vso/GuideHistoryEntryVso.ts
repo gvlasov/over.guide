@@ -8,6 +8,7 @@ import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 export default abstract class GuideHistoryEntryVso<D = GuideHistoryEntryReadDto | GuideHistoryEntryCreateDto> {
     public descriptor: GuideDescriptorVso;
     public parts: (GuidePartTextWidget | GuidePartVideoWidget)[];
+    public isPublic: boolean;
 
     protected constructor(entry: GuideHistoryEntryDto) {
         this.descriptor = new GuideDescriptorVso(entry.descriptor)
@@ -17,6 +18,7 @@ export default abstract class GuideHistoryEntryVso<D = GuideHistoryEntryReadDto 
                     ? new GuidePartTextWidget(part)
                     : new GuidePartVideoWidget(part)
         );
+        this.isPublic = entry.isPublic
     }
 
     get isEmpty(): boolean {

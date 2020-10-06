@@ -9,10 +9,8 @@ import ParamsDescriptorMixin from "@/ts/ParamsDescriptorMixin";
 import {Model, Prop, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
 
-@Component({
-
-})
-export default class ParameterDescriptorSynchronizer extends mixins( ParamsDescriptorMixin ) {
+@Component({})
+export default class ParameterDescriptorSynchronizer extends mixins(ParamsDescriptorMixin) {
     $router: any
 
     @Model('descriptorChange', {required: true})
@@ -20,6 +18,12 @@ export default class ParameterDescriptorSynchronizer extends mixins( ParamsDescr
 
     @Prop({required: true})
     basePath: string
+
+    @Prop({default: false})
+    writeDescriptorToParams: boolean
+
+    @Prop({default: false})
+    writeParamsToDescriptor: boolean
 
     @Watch('$route.params.descriptor')
     onRouteParamsDescriptorChange(paramsText?: string) {
@@ -33,6 +37,9 @@ export default class ParameterDescriptorSynchronizer extends mixins( ParamsDescr
 
     @Watch('descriptor', {deep: true})
     onDescriptorChange() {
+        if (!this.writeDescriptorToParams) {
+            return false
+        }
         let guideIdPart;
         if (this.$route.params.hasOwnProperty('id')) {
             const guideIdParam = this.$route.params.id

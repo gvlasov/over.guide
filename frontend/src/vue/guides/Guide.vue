@@ -3,25 +3,12 @@
         <GuideMeta
                 :entry="head.entry"
                 :search-descriptor="searchDescriptor"
+                :creation-time="head.entry.createdAt"
         />
-        <TrainingGoalToggle
-                :entry="head.entry"
-        />
+        <GuideButtons :entry="head.entry"/>
         <GuideContent
                 :entry="head.entry"
         />
-        <OverwatchButton
-                v-if="canEdit"
-                type="default"
-                v-hammer:tap="edit"
-        >Edit
-        </OverwatchButton>
-        <OverwatchButton
-                v-if="canEdit"
-                type="default"
-                v-hammer:tap="deactivate"
-        >Delete
-        </OverwatchButton>
         <div class="comments">
             <CommentsSection
                     v-if="showCommentsSection"
@@ -52,9 +39,9 @@ import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import GuideMeta from "@/vue/guides/GuideMeta.vue";
 import Vue from 'vue'
 import GuideContent from "@/vue/guides/GuideContent.vue";
-import TrainingGoalToggle from "@/vue/guides/TrainingGoalToggle.vue";
 import CommentsButton from "@/vue/guides/CommentsButton.vue";
 import CommentsSection from "@/vue/comments/CommentsSection.vue";
+import GuideButtons from "@/vue/guides/GuideButtons.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -62,9 +49,9 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        GuideButtons,
         CommentsSection,
         CommentsButton,
-        TrainingGoalToggle,
         GuideContent,
         GuideMeta,
         GuideVideo,
@@ -79,49 +66,7 @@ export default class Guide extends Vue {
     @Prop()
     searchDescriptor: GuideDescriptorVso | null
 
-    declare $router: any
-
     showCommentsSection: boolean = false
-
-    trainingGoalButtonHover: boolean = false
-    cache: MyTrainingGoalsCache = myTrainingGoalsCache
-
-    edit() {
-        this.$router.push(`/guide-editor/${this.head.entry.guideId}`)
-    }
-
-    async deactivate(): Promise<void> {
-        return backend.deactivateGuide(this.head.entry.guideId)
-            .then(() => {
-                this.$emit('guideDeactivated', this.head.entry.guideId)
-            })
-    }
-
-    addTrainingGoal(): void {
-        this.cache.addGoal(this.head.entry.guideId)
-    }
-
-    removeTrainingGoal() {
-        const hadItPending = this.cache.pendingGoalIds.includes(this.head.entry.guideId)
-        this.cache.removeGoal(this.head.entry.guideId)
-            .catch(() => {
-                if (!hadItPending) {
-                    this.$emit('loginRequired')
-                }
-            })
-    }
-
-    get trainingGoalAdded(): boolean {
-        return this.cache.goalIds.includes(this.head.entry.guideId) || this.cache.pendingGoalIds.includes(this.head.entry.guideId);
-    }
-
-    get canEdit(): boolean {
-        return auth.canEditGuide(this.head)
-    }
-
-    get creationTime(): Date {
-        return new Date()
-    }
 
 };
 
@@ -134,7 +79,7 @@ export default class Guide extends Vue {
 
 .guide {
     @include overwatch-panel;
-    display: inline-block;
+    display: block;
     box-sizing: border-box;
     color: white;
     padding: 1em;
@@ -153,10 +98,6 @@ export default class Guide extends Vue {
         text-align: right;
         margin-bottom: 1rem;
 
-        .training-goal-button {
-            font-size: 1.5rem;
-        }
-
         $training-goal-color: #edad4c;
 
         .remove-training-goal-button {
@@ -172,8 +113,11 @@ export default class Guide extends Vue {
             }
         }
     }
+
     .comments {
+        padding-top: 1em;
         text-align: right;
+
         button {
             font-size: 1.5em;
         }

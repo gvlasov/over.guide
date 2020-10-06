@@ -28,7 +28,6 @@ export default class TagGroupFrame extends Vue {
     display: inline-table;
     border-spacing: 0;
 
-
     .tag-type-infix {
         display: table-cell;
         vertical-align: middle;

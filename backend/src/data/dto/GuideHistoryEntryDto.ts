@@ -4,4 +4,5 @@ import {GuidePartAnyDto} from "data/dto/GuidePartDto";
 export default interface GuideHistoryEntryDto {
     descriptor: GuideDescriptorDto,
     parts: GuidePartAnyDto[]
+    isPublic: boolean
 }

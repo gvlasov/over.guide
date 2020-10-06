@@ -43,23 +43,37 @@ export class GuideController {
 
     @Get(':id')
     async get(
+        @Req() request: Request,
         @Res() response: Response,
         @Param('id') id: number
     ) {
-        GuideHead.findOne({
-            where: {
-                guideId: id,
-            },
-            include: GuideHead.includesForDto()
-        })
-            .then(head => {
-                if (head === null) {
-                    response.status(HttpStatus.NOT_FOUND)
-                    response.send()
-                } else {
-                    response.status(HttpStatus.OK)
-                    response.send(head.toDto())
-                }
+        this.authService.getUser(request)
+            .then(user => {
+                return GuideHead.findOne({
+                    where: {
+                        guideId: id,
+                    },
+                    include: GuideHead.includesForDto()
+                })
+                    .then(head => {
+                        if (head === null) {
+                            response.status(HttpStatus.NOT_FOUND)
+                            response.send()
+                        } else if (
+                            !head.guideHistoryEntry.guide.isPublic
+                            && (
+                                user === null
+                                || user.id !== head.guideHistoryEntry.guide.authorId
+                                && !this.moderationService.isModerator(user)
+                            )
+                        ) {
+                            response.status(HttpStatus.FORBIDDEN)
+                            response.send()
+                        } else {
+                            response.status(HttpStatus.OK)
+                            response.send(head.toDto())
+                        }
+                    })
             })
     }
 

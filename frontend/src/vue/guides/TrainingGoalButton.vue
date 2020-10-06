@@ -30,6 +30,7 @@ export default class TrainingGoalButton extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 
 .training-goal-button {
+    width: 11em;
     font-size: 1.5rem;
 }
 

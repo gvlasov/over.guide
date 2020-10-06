@@ -18,8 +18,6 @@ import {ContentHashService} from "src/services/content-hash.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
-import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
-import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 
 describe(
     GuideHistoryEntryService,
@@ -31,7 +29,8 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 const entry = <GuideHistoryEntry>await ctx.service.append(
                     {
@@ -44,8 +43,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(entry.guideId).toBe(guide.id)
@@ -66,7 +66,8 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 await ctx.service.append(
                     {
@@ -83,8 +84,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 const descriptor = (await GuideDescriptor.findOne({
@@ -115,11 +117,13 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryCreateDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(await Guide.findOne()).not.toBe(null)
+                expect((await Guide.findOne()).isPublic).toBe(1)
                 expect(entry.guideId).toBe(1)
                 expect((await entry.$get('guidePartTexts')).length).toBe(1)
                 expect((await entry.$get('guidePartVideos')).length).toBe(0)
@@ -136,7 +140,8 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 const descriptorService = ctx.app.get(GuideDescriptorService)
                 const entry = await ctx.service.append(
@@ -152,8 +157,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -170,8 +176,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 guide.reload()
@@ -190,7 +197,8 @@ describe(
                     battleNetUserId: '79023670347'
                 })
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
@@ -203,8 +211,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdfeed'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -221,8 +230,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'asdfasdf'
                             } as GuidePartTextDto
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     anotherUser
                 )
                 expect(
@@ -236,7 +246,8 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
@@ -253,8 +264,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'house'
                             } as GuidePartTextDto,
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -278,8 +290,9 @@ describe(
                                 kind: 'text',
                                 contentMd: 'mouse'
                             } as GuidePartTextDto,
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -299,7 +312,8 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
@@ -324,8 +338,9 @@ describe(
                                     endSeconds: 30.0
                                 }
                             } as GuidePartVideoDto,
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -357,8 +372,9 @@ describe(
                                     endSeconds: 20.0
                                 }
                             } as GuidePartVideoDto,
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(secondEntry)
@@ -377,7 +393,8 @@ describe(
                 )
                 const user = await User.findOne()
                 const guide = await Guide.create({
-                    authorId: user.id
+                    authorId: user.id,
+                    isPublic: true,
                 })
                 const firstEntry = <GuideHistoryEntry>await ctx.service.append(
                     {
@@ -402,8 +419,9 @@ describe(
                                     endSeconds: 30.0
                                 }
                             } as GuidePartVideoDto,
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -430,8 +448,9 @@ describe(
                                     endSeconds: 30.0
                                 }
                             } as GuidePartVideoDto,
-                        ]
-                    } as GuideHistoryEntryAppendDto,
+                        ],
+                        isPublic: true,
+                    },
                     user
                 )
                 expect(
@@ -443,6 +462,44 @@ describe(
                 expect(
                     (await GuideHistoryEntry.findAndCountAll()).count
                 ).toBe(2)
+            });
+            it('can create non-public guide', async () => {
+                await ctx.fixtures(
+                    heroesFixture,
+                    singleUserFixture
+                )
+                const user = await User.findOne()
+                const firstEntry = <GuideHistoryEntry>await ctx.service.create(
+                    {
+                        descriptor: new Descriptor({
+                            teammateHeroes: [HeroId.WreckingBall],
+                        }),
+                        parts: [
+                            {
+                                kind: 'video',
+                                excerpt: {
+                                    youtubeVideoId: 'asdf',
+                                    startSeconds: 10.0,
+                                    endSeconds: 20.0
+                                }
+                            } as GuidePartVideoDto,
+                            {
+                                kind: 'video',
+                                excerpt: {
+                                    youtubeVideoId: 'asdf',
+                                    startSeconds: 20.0,
+                                    endSeconds: 30.0
+                                }
+                            } as GuidePartVideoDto,
+                        ],
+                        isPublic: false,
+                    },
+                    user
+                )
+                await Guide.findOne({where: {id: firstEntry.guideId}})
+                    .then(guide => {
+                        expect(guide.isPublic).toBe(0)
+                    })
             });
         }
     )
