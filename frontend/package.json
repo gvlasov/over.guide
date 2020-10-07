@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/vue-fontawesome": "^2.0.0",
     "@types/js-cookie": "^2.2.6",
     "@voerro/vue-tagsinput": "github:gvlasov/vue-tagsinput#master",
     "axios": "^0.19.2",

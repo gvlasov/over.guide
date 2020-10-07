@@ -8,14 +8,7 @@
                 v-hammer:tap="onTap"
                 :disabled="!auth.loggedIn"
         >
-            <img
-                    v-if="upvoted"
-                    src="/icons/endorsement-white.png"
-            />
-            <img
-                    v-else
-                    src="/icons/endorsement-white.png"
-            />
+            <font-awesome-icon icon="medal"/>
         </OverwatchButton>
     </div>
 </template>
@@ -90,7 +83,7 @@ export default class Upvoter extends Vue {
 <style lang="scss" scoped>
 @import "~@/assets/css/tags.scss";
 
-$body-size: 1.2em;
+$body-size: 1.7em;
 
 .upvoter {
     flex-shrink: 0;
@@ -113,9 +106,11 @@ $body-size: 1.2em;
         width: $body-size;
         height: $body-size;
         position: relative;
+        border-radius: 50%;
 
         & ::v-deep .background {
             background-color: $overwatch-button-default-bg-color;
+            border-radius: 50%;
         }
 
         &:hover ::v-deep .background {

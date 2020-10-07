@@ -132,6 +132,9 @@ export default class CommentsLevel extends Vue {
         flex-direction: column;
         align-items: center;
         gap: 1em;
+        .upvoter {
+            font-size: .7em;
+        }
     }
 
     .comment-chain-node {
