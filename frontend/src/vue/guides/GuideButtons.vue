@@ -17,18 +17,16 @@
                     @close="() => creatingReport = false"
             />
         </ModalPopup>
-        <OverwatchButton
+        <LinkLikeButton
                 v-if="canEdit"
-                type="default"
                 v-hammer:tap="edit"
         >Edit
-        </OverwatchButton>
-        <OverwatchButton
+        </LinkLikeButton>
+        <LinkLikeButton
                 v-if="canEdit"
-                type="default"
                 v-hammer:tap="deactivate"
         >Delete
-        </OverwatchButton>
+        </LinkLikeButton>
     </div>
 </template>
 
@@ -118,6 +116,10 @@ export default class GuideButtons extends Vue {
         &:hover ::v-deep .background {
             background-color: $training-goal-color;
         }
+    }
+
+    button {
+        padding: 0 1em;
     }
 }
 
