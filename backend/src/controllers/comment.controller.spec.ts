@@ -47,13 +47,15 @@ describe(
                         },
                     },
                 })
+                const currentTime = new Date().toISOString();
                 await Comment.create({
                     postType: PostTypeId.Guide,
                     postId: guide.id,
                     parentId: null,
                     content: '1a',
                     authorId: user.id,
-                    createdAt: new Date().toISOString(),
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
                 })
                 await Comment.create({
                     postType: PostTypeId.Guide,
@@ -61,7 +63,8 @@ describe(
                     parentId: null,
                     content: '1b',
                     authorId: user.id,
-                    createdAt: new Date().toISOString(),
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
                 })
                 await Comment.create({
                     postType: PostTypeId.Guide,
@@ -69,7 +72,8 @@ describe(
                     parentId: null,
                     content: '1c',
                     authorId: user.id,
-                    createdAt: new Date().toISOString(),
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
                 })
                 await Comment.create({
                     postType: PostTypeId.Guide,
@@ -77,7 +81,8 @@ describe(
                     parentId: null,
                     content: '2a',
                     authorId: user.id,
-                    createdAt: new Date().toISOString(),
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
                 })
                 await request(ctx.app.getHttpServer())
                     .get(`/comment/${PostTypeId.Guide}/${guide.id}`)
@@ -152,13 +157,15 @@ describe(
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
                 const oldCommentText = 'hello';
+                const currentTime = new Date().toISOString();
                 const comment = await Comment.create({
                     postType: PostTypeId.Guide,
                     postId: guide.id,
                     parentId: null,
                     content: oldCommentText,
                     authorId: user.id,
-                    createdAt: new Date().toISOString(),
+                    createdAt: currentTime,
+                    updatedAt: currentTime
                 })
                 const newCommentText = oldCommentText + '_updated';
                 await request(ctx.app.getHttpServer())
@@ -199,13 +206,15 @@ describe(
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
                 const oldCommentText = 'hello';
+                const currentTime = new Date().toISOString();
                 const comment = await Comment.create({
                     postType: PostTypeId.Guide,
                     postId: guide.id,
                     parentId: null,
                     content: oldCommentText,
                     authorId: otherUser.id,
-                    createdAt: new Date().toISOString(),
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
                 })
                 const newCommentText = oldCommentText + '_updated';
                 await request(ctx.app.getHttpServer())

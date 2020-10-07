@@ -38,7 +38,7 @@ export class CommentController {
         @Param('postId') postId: number
     ): Promise<CommentReadDto[]> {
         return this.sequelize.query<any>(
-                `
+            `
                     select Comment.id,
                            Comment.postType,
                            Comment.postId,

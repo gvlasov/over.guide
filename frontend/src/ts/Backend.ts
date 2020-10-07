@@ -21,6 +21,8 @@ import PostVso from "@/ts/vso/PostVso";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import PostTypeId from "data/PostTypeId";
 import VoteDto from "data/dto/VoteDto";
+import ReportReasonId from "data/ReportReasonId";
+import ReportDto from "data/dto/ReportDto";
 
 const querystring = require('query-string')
 
@@ -313,6 +315,24 @@ export default class Backend {
                 postId,
                 postTypeId,
             } as VoteDto,
+            response => {
+            }
+        )
+    }
+
+    async report(
+        postTypeId: PostTypeId,
+        postId: number,
+        reportReasonId: ReportReasonId
+    ): Promise<void> {
+        return this.query(
+            'POST',
+            `/report`,
+            {
+                postId,
+                postTypeId,
+                reportReasonId,
+            } as ReportDto,
             response => {
             }
         )

@@ -1,5 +1,9 @@
 <template>
     <div class="guide-buttons">
+        <a
+                v-if="auth.loggedIn"
+                v-hammer:tap="() => creatingReport = !creatingReport"
+        >report</a>
         <OverwatchButton
                 v-if="canEdit"
                 type="default"
@@ -26,6 +30,14 @@
                 v-hammer:tap="addTrainingGoal"
         >Add training goal
         </TrainingGoalButton>
+        <ReportCreator
+                v-if="creatingReport"
+                :post-id="entry.guideId"
+                :post-type-id="PostTypeId.Guide"
+                :post-type-name="'guide'"
+                :reasons="reasons"
+                @close="() => creatingReport = false"
+        />
     </div>
 </template>
 
@@ -44,6 +56,10 @@ import GuideContent from "@/vue/guides/GuideContent.vue";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
+import ReportCreator from "@/vue/guides/ReportCreator.vue";
+import PostTypeId from "data/PostTypeId";
+import ReportReasonDto from "data/dto/ReportReasonDto";
+import reportReasons from 'data/reportReasons'
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -51,6 +67,7 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        ReportCreator,
         TrainingGoalButton,
         GuideContent,
         GuideVideo,
@@ -59,10 +76,19 @@ const backend = new Backend(axios)
     },
 })
 export default class GuideButtons extends Vue {
+
+    PostTypeId = PostTypeId
+
     @Prop({required: true})
     entry: ExistingGuideHistoryEntryVso
 
+    creatingReport: boolean = false
+
     cache: MyTrainingGoalsCache = myTrainingGoalsCache
+
+    auth: Authentication = auth
+
+    reasons: ReportReasonDto[] = Array.from(reportReasons.values())
 
     addTrainingGoal(): void {
         this.cache.addGoal(this.entry.guideId)
@@ -107,6 +133,17 @@ export default class GuideButtons extends Vue {
 .guide-buttons {
     text-align: right;
     margin-bottom: 1rem;
+
+    a {
+        color: white;
+        cursor: pointer;
+        @include overwatch-futura;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 
     button {
         font-size: 1.5rem;

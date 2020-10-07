@@ -24,6 +24,8 @@ import {TrainingGoalController} from "src/controllers/training-goal.controller";
 import {UserController} from "src/controllers/user.controller";
 import {CommentController} from "src/controllers/comment.controller";
 import {VoteController} from "src/controllers/vote.controller";
+import {RightsService} from "src/services/rights.service";
+import {ReportController} from "src/controllers/report.controller";
 
 @Module({
     imports: [DatabaseModule, HttpModule],
@@ -40,6 +42,7 @@ import {VoteController} from "src/controllers/vote.controller";
         UserController,
         CommentController,
         VoteController,
+        ReportController,
     ],
     providers: [
         AppService,
@@ -54,6 +57,7 @@ import {VoteController} from "src/controllers/vote.controller";
         ModerationService,
         ContentHashService,
         GuideSearchService,
+        RightsService,
     ],
 })
 export class AppModule {

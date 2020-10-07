@@ -31,6 +31,7 @@ import {Comment} from "src/database/models/Comment";
 import {Vote} from "src/database/models/Vote";
 import {GuideHeadLink} from "src/database/models/GuideHeadLink";
 import PostTypeId from "data/PostTypeId";
+import {Report} from "src/database/models/Report";
 
 const Umzug = require('umzug')
 
@@ -92,6 +93,7 @@ export const databaseProviders = [
                 GuideHeadLink,
                 User2TrainingGoal,
                 Vote,
+                Report,
             ]);
             const umzug = new Umzug({
                 migrations: {

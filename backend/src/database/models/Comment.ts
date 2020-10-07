@@ -13,7 +13,11 @@ import PostTypeId from "data/PostTypeId";
 import {User} from "src/database/models/User";
 import CommentReadDto from "data/dto/CommentReadDto";
 
-@Table
+@Table({
+    createdAt: true,
+    updatedAt: true,
+    deletedAt: 'deactivatedAt',
+})
 export class Comment extends Model<Comment> {
 
     @PrimaryKey
@@ -24,10 +28,10 @@ export class Comment extends Model<Comment> {
     @AllowNull(true)
     @ForeignKey(() => Comment)
     @Column({type: new DataTypes.INTEGER()})
-    parentId: number|null
+    parentId: number | null
 
     @BelongsTo(() => Comment)
-    parent: Comment|null
+    parent: Comment | null
 
     @AllowNull(false)
     @Column({type: new DataTypes.INTEGER()})
