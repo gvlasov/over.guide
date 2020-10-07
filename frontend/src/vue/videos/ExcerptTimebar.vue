@@ -29,6 +29,9 @@ export default class ExcerptTimebar extends Vue {
     @Prop({required: true})
     startSeconds: number
 
+    @Prop({default: true})
+    enableDragBehavior: boolean
+
     @Prop({required: true})
     currentSeconds: number
 
@@ -74,36 +77,42 @@ export default class ExcerptTimebar extends Vue {
         if (this.currentDragPosition === null) {
             this.onDragStart(e);
         }
-        this.currentDragPosition = this.dragPosition(e);
-        this.$emit(
-            'dragContinue',
-            {
-                start: this.dragStart,
-                end: this.currentDragPosition
-            }
-        );
+        if (this.enableDragBehavior) {
+            this.currentDragPosition = this.dragPosition(e);
+            this.$emit(
+                'dragContinue',
+                {
+                    start: this.dragStart,
+                    end: this.currentDragPosition
+                }
+            );
+        }
     }
 
     onDragStart(e) {
-        for (let element of document.getElementsByTagName('iframe')) {
-            element.style.pointerEvents = 'none';
+        if (this.enableDragBehavior) {
+            for (let element of document.getElementsByTagName('iframe')) {
+                element.style.pointerEvents = 'none';
+            }
+            this.$emit('dragStart', {
+                start: this.dragStart,
+                end: this.dragStart,
+            });
         }
-        this.$emit('dragStart', {
-            start: this.dragStart,
-            end: this.dragStart,
-        });
     }
 
     onDragEnd(e) {
-        this.$emit(
-            'dragEnd',
-            {
-                start: this.dragStart,
-                end: this.dragPosition(e)
+        if (this.enableDragBehavior) {
+            this.$emit(
+                'dragEnd',
+                {
+                    start: this.dragStart,
+                    end: this.dragPosition(e)
+                }
+            );
+            for (let element of document.getElementsByTagName('iframe')) {
+                element.style.pointerEvents = 'auto';
             }
-        );
-        for (let element of document.getElementsByTagName('iframe')) {
-            element.style.pointerEvents = 'auto';
         }
     }
 
