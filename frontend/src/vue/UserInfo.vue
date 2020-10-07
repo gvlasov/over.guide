@@ -161,21 +161,27 @@ export default class UserInfo extends Vue {
     font-family: BigNoodleTooOblique, sans-serif;
 }
 
-.username {
-    position: absolute;
-    padding-left: 1em;
-    z-index: 1;
-    font-size: 5em;
-}
 
 .info {
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .username {
+        padding-left: .5em;
+        z-index: 1;
+        font-size: 5em;
+        opacity: 1;
+        text-shadow: 0 0 .05em hsla(0, 0%, 10%, .7);
+    }
 
     .buttons-wrap {
+        justify-content: right;
         display: inline-flex;
         gap: .5em;
         flex-direction: column;
         flex-wrap: nowrap;
+        flex-grow: 1;
         align-items: flex-end;
         @include overwatch-futura;
 
