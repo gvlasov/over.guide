@@ -106,7 +106,7 @@ export default class GuideButtons extends Vue {
 
 .report-creator {
     text-align: left;
-    background-color: hsla(40, 36%, 35%, .97);
+    background-color: hsla(11, 39%, 44%, .97);
     padding: 1em;
 
     h2 {
@@ -115,13 +115,14 @@ export default class GuideButtons extends Vue {
     }
 
     ul {
+        padding: 0;
         label {
             display: list-item;
             list-style: none;
             padding: .3em;
 
             &:hover {
-                background-color: hsla(192, 60%, 39%, .3);
+                background-color: hsla(194, 60%, 39%, .3);
             }
 
             cursor: pointer;
