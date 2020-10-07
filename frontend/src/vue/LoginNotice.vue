@@ -1,24 +1,17 @@
 <template>
-    <transition
-            name="login-notice-appear"
-            appear
-    >
-        <div class="login-notice">
-            <slot/>
-        </div>
-    </transition>
+    <Popup class="login-notice">
+        <slot/>
+    </Popup>
 </template>
 
 <script lang="ts">
-import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
-import OverwatchButton from "@/vue/OverwatchButton";
 import Vue from 'vue'
 import Component from "vue-class-component";
+import Popup from "@/vue/Popup.vue";
 
 @Component({
     components: {
-        OverwatchButton,
-        BattlenetAuthButton,
+        Popup,
     },
 })
 export default class LoginNotice extends Vue {
@@ -31,17 +24,8 @@ export default class LoginNotice extends Vue {
 
 $width: 40rem;
 .login-notice {
-    text-align: center;
-    left: 50%;
-    top: 50%;
     @include overwatch-panel;
-    transform: translate(-50%, -50%);
-    position: fixed;
-    z-index: 200;
-    max-width: $width;
-    min-width: $width;
     background-color: hsla(250, 30%, 31%, 0.97);
-    box-sizing: border-box;
     padding: 2em;
     display: flex;
     flex-direction: column;
@@ -49,21 +33,5 @@ $width: 40rem;
     justify-content: center;
     flex-wrap: wrap;
     font-size: 1.5rem;
-
-}
-
-
-.login-notice-appear-enter {
-    margin-top: 1em;
-    opacity: 0;
-}
-
-.login-notice-appear-enter-to {
-    margin-top: 0;
-    opacity: 1;
-}
-
-.login-notice-appear-enter-active {
-    transition: margin-top .2s ease-in, opacity .2s ease-out;
 }
 </style>
