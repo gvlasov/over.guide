@@ -5,27 +5,30 @@
                     to="/search"
                     v-bind:class="{active: currentRouteStartsWith('/search')}"
             >
+                <font-awesome-icon icon="home"/>
                 <div>Browse guides</div>
             </router-link>
             <router-link
                     to="/guide-editor/new"
                     v-bind:class="{active: currentRouteStartsWith('/guide-editor')}"
             >
+                <font-awesome-icon icon="plus-square"/>
                 <div>Create guide</div>
             </router-link>
             <router-link
                     to="/training-goals"
                     v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
             >
-                <div>Training goals</div>
+                <font-awesome-icon icon="brain"/>
+                <div class="item-name">Training goals</div>
             </router-link>
-            <!--        <router-link to="/testing-ground">Testing ground</router-link>-->
             <BattlenetAuthButton v-if="username === null"/>
             <a
                     v-else
                     v-bind:href="`/#/user/${userId}`"
                     v-bind:class="{active: userId !== null && currentRouteStartsWith(`/user/${userId}`)}"
             >
+                <font-awesome-icon icon="user"/>
                 <div>{{ username }}</div>
             </a>
         </div>
@@ -68,7 +71,6 @@ export default class Navigation extends Vue {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    margin-bottom: 2rem;
 
     a:not(.battle-net-button) {
         @include overwatch-futura;
@@ -83,8 +85,22 @@ export default class Navigation extends Vue {
     }
 
     a {
-        div {
+        div, svg {
             flex-grow: 0;
+        }
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+        @media screen and (max-width: 48em) {
+            div {
+                display: none;
+            }
+        }
+        @media screen and (min-width: 48em) {
+            svg {
+                display: none;
+            }
         }
 
         display: flex;
@@ -94,6 +110,7 @@ export default class Navigation extends Vue {
         align-self: center;
         height: 4rem;
         box-sizing: border-box;
+
     }
 
     .battle-net-button {

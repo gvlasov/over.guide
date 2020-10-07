@@ -163,8 +163,9 @@ export default class UserInfo extends Vue {
 
 .username {
     position: absolute;
-    top: -3rem;
+    padding-left: 1em;
     z-index: 1;
+    font-size: 5em;
 }
 
 .info {

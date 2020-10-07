@@ -20,7 +20,7 @@ export default class BackgroundHeading extends Vue {
 
 .background-heading {
     font-family: BigNoodleTooOblique, sans-serif;
-    font-size: 8em;
+    font-size: 4em;
     text-shadow: 0 0 .1em #333;
     color: white;
     opacity: .5;

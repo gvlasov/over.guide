@@ -18,22 +18,31 @@ import VueObserveVisibility from 'vue-observe-visibility'
 import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {faBrain, faMedal} from '@fortawesome/free-solid-svg-icons'
+import {
+    faBrain,
+    faHome,
+    faMedal,
+    faPlusSquare,
+    faUser
+} from '@fortawesome/free-solid-svg-icons'
 
 library.add(faBrain);
+library.add(faHome);
+library.add(faPlusSquare);
 library.add(faMedal);
+library.add(faUser);
 
 const VueResizeObserver = require('vue-resize-observer')
 
 const router = new VueRouter({
     routes: [
-        {path: '/counters-practice', component: CountersPractice},
+        {path: '/counters-practice', component: CountersPractice, name: 'Counters practice'},
         {path: '/suggest-pick', component: PickSuggestion},
-        {path: '/guide-editor/:id?/:descriptor?', component: GuideEditor},
+        {path: '/guide-editor/:id?/:descriptor?', component: GuideEditor, name: 'Create guide'},
         {path: '/testing-ground', component: TestingGround},
-        {path: '/search/:descriptor?', component: GuideSearch},
-        {path: '/training-goals', component: TrainingGoals},
-        {path: '/user/:id', component: UserInfo},
+        {path: '/search/:descriptor?', component: GuideSearch, name: 'Browse guides'},
+        {path: '/training-goals', component: TrainingGoals, name: 'My training goals'},
+        {path: '/user/:id', component: UserInfo, name: 'Profile'},
         {path: '/guide/:id', component: GuidePage},
     ],
     scrollBehavior() {
