@@ -3,8 +3,7 @@
         <ScrollToTop ref="scrollToTop"/>
         <Navigation/>
         <BackgroundHeading
-                v-if="$route.name !== void 0"
-        >{{$route.name}}</BackgroundHeading>
+        >{{$route.name || ' '}}</BackgroundHeading>
         <div class="router-content-wrap">
             <router-view @contentChange="resetScrollToTop"></router-view>
         </div>
