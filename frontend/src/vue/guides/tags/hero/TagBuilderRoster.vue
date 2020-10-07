@@ -162,7 +162,7 @@ export default class TagBuilderRoster extends mixins(Roster_SelectedHeroesMixin)
 
     beforeMount() {
         if (typeof window.orientation !== 'undefined') {
-            document.documentElement.requestFullscreen()
+            // document.documentElement.requestFullscreen()
         }
     }
 }
