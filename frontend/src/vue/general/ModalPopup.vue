@@ -13,8 +13,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import Popup from "@/vue/Popup.vue";
-import ModalBackground from "@/vue/ModalBackground.vue";
+import Popup from "@/vue/general/Popup.vue";
+import ModalBackground from "@/vue/general/ModalBackground.vue";
 
 @Component({
     components: {Popup, ModalBackground},

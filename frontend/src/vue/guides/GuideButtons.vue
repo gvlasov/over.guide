@@ -1,9 +1,9 @@
 <template>
     <div class="guide-buttons">
-        <button
+        <LinkLikeButton
                 :disabled="!auth.loggedIn"
                 v-hammer:tap="() => creatingReport = !creatingReport"
-        >report</button>
+        >report</LinkLikeButton>
         <ModalPopup
                 v-if="creatingReport"
                 @close="() =>  creatingReport = false"
@@ -65,6 +65,7 @@ import PostTypeId from "data/PostTypeId";
 import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
 import ModalPopup from "@/vue/general/ModalPopup.vue";
+import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -72,6 +73,7 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        LinkLikeButton,
         ModalPopup,
         ReportCreator,
         TrainingGoalButton,
@@ -139,21 +141,6 @@ export default class GuideButtons extends Vue {
 .guide-buttons {
     text-align: right;
     margin-bottom: 1rem;
-
-    a {
-        color: white;
-        cursor: pointer;
-        @include overwatch-futura;
-        text-decoration: none;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
-    button {
-        font-size: 1.5rem;
-    }
 
     $training-goal-color: #edad4c;
 
