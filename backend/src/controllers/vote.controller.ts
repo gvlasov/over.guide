@@ -57,7 +57,6 @@ export class VoteController {
         @Req() request: Request,
         @Body() dto: VoteDto,
     ) {
-        console.log(dto)
         this.authService.getUser(request)
             .then(user =>
                 Vote.destroy({

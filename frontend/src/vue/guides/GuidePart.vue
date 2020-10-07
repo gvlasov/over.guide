@@ -142,7 +142,6 @@ export default class GuidePart extends Vue {
         this.parts.splice(index + d, 0, elem)
         this.$nextTick(() => {
             const element = document.getElementById(this.elementId(this.widget));
-            console.log(element)
             this.$scrollTo(
                 element,
                 {
