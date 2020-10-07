@@ -108,7 +108,7 @@ export default class GuidePartTextEditor extends Vue {
 @import '~@/assets/css/fonts.scss';
 
 .text-guide-part {
-    padding-top: 1em;
+    padding-top: .5em;
     max-width: 100%;
 
     & ::v-deep img {
@@ -119,6 +119,8 @@ export default class GuidePartTextEditor extends Vue {
 
     textarea {
         outline: none;
+        width: 100%;
+        box-sizing: border-box;
 
         &.guide-part-text-editor {
             width: 100%;

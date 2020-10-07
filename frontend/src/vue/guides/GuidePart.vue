@@ -14,6 +14,9 @@
             </OverwatchButton>
         </template>
         <div class="move-guide-buttons">
+            <div class="guide-part-number">
+                {{index+1}}/{{parts.length}}
+            </div>
             <OverwatchPanelButton
                     :disabled="index === parts.length - 1"
                     type="default"
@@ -188,8 +191,16 @@ export default class GuidePart extends Vue {
     .move-guide-buttons {
         display: block;
         text-align: right;
-        height: 0;
         overflow: visible;
+        .guide-part-number {
+            @include overwatch-futura;
+            font-size: 1.3em;
+            line-height: 1em;
+            display: inline-block;
+            height: 1em;
+            vertical-align: top;
+            padding-right: .3em;
+        }
 
         button {
             & ::v-deep .content {
