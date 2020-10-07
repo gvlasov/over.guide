@@ -105,6 +105,7 @@ export default class GuideButtons extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 
 .report-creator {
+    font-size: .8em;
     text-align: left;
     background-color: hsla(11, 39%, 44%, .97);
     padding: 1em;
@@ -129,7 +130,6 @@ export default class GuideButtons extends Vue {
 
             .name {
                 font-weight: bold;
-                font-size: 1.2em;
                 display: inline-block;
                 color: #ffffff;
                 text-shadow: 1px 1px black;
@@ -149,8 +149,8 @@ export default class GuideButtons extends Vue {
     .report-created-notification {
         cursor: pointer;
         text-align: center;
-        font-family: 'BigNoodleTooOblique', 'sans-serif';
-        font-size: 2em;
+        @include overwatch-futura;
+        font-size: 1em;
 
         .close {
             display: inline-block;

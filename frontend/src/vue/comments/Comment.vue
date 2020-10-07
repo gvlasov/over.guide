@@ -33,9 +33,20 @@
             </button>
             <button
                     v-if="comment.author.id === auth.userId"
-                    v-hammer:tap="() => showReplyForm = !showReplyForm"
+                    v-hammer:tap="() => showReportDialogue = !showReportDialogue"
             >Report
             </button>
+            <ModalPopup
+                    v-if="showReportDialogue"
+            >
+                <ReportCreator
+                        :post-type-id="PostTypeId.Comment"
+                        :post-id="comment.id"
+                        post-type-name="comment"
+                        :reasons="commentReportReasons"
+                        @close="() => showReportDialogue = false"
+                    />
+            </ModalPopup>
         </div>
         <div
                 v-if="showReplyForm"
@@ -65,9 +76,21 @@ import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import UserLink from "@/vue/guides/UserLink.vue";
 import Authentication from "@/ts/Authentication";
 import CommentHider from "@/vue/comments/CommentHider.vue";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
+import ReportCreator from "@/vue/guides/ReportCreator.vue";
+import PostTypeId from "data/PostTypeId";
+import reportReasons from 'data/reportReasons'
+import ReportReasonId from "data/ReportReasonId";
+
+const commentReportReasons = [
+    reportReasons.get(ReportReasonId.Spam),
+    reportReasons.get(ReportReasonId.OffensiveLanguage),
+]
 
 @Component({
     components: {
+        ReportCreator,
+        ModalPopup,
         CommentHider,
         UserLink,
         RelativeTime,
@@ -76,6 +99,9 @@ import CommentHider from "@/vue/comments/CommentHider.vue";
     }
 })
 export default class Comment extends Vue {
+    PostTypeId = PostTypeId
+
+    commentReportReasons = commentReportReasons
 
     @Prop({required: true})
     comment: CommentVso
@@ -85,6 +111,8 @@ export default class Comment extends Vue {
 
     @Prop({default: false})
     initialShowReplyForm: boolean
+
+    showReportDialogue: boolean = false
 
     auth: Authentication = Authentication.instance
 
