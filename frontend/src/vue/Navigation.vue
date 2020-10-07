@@ -67,12 +67,18 @@ export default class Navigation extends Vue {
 .navigation {
     $underline-width: .3em;
     font-size: 1.7em;
-    background-color: hsla(227, 29%, 45%, .7);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 
-    a:not(.battle-net-button) {
+    a {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+        height: 4rem;
+        box-sizing: border-box;
+        background-color: hsla(227, 29%, 45%, .7);
         @include overwatch-futura;
         text-decoration: none;
         white-space: nowrap;
@@ -82,16 +88,16 @@ export default class Navigation extends Vue {
             background-color: $overwatch-button-default-bg-color;
             border-bottom: $underline-width solid $tag-teammate-color;
         }
-    }
 
-    a {
         div, svg {
             flex-grow: 0;
         }
+
         svg {
             display: block;
             margin: 0 auto;
         }
+
         @media screen and (max-width: 48em) {
             div {
                 display: none;
@@ -102,14 +108,6 @@ export default class Navigation extends Vue {
                 display: none;
             }
         }
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        flex-grow: 1;
-        align-self: center;
-        height: 4rem;
-        box-sizing: border-box;
 
     }
 
