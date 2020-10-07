@@ -88,10 +88,14 @@ import {Model, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import LoginNotice from "@/vue/LoginNotice.vue";
+import ModalBackground from "@/vue/ModalBackground.vue";
 
 const playingZonePaddingPx = 50;
 @Component({
     components: {
+        ModalBackground,
+        LoginNotice,
         LoginRequirement,
         TagBadges,
         HeroTag,

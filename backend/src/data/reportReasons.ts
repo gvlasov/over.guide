@@ -14,7 +14,7 @@ const data = [
         name: 'Not educational',
         label: 'not educationial',
         dataName: 'not-educational',
-        description: 'Doesn\'t contain any demonstrativee examples and/or explanations',
+        description: 'Doesn\'t contain any demonstrative examples and/or explanations',
     },
     {
         id: ReportReasonId.OffensiveLanguage,

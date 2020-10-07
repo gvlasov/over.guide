@@ -1,16 +1,18 @@
 <template>
-    <Popup class="login-notice">
+    <ModalPopup class="login-notice">
         <slot/>
-    </Popup>
+    </ModalPopup>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
 import Popup from "@/vue/Popup.vue";
+import ModalPopup from "@/vue/ModalPopup.vue";
 
 @Component({
     components: {
+        ModalPopup,
         Popup,
     },
 })
@@ -22,8 +24,7 @@ export default class LoginNotice extends Vue {
 <style lang="scss" scoped>
 @import '~@/assets/css/overwatch-ui.scss';
 
-$width: 40rem;
-.login-notice {
+.login-notice ::v-deep .popup {
     @include overwatch-panel;
     background-color: hsla(250, 30%, 31%, 0.97);
     padding: 2em;

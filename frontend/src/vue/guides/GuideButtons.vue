@@ -1,9 +1,21 @@
 <template>
     <div class="guide-buttons">
-        <a
-                v-if="auth.loggedIn"
+        <button
+                :disabled="!auth.loggedIn"
                 v-hammer:tap="() => creatingReport = !creatingReport"
-        >report</a>
+        >report</button>
+        <ModalPopup
+                v-if="creatingReport"
+                @close="() =>  creatingReport = false"
+        >
+            <ReportCreator
+                    :post-id="entry.guideId"
+                    :post-type-id="PostTypeId.Guide"
+                    :post-type-name="'guide'"
+                    :reasons="reasons"
+                    @close="() => creatingReport = false"
+            />
+        </ModalPopup>
         <OverwatchButton
                 v-if="canEdit"
                 type="default"
@@ -30,14 +42,6 @@
                 v-hammer:tap="addTrainingGoal"
         >Add training goal
         </TrainingGoalButton>
-        <ReportCreator
-                v-if="creatingReport"
-                :post-id="entry.guideId"
-                :post-type-id="PostTypeId.Guide"
-                :post-type-name="'guide'"
-                :reasons="reasons"
-                @close="() => creatingReport = false"
-        />
     </div>
 </template>
 
@@ -60,6 +64,7 @@ import ReportCreator from "@/vue/guides/ReportCreator.vue";
 import PostTypeId from "data/PostTypeId";
 import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
+import ModalPopup from "@/vue/ModalPopup.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
@@ -67,6 +72,7 @@ const backend = new Backend(axios)
 
 @Component({
     components: {
+        ModalPopup,
         ReportCreator,
         TrainingGoalButton,
         GuideContent,
