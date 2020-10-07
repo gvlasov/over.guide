@@ -7,8 +7,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import Popup from "@/vue/Popup.vue";
-import ModalPopup from "@/vue/ModalPopup.vue";
+import Popup from "@/vue/general/Popup.vue";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
 
 @Component({
     components: {

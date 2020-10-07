@@ -64,7 +64,7 @@ import ReportCreator from "@/vue/guides/ReportCreator.vue";
 import PostTypeId from "data/PostTypeId";
 import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
-import ModalPopup from "@/vue/ModalPopup.vue";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 const auth = new Authentication();
