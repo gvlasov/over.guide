@@ -10,7 +10,7 @@
                 :entry="head.entry"
         />
         <div class="footer">
-            <div class="guide-upvoter">
+            <div class="buttons">
                 <Upvoter
                         :post-id="head.entry.guideId"
                         :post-type-id="PostTypeId.Guide"
@@ -19,6 +19,7 @@
                         @upvoteRemoved="() => head.votesCount--"
                 />
                 <div class="votes-count">{{ head.votesCount }}</div>
+                <TrainingGoalButton :entry="head.entry"/>
             </div>
             <div
                     class="comments"
@@ -58,6 +59,7 @@ import CommentsSection from "@/vue/comments/CommentsSection.vue";
 import GuideButtons from "@/vue/guides/GuideButtons.vue";
 import PostTypeId from "data/PostTypeId";
 import Upvoter from "@/vue/comments/Upvoter.vue";
+import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 
 const auth = new Authentication();
 const backend = new Backend(axios)
@@ -73,6 +75,7 @@ const backend = new Backend(axios)
         GuideVideo,
         GuidePartText,
         OverwatchButton,
+        TrainingGoalButton,
     },
 })
 export default class Guide extends Vue {
@@ -108,7 +111,7 @@ export default class Guide extends Vue {
         flex-wrap: wrap;
         padding-top: 1em;
 
-        .guide-upvoter {
+        .buttons {
             flex-grow: 1;
             text-align: left;
             display: flex;
@@ -116,13 +119,18 @@ export default class Guide extends Vue {
 
             .votes-count {
                 padding-left: .5em;
+                padding-right: 1.5em;
                 font-weight: bold;
                 font-size: 1.4em;
                 @include overwatch-futura;
             }
 
             .upvoter {
+                display: inline-block;
+            }
 
+            .training-goal-button {
+                display: inline-block;
             }
         }
 
