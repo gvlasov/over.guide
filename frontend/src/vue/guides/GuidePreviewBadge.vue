@@ -10,7 +10,7 @@
             >Close
             </OverwatchButton>
             <Guide
-                    head="guide"
+                    :head="head"
                     :show-training-goal-button="false"
                     :search-descriptor="null"
             />
@@ -26,11 +26,11 @@
             >
                 <div class="tags">
                     <HeroTag
-                            v-if="guide.descriptor.hasHeroes"
+                            v-if="head.entry.descriptor.hasHeroes"
                             class="hero-tag"
-                            :descriptor="guide.descriptor"
+                            :descriptor="head.entry.descriptor"
                     />
-                    <TagBadges :descriptor="guide.descriptor"/>
+                    <TagBadges :descriptor="head.entry.descriptor"/>
                 </div>
                 <GuidePartText
                         v-if="typeof firstTextWidget !== 'undefined'"
@@ -49,7 +49,7 @@
                                 :loop="true"
                                 :autoplay="false"
                                 :mute="true"
-                                :player-element-id="'training-goal-' + guide.guideId + '-' + order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
+                                :player-element-id="'training-goal-' + head.entry.guideId + '-' + order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
                                 class="video"
                                 :enable-controls="false"
                         />
@@ -71,15 +71,14 @@ import ThematicTagBadge from "@/vue/guides/tags/ThematicTagBadge";
 import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
 import AspectRatioBox from "@/vue/AspectRatioBox";
 import GuidePartText from "@/vue/guides/GuidePartText";
-import ExistingGuideHistoryEntryVso
-    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import Guide from "@/vue/guides/Guide";
 import TagBadges from "@/vue/guides/TagBadges";
 import Vue from 'vue'
 import {Prop} from "vue-property-decorator";
-import GuidePartTextWidget from "../../js/vso/GuidePartTextWidget";
-import GuidePartVideoWidget from "../../js/vso/GuidePartVideoWidget";
+import GuidePartTextWidget from "@/ts/vso/GuidePartTextWidget";
+import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
 import Component from "vue-class-component";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 
 const backend = new Backend(axios);
 
@@ -97,7 +96,7 @@ const backend = new Backend(axios);
 })
 export default class GuidePreviewBadge extends Vue {
     @Prop({required: true})
-    guide: ExistingGuideHistoryEntryVso
+    head: ExistingGuideHeadVso
 
     @Prop({default: false})
     open: boolean
@@ -110,16 +109,16 @@ export default class GuidePreviewBadge extends Vue {
 
     removeTrainingGoal() {
         MyTrainingGoalsCache.instance()
-            .removeGoal(this.guide.guideId)
+            .removeGoal(this.head.entry.guideId)
     }
 
     get firstVideoWidget(): GuidePartVideoWidget {
-        return this.guide.parts.find(widget => widget.isVideo) as GuidePartVideoWidget
+        return this.head.entry.parts.find(widget => widget.isVideo) as GuidePartVideoWidget
 
     }
 
     get firstTextWidget(): GuidePartTextWidget {
-        return this.guide.parts.find(widget => widget.isText) as GuidePartTextWidget
+        return this.head.entry.parts.find(widget => widget.isText) as GuidePartTextWidget
     }
 };
 

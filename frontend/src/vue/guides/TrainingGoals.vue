@@ -29,7 +29,7 @@
                 <TrainingGoal
                         class="training-goal root-content-sizer root-content-panel-wrap"
                         v-for="trainingGoal in trainingGoals"
-                        :key="trainingGoal.guide.guideId + '-'+trainingGoal.order"
+                        :key="trainingGoal.head.entry.guideId + '-'+trainingGoal.order"
                         :training-goal="trainingGoal"
                         @removeUndo="onRemoveUndo"
                         @open="() => openOnly(trainingGoal)"
@@ -45,8 +45,6 @@ import Backend from "@/ts/Backend";
 import axios from 'axios';
 import Guide from "@/vue/guides/Guide";
 import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
-import ExistingGuideHistoryEntryVso
-    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import TrainingGoalWidget from "@/ts/vso/TrainingGoalWidget";
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import draggable from 'vuedraggable';
@@ -57,6 +55,7 @@ import TestingGround from "@/vue/TestingGround";
 import Vue from 'vue'
 import {Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
@@ -81,7 +80,7 @@ export default class TrainingGoals extends Vue {
     onRemoveUndo(guideId) {
         const guideIds = this.trainingGoals
             .filter(it => !it.deleted)
-            .map(it => it.guide.guideId);
+            .map(it => it.head.entry.guideId);
         MyTrainingGoalsCache.instance()
             .addAndReorder(guideId, guideIds)
     }
@@ -116,7 +115,7 @@ export default class TrainingGoals extends Vue {
                         .then(goals =>
                             goals.map(dto =>
                                 new TrainingGoalWidget(
-                                    new ExistingGuideHistoryEntryVso(dto.guideHistoryEntry),
+                                    new ExistingGuideHeadVso(dto),
                                     dto.order,
                                     false
                                 )
@@ -132,10 +131,10 @@ export default class TrainingGoals extends Vue {
     ) {
         const newGuideIds = newValue
             .filter(it => !it.deleted)
-            .map(it => it.guide.guideId);
+            .map(it => it.head.entry.guideId);
         const oldGuideIds = oldValue
             .filter(it => !it.deleted)
-            .map(it => it.guide.guideId);
+            .map(it => it.head.entry.guideId);
         for (let index in this.trainingGoals) {
             this.trainingGoals[index].order = this.trainingGoals.length - index - 1;
         }

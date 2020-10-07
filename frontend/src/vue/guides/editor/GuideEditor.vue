@@ -104,7 +104,7 @@
             >
                 <BackgroundHeading>Preview</BackgroundHeading>
                 <GuidePreview
-                        :head="guide"
+                        :head="head"
                         :search-descriptor="guide.entry.descriptor"
                 />
                 <div class="preview-buttons">
@@ -175,7 +175,6 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     $scrollTo: any
 
-
     @Watch('guide', {deep: true})
     @Debounce(500)
     onGuideChange(newValue: NewGuideHeadVso | ExistingGuideHeadVso) {
@@ -189,7 +188,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     }
 
     onDone() {
-        if (this.guide.entry.descriptor.isEmpty) {
+        if (this.head.entry.descriptor.isEmpty) {
             this.forceDescriptorSelection = true;
         } else {
             this.wipeEmptyParts();
@@ -202,9 +201,9 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     publish() {
         (
-            this.guide instanceof ExistingGuideHeadVso
-                ? backend.updateGuide(this.guide.entry.toDto())
-                : backend.createGuide(this.guide.entry.toDto())
+            this.head instanceof ExistingGuideHeadVso
+                ? backend.updateGuide(this.head.entry.toDto())
+                : backend.createGuide(this.head.entry.toDto())
         )
             .then((guideId) => {
                 this.$router.push(`/guide/${guideId}`)
@@ -219,18 +218,18 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     wipeEmptyParts() {
         const emptyIndices = [];
-        for (let index in this.guide.entry.parts) {
-            if (!this.guide.entry.parts.hasOwnProperty(index)) {
+        for (let index in this.head.entry.parts) {
+            if (!this.head.entry.parts.hasOwnProperty(index)) {
                 continue;
             }
-            const part = this.guide.entry.parts[index];
+            const part = this.head.entry.parts[index];
             if (part.isEmpty) {
                 emptyIndices.push(index)
             }
         }
         let shift = 0;
         for (let index of emptyIndices) {
-            this.guide.entry.parts.splice(index - shift, 1);
+            this.head.entry.parts.splice(index - shift, 1);
             shift++;
         }
     }
@@ -239,10 +238,10 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
         return this.$route.params.id === void 0 || this.$route.params.id === 'new'
     }
 
-    declare guide: NewGuideHeadVso | ExistingGuideHeadVso
+    declare head: NewGuideHeadVso | ExistingGuideHeadVso
 
     @AsyncComputedProp()
-    async guide() {
+    async head() {
         if (this.isRouteForNewGuide) {
             const draftGuide = draft.guide;
             if (draftGuide !== null) {
@@ -295,11 +294,11 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     }
 
     get isDoneButtonEnabled(): boolean {
-        return this.guide.entry.parts.find(widget => !widget.isEmpty) !== void 0;
+        return this.head.entry.parts.find(widget => !widget.isEmpty) !== void 0;
     }
 
     get isNewGuide(): boolean {
-        return this.guide instanceof NewGuideHeadVso
+        return this.head instanceof NewGuideHeadVso
     }
 }
 </script>
