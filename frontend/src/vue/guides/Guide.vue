@@ -5,7 +5,10 @@
                 :search-descriptor="searchDescriptor"
                 :creation-time="head.entry.createdAt"
         />
-        <GuideButtons :entry="head.entry"/>
+        <GuideButtons
+                :entry="head.entry"
+                @guideDeactivated="guideId => $emit('guideDeactivated', guideId)"
+        />
         <GuideContent
                 :entry="head.entry"
         />

@@ -24,9 +24,25 @@
         </LinkLikeButton>
         <LinkLikeButton
                 v-if="canEdit"
-                v-hammer:tap="deactivate"
+                v-hammer:tap="() => deletingGuide = true"
         >Delete
         </LinkLikeButton>
+        <ModalPopup
+                v-if="deletingGuide"
+                @close="() => deletingGuide = false"
+        >
+            <div class="deletion-dialogue">
+                <p>
+                    Are you sure you want to delete this guide?<br/>This can't be undone.
+                </p>
+                <p>The guide will remain in training goals of users who have it added</p>
+                <OverwatchButton
+                        type="default"
+                        v-hammer:tap="deactivate"
+                >Confirm deletion
+                </OverwatchButton>
+            </div>
+        </ModalPopup>
     </div>
 </template>
 
@@ -71,6 +87,8 @@ export default class GuideButtons extends Vue {
 
     creatingReport: boolean = false
 
+    deletingGuide: boolean = false
+
 
     auth: Authentication = auth
 
@@ -85,6 +103,10 @@ export default class GuideButtons extends Vue {
             .deactivateGuide(this.entry.guideId)
             .then(() => {
                 this.$emit('guideDeactivated', this.entry.guideId)
+            })
+            .finally(() => {
+                this.deletingGuide = false
+                this.$router.push(`/user/${auth.userId}`)
             })
     }
 
@@ -121,9 +143,14 @@ export default class GuideButtons extends Vue {
         }
     }
 
-    button {
+    & > button {
         padding-left: 1em;
         padding-right: 1em;
+    }
+
+    .deletion-dialogue {
+        padding: 1em;
+        @include overwatch-futura-no-smallcaps;
     }
 }
 

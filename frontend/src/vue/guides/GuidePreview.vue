@@ -5,12 +5,6 @@
                 :search-descriptor="searchDescriptor"
                 :creation-time="nowTime"
         />
-        <div style="text-align: right;">
-            <TrainingGoalButton
-                    type="default"
-            >Add training goal
-            </TrainingGoalButton>
-        </div>
         <GuideContent
                 :entry="head.entry"
         />

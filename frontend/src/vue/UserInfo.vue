@@ -52,6 +52,7 @@
                             :head="head"
                             :show-training-goal-button="true"
                             :search-descriptor="null"
+                            @guideDeactivated="onDeactivated"
                     />
                 </div>
             </div>
@@ -107,6 +108,24 @@ export default class UserInfo extends Vue {
 
     get battleNetLogoutUrl(): string {
         return auth.battleNetLogoutUrl;
+    }
+
+    onDeactivated(guideId: number) {
+        console.log('on deactivated')
+        if (this.userInfo === null || this.userInfo.lastAuthoredGuides === void 0) {
+            throw new Error()
+        }
+        const index: number | undefined = this.userInfo.lastAuthoredGuides.findIndex(
+            g => guideId === g.entry.guideId
+        );
+        if (index === void 0) {
+            throw new Error()
+        } else {
+            this.userInfo.lastAuthoredGuides.splice(
+                index,
+                1
+            )
+        }
     }
 
     logout() {
