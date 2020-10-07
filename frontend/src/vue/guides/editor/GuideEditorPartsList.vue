@@ -126,78 +126,80 @@ export default class GuideEditorPartsList extends Vue {
 @import '~@/assets/css/overwatch-ui.scss';
 @import '~@/assets/css/common.scss';
 
-.guide-parts {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+.parts-list {
+    .guide-parts {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
 
-    .guide-part {
+        .guide-part {
 
-        &.appear-enter {
-            max-height: 3em;
-            overflow: hidden;
+            &.appear-enter {
+                max-height: 3em;
+                overflow: hidden;
+            }
+
+            &.appear-enter-to-text {
+                max-height: 24em;
+                overflow: hidden;
+            }
+
+            &.appear-enter-to-video {
+                max-height: 14em;
+                overflow: hidden;
+            }
+
+            &.appear-enter-active {
+                transition: max-height .2s ease-out,
+                opacity .2s ease-out;
+            }
+
+            &.appear-leave {
+                max-height: 24em;
+                opacity: 1;
+                overflow: hidden;
+            }
+
+            &.appear-leave-to {
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+            }
+
+            &.appear-leave-active {
+                transition: max-height .2s ease-out,
+                opacity .2s ease-out;
+            }
+
+            &:first-child {
+                margin-top: 2em;
+            }
         }
+    }
 
-        &.appear-enter-to-text {
-            max-height: 24em;
-            overflow: hidden;
-        }
+    .part-spawner {
+        margin-top: 2rem;
+        max-height: 15em;
+        opacity: 1;
 
-        &.appear-enter-to-video {
-            max-height: 14em;
-            overflow: hidden;
-        }
+        $new-buttons-animation-duration: .2s;
 
-        &.appear-enter-active {
-            transition: max-height .2s ease-out,
-            opacity .2s ease-out;
-        }
-
-        &.appear-leave {
-            max-height: 24em;
-            opacity: 1;
-            overflow: hidden;
-        }
-
-        &.appear-leave-to {
+        &.new-buttons-appear-enter {
             max-height: 0;
+            margin-top: 0;
             opacity: 0;
             overflow: hidden;
         }
 
-        &.appear-leave-active {
-            transition: max-height .2s ease-out,
-            opacity .2s ease-out;
+        &.new-buttons-appear-enter-to {
+            overflow: hidden;
         }
 
-        &:first-child {
-            margin-top: 2em;
+        &.new-buttons-appear-enter-active {
+            transition: max-height $new-buttons-animation-duration ease-out,
+            margin-top $new-buttons-animation-duration ease-out;
+            transition-delay: .05s, .05s;
         }
-    }
-}
-
-.part-spawner {
-    margin-top: 2rem;
-    max-height: 15em;
-    opacity: 1;
-
-    $new-buttons-animation-duration: .2s;
-
-    &.new-buttons-appear-enter {
-        max-height: 0;
-        margin-top: 0;
-        opacity: 0;
-        overflow: hidden;
-    }
-
-    &.new-buttons-appear-enter-to {
-        overflow: hidden;
-    }
-
-    &.new-buttons-appear-enter-active {
-        transition: max-height $new-buttons-animation-duration ease-out,
-        margin-top $new-buttons-animation-duration ease-out;
-        transition-delay: .05s, .05s;
     }
 }
 

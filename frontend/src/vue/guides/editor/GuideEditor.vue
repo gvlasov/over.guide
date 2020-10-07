@@ -66,7 +66,7 @@
                     >Done
                     </OverwatchButton>
                 </div>
-                <div v-else>
+                <template v-else>
                     <div class="public-private-buttons">
                         <transition name="public-private">
                             <OverwatchButton
@@ -89,15 +89,14 @@
                     <GuideEditorPartsList :entry="guide.entry"/>
                     <OverwatchButton
                             type="main"
-                            class="done-button"
+                            class="preview-button"
                             v-hammer:tap="onDone"
                             data-type="text"
                             :disabled="!isDoneButtonEnabled"
                             :show-buttons="false"
-                            v-bind:style="{position: isDoneButtonEnabled ? 'sticky' :'relative' }"
                     >Preview
                     </OverwatchButton>
-                </div>
+                </template>
             </div>
             <div
                     v-if="preview"
@@ -108,16 +107,18 @@
                         :head="guide"
                         :search-descriptor="guide.entry.descriptor"
                 />
-                <OverwatchButton
-                        type="default"
-                        v-hammer:tap="() => preview = false"
-                >Edit
-                </OverwatchButton>
-                <OverwatchButton
-                        type="main"
-                        v-hammer:tap="publish"
-                >{{ guide.entry.isPublic ? 'publish' : 'save' }}
-                </OverwatchButton>
+                <div class="preview-buttons">
+                    <OverwatchButton
+                            type="default"
+                            v-hammer:tap="() => preview = false"
+                    >Edit
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="main"
+                            v-hammer:tap="publish"
+                    >{{ guide.entry.isPublic ? 'publish' : 'save' }}
+                    </OverwatchButton>
+                </div>
             </div>
         </template>
     </div>
@@ -317,7 +318,10 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-        position: relative;
+
+        .parts-list {
+            z-index: 1;
+        }
 
         .public-private-buttons {
             position: relative;
@@ -385,18 +389,11 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
             }
         }
 
-        .guide-parts {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .done-button {
+        .preview-button {
             width: 100%;
             height: 3em;
-            position: sticky;
-            bottom: 0;
             margin-top: 3em;
+            margin-bottom: 6em;
         }
 
         .descriptor-builder {
@@ -437,6 +434,18 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
         & > button {
             font-size: 2em;
+        }
+
+        .preview-buttons {
+            display: flex;
+            justify-content: stretch;
+            flex-wrap: nowrap;
+            gap: 1em;
+
+            button {
+                flex-grow: 1;
+                height: 3em;
+            }
         }
     }
 }
