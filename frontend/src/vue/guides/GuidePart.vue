@@ -1,5 +1,5 @@
 <template>
-    <div class="guide-part">
+    <div class="guide-part" v-bind:id="elementId(widget)">
         <template v-if="widget.isText">
             <MarkdownGuide
                     v-if="showMarkdownGuide && !widget.editing && widget.isText"
@@ -13,6 +13,22 @@
             >Formatting guide
             </OverwatchButton>
         </template>
+        <div class="move-guide-buttons">
+            <OverwatchPanelButton
+                    :disabled="index === parts.length - 1"
+                    type="default"
+                    v-hammer:tap="() => movePartDown(index)"
+            >
+                <img src="/icons/arrow-down-white.svg"/>
+            </OverwatchPanelButton>
+            <OverwatchPanelButton
+                    :disabled="index === 0"
+                    type="default"
+                    v-hammer:tap="() => movePartUp(index)"
+            >
+                <img src="/icons/arrow-up-white.svg"/>
+            </OverwatchPanelButton>
+        </div>
         <template v-if="!showMarkdownGuide">
             <GuidePartTextEditor
                     v-if="widget.isText"
@@ -46,22 +62,6 @@
                         v-hammer:tap="() => deletePart(index)"
                 >Delete
                 </OverwatchButton>
-                <div class="move-guide-buttons">
-                    <OverwatchPanelButton
-                            :disabled="index === parts.length - 1"
-                            type="default"
-                            v-hammer:tap="() => movePartDown(index)"
-                    >
-                        <img src="/icons/arrow-down-white.svg"/>
-                    </OverwatchPanelButton>
-                    <OverwatchPanelButton
-                            :disabled="index === 0"
-                            type="default"
-                            v-hammer:tap="() => movePartUp(index)"
-                    >
-                        <img src="/icons/arrow-up-white.svg"/>
-                    </OverwatchPanelButton>
-                </div>
             </div>
         </template>
     </div>
@@ -121,6 +121,10 @@ export default class GuidePart extends Vue {
         );
     }
 
+    elementId(widget: GuidePartWidget) {
+        return 'guide-part-' + widget.id;
+    }
+
     movePartUp(index) {
         this.movePart(index, -1)
     }
@@ -133,7 +137,17 @@ export default class GuidePart extends Vue {
         const elem = this.parts[index]
         this.parts.splice(index, 1)
         this.parts.splice(index + d, 0, elem)
-        this.$scrollTo(this.$el)
+        this.$nextTick(() => {
+            const element = document.getElementById(this.elementId(this.widget));
+            console.log(element)
+            this.$scrollTo(
+                element,
+                {
+                    // https://github.com/rigor789/vue-scrollto/issues/36#issuecomment-313853007                }
+                    cancelable: false,
+                }
+            )
+        })
     }
 
     deletePart(index) {
@@ -171,6 +185,34 @@ export default class GuidePart extends Vue {
         }
     }
 
+    .move-guide-buttons {
+        display: block;
+        text-align: right;
+        height: 0;
+        overflow: visible;
+
+        button {
+            & ::v-deep .content {
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            & ::v-deep img {
+                height: .7em;
+            }
+
+            & ::v-deep .background {
+                background-color: rgba(81, 96, 148, 0.7);
+            }
+
+            &[disabled] ::v-deep .background {
+                background-color: transparent;
+            }
+        }
+    }
+
     .guide-part-buttons {
         position: relative;
         margin-top: 2em;
@@ -179,34 +221,6 @@ export default class GuidePart extends Vue {
             font-size: 2em;
         }
 
-        .move-guide-buttons {
-            position: absolute;
-            right: 0;
-            display: inline-block;
-
-            button {
-                height: 100%;
-
-                & ::v-deep .content {
-                    padding: 0;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                & ::v-deep img {
-                    height: .7em;
-                }
-
-                & ::v-deep .background {
-                    background-color: rgba(81, 96, 148, 0.7);
-                }
-
-                &[disabled] ::v-deep .background {
-                    background-color: transparent;
-                }
-            }
-        }
     }
 }
 
