@@ -87,17 +87,16 @@
                         </transition>
                     </div>
                     <GuideEditorPartsList :entry="guide.entry"/>
-                    <div>
-                        <OverwatchButton
-                                type="main"
-                                class="done-button"
-                                v-hammer:tap="onDone"
-                                data-type="text"
-                                :disabled="!isDoneButtonEnabled"
-                                :show-buttons="false"
-                        >Preview
-                        </OverwatchButton>
-                    </div>
+                    <OverwatchButton
+                            type="main"
+                            class="done-button"
+                            v-hammer:tap="onDone"
+                            data-type="text"
+                            :disabled="!isDoneButtonEnabled"
+                            :show-buttons="false"
+                            v-bind:style="{position: isDoneButtonEnabled ? 'sticky' :'relative' }"
+                    >Preview
+                    </OverwatchButton>
                 </div>
             </div>
             <div
@@ -117,7 +116,7 @@
                 <OverwatchButton
                         type="main"
                         v-hammer:tap="publish"
-                >{{guide.entry.isPublic ? 'publish' : 'save'}}
+                >{{ guide.entry.isPublic ? 'publish' : 'save' }}
                 </OverwatchButton>
             </div>
         </template>
@@ -313,12 +312,12 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     display: inline-flex;
     flex-direction: column;
     gap: .6em;
-    padding-bottom: 6em;
 
     .editor {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        position: relative;
 
         .public-private-buttons {
             position: relative;
@@ -392,6 +391,10 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
         }
 
         .done-button {
+            width: 100%;
+            height: 3em;
+            position: sticky;
+            bottom: 0;
             margin-top: 3em;
         }
 
