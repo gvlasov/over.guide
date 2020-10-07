@@ -48,7 +48,11 @@ button {
         pointer-events: none;
 
         & ::v-deep .background {
-            background-color: transparent;
+            background-color: hsla(0, 0%, 20%, .3) !important;
+        }
+
+        & ::v-deep .content {
+            color: hsla(0, 0, 100%, 1)
         }
     }
 }
