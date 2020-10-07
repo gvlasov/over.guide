@@ -321,6 +321,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
         .public-private-buttons {
             position: relative;
+            overflow: hidden;
             height: 3em;
             padding: 1em 0;
 
