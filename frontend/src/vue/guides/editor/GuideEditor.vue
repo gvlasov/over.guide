@@ -95,7 +95,7 @@
                                 data-type="text"
                                 :disabled="!isDoneButtonEnabled"
                                 :show-buttons="false"
-                        >Done
+                        >Preview
                         </OverwatchButton>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                 <OverwatchButton
                         type="main"
                         v-hammer:tap="publish"
-                >Publish
+                >{{guide.entry.isPublic ? 'publish' : 'save'}}
                 </OverwatchButton>
             </div>
         </template>
