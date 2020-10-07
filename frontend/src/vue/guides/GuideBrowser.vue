@@ -1,6 +1,5 @@
 <template>
     <div class="guide-browser root-content-sizer">
-        <LoginNotice>asdfasdf</LoginNotice>
         <LoginRequirement
                 v-if="loginRequired"
                 @back="() => {loginRequired = false}"
@@ -89,12 +88,10 @@ import {Model, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
-import LoginNotice from "@/vue/LoginNotice.vue";
 
 const playingZonePaddingPx = 50;
 @Component({
     components: {
-        LoginNotice,
         LoginRequirement,
         TagBadges,
         HeroTag,
