@@ -107,6 +107,7 @@ export default class Guide extends Vue {
     padding: 1em;
 
     .footer {
+        border-top: 1px solid hsla(0, 0, 100%, .2);
         display: flex;
         flex-wrap: wrap;
         padding-top: 1em;

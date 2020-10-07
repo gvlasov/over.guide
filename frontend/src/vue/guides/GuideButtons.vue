@@ -100,6 +100,9 @@ export default class GuideButtons extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 
 .guide-buttons {
+    border-bottom: 1px solid hsla(0, 0, 100%, .2);
+    padding-top: .3em;
+    padding-bottom: .3em;
     text-align: right;
     margin-bottom: 1rem;
 
@@ -119,7 +122,8 @@ export default class GuideButtons extends Vue {
     }
 
     button {
-        padding: 0 1em;
+        padding-left: 1em;
+        padding-right: 1em;
     }
 }
 

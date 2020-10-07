@@ -1,9 +1,9 @@
 <template>
     <div class="wrap root-content-sizer">
-        <div v-if="$asyncComputed.guide.updating">
-            {{ $asyncComputed.guide.state }}
+        <div v-if="$asyncComputed.head.updating">
+            {{ $asyncComputed.head.state }}
             <BackgroundHeading>Loading</BackgroundHeading>
-            {{ JSON.stringify($asyncComputed.guide) }}
+            {{ JSON.stringify($asyncComputed.head) }}
         </div>
         <div v-else-if="guideNotFound">
             <BackgroundHeading>Guide not found</BackgroundHeading>
@@ -11,7 +11,7 @@
         <template v-else>
             <ParameterDescriptorSynchronizer
                     v-if="isNewGuide"
-                    v-model="guide.entry.descriptor"
+                    v-model="head.entry.descriptor"
                     base-path="/guide-editor/"
             />
             <LoginRequirement
@@ -35,17 +35,17 @@
                         class="root-content-panel-wrap"
                 >
                     <DescriptorBuilder
-                            :descriptor="guide.entry.descriptor"
+                            :descriptor="head.entry.descriptor"
                             :search-button-enabled="false"
                             class="descriptor-builder"
                             v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
                     >
                         <div
-                                v-if="!guide.entry.descriptor.isEmpty"
+                                v-if="!head.entry.descriptor.isEmpty"
                                 class="similar-tag-guides-wrap"
                         >
                             <SimilarTagGuides
-                                    :descriptor="guide.entry.descriptor"
+                                    :descriptor="head.entry.descriptor"
                             />
                         </div>
                     </DescriptorBuilder>
@@ -61,7 +61,7 @@
                     </OverwatchButton>
                     <OverwatchButton
                             type="main"
-                            :disabled="guide.entry.descriptor.isEmpty"
+                            :disabled="head.entry.descriptor.isEmpty"
                             v-hammer:tap="() => {forceDescriptorSelection = false; preview = true}"
                     >Done
                     </OverwatchButton>
@@ -70,10 +70,10 @@
                     <div class="public-private-buttons">
                         <transition name="public-private">
                             <OverwatchButton
-                                    v-if="guide.entry.isPublic"
+                                    v-if="head.entry.isPublic"
                                     key="public"
                                     type="default"
-                                    v-hammer:tap="() => guide.entry.isPublic = false"
+                                    v-hammer:tap="() => head.entry.isPublic = false"
                             >public
                             </OverwatchButton>
                             <OverwatchButton
@@ -81,12 +81,12 @@
                                     key="private"
                                     type="default"
                                     class="private"
-                                    v-hammer:tap="() => guide.entry.isPublic = true"
+                                    v-hammer:tap="() => head.entry.isPublic = true"
                             >private
                             </OverwatchButton>
                         </transition>
                     </div>
-                    <GuideEditorPartsList :entry="guide.entry"/>
+                    <GuideEditorPartsList :entry="head.entry"/>
                     <OverwatchButton
                             type="main"
                             class="preview-button"
@@ -105,7 +105,7 @@
                 <BackgroundHeading>Preview</BackgroundHeading>
                 <GuidePreview
                         :head="head"
-                        :search-descriptor="guide.entry.descriptor"
+                        :search-descriptor="head.entry.descriptor"
                 />
                 <div class="preview-buttons">
                     <OverwatchButton
@@ -116,7 +116,7 @@
                     <OverwatchButton
                             type="main"
                             v-hammer:tap="publish"
-                    >{{ guide.entry.isPublic ? 'publish' : 'save' }}
+                    >{{ head.entry.isPublic ? 'publish' : 'save' }}
                     </OverwatchButton>
                 </div>
             </div>

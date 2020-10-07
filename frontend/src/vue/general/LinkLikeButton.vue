@@ -31,5 +31,6 @@ button {
     }
     background-color: transparent;
     border: 0;
+    padding-bottom: .2em;
 }
 </style>
