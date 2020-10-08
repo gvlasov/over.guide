@@ -81,8 +81,9 @@ export default class CommentsSection extends Vue {
 .comment-section {
     max-width: 100%;
 
-    .comment-form {
+    & > .comment-form {
         justify-content: flex-end;
+        padding-bottom: .4em;
 
         button.close-button {
             order: 0;

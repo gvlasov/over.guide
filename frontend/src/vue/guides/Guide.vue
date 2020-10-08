@@ -142,6 +142,7 @@ export default class Guide extends Vue {
             text-align: right;
             flex-grow: 1;
             flex-basis: auto;
+            padding-top: 1em;
 
             &.uncollapsed {
                 flex-basis: 100%;
