@@ -126,6 +126,7 @@ describe(
                         postId: guide.id,
                         postType: PostTypeId.Guide,
                         content: commentText,
+                        parentId: null,
                     } as CommentCreateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.CREATED)

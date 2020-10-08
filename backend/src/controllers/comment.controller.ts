@@ -113,15 +113,18 @@ export class CommentController {
                 updatedAt: new Date().toISOString(),
                 authorId: user.id,
             },
-            {
-                include: [
-                    {
-                        model: User,
-                        as: 'author'
-                    }
-                ]
-            }
+
         )
+            .then(comment => comment.reload(
+                {
+                    include: [
+                        {
+                            model: User,
+                            as: 'author'
+                        }
+                    ]
+                }
+            ))
             .then(comment => {
                 response.status(HttpStatus.CREATED)
                 response.send(comment.toDto(0))
