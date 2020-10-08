@@ -20,7 +20,7 @@ import {Sequelize} from "sequelize-typescript";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
 import {QueryTypes} from "sequelize";
-import CommentReadDto from "data/dto/CommentReadDto";
+import {CommentReadDto} from "data/dto/CommentReadDto";
 import {User} from "src/database/models/User";
 import PostTypeId from "data/PostTypeId";
 
@@ -47,6 +47,7 @@ export class CommentController {
                            Comment.content,
                            Comment.createdAt,
                            Comment.updatedAt,
+                           (Comment.deactivatedById is not null or Comment.deactivatedAt is not null) as deleted,
                            U.id         as authorId,
                            U.name       as authorName,
                            count(V.id) as votes
@@ -55,7 +56,6 @@ export class CommentController {
                              left join User U on Comment.authorId = U.id
                     where Comment.postId = :postId
                       and Comment.postType = :postType
-                      and Comment.deactivatedAt is null
                     group by Comment.id
             `,
             {
@@ -71,6 +71,9 @@ export class CommentController {
                     comment.author = {}
                     comment.author.id = comment.authorId
                     comment.author.name = comment.authorName
+                    if (comment.deleted) {
+                        delete comment.content
+                    }
                     delete comment.authorId
                     delete comment.authorName
                     return comment
@@ -86,22 +89,39 @@ export class CommentController {
         @Body() dto: CommentCreateDto,
     ) {
         const user = await this.authService.getUser(request)
-        Comment.create({
-            ...dto,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            authorId: user.id,
-        })
-            .then((comment: Comment) =>
-                comment.reload({
-                    include: [
-                        {
-                            model: User,
-                            as: 'author'
-                        }
-                    ]
-                })
+        if (dto.parentId !== null) {
+            await Comment.findOne(
+                {
+                    where: {
+                        id: dto.parentId,
+                        deactivatedById: null,
+                        deactivatedAt: null,
+                    }
+                }
             )
+                .then(comment => {
+                    if (comment === null) {
+                        response.status(HttpStatus.NOT_FOUND)
+                        response.send()
+                    }
+                })
+        }
+        Comment.create(
+            {
+                ...dto,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                authorId: user.id,
+            },
+            {
+                include: [
+                    {
+                        model: User,
+                        as: 'author'
+                    }
+                ]
+            }
+        )
             .then(comment => {
                 response.status(HttpStatus.CREATED)
                 response.send(comment.toDto(0))
@@ -125,6 +145,8 @@ export class CommentController {
                 where: {
                     id: dto.id,
                     authorId: user.id,
+                    deactivatedById: null,
+                    deactivatedAt: null,
                 },
             }
         )
@@ -149,7 +171,11 @@ export class CommentController {
         this.authService.getUser(request)
             .then(
                 user =>
-                    Comment.destroy(
+                    Comment.update(
+                        {
+                            deactivatedById: user.id,
+                            deactivatedAt: new Date().toISOString(),
+                        },
                         {
                             where: {
                                 id: id,
@@ -159,7 +185,7 @@ export class CommentController {
                     )
             )
             .then(deletedCount => {
-                if (deletedCount === 0) {
+                if (deletedCount[0] === 0) {
                     response.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     response.send()
                 } else {

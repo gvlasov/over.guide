@@ -290,7 +290,11 @@ describe(
                     .then(async () => {
                         expect(
                             (await Comment.findAndCountAll()).count
-                        ).toStrictEqual(0)
+                        ).toStrictEqual(1)
+                        comment.reload().then(comment => {
+                            expect(comment.deactivatedById).toStrictEqual(user.id)
+                            expect(comment.deactivatedAt).not.toBeNull()
+                        })
                     })
             });
             it('user can\'t delete other users\' comments', async () => {
@@ -320,15 +324,103 @@ describe(
                     createdAt: currentTime,
                     updatedAt: currentTime,
                 })
-                expect(
-                    (await Comment.findAndCountAll()).count
-                ).toStrictEqual(1)
                 await request(ctx.app.getHttpServer())
                     .delete(`/comment/${comment.id}`)
                     .send()
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .then(async () => {
+                    .then(async () => comment.reload())
+                    .then(comment => {
+                        expect(comment.deactivatedAt).toBeNull()
+                        expect(comment.deactivatedById).toBeNull()
+                    })
+            });
+            it('deleted comment and its tree are accessible with no content in deleted comment', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne()
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const currentTime = new Date().toISOString();
+                const rootComment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'root',
+                    authorId: user.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                    deactivatedById: user.id,
+                    deactivatedAt: new Date().toISOString(),
+                })
+                const childComment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: rootComment.id,
+                    content: 'child',
+                    authorId: user.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                })
+                expect(
+                    (await Comment.findAndCountAll()).count
+                ).toStrictEqual(2)
+                await request(ctx.app.getHttpServer())
+                    .get(`/comment/${PostTypeId.Guide}/${guide.id}`)
+                    .send()
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(async (response) => {
+                        expect(response.body[0].deleted).toStrictEqual(1)
+                        expect(response.body[0].content).toStrictEqual(void 0)
+                    })
+            });
+            it('can\'t reply to deleted comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne()
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const currentTime = new Date().toISOString();
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'root',
+                    authorId: user.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                    deactivatedById: user.id,
+                    deactivatedAt: new Date().toISOString(),
+                })
+                expect(
+                    (await Comment.findAndCountAll()).count
+                ).toStrictEqual(1)
+                await request(ctx.app.getHttpServer())
+                    .post(`/comment/create`)
+                    .send({
+                        postId: comment.postId,
+                        postType: comment.postType,
+                        parentId: comment.id,
+                        content: 'reply',
+                    } as CommentCreateDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.NOT_FOUND)
+                    .then(async (response) => {
                         expect(
                             (await Comment.findAndCountAll()).count
                         ).toStrictEqual(1)

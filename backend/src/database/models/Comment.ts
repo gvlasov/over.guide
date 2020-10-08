@@ -11,7 +11,8 @@ import {
 import {DataTypes} from "sequelize";
 import PostTypeId from "data/PostTypeId";
 import {User} from "src/database/models/User";
-import CommentReadDto from "data/dto/CommentReadDto";
+import AliveCommentReadDto from "data/dto/AliveCommentReadDto";
+import DeletedCommentReadDto from "data/dto/DeletedCommentReadDto";
 
 @Table({
     createdAt: true,
@@ -73,17 +74,25 @@ export class Comment extends Model<Comment> {
     @BelongsTo(() => User, 'deactivatedById')
     deactivatedBy: User
 
-    toDto(votes: number): CommentReadDto {
+    toDto(votes: number): AliveCommentReadDto {
+        return {
+            ...this.toDeletedDto(votes),
+            content: this.content,
+            deleted: false,
+        }
+    }
+
+    toDeletedDto(votes: number): DeletedCommentReadDto {
         return {
             id: this.id,
             author: this.author.toDto(),
-            content: this.content,
             createdAt: this.createdAt.toISOString(),
             parentId: this.parentId,
             postId: this.postId,
             postType: this.postType,
             updatedAt: this.updatedAt.toISOString(),
             votes,
+            deleted: true,
         }
     }
 

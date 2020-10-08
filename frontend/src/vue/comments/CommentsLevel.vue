@@ -6,6 +6,7 @@
         >
             <div class="aside">
                 <Upvoter
+                        v-bind:style="{visibility: comment.deleted ? 'hidden' : 'visible'}"
                         :post-id="comment.id"
                         :post-type-id="PostTypeId.Comment"
                         :initial-upvoted="false"

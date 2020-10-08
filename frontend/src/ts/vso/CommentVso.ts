@@ -1,4 +1,4 @@
-import CommentReadDto from "data/dto/CommentReadDto";
+import {CommentReadDto} from "data/dto/CommentReadDto";
 import UserVso from "@/ts/vso/UserVso";
 
 export default class CommentVso {
@@ -7,23 +7,25 @@ export default class CommentVso {
     readonly postId: number
     readonly postType: number
     readonly parentId: number|null
-    readonly content: string
+    readonly content: string|null
     readonly createdAt: Date
     readonly updatedAt: Date
     votes: number
     readonly author: UserVso
     readonly children: CommentVso[]
+    deleted: boolean
 
     constructor(dto: CommentReadDto, children: CommentVso[]) {
         this.id = dto.id;
         this.postId = dto.postId;
         this.postType = dto.postType;
         this.parentId = dto.parentId;
-        this.content = dto.content;
+        this.content = dto.deleted ? null : dto.content;
         this.createdAt = new Date(dto.createdAt)
         this.updatedAt = new Date(dto.updatedAt)
         this.votes = dto.votes;
         this.author = new UserVso(dto.author)
+        this.deleted = dto.deleted;
         this.children = children;
     }
 

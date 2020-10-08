@@ -1,13 +1,4 @@
-import UserDto from "data/dto/UserDto";
+import AliveCommentReadDto from "data/dto/AliveCommentReadDto";
+import DeletedCommentReadDto from "data/dto/DeletedCommentReadDto";
 
-export default interface CommentReadDto {
-    readonly id: number
-    readonly parentId: number | null
-    readonly postId: number
-    readonly postType: number
-    readonly content: string
-    readonly createdAt: string
-    readonly updatedAt: string
-    readonly votes: number
-    readonly author: UserDto
-}
+export type CommentReadDto = AliveCommentReadDto | DeletedCommentReadDto

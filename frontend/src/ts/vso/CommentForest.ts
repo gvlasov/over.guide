@@ -1,4 +1,4 @@
-import CommentReadDto from "data/dto/CommentReadDto";
+import {CommentReadDto} from "data/dto/CommentReadDto";
 import CommentVso from "@/ts/vso/CommentVso";
 
 type CommentChildrenRegistry = {

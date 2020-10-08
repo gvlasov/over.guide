@@ -1,5 +1,8 @@
 <template>
-    <div class="comment">
+    <div
+            class="comment"
+            v-bind:class="{deleted: comment.deleted}"
+    >
         <div class="heading">
             <UserLink
                     :user="comment.author"
@@ -9,25 +12,31 @@
             <div class="separator">·</div>
             <RelativeTime class="time" :time="comment.updatedAt"/>
         </div>
-        <div class="content">
+        <div
+                v-if="!comment.deleted"
+                class="content"
+        >
             {{ comment.content }}
+        </div>
+        <div v-else class="deleted-comment">
+            Deleted
         </div>
         <div
                 class="buttons"
         >
             <button
-                    v-if="auth.loggedIn"
+                    v-if="!comment.deleted && auth.loggedIn"
                     class="reply-button"
                     v-hammer:tap="() => showReplyForm = !showReplyForm"
             ><img src="/icons/arrow-right-white.svg"/> Reply
             </button>
             <button
-                    v-if="comment.author.id === auth.userId"
+                    v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showReplyForm = !showReplyForm"
             >Edit
             </button>
             <button
-                    v-if="comment.author.id === auth.userId"
+                    v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showDeleteDialogue = !showDeleteDialogue"
             >Delete
             </button>
@@ -47,7 +56,7 @@
                 </div>
             </ModalPopup>
             <button
-                    v-if="comment.author.id === auth.userId"
+                    v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showReportDialogue = !showReportDialogue"
             >Report
             </button>
@@ -146,6 +155,7 @@ export default class Comment extends Vue {
         )
             .finally(() => {
                 this.showDeleteDialogue = false
+                this.comment.deleted = true;
                 this.$emit('deleted')
             })
     }
@@ -248,6 +258,10 @@ $strong-color: white;
     .deletion-dialogue {
         padding: 1em;
         @include overwatch-futura-no-smallcaps;
+    }
+
+    &.deleted {
+        background-color: hsla(0, 66%, 41%, .3);
     }
 }
 
