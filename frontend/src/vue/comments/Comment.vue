@@ -28,9 +28,24 @@
             </button>
             <button
                     v-if="comment.author.id === auth.userId"
-                    v-hammer:tap="() => showReplyForm = !showReplyForm"
+                    v-hammer:tap="() => showDeleteDialogue = !showDeleteDialogue"
             >Delete
             </button>
+            <ModalPopup
+                    v-if="showDeleteDialogue"
+                    @close="() => showDeleteDialogue = false"
+            >
+                <div class="deletion-dialogue">
+                    <p>
+                        Are you sure you want to delete this comment?<br/>This can't be undone.
+                    </p>
+                    <OverwatchButton
+                            type="default"
+                            v-hammer:tap="deleteComment"
+                    >Confirm deletion
+                    </OverwatchButton>
+                </div>
+            </ModalPopup>
             <button
                     v-if="comment.author.id === auth.userId"
                     v-hammer:tap="() => showReportDialogue = !showReportDialogue"
@@ -45,7 +60,7 @@
                         post-type-name="comment"
                         :reasons="commentReportReasons"
                         @close="() => showReportDialogue = false"
-                    />
+                />
             </ModalPopup>
         </div>
         <div
@@ -81,6 +96,7 @@ import ReportCreator from "@/vue/guides/ReportCreator.vue";
 import PostTypeId from "data/PostTypeId";
 import reportReasons from 'data/reportReasons'
 import ReportReasonId from "data/ReportReasonId";
+import Backend from "@/ts/Backend";
 
 const commentReportReasons = [
     reportReasons.get(ReportReasonId.Spam),
@@ -114,12 +130,24 @@ export default class Comment extends Vue {
 
     showReportDialogue: boolean = false
 
+    showDeleteDialogue: boolean = false
+
     auth: Authentication = Authentication.instance
 
     showReplyForm = this.initialShowReplyForm
 
     get isOpPost(): boolean {
         return this.post.authorId !== this.comment.author.id
+    }
+
+    deleteComment() {
+        Backend.instance.deleteComment(
+            this.comment.id,
+        )
+            .finally(() => {
+                this.showDeleteDialogue = false
+                this.$emit('deleted')
+            })
     }
 
 }
@@ -159,7 +187,7 @@ $strong-color: white;
         resize: vertical;
     }
 
-    button {
+    .buttons > button {
         font-size: 1em;
         font-weight: bold;
         background: none;
@@ -215,6 +243,11 @@ $strong-color: white;
             flex-grow: 0;
             margin-left: 2em;
         }
+    }
+
+    .deletion-dialogue {
+        padding: 1em;
+        @include overwatch-futura-no-smallcaps;
     }
 }
 

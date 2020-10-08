@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     HttpStatus,
     Inject,
@@ -133,6 +134,36 @@ export class CommentController {
                     response.send()
                 } else {
                     response.status(HttpStatus.ACCEPTED)
+                    response.send()
+                }
+            })
+    }
+
+    @Delete(':id')
+    @UseGuards(AuthenticatedGuard)
+    async deleteComment(
+        @Res() response: Response,
+        @Req() request: Request,
+        @Param('id') id: number,
+    ) {
+        this.authService.getUser(request)
+            .then(
+                user =>
+                    Comment.destroy(
+                        {
+                            where: {
+                                id: id,
+                                authorId: user.id,
+                            },
+                        }
+                    )
+            )
+            .then(deletedCount => {
+                if (deletedCount === 0) {
+                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    response.send()
+                } else {
+                    response.status(HttpStatus.OK)
                     response.send()
                 }
             })

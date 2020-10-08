@@ -256,6 +256,84 @@ describe(
                     } as CommentCreateDto)
                     .expect(HttpStatus.FORBIDDEN)
             });
+            it('user can delete his comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne()
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const currentTime = new Date().toISOString();
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'asdf',
+                    authorId: user.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                })
+                expect(
+                    (await Comment.findAndCountAll()).count
+                ).toStrictEqual(1)
+                await request(ctx.app.getHttpServer())
+                    .delete(`/comment/${comment.id}`)
+                    .send()
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                    .then(async () => {
+                        expect(
+                            (await Comment.findAndCountAll()).count
+                        ).toStrictEqual(0)
+                    })
+            });
+            it('user can\'t delete other users\' comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne()
+                const anotherUser = await User.create({
+                    name: 'another user',
+                    battleNetUserId: '1234213452'
+                })
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const currentTime = new Date().toISOString();
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: 'asdf',
+                    authorId: anotherUser.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                })
+                expect(
+                    (await Comment.findAndCountAll()).count
+                ).toStrictEqual(1)
+                await request(ctx.app.getHttpServer())
+                    .delete(`/comment/${comment.id}`)
+                    .send()
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .then(async () => {
+                        expect(
+                            (await Comment.findAndCountAll()).count
+                        ).toStrictEqual(1)
+                    })
+            });
         }
     )
 )

@@ -338,5 +338,17 @@ export default class Backend {
         )
     }
 
+    async deleteComment(
+        commentId: number,
+    ): Promise<void> {
+        return this.query(
+            'DELETE',
+            `/comment/${commentId}`,
+            {},
+            response => {
+            }
+        )
+    }
+
 }
 
