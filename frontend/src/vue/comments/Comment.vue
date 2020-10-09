@@ -32,7 +32,7 @@
             </button>
             <button
                     v-if="!comment.deleted && comment.author.id === auth.userId"
-                    v-hammer:tap="() => showReplyForm = !showReplyForm"
+                    v-hammer:tap="() => showEditForm = !showEditForm"
             >Edit
             </button>
             <button
@@ -73,16 +73,23 @@
             </ModalPopup>
         </div>
         <div
-                v-if="showReplyForm"
+                v-if="showReplyForm || showEditForm"
                 class="form-wrap"
         >
             <CommentHider/>
-            <CommentForm
+            <CreateCommentForm
+                    v-if="showReplyForm"
                     :post="post"
                     :parent="comment"
                     :comments-level="comment.children"
                     @reply="() => showReplyForm = !showReplyForm"
                     @cancel="() => showReplyForm = false"
+            />
+            <EditCommentForm
+                    v-else-if="showEditForm"
+                    :comment="comment"
+                    @edit="() => showEditForm = !showEditForm"
+                    @cancel="() => showEditForm = false"
             />
         </div>
     </div>
@@ -106,6 +113,8 @@ import PostTypeId from "data/PostTypeId";
 import reportReasons from 'data/reportReasons'
 import ReportReasonId from "data/ReportReasonId";
 import Backend from "@/ts/Backend";
+import CreateCommentForm from "@/vue/comments/CreateCommentForm.vue";
+import EditCommentForm from "@/vue/comments/EditCommentForm.vue";
 
 const commentReportReasons = [
     reportReasons.get(ReportReasonId.Spam),
@@ -114,6 +123,8 @@ const commentReportReasons = [
 
 @Component({
     components: {
+        EditCommentForm,
+        CreateCommentForm,
         ReportCreator,
         ModalPopup,
         CommentHider,
@@ -144,6 +155,8 @@ export default class Comment extends Vue {
     auth: Authentication = Authentication.instance
 
     showReplyForm = this.initialShowReplyForm
+
+    showEditForm = false
 
     get isOpPost(): boolean {
         return this.post.authorId !== this.comment.author.id

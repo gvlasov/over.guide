@@ -238,6 +238,50 @@ describe(
                         expect(comment.content).toBe(oldCommentText)
                     })
             });
+            it('can\'t edit deleted comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne();
+                const otherUser = await User.create({
+                    name: 'another user',
+                    battleNetUserId: '32145235',
+                })
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const oldCommentText = 'hello';
+                const currentTime = new Date().toISOString();
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: oldCommentText,
+                    authorId: otherUser.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                    deactivatedById: user.id,
+                    deactivatedAt: new Date().toISOString(),
+                })
+                const newCommentText = oldCommentText + '_updated';
+                await request(ctx.app.getHttpServer())
+                    .post(`/comment/edit`)
+                    .send({
+                        id: comment.id,
+                        content: newCommentText,
+                    } as CommentUpdateDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .then(response => comment.reload())
+                    .then(comment => {
+                        expect(comment.content).toBe(oldCommentText)
+                    })
+            });
             it('unauthorized users can\'t create comments', async () => {
                 await ctx.fixtures(
                     singleUserFixture,

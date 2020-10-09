@@ -16,13 +16,14 @@ import OrderedGuideHeadDto from "data/dto/OrderedGuideHeadDto";
 import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
-import CommentReadDto from "data/dto/CommentReadDto";
+import {CommentReadDto} from "data/dto/CommentReadDto";
 import PostVso from "@/ts/vso/PostVso";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import PostTypeId from "data/PostTypeId";
 import VoteDto from "data/dto/VoteDto";
 import ReportReasonId from "data/ReportReasonId";
 import ReportDto from "data/dto/ReportDto";
+import CommentUpdateDto from "data/dto/CommentUpdateDto";
 
 const querystring = require('query-string')
 
@@ -345,6 +346,22 @@ export default class Backend {
             'DELETE',
             `/comment/${commentId}`,
             {},
+            response => {
+            }
+        )
+    }
+
+    async editComment(
+        commentId: number,
+        content: string
+    ): Promise<void> {
+        return this.query(
+            'POST',
+            `/comment/edit`,
+            {
+                id: commentId,
+                content,
+            } as CommentUpdateDto,
             response => {
             }
         )

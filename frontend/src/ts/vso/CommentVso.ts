@@ -7,7 +7,7 @@ export default class CommentVso {
     readonly postId: number
     readonly postType: number
     readonly parentId: number|null
-    readonly content: string|null
+    content: string|null
     readonly createdAt: Date
     readonly updatedAt: Date
     votes: number

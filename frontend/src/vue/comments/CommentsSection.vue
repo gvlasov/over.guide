@@ -1,6 +1,6 @@
 <template>
     <div class="comment-section" v-resize="onResize">
-        <CommentForm
+        <CreateCommentForm
                 :post="post"
                 :comments-level="firstLevelComments"
                 :parent="post"
@@ -29,11 +29,14 @@ import AsyncComputedProp from 'vue-async-computed-decorator'
 import CommentForest from "@/ts/vso/CommentForest";
 import CommentsLevel from "@/vue/comments/CommentsLevel.vue";
 import PostVso from "@/ts/vso/PostVso";
-import CommentForm from "@/vue/comments/CommentForm.vue";
 import Backend from "@/ts/Backend";
+import CreateCommentForm from "@/vue/comments/CreateCommentForm.vue";
 
 @Component({
-    components: {CommentForm, CommentsLevel}
+    components: {
+        CreateCommentForm,
+        CommentsLevel,
+    }
 })
 export default class CommentsSection extends Vue {
     @Prop({required: true})
@@ -50,9 +53,7 @@ export default class CommentsSection extends Vue {
     clientWidth: number = 0
 
     get lastNestingLevel(): number {
-        const level = (this.clientWidth / this.fontSizePx - 32) / 3;
-        console.log(level)
-        return level
+        return (this.clientWidth / this.fontSizePx - 32) / 3
     }
 
     get fontSizePx(): number {

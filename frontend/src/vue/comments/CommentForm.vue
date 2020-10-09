@@ -15,9 +15,9 @@
         <OverwatchButton
                 v-if="auth.loggedIn"
                 type="main"
-                v-hammer:tap="sendReply"
+                v-hammer:tap="onSubmitTap"
                 :disabled="message.length === 0"
-        >reply
+        >{{ submitButtonText }}
         </OverwatchButton>
         <OverwatchButton
                 type="default"
@@ -33,21 +33,16 @@ import Vue from 'vue'
 import Component from "vue-class-component";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import {Prop, Ref} from "vue-property-decorator";
-import PostVso from "@/ts/vso/PostVso";
 import Backend from "@/ts/Backend";
 import axios from 'axios';
-import CommentCreateDto from "data/dto/CommentCreateDto";
-import CommentVso from "@/ts/vso/CommentVso";
 import CommentHider from "@/vue/comments/CommentHider.vue";
 import Authentication from "@/ts/Authentication";
-import BattlenetAuthButton from "@/vue/BattlenetAuthButton.vue";
 import LoginRequirement from "@/vue/LoginRequirement.vue";
 
 const backend = new Backend(axios)
 @Component({
     components: {
         LoginRequirement,
-        BattlenetAuthButton,
         CommentHider,
         OverwatchButton,
     }
@@ -56,41 +51,19 @@ export default class CommentForm extends Vue {
 
     @Ref('textarea') textarea: HTMLTextAreaElement
 
-    @Prop({required: true})
-    post: PostVso
-
-    @Prop({default: false})
-    disabled: boolean
-
-    @Prop({required: true})
-    parent: CommentVso | PostVso
-
-    @Prop({required: true})
-    commentsLevel: CommentVso[]
-
     @Prop({default: 'cancel'})
     closeButtonText: string
+
+    @Prop({required: true})
+    submitButtonText: string
 
     message: string = ''
 
     auth: Authentication = Authentication.instance
 
-    sendReply(e) {
-        this.$emit('reply')
-        e.preventDefault()
-        backend
-            .createComment({
-                postType: this.post.postType,
-                postId: this.post.postId,
-                parentId: this.parent instanceof CommentVso ? this.parent.id : null,
-                content: this.message,
-            } as CommentCreateDto)
-            .then((dto) => {
-                this.message = '';
-                this.post.commentsCount++;
-                return this.commentsLevel.unshift(new CommentVso(dto, []))
-            })
-        return false
+    onSubmitTap(e) {
+        this.$emit('submit', this.message);
+        this.message = ''
     }
 
     onSubmit(e) {
