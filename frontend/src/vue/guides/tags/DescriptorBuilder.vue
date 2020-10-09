@@ -1,6 +1,6 @@
 <template>
     <div class="descriptor-builder">
-        <TagBuilder
+        <HeroTagBuilder
                 :descriptor="descriptor"
                 @done="() => $emit('descriptorChange', this.descriptor)"
         />
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import TagBuilder from "@/vue/guides/tags/hero/TagBuilder";
+import HeroTagBuilder from "@/vue/guides/tags/hero/HeroTagBuilder";
 import ThematicTagInput from "@/vue/guides/ThematicTagInput";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import OverwatchButton from "@/vue/OverwatchButton";
@@ -23,7 +23,7 @@ import {Prop} from "vue-property-decorator";
 @Component({
     components: {
         OverwatchButton,
-        TagBuilder,
+        HeroTagBuilder,
         ThematicTagInput,
     },
 })

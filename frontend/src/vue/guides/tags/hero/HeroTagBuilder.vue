@@ -108,7 +108,7 @@ import Component from "vue-class-component";
         TagGroupHeroes,
     },
 })
-export default class TagBuilder extends Vue {
+export default class HeroTagBuilder extends Vue {
     @Prop({required: true})
     descriptor: GuideDescriptorVso
 
