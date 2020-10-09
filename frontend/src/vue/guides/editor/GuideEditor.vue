@@ -35,7 +35,7 @@
                         class="root-content-panel-wrap"
                 >
                     <DescriptorBuilder
-                            :descriptor="head.entry.descriptor"
+                            v-model="head.entry.descriptor"
                             :search-button-enabled="false"
                             class="descriptor-builder"
                             v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
