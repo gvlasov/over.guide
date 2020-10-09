@@ -20,7 +20,7 @@
                                 v-for="group in heroGroups.groups"
                                 class="role-group"
                         >
-                            <TagBuilderRosterPortrait
+                            <HeroTagBuilderRosterPortrait
                                     v-for="hero in group"
                                     v-bind:key="hero.dataName"
                                     ref="portraits"
@@ -61,7 +61,7 @@
                         <div
                                 class="tag-builder-roster-tag-wrap"
                                 style="">
-                            <TagBuilderRosterTag
+                            <HeroTagBuilderRosterTag
                                     :descriptor="draftDescriptor"
                                     class="descriptor-mirror"
                                     :selected-position="gamerPosition"
@@ -92,15 +92,16 @@
 <script lang="ts">
 import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
-import TagBuilderRosterPortrait
-    from "@/vue/guides/tags/hero/TagBuilderRosterPortrait";
+import HeroTagBuilderRosterPortrait
+    from "@/vue/guides/tags/hero/HeroTagBuilderRosterPortrait";
 import AbilitySelect from "@/vue/guides/tags/hero/AbilitySelect";
 import Roster_SelectedHeroesMixin
     from "@/vue/roster/Roster_SelectedHeroesMixin";
 import HeroGroupsByRole from "@/ts/HeroGroupsByRole";
 import AbilityIcon from "@/vue/AbilityIcon";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
-import TagBuilderRosterTag from "@/vue/guides/tags/hero/TagBuilderRosterTag"
+import HeroTagBuilderRosterTag
+    from "@/vue/guides/tags/hero/HeroTagBuilderRosterTag"
 import OverwatchButton from "@/vue/OverwatchButton";
 import Role from "data/Role";
 import GamerPositionVso from "@/ts/vso/GamerPositionVso";
@@ -114,13 +115,13 @@ import TagGroupVso from "@/ts/vso/TagGroupVso";
         OverwatchButton,
         AbilityIcon,
         AbilitySelect,
-        TagBuilderRosterPortrait,
+        HeroTagBuilderRosterPortrait,
         TagGroupBackground,
         TagGroupFrame,
-        TagBuilderRosterTag,
+        HeroTagBuilderRosterTag,
     },
 })
-export default class TagBuilderRoster extends mixins(Roster_SelectedHeroesMixin) {
+export default class HeroTagBuilderRoster extends mixins(Roster_SelectedHeroesMixin) {
 
     @Model('descriptorChange', {required: true})
     descriptor: GuideDescriptorVso

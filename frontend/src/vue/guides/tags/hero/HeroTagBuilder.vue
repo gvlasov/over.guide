@@ -63,21 +63,21 @@
                 </template>
             </TagGroupFrame>
         </div>
-        <TagBuilderRoster
+        <HeroTagBuilderRoster
                 v-if="selecting && selecting.isPlayer"
                 :gamer-position="gamerPositions.players"
                 v-model="localDescriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
                 @save="onRosterDone"
         />
-        <TagBuilderRoster
+        <HeroTagBuilderRoster
                 v-if="selecting && selecting.isTeammate"
                 :gamer-position="gamerPositions.teammates"
                 v-model="localDescriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
                 @save="onRosterDone"
         />
-        <TagBuilderRoster
+        <HeroTagBuilderRoster
                 v-if="selecting && selecting.isEnemy"
                 v-model="localDescriptor"
                 :gamer-position="gamerPositions.enemies"
@@ -91,7 +91,7 @@
 import TagGroupFrame from "@/vue/guides/tags/hero/TagGroupFrame";
 import TagGroupBackground from "@/vue/guides/tags/hero/TagGroupBackground";
 import TagGroupInvite from "@/vue/guides/tags/hero/TagGroupInvite";
-import TagBuilderRoster from "@/vue/guides/tags/hero/TagBuilderRoster";
+import HeroTagBuilderRoster from "@/vue/guides/tags/hero/HeroTagBuilderRoster";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 import GamerPositionVso from "@/ts/vso/GamerPositionVso";
@@ -104,7 +104,7 @@ import Component from "vue-class-component";
         TagGroupInvite,
         TagGroupBackground,
         TagGroupFrame,
-        TagBuilderRoster,
+        HeroTagBuilderRoster,
         TagGroupHeroes,
     },
 })

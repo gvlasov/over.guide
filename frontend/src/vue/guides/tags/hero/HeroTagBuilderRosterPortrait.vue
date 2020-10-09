@@ -27,7 +27,7 @@ import Component from "vue-class-component";
         RosterPortrait,
     },
 })
-export default class TagBuilderRosterPortrait extends Vue {
+export default class HeroTagBuilderRosterPortrait extends Vue {
     @Prop({required: true})
     hero: HeroDto
 
