@@ -68,21 +68,21 @@
                 :gamer-position="gamerPositions.players"
                 :descriptor="descriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
-                @save="() => {selecting = null; $emit('done')}"
+                @save="onRosterDone"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isTeammate"
                 :gamer-position="gamerPositions.teammates"
                 :descriptor="descriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
-                @save="() => {selecting = null; $emit('done')}"
+                @save="onRosterDone"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isEnemy"
                 :descriptor="descriptor"
                 :gamer-position="gamerPositions.enemies"
-                @tagGroupSelect="($event) => {selecting = $event;}"
-                @save="() => {selecting = null; $emit('done')}"
+                @tagGroupSelect="onRosterDone"
+                @save="() => {}"
         />
     </div>
 </template>
@@ -119,6 +119,12 @@ export default class HeroTagBuilder extends Vue {
         teammates: GamerPositionVso.Teammates,
         enemies: GamerPositionVso.Enemies,
     }
+
+    onRosterDone() {
+        this.selecting = null;
+        this.$emit('done')
+    }
+
 }
 </script>
 
