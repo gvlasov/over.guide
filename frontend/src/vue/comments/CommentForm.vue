@@ -25,6 +25,11 @@
                 v-hammer:tap="() => $emit('cancel')"
         >{{ closeButtonText }}
         </OverwatchButton>
+        <div
+                v-if="errorMessage !== null"
+                class="error"
+        >{{ errorMessage }}
+        </div>
     </form>
 </template>
 
@@ -58,6 +63,9 @@ export default class CommentForm extends Vue {
     submitButtonText: string
 
     message: string = ''
+
+    @Prop({default: () => null})
+    errorMessage: string|null
 
     auth: Authentication = Authentication.instance
 
@@ -123,6 +131,11 @@ export default class CommentForm extends Vue {
 
     button {
         font-size: 1.5em;
+    }
+
+    .error {
+        padding: .3em;
+        background-color: hsla(0, 66%, 41%, .3);
     }
 }
 </style>

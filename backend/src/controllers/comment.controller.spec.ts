@@ -282,6 +282,48 @@ describe(
                         expect(comment.content).toBe(oldCommentText)
                     })
             });
+            it('can\'t edit comments that are more than 30 minutes old', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const user = await User.findOne();
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const oldCommentText = 'hello';
+                const date = new Date();
+                date.setHours(date.getHours() - 1)
+                const hourAgo = date.toISOString();
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: oldCommentText,
+                    authorId: user.id,
+                    createdAt: hourAgo,
+                    updatedAt: hourAgo,
+                    deactivatedById: null,
+                    deactivatedAt: null,
+                })
+                const newCommentText = oldCommentText + '_updated';
+                await request(ctx.app.getHttpServer())
+                    .post(`/comment/edit`)
+                    .send({
+                        id: comment.id,
+                        content: newCommentText,
+                    } as CommentUpdateDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .then(response => comment.reload())
+                    .then(comment => {
+                        expect(comment.content).toBe(oldCommentText)
+                    })
+            });
             it('unauthorized users can\'t create comments', async () => {
                 await ctx.fixtures(
                     singleUserFixture,

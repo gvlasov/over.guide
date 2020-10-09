@@ -4,6 +4,7 @@
             :submit-button-text="'Edit'"
             @submit="sendEdit"
             @cancel="$emit('cancel')"
+            :error-message="errorMessage"
     />
 </template>
 
@@ -33,8 +34,9 @@ export default class EditCommentForm extends Vue {
 
     auth: Authentication = Authentication.instance
 
+    errorMessage: string|null = null
+
     sendEdit(message) {
-        this.$emit('edit')
         Backend.instance
             .editComment(
                 this.comment.id,
@@ -42,6 +44,12 @@ export default class EditCommentForm extends Vue {
             )
             .then((dto) => {
                 this.comment.content = message;
+                this.$emit('edit')
+            })
+            .catch(e => {
+                if (e.response.status === 422) {
+                    this.errorMessage = 'You can only edit comments in first 30 minutes'
+                }
             })
     }
 

@@ -19,7 +19,7 @@ import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
-import {QueryTypes} from "sequelize";
+import {Op, QueryTypes} from "sequelize";
 import {CommentReadDto} from "data/dto/CommentReadDto";
 import {User} from "src/database/models/User";
 import PostTypeId from "data/PostTypeId";
@@ -113,7 +113,6 @@ export class CommentController {
                 updatedAt: new Date().toISOString(),
                 authorId: user.id,
             },
-
         )
             .then(comment => comment.reload(
                 {
@@ -139,6 +138,8 @@ export class CommentController {
         @Body() dto: CommentUpdateDto,
     ) {
         const user = await this.authService.getUser(request)
+        const minDate = new Date();
+        minDate.setMinutes(minDate.getMinutes() - 30)
         Comment.update(
             {
                 ...dto,
@@ -150,6 +151,9 @@ export class CommentController {
                     authorId: user.id,
                     deactivatedById: null,
                     deactivatedAt: null,
+                    createdAt: {
+                        [Op.gt]: minDate.toISOString()
+                    }
                 },
             }
         )
