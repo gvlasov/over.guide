@@ -3,6 +3,7 @@
             :close-button-text="closeButtonText"
             @submit="sendReply"
             :submit-button-text="'Reply'"
+            @cancel="$emit('cancel')"
     />
 </template>
 
