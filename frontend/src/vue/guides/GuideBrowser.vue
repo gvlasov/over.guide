@@ -9,7 +9,7 @@
         <div class="root-content-panel-wrap">
             <DescriptorBuilder
                     :search-button-enabled="false"
-                    :descriptor="descriptor"
+                    v-model="localDescriptor"
             />
         </div>
         <div class="guide-feed root-content-panel-wrap">
@@ -122,6 +122,14 @@ export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSear
         this.$emit('descriptorChange', newDescriptor);
         this.visibleVideos.slice(0, this.visibleVideos.length)
         this.players.slice(0, this.players.length)
+    }
+
+    get localDescriptor() : GuideDescriptorVso {
+        return this.descriptor
+    }
+
+    set localDescriptor(descriptor: GuideDescriptorVso) {
+        this.$emit('descriptorChange', descriptor)
     }
 
     onDeactivated(guideId: number) {

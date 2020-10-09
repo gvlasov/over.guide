@@ -62,12 +62,12 @@
                                 class="tag-builder-roster-tag-wrap"
                                 style="">
                             <TagBuilderRosterTag
-                                    :descriptor="descriptor"
+                                    :descriptor="draftDescriptor"
                                     class="descriptor-mirror"
                                     :selected-position="gamerPosition"
-                                    @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.players.gamerPosition)}"
-                                    @teammateTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.teammates.gamerPosition)}"
-                                    @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', descriptor.enemies.gamerPosition)}"
+                                    @playerTap="()=>{selectingSkills = false; $emit('tagGroupSelect', draftDescriptor.players.gamerPosition)}"
+                                    @teammateTap="()=>{selectingSkills = false; $emit('tagGroupSelect', draftDescriptor.teammates.gamerPosition)}"
+                                    @enemyTap="()=>{selectingSkills = false; $emit('tagGroupSelect', draftDescriptor.enemies.gamerPosition)}"
                             />
                         </div>
                     </div>
@@ -105,7 +105,7 @@ import OverwatchButton from "@/vue/OverwatchButton";
 import Role from "data/Role";
 import GamerPositionVso from "@/ts/vso/GamerPositionVso";
 import Component, {mixins} from "vue-class-component";
-import {Prop} from "vue-property-decorator";
+import {Model, Prop, Watch} from "vue-property-decorator";
 import HeroDto from "data/dto/HeroDto";
 import TagGroupVso from "@/ts/vso/TagGroupVso";
 
@@ -121,21 +121,31 @@ import TagGroupVso from "@/ts/vso/TagGroupVso";
     },
 })
 export default class TagBuilderRoster extends mixins(Roster_SelectedHeroesMixin) {
+
+    @Model('descriptorChange', {required: true})
+    descriptor: GuideDescriptorVso
+
     @Prop({required: true})
     gamerPosition: GamerPositionVso
 
-    @Prop({required: true})
-    descriptor: GuideDescriptorVso
-
     selectingSkills: boolean = false
+
     heroGroups: HeroGroupsByRole = HeroGroupsByRole.ALL
 
+    draftDescriptor: GuideDescriptorVso = this.descriptor.clone()
+
     onDoneTap() {
+        this.$emit('descriptorChange', this.draftDescriptor)
         this.$emit('save')
     }
 
+    @Watch('descriptor')
+    onInputDescriptorChange() {
+        this.draftDescriptor = this.descriptor.clone()
+    }
+
     selectedHeroAbilities(hero) {
-        return this.descriptor
+        return this.draftDescriptor
             .getGroupByGamerPosition(this.gamerPosition)
             .abilities
             .filter(ability => ability.hero.id === hero.id)
@@ -157,7 +167,7 @@ export default class TagBuilderRoster extends mixins(Roster_SelectedHeroesMixin)
     }
 
     get tagGroup(): TagGroupVso {
-        return this.descriptor.getGroupByGamerPosition(this.gamerPosition);
+        return this.draftDescriptor.getGroupByGamerPosition(this.gamerPosition);
     }
 
     beforeMount() {

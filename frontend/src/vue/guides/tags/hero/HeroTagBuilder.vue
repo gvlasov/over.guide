@@ -66,23 +66,23 @@
         <TagBuilderRoster
                 v-if="selecting && selecting.isPlayer"
                 :gamer-position="gamerPositions.players"
-                :descriptor="descriptor"
+                v-model="localDescriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
                 @save="onRosterDone"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isTeammate"
                 :gamer-position="gamerPositions.teammates"
-                :descriptor="descriptor"
+                v-model="localDescriptor"
                 @tagGroupSelect="($event) => {selecting = $event;}"
                 @save="onRosterDone"
         />
         <TagBuilderRoster
                 v-if="selecting && selecting.isEnemy"
-                :descriptor="descriptor"
+                v-model="localDescriptor"
                 :gamer-position="gamerPositions.enemies"
-                @tagGroupSelect="onRosterDone"
-                @save="() => {}"
+                @tagGroupSelect="($event) => {selecting = $event;}"
+                @save="onRosterDone"
         />
     </div>
 </template>
@@ -96,7 +96,7 @@ import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import TagGroupHeroes from "@/vue/guides/tags/hero/TagGroupHeroes";
 import GamerPositionVso from "@/ts/vso/GamerPositionVso";
 import Vue from 'vue'
-import {Prop} from "vue-property-decorator";
+import {Model} from "vue-property-decorator";
 import Component from "vue-class-component";
 
 @Component({
@@ -109,7 +109,7 @@ import Component from "vue-class-component";
     },
 })
 export default class HeroTagBuilder extends Vue {
-    @Prop({required: true})
+    @Model('descriptorChange', {required: true})
     descriptor: GuideDescriptorVso
 
     selecting: GamerPositionVso | null = null
@@ -118,6 +118,14 @@ export default class HeroTagBuilder extends Vue {
         players: GamerPositionVso.Players,
         teammates: GamerPositionVso.Teammates,
         enemies: GamerPositionVso.Enemies,
+    }
+
+    get localDescriptor() {
+        return this.descriptor
+    }
+
+    set localDescriptor(descriptor: GuideDescriptorVso) {
+        this.$emit('descriptorChange', descriptor)
     }
 
     onRosterDone() {

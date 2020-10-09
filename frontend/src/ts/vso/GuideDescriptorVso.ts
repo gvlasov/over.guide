@@ -55,7 +55,20 @@ export default class GuideDescriptorVso {
                 );
     }
 
-    getGroupByGamerPosition(gamerPosition: GamerPositionVso) : TagGroupVso {
+    clone(): GuideDescriptorVso {
+        return new GuideDescriptorVso({
+            playerHeroes: this.players.heroes.map(h => h.id),
+            playerAbilities: this.players.abilities.map(a => a.id),
+            enemyHeroes: this.enemies.heroes.map(h => h.id),
+            enemyAbilities: this.enemies.abilities.map(a => a.id),
+            teammateHeroes: this.teammates.heroes.map(h => h.id),
+            teammateAbilities: this.teammates.abilities.map(a => a.id),
+            mapTags: this.maps.map(m => m.id),
+            thematicTags: this.thematicTags.map(t => t.id),
+        })
+    }
+
+    getGroupByGamerPosition(gamerPosition: GamerPositionVso): TagGroupVso {
         if (gamerPosition.isTeammate) {
             return this.teammates;
         } else if (gamerPosition.isEnemy) {
@@ -99,10 +112,10 @@ export default class GuideDescriptorVso {
             this.enemies.abilities.map(a => a.id),
             this.maps.map(m => m.id),
             this.thematicTags.map(t => t.id)
-        ].toString()
+        ].join('|')
     }
 
-    get hasHeroes() : boolean {
+    get hasHeroes(): boolean {
         return this.players.heroes.length > 0 ||
             this.teammates.heroes.length > 0 ||
             this.enemies.heroes.length > 0;

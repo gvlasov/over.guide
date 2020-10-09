@@ -1,8 +1,7 @@
 <template>
     <div class="descriptor-builder">
         <HeroTagBuilder
-                :descriptor="descriptor"
-                @done="() => $emit('descriptorChange', this.descriptor)"
+                v-model="localDescriptor"
         />
         <ThematicTagInput
             :descriptor="descriptor"
@@ -18,7 +17,7 @@ import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import OverwatchButton from "@/vue/OverwatchButton";
 import Component from "vue-class-component";
 import Vue from 'vue'
-import {Prop} from "vue-property-decorator";
+import {Model, Prop} from "vue-property-decorator";
 
 @Component({
     components: {
@@ -29,7 +28,7 @@ import {Prop} from "vue-property-decorator";
 })
 export default class DescriptorBuilder extends Vue {
 
-    @Prop({required: true})
+    @Model('descriptorChange', {required: true})
     descriptor: GuideDescriptorVso
 
     @Prop({
@@ -37,6 +36,16 @@ export default class DescriptorBuilder extends Vue {
         type: Boolean,
     })
     searchButtonEnabled: boolean
+
+    get localDescriptor() {
+        return this.descriptor
+    }
+
+    set localDescriptor(descriptor: GuideDescriptorVso) {
+        this.$emit('descriptorChange', descriptor)
+    }
+
+
 }
 </script>
 
