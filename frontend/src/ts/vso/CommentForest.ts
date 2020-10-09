@@ -30,16 +30,18 @@ export default class CommentForest {
 
     private buildCommentsTree(
         currentLevel: CommentReadDto[],
-        children: CommentChildrenRegistry
+        childrenRegistry: CommentChildrenRegistry
     ): CommentVso[] {
         if (currentLevel.length === 0) {
             return []
         }
         return currentLevel.map(
-            dto => new CommentVso(
-                dto,
-                this.buildCommentsTree(children[dto.id] || [], children)
-            )
+            dto => {
+                return new CommentVso(
+                    dto,
+                    this.buildCommentsTree(childrenRegistry[dto.id] || [], childrenRegistry)
+                )
+            }
         )
     }
 
