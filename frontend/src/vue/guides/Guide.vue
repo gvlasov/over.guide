@@ -17,7 +17,6 @@
                 <Upvoter
                         :post-id="head.entry.guideId"
                         :post-type-id="PostTypeId.Guide"
-                        :initial-upvoted="false"
                         @upvote="() => head.votesCount++"
                         @upvoteRemoved="() => head.votesCount--"
                 />

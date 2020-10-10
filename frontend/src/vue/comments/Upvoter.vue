@@ -18,9 +18,9 @@ import Vue from 'vue'
 import {Prop} from "vue-property-decorator";
 import Component from "vue-class-component";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
-import Backend from "@/ts/Backend";
 import Authentication from "@/ts/Authentication";
 import PostTypeId from "data/PostTypeId";
+import UpvoteCache from "@/ts/UpvoteCache";
 
 @Component({
     components: {OverwatchButton}
@@ -28,13 +28,14 @@ import PostTypeId from "data/PostTypeId";
 export default class Upvoter extends Vue {
 
     @Prop({required: true})
-    initialUpvoted: boolean
-
-    @Prop({required: true})
     postId: number
 
     @Prop({required: true})
     postTypeId: PostTypeId
+
+    initialUpvoted: boolean =
+        UpvoteCache.instance
+            .hasUpvote(this.postTypeId, this.postId)
 
     tappable: boolean = true
 
@@ -50,7 +51,7 @@ export default class Upvoter extends Vue {
         if (this.upvoted) {
             this.upvoted = false
             this.$emit('upvoteRemoved')
-            Backend.instance
+            UpvoteCache.instance
                 .removeUpvote(this.postTypeId, this.postId)
                 .catch(e => {
                     if (e.status === 422) {
@@ -63,13 +64,13 @@ export default class Upvoter extends Vue {
         } else {
             this.upvoted = true
             this.$emit('upvote')
-            Backend.instance
+            UpvoteCache.instance
                 .upvote(this.postTypeId, this.postId)
-                .catch(e => {
-                    if (e.response.status === 422) {
-                        this.$emit('upvoteRemoved')
-                    }
-                })
+                // .catch(e => {
+                //     if (e.response.status === 422) {
+                //         this.$emit('upvoteRemoved')
+                //     }
+                // })
                 .finally(() => {
                     this.tappable = true
                 })
