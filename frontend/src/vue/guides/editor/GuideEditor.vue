@@ -146,6 +146,8 @@ import AsyncComputedProp from "vue-async-computed-decorator";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
 import GuidePreview from "@/vue/guides/GuidePreview.vue";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 
 const Debounce = require('debounce-decorator').default
 
@@ -206,6 +208,9 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                 : backend.createGuide(this.head.entry.toDto())
         )
             .then((guideId) => {
+                if (guideId === void 0) {
+                    guideId = (this.head.entry as ExistingGuideHistoryEntryVso).guideId
+                }
                 this.$router.push(`/guide/${guideId}`)
                 draft.reset()
             })
