@@ -60,12 +60,10 @@ export default class UpvoteCache {
     }
 
     hasUpvote(postTypeId: PostTypeId, postId: number): boolean {
-        return this.postIds[postTypeId] !== void 0 &&
-            this.postIds[postTypeId].includes(postId);
+        return this.postIds[postTypeId]?.includes(postId);
     }
 
     private cacheUpvotes() {
-        console.log('cache upvotes')
         localStorage.setItem(
             UpvoteCache.localStorageKey,
             JSON.stringify(this.postIds)
