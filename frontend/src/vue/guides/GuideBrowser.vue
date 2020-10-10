@@ -129,7 +129,9 @@ export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSear
     }
 
     set localDescriptor(descriptor: GuideDescriptorVso) {
-        this.$emit('descriptorChange', descriptor)
+        if (descriptor.hash !== this.descriptor.hash) {
+            this.$emit('descriptorChange', descriptor)
+        }
     }
 
     onDeactivated(guideId: number) {
