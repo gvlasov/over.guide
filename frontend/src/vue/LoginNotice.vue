@@ -1,5 +1,5 @@
 <template>
-    <ModalPopup class="login-notice">
+    <ModalPopup>
         <slot/>
     </ModalPopup>
 </template>
@@ -26,13 +26,6 @@ export default class LoginNotice extends Vue {
 
 .login-notice ::v-deep .popup {
     @include overwatch-panel;
-    background-color: hsla(250, 30%, 31%, 0.97);
-    padding: 2em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
     font-size: 1.5rem;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <LoginNotice>
+    <div class="login-notice">
         <div class="notice">
             <slot name="notice"/>
         </div>
@@ -21,7 +21,7 @@
                 v-hammer:tap="() => $emit('back')"
         >Back
         </OverwatchButton>
-    </LoginNotice>
+    </div>
 </template>
 
 <script lang="ts">
@@ -39,7 +39,7 @@ import {Ref} from "vue-property-decorator";
         BattlenetAuthButton,
     },
 })
-export default class Loginrequirement extends Vue {
+export default class LoginRequirement extends Vue {
     @Ref('battle-net-auth-button') bnetButton
 
     declare $route: any
@@ -55,22 +55,29 @@ export default class Loginrequirement extends Vue {
 <style lang="scss" scoped>
 @import '~@/assets/css/overwatch-ui.scss';
 
-.notice {
+.login-notice {
+    background-color: hsla(250, 30%, 31%, 0.80);
     font-size: 1.1em;
     @include overwatch-futura;
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
 
     &.subnotice {
         font-size: .8em;
         margin-bottom: 1.6rem;
     }
-}
 
-.login-button {
-    margin: 3rem 0 2rem 0;
-    font-size: 2em;
-}
+    .login-button {
+        margin: 3rem 0 2rem 0;
+        font-size: 2em;
+    }
 
-.close-button {
-    font-size: 1.2em;
+    .close-button {
+        font-size: 1.2em;
+    }
 }
 </style>

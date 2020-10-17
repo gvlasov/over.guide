@@ -114,7 +114,6 @@ export default class CommentForm extends Vue {
             position: absolute;
             min-height: 100%;
             min-width: 100%;
-            background-color: hsla(249, 22%, 19%, .3);
             display: flex;
             flex-direction: row;
             justify-content: center;

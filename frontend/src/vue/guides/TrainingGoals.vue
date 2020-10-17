@@ -1,11 +1,14 @@
 <template>
     <div class="training-goals root-content-sizer">
-        <LoginRequirement
+        <ModalPopup
                 v-if="!authenticated"
-                @back="$router.go(-1)"
         >
-            <template v-slot:notice>Log in to view your training goals</template>
-        </LoginRequirement>
+            <LoginRequirement
+                    @back="$router.go(-1)"
+            >
+                <template v-slot:notice>Log in to view your training goals</template>
+            </LoginRequirement>
+        </ModalPopup>
         <div
                 v-if="synchronizing"
                 class="synchronization"
@@ -56,11 +59,13 @@ import Vue from 'vue'
 import {Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
 @Component({
     components: {
+        ModalPopup,
         TestingGround,
         LoginRequirement,
         TrainingGoal,
