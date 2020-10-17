@@ -42,6 +42,9 @@ export class BattlenetService {
             .then(response => {
                 return response.data.access_token;
             })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     async userInfo(token: string) {

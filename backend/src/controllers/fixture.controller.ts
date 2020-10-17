@@ -4,7 +4,9 @@ import heroesFixture from '@fixtures/heroes'
 import mapsFixture from '@fixtures/maps'
 import thematicTagsFixture from '@fixtures/thematicTags'
 import guideTestingFixture from '@fixtures/guideTesting'
+import reportsFixture from '@fixtures/reportsFixture'
 import abilitiesFixture from '@fixtures/abilities'
+import commentsFixture from "@fixtures/commentsFixture";
 
 @Controller('fixture')
 export class FixtureController {
@@ -31,7 +33,9 @@ export class FixtureController {
             mapsFixture,
             abilitiesFixture,
             thematicTagsFixture,
-            guideTestingFixture
+            guideTestingFixture,
+            commentsFixture,
+            reportsFixture,
         )
     }
 

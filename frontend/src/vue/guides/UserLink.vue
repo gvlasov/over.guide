@@ -26,9 +26,13 @@ a {
     @include overwatch-futura;
     color: white;
     text-decoration: none;
+    font-size: 1.15em;
 
     &:hover {
         text-decoration: underline;
+    }
+    &:visited {
+        color: white;
     }
 }
 </style>

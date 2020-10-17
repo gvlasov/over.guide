@@ -1,5 +1,5 @@
 <template>
-    <div v-bind:title="absoluteDateText()">{{ creationTimeRelative() }} ago</div>
+    <span class="relative-time" v-bind:title="absoluteDateText()">{{ creationTimeRelative() }} ago</span>
 </template>
 
 <script lang="ts">
@@ -33,5 +33,7 @@ export default class RelativeTime extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/css/overwatch-ui.scss";
+.relative-time {
+    display: inline;
+}
 </style>

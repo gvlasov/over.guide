@@ -20,6 +20,10 @@ import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Op} from "sequelize";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
+import {Sentence} from "src/database/models/Sentence";
+import {Restriction} from "src/database/models/Restriction";
+import RestrictionTypeId from "data/RestrictionTypeId";
+import ApiErrorId from "data/ApiErrorId";
 
 
 describe(
@@ -93,7 +97,7 @@ describe(
                             response.body.length
                         ).toBe(3)
                         expect(
-                            response.body[0].votes
+                            response.body[0].votesCount
                         ).toBe(0)
                     })
                 await request(ctx.app.getHttpServer())
@@ -203,6 +207,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -252,6 +257,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -277,7 +283,7 @@ describe(
                     } as CommentUpdateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .then(response => comment.reload())
+                    .then(response => Comment.findOne({where: {id: comment.id}}))
                     .then(comment => {
                         expect(comment.content).toBe(oldCommentText)
                     })
@@ -319,7 +325,7 @@ describe(
                     } as CommentUpdateDto)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .then(response => comment.reload())
+                    .then(response => Comment.findOne({where: {id: comment.id}}))
                     .then(comment => {
                         expect(comment.content).toBe(oldCommentText)
                     })
@@ -378,10 +384,11 @@ describe(
                         expect(
                             (await Comment.findAndCountAll()).count
                         ).toStrictEqual(1)
-                        comment.reload().then(comment => {
-                            expect(comment.deactivatedById).toStrictEqual(user.id)
-                            expect(comment.deactivatedAt).not.toBeNull()
-                        })
+                        return Comment.findOne({where: {id: comment.id}})
+                            .then(comment => {
+                                expect(comment.deactivatedById).toStrictEqual(user.id)
+                                expect(comment.deactivatedAt).not.toBeNull()
+                            })
                     })
             });
             it('user can\'t delete other users\' comments', async () => {
@@ -397,7 +404,8 @@ describe(
                 const user = await User.findOne()
                 const anotherUser = await User.create({
                     name: 'another user',
-                    battleNetUserId: '1234213452'
+                    battleNetUserId: '1234213452',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -416,7 +424,7 @@ describe(
                     .send()
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-                    .then(async () => comment.reload())
+                    .then(() => Comment.findOne({where: {id: comment.id}}))
                     .then(comment => {
                         expect(comment.deactivatedAt).toBeNull()
                         expect(comment.deactivatedById).toBeNull()
@@ -457,7 +465,7 @@ describe(
                     updatedAt: currentTime,
                 })
                 expect(
-                    (await Comment.findAndCountAll()).count
+                    (await Comment.findAll()).length
                 ).toStrictEqual(2)
                 await request(ctx.app.getHttpServer())
                     .get(`/comment/${PostTypeId.Guide}/${guide.id}`)
@@ -465,7 +473,7 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(async (response) => {
-                        expect(response.body[0].deleted).toStrictEqual(1)
+                        expect(response.body[0].deleted).toStrictEqual(true)
                         expect(response.body[0].content).toStrictEqual(void 0)
                     })
             });
@@ -511,6 +519,82 @@ describe(
                         expect(
                             (await Comment.findAndCountAll()).count
                         ).toStrictEqual(1)
+                    })
+            });
+            it('user banned from commenting can\'t create or edit comments', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture
+                )
+                const guide = await Guide.findOne()
+                const defender = await User.findOne()
+                const judge = await User.create({
+                    name: 'judge',
+                    battleNetUserId: '43343',
+                    banned: 0,
+                })
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(defender)
+                const currentTime = new Date().toISOString();
+                const momentIn2Hours = new Date()
+                momentIn2Hours.setHours(momentIn2Hours.getHours() + 2)
+                await Sentence.create({
+                    defenderId: defender.id,
+                    judgeId: judge.id,
+                })
+                    .then(sentence => {
+                        return Restriction.create({
+                            typeId: RestrictionTypeId.CommentCreationBan,
+                            sentenceId: sentence.id,
+                            objectId: null,
+                            start: new Date('2020-09-15T20:30:40.535Z'),
+                            end: momentIn2Hours.toISOString(),
+                        })
+                    })
+                const oldCommentText = 'root';
+                const comment = await Comment.create({
+                    postType: PostTypeId.Guide,
+                    postId: guide.id,
+                    parentId: null,
+                    content: oldCommentText,
+                    authorId: judge.id,
+                    createdAt: currentTime,
+                    updatedAt: currentTime,
+                })
+                expect((await Comment.findAll())).toHaveLength(1)
+                await request(ctx.app.getHttpServer())
+                    .post(`/comment/create`)
+                    .send({
+                        postId: guide.id,
+                        postType: PostTypeId.Guide,
+                        parentId: null,
+                        content: 'reply',
+                    } as CommentCreateDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.FORBIDDEN)
+                    .then(async (response) => {
+                        expect(
+                            response.body.error
+                        ).toStrictEqual(ApiErrorId.UserBannedFromCommenting)
+                        expect((await Comment.findAll())).toHaveLength(1)
+                    })
+                await request(ctx.app.getHttpServer())
+                    .post(`/comment/edit`)
+                    .send({
+                        id: comment.id,
+                        content: 'reply+88888888888888888',
+                    } as CommentUpdateDto)
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.FORBIDDEN)
+                    .then(async (response) => {
+                        expect(
+                            response.body.error
+                        ).toStrictEqual(ApiErrorId.UserBannedFromCommenting)
+                        expect((await Comment.findOne()).content).toStrictEqual(oldCommentText)
                     })
             });
         }

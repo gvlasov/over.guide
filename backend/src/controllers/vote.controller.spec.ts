@@ -43,6 +43,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -87,6 +88,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -129,6 +131,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -171,6 +174,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -205,6 +209,7 @@ describe(
                 const otherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '32145235',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)

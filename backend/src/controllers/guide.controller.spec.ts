@@ -28,13 +28,19 @@ import GuideSearchQueryQuickie from "data/dto/GuideSearchQueryQuickie";
 import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
+import {RestrictionService} from "src/services/restriction.service";
+import {Sentence} from "src/database/models/Sentence";
+import {Restriction} from "src/database/models/Restriction";
+import RestrictionTypeId from "data/RestrictionTypeId";
+import ApiErrorId from "data/ApiErrorId";
+import {GuideHead} from "src/database/models/GuideHead";
 
 describe(
     GuideController,
     nestTest(
         GuideController,
         [],
-        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService, GuideSearchService],
+        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService, GuideSearchService, RestrictionService],
         (ctx) => {
             it('gets guide by id', async () => {
                 await ctx.fixtures(
@@ -250,6 +256,7 @@ describe(
                 const user2 = await User.create({
                     name: 'Another dude',
                     battleNetUserId: '74563456986',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const user1Token = tokenService.getToken(user1)
@@ -307,7 +314,8 @@ describe(
                     )
                 const moderator = await User.create({
                     name: 'moderator user',
-                    battleNetUserId: '983724587234'
+                    battleNetUserId: '983724587234',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
@@ -399,7 +407,8 @@ describe(
                     )
                 const moderator = await User.create({
                     name: 'moderator user',
-                    battleNetUserId: '983724587234'
+                    battleNetUserId: '983724587234',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
@@ -435,7 +444,8 @@ describe(
                 const user1 = await User.findOne();
                 const user2 = await User.create({
                     name: 'another dude',
-                    battleNetUserId: '983724587234'
+                    battleNetUserId: '983724587234',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const user2Token = tokenService.getToken(user2)
@@ -648,7 +658,8 @@ describe(
                     )
                 const moderator = await User.create({
                     name: 'moderator user',
-                    battleNetUserId: '983724587234'
+                    battleNetUserId: '983724587234',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
@@ -1177,7 +1188,8 @@ describe(
                 const user = await User.findOne();
                 const anotherUser = await User.create({
                     name: 'another user',
-                    battleNetUserId: '983724587234'
+                    battleNetUserId: '983724587234',
+                    banned: 0,
                 })
                 const token = ctx.app.get(TokenService).getToken(anotherUser)
                 await ctx.app.get(GuideHistoryEntryService).create(
@@ -1243,7 +1255,8 @@ describe(
                     )
                 const moderator = await User.create({
                     name: 'moderator user',
-                    battleNetUserId: '983724587234'
+                    battleNetUserId: '983724587234',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const moderatorToken = tokenService.getToken(moderator)
@@ -1323,6 +1336,84 @@ describe(
                     .then(
                         guide => {
                             expect(guide.isPublic).toStrictEqual(1)
+                        }
+                    )
+            });
+            it('guide forced to be private can\'t be changed to public', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    abilitiesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    smallGuideTestingFixture,
+                )
+                const defender = await User.findOne();
+                const judge = await User.create({
+                    name: 'judge',
+                    battleNetUserId: '123',
+                    banned: 0,
+                })
+                const token = ctx.app.get(TokenService).getToken(defender)
+                const guide = await Guide.findOne()
+                guide.isPublic = 0
+                await guide.save()
+                await guide.reload()
+                expect(guide.isPublic).toStrictEqual(0)
+                const momentIn2Hours = new Date();
+                momentIn2Hours.setHours(momentIn2Hours.getHours() + 2)
+                await Sentence.create({
+                    defenderId: defender.id,
+                    judgeId: judge.id,
+                })
+                    .then(sentence => {
+                        return Restriction.create({
+                            typeId: RestrictionTypeId.ForceGuidePrivate,
+                            objectId: guide.id,
+                            sentenceId: sentence.id,
+                            start: new Date().toISOString(),
+                            end: momentIn2Hours.toISOString(),
+                        })
+                    })
+                const newContent = 'NEW CONTENT';
+                await request(ctx.app.getHttpServer())
+                    .post(`/guide/update`)
+                    .set({Authorization: `Bearer ${token}`})
+                    .send({
+                        descriptor: new Descriptor({
+                            mapTags: [MapId.Dorado],
+                        }),
+                        parts: [
+                            {
+                                contentMd: newContent,
+                                kind: 'text',
+                            } as GuidePartTextDto
+                        ],
+                        isPublic: true,
+                        guideId: guide.id,
+                    } as GuideHistoryEntryAppendDto)
+                    .expect(HttpStatus.FORBIDDEN)
+                    .then(
+                        response => {
+                            expect(response.body.error).toStrictEqual(ApiErrorId.GuideForcedToBePrivate)
+                            return guide.reload()
+                        }
+                    )
+                    .then(
+                        async guide => {
+                            expect(guide.isPublic).toStrictEqual(0)
+                            expect(
+                                await GuideHead.findOne({
+                                    where: {
+                                        guideId: guide.id,
+                                    },
+                                    include: GuideHead.includesForDto(),
+                                })
+                                    .then(head => {
+                                        return head.guideHistoryEntry.guidePartTexts[0].contentMd
+                                    })
+                            )
+                                .not.toStrictEqual(newContent)
                         }
                     )
             });

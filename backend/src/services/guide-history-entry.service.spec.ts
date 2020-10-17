@@ -3,7 +3,10 @@ import heroesFixture from "@fixtures/heroes"
 import mapsFixture from "@fixtures/maps"
 import thematicTagsFixture from "@fixtures/thematicTags"
 import singleUserFixture from "@fixtures/single-user"
-import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
+import {
+    GuideHistoryEntryService,
+    SaveResult
+} from "src/services/guide-history-entry.service";
 import {Guide} from "src/database/models/Guide";
 import {User} from "src/database/models/User";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
@@ -18,10 +21,14 @@ import {ContentHashService} from "src/services/content-hash.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
+import {Sentence} from "src/database/models/Sentence";
+import {Restriction} from "src/database/models/Restriction";
+import RestrictionTypeId from "data/RestrictionTypeId";
+import {RestrictionService} from "src/services/restriction.service";
 
 describe(
     GuideHistoryEntryService,
-    nestTest(GuideHistoryEntryService, [], [GuideDescriptorService, ContentHashService], (ctx) => {
+    nestTest(GuideHistoryEntryService, [], [GuideDescriptorService, ContentHashService, RestrictionService], (ctx) => {
             it('saves first history entry in existing guide', async () => {
                 await ctx.fixtures(
                     singleUserFixture,
@@ -194,7 +201,8 @@ describe(
                 const user = await User.findOne()
                 const anotherUser = await User.create({
                     name: 'Another dude',
-                    battleNetUserId: '79023670347'
+                    battleNetUserId: '79023670347',
+                    banned: 0,
                 })
                 const guide = await Guide.create({
                     authorId: user.id,
@@ -500,6 +508,54 @@ describe(
                     .then(guide => {
                         expect(guide.isPublic).toBe(0)
                     })
+            });
+            it('can\'t create or edit guides if user is banned', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture
+                )
+                const defender = await User.findOne();
+                const judge = await User.create({
+                    name: 'judge',
+                    battleNetUserId: '123',
+                    banned: 0,
+                })
+                const momentIn2Hours = new Date();
+                momentIn2Hours.setHours(momentIn2Hours.getHours() + 2)
+                await Sentence.create({
+                    defenderId: defender.id,
+                    judgeId: judge.id,
+                })
+                    .then(sentence => {
+                        return Restriction.create({
+                            typeId: RestrictionTypeId.GuideCreationBan,
+                            objectId: null,
+                            sentenceId: sentence.id,
+                            start: new Date().toISOString(),
+                            end: momentIn2Hours.toISOString(),
+                        })
+                    })
+                expect(
+                    await ctx.service.create(
+                        {
+                            parts: [
+                                {
+                                    kind: 'text',
+                                    contentMd: 'asdf'
+                                } as GuidePartTextDto
+                            ],
+                            descriptor: new Descriptor({
+                                mapTags: [MapId.Dorado],
+                            }),
+                            isPublic: false,
+                        },
+                        defender
+                    )
+                ).toStrictEqual(
+                    SaveResult.UserBannedFromGuideCreation
+                )
             });
         }
     )

@@ -8,7 +8,7 @@ export default interface AliveCommentReadDto {
     readonly content: string
     readonly createdAt: string
     readonly updatedAt: string
-    readonly votes: number
+    readonly votesCount: number
     readonly author: UserDto
     readonly deleted: false
 }

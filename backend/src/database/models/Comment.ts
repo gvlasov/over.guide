@@ -4,20 +4,51 @@ import {
     BelongsTo,
     Column,
     ForeignKey,
+    HasMany,
     Model,
     PrimaryKey,
     Table
 } from 'sequelize-typescript';
-import {DataTypes} from "sequelize";
+import Sequelize, {DataTypes} from "sequelize";
 import PostTypeId from "data/PostTypeId";
 import {User} from "src/database/models/User";
 import AliveCommentReadDto from "data/dto/AliveCommentReadDto";
 import DeletedCommentReadDto from "data/dto/DeletedCommentReadDto";
+import {Vote} from "src/database/models/Vote";
+import {CommentReadDto} from "data/dto/CommentReadDto";
 
 @Table({
-    createdAt: true,
-    updatedAt: true,
-    deletedAt: 'deactivatedAt',
+    deletedAt: false,
+    defaultScope: {
+        include: [
+            {
+                model: User,
+                as: 'author',
+            },
+        ],
+    },
+    scopes: {
+        votes: (voteIdPath: string = 'votes') => {
+            return {
+                attributes: {
+                    include: [
+                        [
+                            Sequelize.literal('count(`' + voteIdPath + '`.id)'),
+                            'votesCount',
+                        ],
+                    ]
+                },
+                include: [
+                    {
+                        model: Vote,
+                        as: 'votes',
+                        attributes: [],
+                    },
+                ],
+                group: ['id']
+            }
+        }
+    }
 })
 export class Comment extends Model<Comment> {
 
@@ -74,15 +105,40 @@ export class Comment extends Model<Comment> {
     @BelongsTo(() => User, 'deactivatedById')
     deactivatedBy: User
 
-    toDto(votes: number): AliveCommentReadDto {
+    @HasMany(
+        () => Vote,
+        {
+            foreignKey: 'postId',
+            constraints: false,
+            scope: {
+                postTypeId: PostTypeId.Comment,
+            }
+        }
+    )
+    votes: Vote[]
+
+    @Column({
+        type: new DataTypes.VIRTUAL(DataTypes.INTEGER)
+    })
+    votesCount: number
+
+    toDto(): CommentReadDto {
+        if (this.deactivatedAt !== null) {
+            return this.toDeletedDto()
+        } else {
+            return this.toAliveDto()
+        }
+    }
+
+    toAliveDto(): AliveCommentReadDto {
         return {
-            ...this.toDeletedDto(votes),
+            ...this.toDeletedDto(),
             content: this.content,
             deleted: false,
         }
     }
 
-    toDeletedDto(votes: number): DeletedCommentReadDto {
+    toDeletedDto(): DeletedCommentReadDto {
         return {
             id: this.id,
             author: this.author.toDto(),
@@ -91,7 +147,7 @@ export class Comment extends Model<Comment> {
             postId: this.postId,
             postType: this.postType,
             updatedAt: this.updatedAt.toISOString(),
-            votes,
+            votesCount: this.votesCount,
             deleted: true,
         }
     }

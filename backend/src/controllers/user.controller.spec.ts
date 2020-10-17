@@ -70,6 +70,7 @@ describe(
                 const anotherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '1231241241243',
+                    banned: 0,
                 })
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
@@ -176,6 +177,7 @@ describe(
                 const anotherUser = await User.create({
                     name: anotherUserName,
                     battleNetUserId: '1231241241243',
+                    banned: 0,
                 })
                 const originalUsername = user.name;
                 const tokenService = ctx.app.get(TokenService)

@@ -34,7 +34,8 @@ export class BattlenetAuthController {
                         if (user === null) {
                             return User.create({
                                 battleNetUserId: userInfo.id,
-                                name: userInfo.battletag
+                                name: userInfo.battletag,
+                                banned: 0,
                             });
                         } else {
                             return user

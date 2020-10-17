@@ -41,6 +41,9 @@ export class User extends Model<User> {
     )
     trainingGoals: Array<Guide & { User2TrainingGoal: User2TrainingGoal }>;
 
+    @AllowNull(false)
+    @Column({type: new DataTypes.TINYINT()})
+    banned: boolean;
 
     @BelongsToMany(
         () => GuideHead,

@@ -5,15 +5,10 @@ import Vue from 'vue'
 import {Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 
 const backend = new Backend(axios);
 
-type InfiniteHandlerState = {
-    complete: () => void,
-    error: () => void,
-    loaded: () => void,
-    reset: () => void
-};
 @Component({})
 export default class InfiniteGuideSearchMixin extends Vue {
 

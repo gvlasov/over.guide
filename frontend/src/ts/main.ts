@@ -13,6 +13,7 @@ import {VueHammer} from 'vue2-hammer'
 import TrainingGoals from "@/vue/guides/TrainingGoals.vue";
 import UserInfo from "@/vue/UserInfo.vue";
 import GuidePage from "@/vue/guides/GuidePage.vue";
+import ModerationPage from "@/vue/moderation/ModerationPage.vue";
 import VueScrollTo from 'vue-scrollto';
 import VueObserveVisibility from 'vue-observe-visibility'
 import '@/ts/utils/vue-array-replace'
@@ -36,14 +37,31 @@ const VueResizeObserver = require('vue-resize-observer')
 
 const router = new VueRouter({
     routes: [
-        {path: '/counters-practice', component: CountersPractice, name: 'Counters practice'},
+        {
+            path: '/counters-practice',
+            component: CountersPractice,
+            name: 'Counters practice'
+        },
         {path: '/suggest-pick', component: PickSuggestion},
-        {path: '/guide-editor/:id?/:descriptor?', component: GuideEditor, name: 'Create guide'},
+        {
+            path: '/guide-editor/:id?/:descriptor?',
+            component: GuideEditor,
+            name: 'Create guide'
+        },
         {path: '/testing-ground', component: TestingGround},
-        {path: '/search/:descriptor?', component: GuideSearch, name: 'Browse guides'},
-        {path: '/training-goals', component: TrainingGoals, name: 'My training goals'},
+        {
+            path: '/search/:descriptor?',
+            component: GuideSearch,
+            name: 'Browse guides'
+        },
+        {
+            path: '/training-goals',
+            component: TrainingGoals,
+            name: 'My training goals'
+        },
         {path: '/user/:id', component: UserInfo, name: 'Profile'},
         {path: '/guide/:id', component: GuidePage},
+        {path: '/moderation', component: ModerationPage, name: 'Moderation'},
     ],
     scrollBehavior() {
         return {x: 0, y: 0}

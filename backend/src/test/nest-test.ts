@@ -2,7 +2,7 @@ import {Test, TestingModule} from "@nestjs/testing";
 import {Fixture, FixtureService} from "src/services/fixture.service";
 import {Provider} from "@nestjs/common/interfaces/modules/provider.interface";
 import {INestApplication, Type, ValidationPipe} from "@nestjs/common";
-import {databaseProviders} from "src/database/database.providers";
+import appModuleConfig from 'src/app.module.config'
 
 class TestContext<T> {
     service: T
@@ -25,9 +25,9 @@ export function nestTest<T>(
 
         beforeEach(async () => {
             const app: TestingModule = await Test.createTestingModule({
-                controllers: initialControllers.concat(controllers),
-                providers: initialProviders.concat(providers).concat([FixtureService, serviceToTest, ...databaseProviders])
-
+                imports: appModuleConfig.imports,
+                controllers: appModuleConfig.controllers,
+                providers: appModuleConfig.providers,
             }).compile();
 
             const fixtureService = app.get<FixtureService>(FixtureService);

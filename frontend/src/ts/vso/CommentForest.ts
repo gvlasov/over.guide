@@ -57,9 +57,9 @@ export default class CommentForest {
             }
             deletedLeaves = newDeletedLeaves
         }
-        firstLevel.sort((a, b) => b.votes - a.votes)
+        firstLevel.sort((a, b) => b.votesCount - a.votesCount)
         for (let node of Object.values(tree)) {
-            node.children.sort((a, b) => b.votes - a.votes)
+            node.children.sort((a, b) => b.votesCount - a.votesCount)
         }
         this.firstLevelComments = this.buildCommentsTree(firstLevel, tree)
     }

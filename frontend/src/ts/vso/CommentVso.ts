@@ -1,5 +1,6 @@
 import {CommentReadDto} from "data/dto/CommentReadDto";
 import UserVso from "@/ts/vso/UserVso";
+import PostVso from "@/ts/vso/PostVso";
 
 export default class CommentVso {
 
@@ -38,6 +39,15 @@ export default class CommentVso {
                 return [c, ...c.recursiveChildren]
             }
         )
+    }
+
+    get strayPost(): PostVso {
+        return {
+            postId: this.postId,
+            postType: this.postType,
+            authorId: 0,
+            commentsCount: 0,
+        }
     }
 
 

@@ -19,10 +19,11 @@ import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
-import {Op, QueryTypes} from "sequelize";
+import {Op} from "sequelize";
 import {CommentReadDto} from "data/dto/CommentReadDto";
-import {User} from "src/database/models/User";
-import PostTypeId from "data/PostTypeId";
+import {RestrictionService} from "src/services/restriction.service";
+import RestrictionTypeId from "data/RestrictionTypeId";
+import ApiErrorId from "data/ApiErrorId";
 
 @Controller('comment')
 export class CommentController {
@@ -30,6 +31,7 @@ export class CommentController {
     constructor(
         @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
         private readonly authService: AuthService,
+        private readonly restrictionService: RestrictionService
     ) {
     }
 
@@ -38,96 +40,64 @@ export class CommentController {
         @Param('postType') postType: number,
         @Param('postId') postId: number
     ): Promise<CommentReadDto[]> {
-        return this.sequelize.query<any>(
-            `
-                    select Comment.id,
-                           Comment.postType,
-                           Comment.postId,
-                           Comment.parentId,
-                           Comment.content,
-                           Comment.createdAt,
-                           Comment.updatedAt,
-                           (Comment.deactivatedById is not null or Comment.deactivatedAt is not null) as deleted,
-                           U.id         as authorId,
-                           U.name       as authorName,
-                           count(V.id) as votes
-                    from Comment
-                             left join Vote V on Comment.id = V.postId and V.postTypeId = ${PostTypeId.Comment}
-                             left join User U on Comment.authorId = U.id
-                    where Comment.postId = :postId
-                      and Comment.postType = :postType
-                    group by Comment.id
-            `,
-            {
-                replacements: {
-                    postId: postId,
-                    postType: postType,
-                },
-                type: QueryTypes.SELECT,
+        return Comment.scope(['defaultScope', 'votes']).findAll({
+            where: {
+                postType: postType,
+                postId: postId,
             }
-        )
+        })
             .then(comments => {
-                return comments.map(comment => {
-                    comment.author = {}
-                    comment.author.id = comment.authorId
-                    comment.author.name = comment.authorName
-                    if (comment.deleted) {
-                        delete comment.content
-                    }
-                    delete comment.authorId
-                    delete comment.authorName
-                    return comment
-                })
+                return comments.map(comment => comment.toDto())
             })
     }
 
     @Post('create')
     @UseGuards(AuthenticatedGuard)
-    async commentOnGuide(
+    async createComment(
         @Res() response: Response,
         @Req() request: Request,
         @Body() dto: CommentCreateDto,
     ) {
         const user = await this.authService.getUser(request)
-        if (dto.parentId !== null) {
-            await Comment.findOne(
+        if (await this.restrictionService.hasActiveRestriction(user, RestrictionTypeId.CommentCreationBan)) {
+            response.status(HttpStatus.FORBIDDEN)
+            response.send({error: ApiErrorId.UserBannedFromCommenting})
+        } else {
+            if (dto.parentId !== null) {
+                await Comment.findOne(
+                    {
+                        where: {
+                            deactivatedById: {
+                                [Op.eq]: null,
+                            },
+                            deactivatedAt: {
+                                [Op.eq]: null,
+                            },
+                            id: dto.parentId,
+                        },
+                    }
+                )
+                    .then(comment => {
+                        if (comment === null) {
+                            response.status(HttpStatus.NOT_FOUND)
+                            response.send()
+                        }
+                    })
+            }
+            Comment.create(
                 {
-                    where: {
-                        id: dto.parentId,
-                        deactivatedById: null,
-                        deactivatedAt: null,
-                    }
-                }
+                    ...dto,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    authorId: user.id,
+                },
             )
+                .then(comment => Comment.findOne({where: {id: comment.id}}))
                 .then(comment => {
-                    if (comment === null) {
-                        response.status(HttpStatus.NOT_FOUND)
-                        response.send()
-                    }
+                    response.status(HttpStatus.CREATED)
+                    response.send(comment.toDto())
                 })
         }
-        Comment.create(
-            {
-                ...dto,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                authorId: user.id,
-            },
-        )
-            .then(comment => comment.reload(
-                {
-                    include: [
-                        {
-                            model: User,
-                            as: 'author'
-                        }
-                    ]
-                }
-            ))
-            .then(comment => {
-                response.status(HttpStatus.CREATED)
-                response.send(comment.toDto(0))
-            })
     }
 
     @Post('edit')
@@ -138,34 +108,40 @@ export class CommentController {
         @Body() dto: CommentUpdateDto,
     ) {
         const user = await this.authService.getUser(request)
-        const minDate = new Date();
-        minDate.setMinutes(minDate.getMinutes() - 30)
-        Comment.update(
-            {
-                ...dto,
-                updatedAt: new Date().toISOString(),
-            },
-            {
-                where: {
-                    id: dto.id,
-                    authorId: user.id,
-                    deactivatedById: null,
-                    deactivatedAt: null,
-                    createdAt: {
-                        [Op.gt]: minDate.toISOString()
-                    }
+
+        if (await this.restrictionService.hasActiveRestriction(user, RestrictionTypeId.CommentCreationBan)) {
+            response.status(HttpStatus.FORBIDDEN)
+            response.send({error: ApiErrorId.UserBannedFromCommenting})
+        } else {
+            const minDate = new Date();
+            minDate.setMinutes(minDate.getMinutes() - 30)
+            Comment.update(
+                {
+                    ...dto,
+                    updatedAt: new Date().toISOString(),
                 },
-            }
-        )
-            .then(comment => {
-                if (comment[0] === 0) {
-                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                    response.send()
-                } else {
-                    response.status(HttpStatus.ACCEPTED)
-                    response.send()
+                {
+                    where: {
+                        id: dto.id,
+                        authorId: user.id,
+                        deactivatedById: null,
+                        deactivatedAt: null,
+                        createdAt: {
+                            [Op.gt]: minDate.toISOString()
+                        }
+                    },
                 }
-            })
+            )
+                .then(comment => {
+                    if (comment[0] === 0) {
+                        response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        response.send()
+                    } else {
+                        response.status(HttpStatus.ACCEPTED)
+                        response.send()
+                    }
+                })
+        }
     }
 
     @Delete(':id')

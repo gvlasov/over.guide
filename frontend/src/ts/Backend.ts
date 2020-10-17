@@ -24,6 +24,9 @@ import VoteDto from "data/dto/VoteDto";
 import ReportReasonId from "data/ReportReasonId";
 import ReportDto from "data/dto/ReportDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
+import ReportPageDto from "data/dto/ReportPageDto";
+import ReportQueryDto from "data/dto/ReportQueryDto";
+import SentenceCreateDto from "data/dto/SentenceCreateDto";
 
 const querystring = require('query-string')
 
@@ -362,6 +365,39 @@ export default class Backend {
                 id: commentId,
                 content,
             } as CommentUpdateDto,
+            response => {
+            }
+        )
+    }
+
+    async searchReportsPaginated(clientAlreadyHasReportIds: number[]): Promise<ReportPageDto> {
+        return this.query(
+            'POST',
+            `/report/search`,
+            {
+                clientAlreadyHasReportIds
+            } as ReportQueryDto,
+            response => {
+                return response.data;
+            }
+        )
+    }
+
+    async createSentence(dto: SentenceCreateDto): Promise<void> {
+        return this.query(
+            'PUT',
+            `/sentence`,
+            dto,
+            response => {
+            }
+        )
+    }
+
+    async handleReport(reportId: number): Promise<void> {
+        return this.query(
+            'PUT',
+            `/report/${reportId}/handle`,
+            {},
             response => {
             }
         )

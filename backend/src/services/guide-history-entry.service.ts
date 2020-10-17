@@ -16,9 +16,12 @@ import {ContentHashService} from "src/services/content-hash.service";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
+import RestrictionTypeId from "data/RestrictionTypeId";
+import {RestrictionService} from "src/services/restriction.service";
 
 export enum SaveResult {
-    SavingDuplicateRejected
+    SavingDuplicateRejected,
+    UserBannedFromGuideCreation
 }
 
 @Injectable()
@@ -27,7 +30,8 @@ export class GuideHistoryEntryService {
     constructor(
         private readonly guideDescriptorService: GuideDescriptorService,
         private readonly contentHashService: ContentHashService,
-        @Inject(SEQUELIZE) private readonly sequelize: Sequelize
+        @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
+        private readonly restrictionService: RestrictionService,
     ) {
     }
 
@@ -69,6 +73,9 @@ export class GuideHistoryEntryService {
         saver: User
     ): Promise<GuideHistoryEntry | SaveResult> {
         return this.sequelize.transaction(async (t) => {
+            if (await this.restrictionService.hasActiveRestriction(saver, RestrictionTypeId.GuideCreationBan)) {
+                return SaveResult.UserBannedFromGuideCreation
+            }
             const descriptor = await
                 this.guideDescriptorService.obtainExact(gheDto.descriptor);
             const guide = await obtainModel()

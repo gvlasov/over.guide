@@ -7,7 +7,7 @@ export default interface DeletedCommentReadDto {
     readonly postType: number
     readonly createdAt: string
     readonly updatedAt: string
-    readonly votes: number
+    readonly votesCount: number
     readonly author: UserDto
     readonly deleted: true
 }

@@ -5,7 +5,7 @@ import {User} from "src/database/models/User";
 export class ModerationService {
 
     isModerator(user: User): boolean {
-        return false
+        return user.name.indexOf('ojman') > -1
     }
 
 }

@@ -29,6 +29,9 @@ import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 import {GuideHead} from "src/database/models/GuideHead";
 import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
+import ApiErrorId from "data/ApiErrorId";
+import {RestrictionService} from "src/services/restriction.service";
+import RestrictionTypeId from "data/RestrictionTypeId";
 
 @Controller('guide')
 export class GuideController {
@@ -37,7 +40,8 @@ export class GuideController {
         private readonly authService: AuthService,
         private readonly guideHistoryEntryService: GuideHistoryEntryService,
         private readonly moderationService: ModerationService,
-        private readonly guideSearchService: GuideSearchService
+        private readonly guideSearchService: GuideSearchService,
+        private readonly restrictionService: RestrictionService
     ) {
     }
 
@@ -90,6 +94,9 @@ export class GuideController {
             if (entry === SaveResult.SavingDuplicateRejected) {
                 response.status(HttpStatus.ACCEPTED)
                 response.send()
+            } else if (entry === SaveResult.UserBannedFromGuideCreation) {
+                response.status(HttpStatus.FORBIDDEN)
+                response.send({error: ApiErrorId.UserBannedFromEditingGuides})
             } else {
                 response.status(HttpStatus.CREATED)
                 response.send({
@@ -115,6 +122,16 @@ export class GuideController {
     ) {
         const user = await this.authService.getUser(request)
         if (
+            dto.isPublic === true
+            && await this.restrictionService.hasActiveRestriction(
+                user,
+                RestrictionTypeId.ForceGuidePrivate,
+                dto.guideId
+            )
+        ) {
+            response.status(HttpStatus.FORBIDDEN)
+            response.send({error: ApiErrorId.GuideForcedToBePrivate})
+        } else if (
             (
                 await Guide.findOne(
                     {where: {id: dto.guideId}}

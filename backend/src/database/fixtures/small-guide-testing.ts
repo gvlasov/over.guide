@@ -11,7 +11,8 @@ export default async (moduleRef: ModuleRef) => {
     const entryService = moduleRef.get(GuideHistoryEntryService)
     const user = await User.create({
         name: "user man",
-        battleNetUserId: "12341234"
+        battleNetUserId: "12341234",
+        banned: 0,
     })
     const videoId = 'vGc4mg5pul4'
     const generator = new DescriptorGenerator({

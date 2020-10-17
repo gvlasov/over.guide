@@ -24,13 +24,14 @@ import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import AddAndReorderTrainingGoalDto
     from "data/dto/AddAndReorderTrainingGoalDto";
 import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
+import {RestrictionService} from "src/services/restriction.service";
 
 describe(
     TrainingGoalController,
     nestTest(
         TrainingGoalController,
         [],
-        [AuthService, TokenService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService],
+        [AuthService, TokenService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService, RestrictionService],
         (ctx) => {
             it('adds and removes training goals', async () => {
                 await ctx.fixtures(
@@ -135,6 +136,7 @@ describe(
                 const anotherUser = await User.create({
                     name: 'another user',
                     battleNetUserId: '1231241241243',
+                    banned: 0,
                 }, {
                     include: [{
                         model: Guide,
