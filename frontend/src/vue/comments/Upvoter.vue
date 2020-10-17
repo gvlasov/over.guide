@@ -33,13 +33,9 @@ export default class Upvoter extends Vue {
     @Prop({required: true})
     postTypeId: PostTypeId
 
-    initialUpvoted: boolean =
-        UpvoteCache.instance
-            .hasUpvote(this.postTypeId, this.postId)
-
     tappable: boolean = true
 
-    upvoted: boolean = this.initialUpvoted
+    upvoted: boolean = UpvoteCache.instance.hasUpvote(this.postTypeId, this.postId)
 
     auth: Authentication = Authentication.instance
 

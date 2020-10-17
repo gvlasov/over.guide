@@ -1,5 +1,6 @@
 import Backend from "@/ts/Backend";
 import PostTypeId from "data/PostTypeId";
+import Authentication from "@/ts/Authentication";
 
 type PostIds = {
     [key: number]: number[],
@@ -18,14 +19,18 @@ export default class UpvoteCache {
 
     private readonly postIds: PostIds
 
-    private static readonly localStorageKey = 'upvotes';
+    private static readonly localStorageKeyBase = 'upvotes';
 
     private constructor() {
-        const item = localStorage.getItem(UpvoteCache.localStorageKey);
-        if (item === null) {
+        if (Authentication.instance.userId === void 0) {
             this.postIds = {}
         } else {
-            this.postIds = JSON.parse(item)
+            const item = localStorage.getItem(this.currentUserKey);
+            if (item === null) {
+                this.postIds = {}
+            } else {
+                this.postIds = JSON.parse(item)
+            }
         }
     }
 
@@ -65,9 +70,13 @@ export default class UpvoteCache {
 
     private cacheUpvotes() {
         localStorage.setItem(
-            UpvoteCache.localStorageKey,
+            this.currentUserKey,
             JSON.stringify(this.postIds)
         );
+    }
+
+    get currentUserKey(): string {
+        return UpvoteCache.localStorageKeyBase + '_' + Authentication.instance.userId
     }
 
 
