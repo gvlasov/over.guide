@@ -45,10 +45,14 @@ export default class Authentication {
     }
 
     logoutSite(): void {
+        this.removeAuthCookies()
+        window.location.href = '/'
+    }
+
+    removeAuthCookies() {
         Cookies.remove('auth-token')
         Cookies.remove('username')
         Cookies.remove('userId')
-        window.location.href = '/'
     }
 
     logoutBattleNet() {

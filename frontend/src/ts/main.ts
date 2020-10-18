@@ -14,6 +14,7 @@ import TrainingGoals from "@/vue/guides/TrainingGoals.vue";
 import UserInfo from "@/vue/UserInfo.vue";
 import GuidePage from "@/vue/guides/GuidePage.vue";
 import ModerationPage from "@/vue/moderation/ModerationPage.vue";
+import StorageResetPage from "@/vue/StorageResetPage.vue";
 import VueScrollTo from 'vue-scrollto';
 import VueObserveVisibility from 'vue-observe-visibility'
 import '@/ts/utils/vue-array-replace'
@@ -62,6 +63,7 @@ const router = new VueRouter({
         {path: '/user/:id', component: UserInfo, name: 'Profile'},
         {path: '/guide/:id', component: GuidePage},
         {path: '/moderation', component: ModerationPage, name: 'Moderation'},
+        {path: '/storage-reset', component: StorageResetPage, name: 'Reset storage'},
     ],
     scrollBehavior() {
         return {x: 0, y: 0}
