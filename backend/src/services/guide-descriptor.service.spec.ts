@@ -8,7 +8,6 @@ import MapId from "data/MapId";
 import GuideTheme from "data/GuideTheme";
 import mapsFixture from "@fixtures/maps"
 import thematicTagsFixture from "@fixtures/thematicTags"
-import {ContentHashService} from "src/services/content-hash.service";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import AbilityId from "data/AbilityId";
@@ -17,7 +16,7 @@ import ImpossibleDescriptorError from "src/services/ImpossibleDescriptorError";
 
 describe(
     GuideDescriptorService,
-    nestTest(GuideDescriptorService, [], [ContentHashService], (ctx) => {
+    nestTest(GuideDescriptorService, (ctx) => {
             it('finds by different hero categories', async () => {
                 await ctx.fixtures(
                     heroesFixture,

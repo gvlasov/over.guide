@@ -3,7 +3,6 @@ import {nestTest} from "src/test/nest-test";
 import singleUserFixture from "@fixtures/single-user"
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
-import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import {HttpStatus} from "@nestjs/common";
 import {CommentController} from "src/controllers/comment.controller";
@@ -14,9 +13,6 @@ import thematicTagsFixture from "@fixtures/thematicTags";
 import smallGuideTestingFixture from "@fixtures/small-guide-testing";
 import {Comment} from 'src/database/models/Comment'
 import {Guide} from "src/database/models/Guide";
-import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Op} from "sequelize";
 import CommentCreateDto from "data/dto/CommentCreateDto";
 import CommentUpdateDto from "data/dto/CommentUpdateDto";
@@ -30,8 +26,6 @@ describe(
     CommentController,
     nestTest(
         CommentController,
-        [],
-        [TokenService, AuthService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService],
         (ctx) => {
             it('gets list of comments', async () => {
                 await ctx.fixtures(

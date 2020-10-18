@@ -5,8 +5,6 @@ import {MatchupEvaluationController} from "src/controllers/matchup-evaluation.co
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
-import {AuthService} from "src/services/auth.service";
-import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import heroesFixture from "@fixtures/heroes";
 import {Hero} from "src/database/models/Hero";
 import {HttpStatus} from "@nestjs/common";
@@ -16,8 +14,6 @@ describe(
     MatchupEvaluationController,
     nestTest(
         MatchupEvaluationController,
-        [],
-        [TokenService, MatchupEvaluationService, AuthService],
         (ctx) => {
             it('creates matchup evaluation as logged in user', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture)

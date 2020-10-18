@@ -3,7 +3,6 @@ import {nestTest} from "src/test/nest-test";
 import singleUserFixture from "@fixtures/single-user"
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
-import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import {HttpStatus} from "@nestjs/common";
 import PostTypeId from "data/PostTypeId";
@@ -13,9 +12,6 @@ import thematicTagsFixture from "@fixtures/thematicTags";
 import smallGuideTestingFixture from "@fixtures/small-guide-testing";
 import {Comment} from 'src/database/models/Comment'
 import {Guide} from "src/database/models/Guide";
-import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Vote} from "src/database/models/Vote";
 import VoteDto from "data/dto/VoteDto";
 import {VoteController} from "src/controllers/vote.controller";
@@ -26,8 +22,6 @@ describe(
     VoteController,
     nestTest(
         VoteController,
-        [],
-        [TokenService, AuthService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService],
         (ctx) => {
             it('upvotes and downvotes comment', async () => {
                 await ctx.fixtures(

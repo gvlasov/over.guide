@@ -9,7 +9,7 @@ import {RestrictionService} from "src/services/restriction.service";
 
 describe(
     RestrictionService,
-    nestTest(RestrictionService, [], [], (ctx) => {
+    nestTest(RestrictionService, (ctx) => {
             it('tells if a user has an active restriction', async () => {
                 await ctx.fixtures(
                     singleUserFixture,

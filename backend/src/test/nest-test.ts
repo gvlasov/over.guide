@@ -1,6 +1,5 @@
 import {Test, TestingModule} from "@nestjs/testing";
 import {Fixture, FixtureService} from "src/services/fixture.service";
-import {Provider} from "@nestjs/common/interfaces/modules/provider.interface";
 import {INestApplication, Type, ValidationPipe} from "@nestjs/common";
 import appModuleConfig from 'src/app.module.config'
 
@@ -12,16 +11,10 @@ class TestContext<T> {
 
 export function nestTest<T>(
     serviceToTest: Type<T>,
-    controllers: any[],
-    providers: Provider[],
     call: (testContext: TestContext<T>) => void
 ) {
     return () => {
         let testContext = new TestContext<T>()
-        const isController = serviceToTest.name.match(/Controller$/) !== null;
-
-        const initialProviders: Provider[] = isController ? [serviceToTest] : [];
-        const initialControllers = isController ? [serviceToTest] : [];
 
         beforeEach(async () => {
             const app: TestingModule = await Test.createTestingModule({

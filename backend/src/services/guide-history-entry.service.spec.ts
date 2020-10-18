@@ -17,18 +17,16 @@ import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {GuidePartText} from "src/database/models/GuidePartText";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import {GuidePartVideo} from "src/database/models/GuidePartVideo";
-import {ContentHashService} from "src/services/content-hash.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
 import {Sentence} from "src/database/models/Sentence";
 import {Restriction} from "src/database/models/Restriction";
 import RestrictionTypeId from "data/RestrictionTypeId";
-import {RestrictionService} from "src/services/restriction.service";
 
 describe(
     GuideHistoryEntryService,
-    nestTest(GuideHistoryEntryService, [], [GuideDescriptorService, ContentHashService, RestrictionService], (ctx) => {
+    nestTest(GuideHistoryEntryService, (ctx) => {
             it('saves first history entry in existing guide', async () => {
                 await ctx.fixtures(
                     singleUserFixture,

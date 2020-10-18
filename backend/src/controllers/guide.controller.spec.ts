@@ -2,8 +2,6 @@ import {User} from "src/database/models/User";
 import {nestTest} from "src/test/nest-test";
 import singleUserFixture from "@fixtures/single-user"
 import {TokenService} from "src/services/token.service";
-import {AuthService} from "src/services/auth.service";
-import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
 import heroesFixture from "@fixtures/heroes";
 import abilitiesFixture from "@fixtures/abilities";
 import smallGuideTestingFixture from "@fixtures/small-guide-testing";
@@ -15,20 +13,16 @@ import {HttpStatus} from "@nestjs/common";
 import HeroId from "data/HeroId";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Guide} from "src/database/models/Guide";
 import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {ModerationService} from "src/services/moderation.service";
 import GuideTheme from "data/GuideTheme";
 import MapId from "data/MapId";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideSearchService} from "src/services/guide-search.service";
 import Descriptor from "data/dto/GuideDescriptorQuickie";
 import GuideSearchQueryQuickie from "data/dto/GuideSearchQueryQuickie";
 import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryAppendDto from "data/dto/GuideHistoryEntryAppendDto";
 import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
-import {RestrictionService} from "src/services/restriction.service";
 import {Sentence} from "src/database/models/Sentence";
 import {Restriction} from "src/database/models/Restriction";
 import RestrictionTypeId from "data/RestrictionTypeId";
@@ -39,8 +33,6 @@ describe(
     GuideController,
     nestTest(
         GuideController,
-        [],
-        [TokenService, MatchupEvaluationService, AuthService, GuideHistoryEntryService, GuideDescriptorService, ModerationService, ContentHashService, GuideSearchService, RestrictionService],
         (ctx) => {
             it('gets guide by id', async () => {
                 await ctx.fixtures(

@@ -12,8 +12,6 @@ import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
 import HeroId from "data/HeroId";
 import {Sentence} from "src/database/models/Sentence";
 import ImmediateActionTypeId from "data/ImmediateActionTypeId";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
 import abilitiesFixture from "@fixtures/abilities";
@@ -26,7 +24,7 @@ import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 
 describe(
     SentenceImmediateActionService,
-    nestTest(SentenceImmediateActionService, [], [ContentHashService, GuideDescriptorService, GuideHistoryEntryService], (ctx) => {
+    nestTest(SentenceImmediateActionService, (ctx) => {
             it('can deactivate a specific guide', async () => {
                 await ctx.fixtures(
                     heroesFixture,

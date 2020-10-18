@@ -7,7 +7,7 @@ import {Map} from "src/database/models/Map"
 
 describe(
     FixtureService,
-    nestTest(FixtureService, [], [], (ctx) => {
+    nestTest(FixtureService, (ctx) => {
         it('loads single fixture', async () => {
             await ctx.service.loadFixtureClear(singleUserFixture)
             expect(

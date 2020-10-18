@@ -3,18 +3,12 @@ import {nestTest} from "src/test/nest-test";
 import singleUserFixture from "@fixtures/single-user"
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
-import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import {HttpStatus} from "@nestjs/common";
 import abilitiesFixture from "@fixtures/abilities";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
 import smallGuideTestingFixture from "@fixtures/small-guide-testing";
-import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
-import {RightsService} from "src/services/rights.service";
-import {ReportSearchService} from "src/services/report-search.service";
 import {ModerationService} from "src/services/moderation.service";
 import {SentenceController} from "src/controllers/sentence.controller";
 import SentenceCreateDto from "data/dto/SentenceCreateDto";
@@ -23,9 +17,7 @@ import RestrictionCreateDto from "data/dto/RestrictionCreateDto";
 import ImmediateActionCreateDto from "data/dto/ImmediateActionCreateDto";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import ImmediateActionTypeId from "data/ImmediateActionTypeId";
-import {SentenceImmediateActionService} from "src/services/sentence-immediate-action.service";
 import {ImmediateAction} from "src/database/models/ImmediateAction";
-import {RestrictionService} from "src/services/restriction.service";
 import {Comment} from "src/database/models/Comment";
 import PostTypeId from "data/PostTypeId";
 import {Guide} from "src/database/models/Guide";
@@ -34,8 +26,6 @@ describe(
     SentenceController,
     nestTest(
         SentenceController,
-        [],
-        [TokenService, AuthService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService, RightsService, ReportSearchService, ModerationService, SentenceImmediateActionService, RestrictionService],
         (ctx) => {
             it('creates a sentence', async () => {
                 await ctx.fixtures(
@@ -304,7 +294,7 @@ describe(
                     })
                 const sentence = await Sentence.findOne()
                 await request(ctx.app.getHttpServer())
-                    .put(`/sentence/edit/${sentence.id+1}`)
+                    .put(`/sentence/edit/${sentence.id + 1}`)
                     .send({
                         defenderId: defender.id,
                         restrictions: [

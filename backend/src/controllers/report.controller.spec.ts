@@ -3,7 +3,6 @@ import {nestTest} from "src/test/nest-test";
 import singleUserFixture from "@fixtures/single-user"
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
-import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import {HttpStatus} from "@nestjs/common";
 import PostTypeId from "data/PostTypeId";
@@ -11,17 +10,12 @@ import abilitiesFixture from "@fixtures/abilities";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
 import smallGuideTestingFixture from "@fixtures/small-guide-testing";
-import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {ReportController} from "src/controllers/report.controller";
 import ReportDto from "data/dto/ReportDto";
 import ReportReasonId from "data/ReportReasonId";
 import {Guide} from "src/database/models/Guide";
 import {Report} from "src/database/models/Report";
-import {RightsService} from "src/services/rights.service";
 import {Comment} from "src/database/models/Comment";
-import {ReportSearchService} from "src/services/report-search.service";
 import {ModerationService} from "src/services/moderation.service";
 import ReportQueryDto from "data/dto/ReportQueryDto";
 import {Sentence} from "src/database/models/Sentence";
@@ -34,8 +28,6 @@ describe(
     ReportController,
     nestTest(
         ReportController,
-        [],
-        [TokenService, AuthService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService, RightsService, ReportSearchService, ModerationService],
         (ctx) => {
             it('reports a guide', async () => {
                 await ctx.fixtures(

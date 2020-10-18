@@ -5,7 +5,7 @@ import singleUserFixture from "@fixtures/single-user"
 
 describe(
     TokenService,
-    nestTest(TokenService, [], [], (ctx) => {
+    nestTest(TokenService, (ctx) => {
             it('creates token from user', async () => {
                 await ctx.fixtures(singleUserFixture)
                 const token = ctx.service.getToken((await User.findOne()));

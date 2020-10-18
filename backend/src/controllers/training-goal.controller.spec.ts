@@ -4,7 +4,6 @@ import singleUserFixture from "@fixtures/single-user"
 import smallGuideTestingFixture from "@fixtures/small-guide-testing"
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
-import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
@@ -13,8 +12,6 @@ import {HttpStatus} from "@nestjs/common";
 import {TrainingGoalController} from "src/controllers/training-goal.controller";
 import {Guide} from "src/database/models/Guide";
 import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {Op} from "sequelize";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
@@ -24,14 +21,11 @@ import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import AddAndReorderTrainingGoalDto
     from "data/dto/AddAndReorderTrainingGoalDto";
 import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
-import {RestrictionService} from "src/services/restriction.service";
 
 describe(
     TrainingGoalController,
     nestTest(
         TrainingGoalController,
-        [],
-        [AuthService, TokenService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService, RestrictionService],
         (ctx) => {
             it('adds and removes training goals', async () => {
                 await ctx.fixtures(

@@ -4,18 +4,13 @@ import singleUserFixture from "@fixtures/single-user"
 import smallGuideTestingFixture from "@fixtures/small-guide-testing"
 import {TokenService} from "src/services/token.service";
 import request from 'supertest'
-import {AuthService} from "src/services/auth.service";
 import heroesFixture from "@fixtures/heroes";
 import mapsFixture from "@fixtures/maps";
 import thematicTagsFixture from "@fixtures/thematicTags";
 import abilitiesFixture from "@fixtures/abilities";
 import {HttpStatus} from "@nestjs/common";
 import {Guide} from "src/database/models/Guide";
-import {GuideHistoryEntryService} from "src/services/guide-history-entry.service";
-import {ContentHashService} from "src/services/content-hash.service";
-import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {UserController} from "src/controllers/user.controller";
-import {GuideSearchService} from "src/services/guide-search.service";
 import UsernameChangeDto from "data/dto/UsernameChangeDto";
 import PostTypeId from "data/PostTypeId";
 import {Op} from "sequelize";
@@ -25,8 +20,6 @@ describe(
     UserController,
     nestTest(
         UserController,
-        [],
-        [AuthService, TokenService, GuideHistoryEntryService, ContentHashService, GuideDescriptorService, GuideSearchService],
         (ctx) => {
             it('gets user info', async () => {
                 await ctx.fixtures(
