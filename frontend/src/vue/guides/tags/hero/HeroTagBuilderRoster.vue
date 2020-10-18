@@ -274,6 +274,12 @@ export default class HeroTagBuilderRoster extends mixins(Roster_SelectedHeroesMi
                         border-radius: .3em;
                         width: 100%;
                         border: .08vw solid transparent;
+                        @media screen and (max-width: 48em) {
+                            font-size: .6em;
+                        }
+                        @media screen and (min-width: 70em) {
+                            font-size: 1.5em;
+                        }
                     }
 
                     .clear-button ::v-deep .content {
