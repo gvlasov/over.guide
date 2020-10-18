@@ -16,7 +16,7 @@ export default class StorageResetPage extends Vue {
         Authentication.instance
             .removeAuthCookies();
         localStorage.clear()
-        this.$router.push('/')
+        this.$router.push('/search')
     }
 
 }
