@@ -233,9 +233,9 @@ export default class ExcerptTimebar extends Vue {
 }
 
 .slider {
-    width: .18em;
+    width: 4px;
     background-color: $overwatch-button-main-bg-color;
-    box-shadow: 0 0 .3em white;
+    box-shadow: 0 0 5px white;
     opacity: .7;
     height: 100%;
     position: absolute;

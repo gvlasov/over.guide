@@ -34,7 +34,7 @@
                 v-if="!showPreload"
                 class="video-custom-ui"
         >
-            <ExcerptTimebar
+            <GuideVideoExcerptTimebar
                     :start-seconds="0"
                     :end-seconds="0"
                     :current-seconds="currentSeconds-part.excerpt.startSeconds"
@@ -43,11 +43,6 @@
                     :enable-drag-behavior="false"
                     @draglessClick="onDraglessClick"
             />
-            <div
-                    v-hammer:tap="onPlayPauseTap"
-                    class="play-pause">
-
-            </div>
         </div>
     </div>
 </template>
@@ -62,10 +57,13 @@ import Component from "vue-class-component";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import GuideHistoryEntryVso from "@/ts/vso/GuideHistoryEntryVso";
 import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
+import GuideVideoExcerptTimebar
+    from "@/vue/guides/GuideVideoExcerptTimebar.vue";
 
 let guideVideoUid = 0;
 @Component({
     components: {
+        GuideVideoExcerptTimebar,
         ExcerptTimebar,
         VideoLoadingScreen,
         AspectRatioBox,
