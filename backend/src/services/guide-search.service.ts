@@ -112,7 +112,7 @@ export class GuideSearchService {
         const nextGuides =
             await GuideHead.findAll({
                 include: GuideHead.includesForDto({
-                    author:  {
+                    author: {
                         where: {
                             id: authorId
                         }

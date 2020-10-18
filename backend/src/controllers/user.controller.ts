@@ -37,7 +37,7 @@ export class UserController {
         @Param('id') userId: number,
         @Res() response: Response
     ) {
-        User.findOne({
+        User.scope(['defaultScope', 'withVotesCount']).findOne({
             where: {
                 id: userId
             },
@@ -52,6 +52,7 @@ export class UserController {
                         {
                             user: user.toDto(),
                             lastAuthoredGuides: await this.searchService.searchByAuthor(userId, 0),
+                            guideVotesReceivedCount: user.guideVotesReceivedCount,
                         } as UserInfoDto
                     )
                 }

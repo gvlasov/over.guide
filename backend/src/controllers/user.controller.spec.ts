@@ -17,6 +17,9 @@ import {GuideDescriptorService} from "src/services/guide-descriptor.service";
 import {UserController} from "src/controllers/user.controller";
 import {GuideSearchService} from "src/services/guide-search.service";
 import UsernameChangeDto from "data/dto/UsernameChangeDto";
+import PostTypeId from "data/PostTypeId";
+import {Op} from "sequelize";
+import {Vote} from "src/database/models/Vote";
 
 describe(
     UserController,
@@ -35,6 +38,13 @@ describe(
                     smallGuideTestingFixture
                 )
                 const user = await User.findOne({});
+                const upvoter = await User.findOne({
+                    where: {
+                        id: {
+                            [Op.ne]: user.id
+                        }
+                    }
+                });
                 await request(ctx.app.getHttpServer())
                     .get(`/user/${user.id}`)
                     .expect(HttpStatus.OK)
@@ -48,6 +58,13 @@ describe(
                         guide.authorId = user.id
                         return guide.save()
                     })
+                    .then(guide =>
+                        Vote.create({
+                            postTypeId: PostTypeId.Guide,
+                            postId: guide.id,
+                            upvoterId: upvoter.id,
+                        })
+                    )
                 await request(ctx.app.getHttpServer())
                     .get(`/user/${user.id}`)
                     .expect(HttpStatus.OK)
@@ -55,6 +72,9 @@ describe(
                         expect(
                             response.body.lastAuthoredGuides.guides
                         ).toHaveLength(1)
+                        expect(
+                            response.body.guideVotesReceivedCount
+                        ).toStrictEqual(1)
                     })
             });
             it('changes username', async () => {

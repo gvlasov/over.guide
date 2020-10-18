@@ -41,6 +41,13 @@
                     </div>
                 </template>
             </div>
+            <div class="root-content-panel-wrap">
+                <div class="stats">
+                    <div class="guide-votes-received-count">
+                        Guides upvoted {{userInfo.guideVotesReceivedCount}} times
+                    </div>
+                </div>
+            </div>
             <div class="guide-feed">
                 <div
 
@@ -171,6 +178,11 @@ export default class UserInfo extends Vue {
         max-width: 100vw;
         min-width: 100%;
     }
+}
+
+.stats {
+    @include overwatch-panel;
+    padding: 1em;
 }
 
 .loading-notice {

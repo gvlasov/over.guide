@@ -52,7 +52,7 @@ export class SentenceController {
                                 }
                             }))
                                 .then(() => {
-                                    this.actionService.issueActions(
+                                    return this.actionService.issueActions(
                                         judge,
                                         sentence,
                                         dto.immediateActions

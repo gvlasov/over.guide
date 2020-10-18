@@ -2,20 +2,50 @@ import {
     AllowNull,
     BelongsToMany,
     Column,
+    HasMany,
     Model,
     Table,
     Unique
 } from 'sequelize-typescript';
-import {DataTypes} from "sequelize";
+import Sequelize, {DataTypes} from "sequelize";
 import {Guide} from "src/database/models/Guide";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import UserDto from "data/dto/UserDto";
 import {GuideHead} from "src/database/models/GuideHead";
+import {Vote} from "src/database/models/Vote";
 
 @Table({
     name: {
         singular: 'User',
         plural: 'Users',
+    },
+    scopes: {
+        withVotesCount: () => {
+            return {
+                attributes: {
+                    include: [
+                        [
+
+                            Sequelize.fn('count', Sequelize.col('authoredGuides.votes.id')),
+                            'guideVotesReceivedCount',
+                        ],
+                    ]
+                },
+                include: [{
+                    model: Guide,
+                    as: 'authoredGuides',
+                    include: [
+                        {
+                            model: Vote,
+                            as: 'votes',
+                            attributes: []
+                        }
+                    ],
+                    attributes: [],
+                }],
+                group: ['User.id'],
+            }
+        }
     }
 })
 export class User extends Model<User> {
@@ -60,6 +90,17 @@ export class User extends Model<User> {
         }
     )
     trainingGoalsHeads: Array<GuideHead & { User2TrainingGoal: User2TrainingGoal }>;
+
+    @Column({
+        type: new DataTypes.VIRTUAL(DataTypes.INTEGER)
+    })
+    guideVotesReceivedCount: number
+
+    @HasMany(
+        () => Guide,
+        'authorId'
+    )
+    authoredGuides: Guide[]
 
     toDto(): UserDto {
         return {

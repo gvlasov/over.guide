@@ -14,6 +14,8 @@ import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {DataTypes} from "sequelize";
 import {utcDate} from "@hamroctopus/utc-date";
 import GuideDto from "data/dto/GuideDto";
+import {Vote} from "src/database/models/Vote";
+import PostTypeId from "data/PostTypeId";
 
 @Table({
     name: {
@@ -56,6 +58,18 @@ export class Guide extends Model<Guide> {
     @Column({type: new DataTypes.TINYINT({length: 1, unsigned: true})})
     isPublic: number
 
+    @HasMany(
+        () => Vote,
+        {
+            foreignKey: 'postId',
+            constraints: false,
+            scope: {
+                'postTypeId': PostTypeId.Guide,
+            },
+        }
+    )
+    votes: Vote[]
+
     isActive(): boolean {
         return this.deactivatedById === null && this.deactivatedAt === null
     }
@@ -63,7 +77,7 @@ export class Guide extends Model<Guide> {
     deactivate(user: User): Promise<Guide> {
         if (
             this.deactivatedById !== null
-            ||this.deactivatedAt !== null
+            || this.deactivatedAt !== null
         ) {
             throw new Error('Already inactive')
         }
