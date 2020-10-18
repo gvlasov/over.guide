@@ -24,9 +24,11 @@ describe(
                 await ctx.fixtures(singleUserFixture)
                 const user = await User.findOne()
                 const token = ctx.service.getToken(user);
-                expect(
-                    (await ctx.service.getUser('asdf'))
-                ).toBe(null)
+                await user.destroy()
+                    .then(() => ctx.service.getUser(token))
+                    .then((user) => {
+                        expect(user).toBeNull()
+                    })
             });
         }
     )
