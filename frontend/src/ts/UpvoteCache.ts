@@ -65,7 +65,12 @@ export default class UpvoteCache {
     }
 
     hasUpvote(postTypeId: PostTypeId, postId: number): boolean {
-        return this.postIds[postTypeId]?.includes(postId);
+        const ids = this.postIds[postTypeId];
+        if (ids === void 0) {
+            return false
+        } else {
+            return ids.includes(postId);
+        }
     }
 
     private cacheUpvotes() {
