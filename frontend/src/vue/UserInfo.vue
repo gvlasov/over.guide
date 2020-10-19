@@ -62,6 +62,21 @@
                             @guideDeactivated="onDeactivated"
                     />
                 </div>
+                <InfiniteLoading
+                        v-if="userInfo !== null"
+                        ref="infiniteLoading"
+                        direction="bottom"
+                        @infinite="infiniteHandler"
+                        force-use-infinite-wrapper
+                >
+
+                    <WeakPanel slot="no-results">
+                        No authored guides
+                    </WeakPanel>
+                    <WeakPanel slot="no-more">
+                        No more guides
+                    </WeakPanel>
+                </InfiniteLoading>
             </div>
         </template>
     </div>
@@ -80,6 +95,10 @@ import BackgroundHeading from "@/vue/BackgroundHeading";
 import LogoutDangerNotice from "@/vue/LogoutDangerNotice";
 import Vue from 'vue'
 import Component from "vue-class-component";
+import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import WeakPanel from "@/vue/guides/WeakPanel.vue";
+import InfiniteLoading from "vue-infinite-loading";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
@@ -91,6 +110,8 @@ const auth = new Authentication()
         OverwatchButton,
         TrainingGoal,
         UsernameInput,
+        WeakPanel,
+        InfiniteLoading,
     },
 })
 export default class UserInfo extends Vue {
@@ -101,6 +122,31 @@ export default class UserInfo extends Vue {
     changingUsername: boolean = false
     userInfo: UserInfoVso | null = null
     promptLogoutDanger: boolean = false
+    alreadyLoadedGuideIds: number[] = []
+    hasNextPage: boolean = true
+
+    async infiniteHandler($state: InfiniteHandlerState) {
+        await Backend.instance.searchGuidesByAuthorPaginated(
+            {
+                clientAlreadyHasGuideIds: this.alreadyLoadedGuideIds,
+                authorId: this.userId,
+            }
+        )
+            .then(page => {
+                if (this.userInfo === null) {
+                    throw new Error('UserInfo not loaded yet')
+                }
+                this.userInfo.lastAuthoredGuides.push(...page.guides.map(dto => new ExistingGuideHeadVso(dto)));
+                this.alreadyLoadedGuideIds.push(...page.guides.map(dto => dto.guideHistoryEntry.guide.id as number))
+                if (this.userInfo.lastAuthoredGuides.length > 0) {
+                    $state.loaded()
+                }
+                if (!page.hasNextPage) {
+                    $state.complete()
+                }
+                this.hasNextPage = page.hasNextPage
+            })
+    }
 
     get isThisMe(): boolean {
         const cookie = auth.userId;
@@ -149,6 +195,8 @@ export default class UserInfo extends Vue {
         backend.getUserInfo(this.userId)
             .then(dto => {
                 this.userInfo = new UserInfoVso(dto);
+                this.alreadyLoadedGuideIds = dto.lastAuthoredGuides.guides.map(g => g.guideHistoryEntry.guide.id)
+                this.hasNextPage = dto.lastAuthoredGuides.hasNextPage
             })
             .catch(e => {
                 if (e.response.status === 404) {

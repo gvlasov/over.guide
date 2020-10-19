@@ -27,6 +27,7 @@ import CommentUpdateDto from "data/dto/CommentUpdateDto";
 import ReportPageDto from "data/dto/ReportPageDto";
 import ReportQueryDto from "data/dto/ReportQueryDto";
 import SentenceCreateDto from "data/dto/SentenceCreateDto";
+import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
 
 const querystring = require('query-string')
 
@@ -254,6 +255,19 @@ export default class Backend {
             query,
             (response) => {
                 return response.data;
+            }
+        )
+    }
+
+    async searchGuidesByAuthorPaginated(
+        query: GuideSearchByAuthorQuery
+    ): Promise<GuideSearchPageDto> {
+        return this.query(
+            'POST',
+            '/guide/search-by-author',
+            query,
+            (response) => {
+                return response.data
             }
         )
     }

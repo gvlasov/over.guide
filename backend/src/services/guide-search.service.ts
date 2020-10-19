@@ -11,6 +11,7 @@ import AbilityId from "data/AbilityId";
 import {IsDefined} from "class-validator";
 import {Sequelize} from "sequelize-typescript";
 import {SEQUELIZE} from "src/constants";
+import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
 
 export class GuideSearchQuery implements GuideSearchQueryDto {
 
@@ -108,16 +109,21 @@ export class GuideSearchService {
             .map(descriptor => descriptor.id);
     }
 
-    async searchByAuthor(authorId: number, pageNumber: number): Promise<GuideSearchPageDto> {
+    async searchByAuthor(query: GuideSearchByAuthorQuery): Promise<GuideSearchPageDto> {
         const nextGuides =
             await GuideHead.findAll({
                 include: GuideHead.includesForDto({
                     author: {
                         where: {
-                            id: authorId
+                            id: query.authorId,
                         }
                     }
                 }),
+                where: {
+                    guideId: {
+                        [Op.notIn]: query.clientAlreadyHasGuideIds
+                    },
+                },
                 limit: GuideSearchService.pageSize + 1,
                 order: [['guideId', 'DESC']]
             });
@@ -125,7 +131,7 @@ export class GuideSearchService {
             guides: nextGuides
                 .slice(0, GuideSearchService.pageSize)
                 .map(head => head.toDto()),
-            pageNumber: pageNumber + 1,
+            pageNumber: 0,
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         } as GuideSearchPageDto
     }

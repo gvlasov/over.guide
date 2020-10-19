@@ -51,7 +51,12 @@ export class UserController {
                     response.send(
                         {
                             user: user.toDto(),
-                            lastAuthoredGuides: await this.searchService.searchByAuthor(userId, 0),
+                            lastAuthoredGuides: await this.searchService.searchByAuthor(
+                                {
+                                    authorId: userId,
+                                    clientAlreadyHasGuideIds: [],
+                                }
+                            ),
                             guideVotesReceivedCount: user.guideVotesReceivedCount,
                         } as UserInfoDto
                     )

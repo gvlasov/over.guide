@@ -32,6 +32,7 @@ import {ExistingGuideHeadDto} from "data/dto/GuideHeadDto";
 import ApiErrorId from "data/ApiErrorId";
 import {RestrictionService} from "src/services/restriction.service";
 import RestrictionTypeId from "data/RestrictionTypeId";
+import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
 
 @Controller('guide')
 export class GuideController {
@@ -246,6 +247,18 @@ export class GuideController {
             })
         })
             .then(guides => guides.map(g => g.toDto()))
+    }
+
+    @Post('search-by-author')
+    async searchByAuthor(
+        @Body() query: GuideSearchByAuthorQuery,
+        @Res() response: Response
+    ) {
+        this.guideSearchService.searchByAuthor(query)
+            .then(page => {
+                response.status(HttpStatus.OK)
+                response.send(page)
+            })
     }
 
 }

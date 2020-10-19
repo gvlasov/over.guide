@@ -1409,6 +1409,115 @@ describe(
                         }
                     )
             });
+            it('searches for guides by author', async () => {
+                await ctx.fixtures(
+                    singleUserFixture,
+                    heroesFixture,
+                    mapsFixture,
+                    thematicTagsFixture,
+                    abilitiesFixture,
+                )
+                const user = await User.findOne();
+                const anotherUser = await User.create({
+                    name: 'another user',
+                    battleNetUserId: '88884848',
+                    banned: 0,
+                });
+                const service = ctx.app.get(GuideHistoryEntryService);
+                const guide1 = await service.create(
+                    {
+                        parts: [{
+                            kind: 'video',
+                            excerpt: {
+                                youtubeVideoId: 'jijij',
+                                startSeconds: 0,
+                                endSeconds: 1,
+                            }
+                        }],
+                        descriptor: new Descriptor({
+                            mapTags: [MapId.Busan],
+                        }),
+                        isPublic: true,
+                    },
+                    user
+                ) as GuideHistoryEntry
+                const guide2 = await service.create(
+                    {
+                        parts: [{
+                            kind: 'video',
+                            excerpt: {
+                                youtubeVideoId: 'ds8ud8sy88f',
+                                startSeconds: 1,
+                                endSeconds: 2,
+                            }
+                        }],
+                        descriptor: new Descriptor({
+                            mapTags: [MapId.Busan],
+                        }),
+                        isPublic: true,
+                    },
+                    anotherUser
+                ) as GuideHistoryEntry
+                const guide3 = await service.create(
+                    {
+                        parts: [{
+                            kind: 'video',
+                            excerpt: {
+                                youtubeVideoId: '8ujsdfhus',
+                                startSeconds: 1,
+                                endSeconds: 2,
+                            }
+                        }],
+                        descriptor: new Descriptor({
+                            mapTags: [MapId.Busan],
+                        }),
+                        isPublic: true,
+                    },
+                    user
+                ) as GuideHistoryEntry
+                await request(ctx.app.getHttpServer())
+                    .post(`/guide/search-by-author`)
+                    .send({
+                        authorId: user.id,
+                        clientAlreadyHasGuideIds: [],
+                    })
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.guides).toHaveLength(2)
+                        const foundGuideIds = response.body.guides.map(head => head.guideHistoryEntry.guide.id);
+                        expect(foundGuideIds).toContain(guide1.id)
+                        expect(foundGuideIds).not.toContain(guide2.id)
+                        expect(foundGuideIds).toContain(guide3.id)
+                    })
+                await request(ctx.app.getHttpServer())
+                    .post(`/guide/search-by-author`)
+                    .send({
+                        authorId: user.id,
+                        clientAlreadyHasGuideIds: [guide1.id],
+                    })
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.guides).toHaveLength(1)
+                        const foundGuideIds = response.body.guides.map(head => head.guideHistoryEntry.guide.id);
+                        expect(foundGuideIds).not.toContain(guide1.id)
+                        expect(foundGuideIds).not.toContain(guide2.id)
+                        expect(foundGuideIds).toContain(guide3.id)
+                    })
+                await request(ctx.app.getHttpServer())
+                    .post(`/guide/search-by-author`)
+                    .send({
+                        authorId: anotherUser.id,
+                        clientAlreadyHasGuideIds: [],
+                    })
+                    .expect(HttpStatus.OK)
+                    .then(response => {
+                        expect(response.body.guides).toHaveLength(1)
+                        const foundGuideIds = response.body.guides.map(head => head.guideHistoryEntry.guide.id);
+                        expect(foundGuideIds).not.toContain(guide1.id)
+                        expect(foundGuideIds).toContain(guide2.id)
+                        expect(foundGuideIds).not.toContain(guide3.id)
+                    })
+            })
         }
     )
 )
