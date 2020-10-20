@@ -10,13 +10,16 @@ import Authentication from "@/ts/Authentication";
 @Component({
     components: {},
 })
-export default class StorageResetPage extends Vue {
+export default class SiteResetPage extends Vue {
 
     mounted() {
         Authentication.instance
             .removeAuthCookies();
         localStorage.clear()
-        this.$router.push('/search')
+        fetch('http://localhost:8080/fixture/load-default')
+            .then(() => {
+                this.$router.push('/search')
+            })
     }
 
 }
