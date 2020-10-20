@@ -61,9 +61,11 @@ export class GuideSearchService {
                 {
                     include: GuideHead.includesForDto({
                         guideHistoryEntry: {
-                            where: {
-                                descriptorId: await this.getDescriptorIds(query),
-                            }
+                            where: this.guideDescriptorService.isEmpty(query)
+                                ? {}
+                                : {
+                                    descriptorId: await this.getDescriptorIds(query),
+                                }
                         },
                         guide: {
                             where: {

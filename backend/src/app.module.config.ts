@@ -1,4 +1,4 @@
-import {HttpModule} from '@nestjs/common';
+import {CacheModule, HttpModule} from '@nestjs/common';
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {DatabaseModule} from './database/database.module';
@@ -32,7 +32,14 @@ import {RestrictionService} from "src/services/restriction.service";
 import {SentenceController} from "src/controllers/sentence.controller";
 
 const config = {
-    imports: [DatabaseModule, HttpModule],
+    imports: [
+        DatabaseModule,
+        HttpModule,
+        CacheModule.register({
+            ttl: 60, // seconds
+            max: 1000, // maximum number of items in cache
+        })
+    ],
     controllers: [
         AppController,
         SuggestPickController,

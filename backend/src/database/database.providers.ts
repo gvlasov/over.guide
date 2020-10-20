@@ -60,7 +60,9 @@ export const databaseProviders = [
                 dialectOptions: {
                     multipleStatements: true,
                 },
-                logging: SQL_LOG ? (...msg) => console.log(msg[0]) : false,
+                benchmark: true,
+                logging: SQL_LOG ? (...msg) => console.log(msg[0], ' — '+msg[1]+' ms') : false,
+
             });
             Sequelize.useCLS(
                 cls.createNamespace('sequelize')

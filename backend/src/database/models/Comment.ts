@@ -27,6 +27,11 @@ import {CommentReadDto} from "data/dto/CommentReadDto";
             },
         ],
     },
+    indexes: [
+        {
+            fields: ['postType', 'postId'],
+        }
+    ],
     scopes: {
         votes: (voteIdPath: string = 'votes') => {
             return {

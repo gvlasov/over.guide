@@ -23,7 +23,7 @@ export default async (moduleRef: ModuleRef) => {
         abilitiesPerHero: [2, 3],
     })
     const contentHashService = moduleRef.get(ContentHashService)
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
         const guide = await Guide.create({
             authorId: user.id,
             isPublic: 1,

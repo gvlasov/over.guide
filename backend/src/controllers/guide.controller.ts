@@ -1,9 +1,11 @@
 import {
     Body,
+    CACHE_MANAGER,
     Controller,
     Get,
     HttpCode,
     HttpStatus,
+    Inject,
     Param,
     Post,
     Req,
@@ -42,7 +44,8 @@ export class GuideController {
         private readonly guideHistoryEntryService: GuideHistoryEntryService,
         private readonly moderationService: ModerationService,
         private readonly guideSearchService: GuideSearchService,
-        private readonly restrictionService: RestrictionService
+        private readonly restrictionService: RestrictionService,
+        @Inject(CACHE_MANAGER) private readonly cacheManager
     ) {
     }
 
@@ -226,7 +229,12 @@ export class GuideController {
     async searchPost(
         @Body() query: GuideSearchQuery
     ): Promise<GuideSearchPageDto> {
-        return this.guideSearchService.search(query)
+        return this.cacheManager.wrap(
+            JSON.stringify(query),
+            () => {
+                return this.guideSearchService.search(query)
+            }
+        )
     }
 
     @Get('search-by-video/:videoId')

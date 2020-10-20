@@ -15,6 +15,11 @@ import PostTypeId from "data/PostTypeId";
 @Table({
     createdAt: false,
     updatedAt: false,
+    indexes: [
+        {
+            fields: ['postTypeId', 'postId'],
+        },
+    ],
 })
 export class Vote extends Model<Vote> {
 

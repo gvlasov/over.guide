@@ -31,6 +31,17 @@ export class GuideDescriptorService {
     ) {
     }
 
+    isEmpty(dto: GuideDescriptorDto) : boolean {
+        return (dto.thematicTags.length +
+            dto.mapTags.length +
+            dto.playerHeroes.length +
+            dto.playerAbilities.length +
+            dto.teammateHeroes.length +
+            dto.teammateAbilities.length +
+            dto.enemyHeroes.length +
+            dto.enemyAbilities.length === 0);
+    }
+
     /**
      * Returns a descriptor from DB that exactly matches the DTO,
      * or creates one if none match.
@@ -111,17 +122,7 @@ export class GuideDescriptorService {
 
     obtainExact(guideDescriptorDto: GuideDescriptorDto): Promise<GuideDescriptor> {
         if (
-            [
-                ...guideDescriptorDto.thematicTags,
-                ...guideDescriptorDto.mapTags,
-                ...guideDescriptorDto.playerHeroes,
-                ...guideDescriptorDto.playerAbilities,
-                ...guideDescriptorDto.teammateHeroes,
-                ...guideDescriptorDto.teammateAbilities,
-                ...guideDescriptorDto.enemyHeroes,
-                ...guideDescriptorDto.enemyAbilities,
-            ]
-                .length === 0
+            this.isEmpty(guideDescriptorDto)
         ) {
             throw new EmptyDescriptorException(
                 `Can't obtain descriptor from empty DTO`
