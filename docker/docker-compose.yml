@@ -24,8 +24,8 @@ services:
     volumes:
       - ..:/home/node/app
     command: "sh -c 'cd backend; npm run start:dev'"
-  redis:
-    image: redis:alpine
+#  redis:
+#    image: redis:alpine
   mariadb:
     image: mariadb:10.4
     expose:
@@ -48,56 +48,3 @@ services:
       MYSQL_ROOT_PASSWORD: "1"
       MYSQL_DATABASE: "overwatch"
       MYSQL_INITDB_SKIP_TZINFO: "1"
-  remark:
-#    build: ../../remark42/
-    image: umputun/remark42:latest
-    container_name: "remark42"
-    hostname: "remark42"
-    restart: "no"
-
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "5"
-
-    # uncomment to expose directly (no proxy)
-    ports:
-      - "8081:8080"
-      - "8443:8443"
-
-    environment:
-      - REMARK_URL=https://localhost:8443
-      - SECRET=12345
-      - STORE_BOLT_PATH=/srv/var/db
-      - BACKUP_PATH=/srv/var/backup
-      - DEBUG=true
-      - SITE=overwatch_compendium
-      - AUTH_BATTLENET_CID=9b012b6e1edf492085cfc5eded56adae
-      - AUTH_BATTLENET_CSEC=Rif8Ug708T47DUw7rxftqCOuonwgETOu
-      - ADMIN_PASSWD=password
-      - SSL_TYPE=static
-      - SSL_CERT=/cert.pem
-      - SSL_KEY=/key.pem
-      - SIMPLE_VIEW=true
-    volumes:
-      - ./var:/srv/var
-      - ./key.pem:/key.pem
-      - ./cert.pem:/cert.pem
-  selenium-hub:
-    image: selenium/hub:3.141
-    expose:
-      - "4444"
-    ports:
-      - "4444:4444"
-  selenium-chrome:
-    image: selenium/node-chrome:3.141
-    depends_on:
-      - selenium-hub
-    links:
-      - "selenium-hub"
-    environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
-      - HUB_PORT_4444_TCP_PORT=4444
-    expose:
-      - "5555"
