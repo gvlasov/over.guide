@@ -21,11 +21,13 @@ import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
+    faBell,
     faBrain,
+    faExternalLinkAlt,
     faHome,
     faMedal,
     faPlusSquare,
-    faUser
+    faUser,
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faBrain);
@@ -33,6 +35,8 @@ library.add(faHome);
 library.add(faPlusSquare);
 library.add(faMedal);
 library.add(faUser);
+library.add(faBell);
+library.add(faExternalLinkAlt);
 
 const VueResizeObserver = require('vue-resize-observer')
 
@@ -65,8 +69,14 @@ const router = new VueRouter({
         {path: '/moderation', component: ModerationPage, name: 'Moderation'},
         {path: '/site-reset', component: SiteResetPage, name: 'Reset storage'},
     ],
-    scrollBehavior() {
-        return {x: 0, y: 0}
+    scrollBehavior(to) {
+        if (to.hash) {
+            return {
+                selector: to.hash,
+                offset: { x: 0, y: 50 },
+            };
+        }
+        return { x: 0, y: 0 };
     }
 });
 

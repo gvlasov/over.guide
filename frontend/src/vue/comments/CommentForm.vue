@@ -80,7 +80,9 @@ export default class CommentForm extends Vue {
     }
 
     mounted() {
-        this.textarea.focus()
+        if (this.$route.hash === '') {
+            this.textarea.focus()
+        }
     }
 
 }

@@ -1,15 +1,23 @@
 <template>
     <div
             class="comment"
-            v-bind:class="{deleted: comment.deleted}"
+            v-bind:class="{deleted: comment.deleted, 'linked-to': enableHashAnchor && linkedTo}"
     >
+        <a v-if="enableHashAnchor" v-bind:id="anchorHash"></a>
         <div class="heading">
             <UserLink
                     :user="comment.author"
                     v-bind:class="{'op-username': !isOpPost}"
             />
-            <div class="points">{{ comment.votes }} points</div>
-            <div class="separator">·</div>
+            <template
+                    v-if="comment.votesCount !== void 0"
+            >
+                <div
+                        class="points"
+                >{{ comment.votesCount }} points
+                </div>
+                <div class="separator">·</div>
+            </template>
             <RelativeTime class="time" :time="comment.updatedAt"/>
         </div>
         <div
@@ -115,6 +123,7 @@ import ReportReasonId from "data/ReportReasonId";
 import Backend from "@/ts/Backend";
 import CreateCommentForm from "@/vue/comments/CreateCommentForm.vue";
 import EditCommentForm from "@/vue/comments/EditCommentForm.vue";
+import {Route} from "vue-router";
 
 const commentReportReasons = [
     reportReasons.get(ReportReasonId.Spam),
@@ -142,6 +151,9 @@ export default class Comment extends Vue {
     @Prop({required: true})
     comment: CommentVso
 
+    @Prop({default: true})
+    enableHashAnchor: boolean
+
     @Prop({required: true})
     post: PostVso
 
@@ -152,11 +164,15 @@ export default class Comment extends Vue {
 
     showDeleteDialogue: boolean = false
 
+    linkedTo: boolean = false
+
     auth: Authentication = Authentication.instance
 
     showReplyForm = this.initialShowReplyForm
 
     showEditForm = false
+
+    declare $route: Route
 
     get isOpPost(): boolean {
         return this.post.authorId !== this.comment.author.id
@@ -171,6 +187,17 @@ export default class Comment extends Vue {
                 this.comment.deleted = true;
                 this.$emit('deleted')
             })
+    }
+
+    get anchorHash(): string {
+        return `comment-${this.comment.postType}-${this.comment.postId}-${this.comment.id}`;
+    }
+
+    mounted() {
+        if (this.enableHashAnchor && this.$route.hash === '#' + this.anchorHash) {
+            this.$scrollTo(this.$el, 300)
+            this.linkedTo = true
+        }
     }
 
 }
@@ -275,6 +302,11 @@ $strong-color: white;
 
     &.deleted {
         background-color: hsla(0, 66%, 41%, .3);
+    }
+
+    &.linked-to {
+        background-color: hsla(348, 83%, 47%, .3);
+        padding: 0 1em 0 1em;
     }
 }
 

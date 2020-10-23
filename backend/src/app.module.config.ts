@@ -30,6 +30,7 @@ import {ReportSearchService} from "src/services/report-search.service";
 import {SentenceImmediateActionService} from "src/services/sentence-immediate-action.service";
 import {RestrictionService} from "src/services/restriction.service";
 import {SentenceController} from "src/controllers/sentence.controller";
+import {NotificationController} from "src/controllers/notification.controller";
 
 const config = {
     imports: [
@@ -55,6 +56,7 @@ const config = {
         VoteController,
         ReportController,
         SentenceController,
+        NotificationController,
     ],
     providers: [
         AppService,

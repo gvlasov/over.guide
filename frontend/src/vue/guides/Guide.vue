@@ -90,7 +90,8 @@ export default class Guide extends Vue {
     @Prop({default: null})
     searchDescriptor: GuideDescriptorVso | null
 
-    showCommentsSection: boolean = false
+    @Prop({default: false})
+    showCommentsSection: boolean
 
 };
 

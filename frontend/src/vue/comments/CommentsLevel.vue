@@ -1,7 +1,7 @@
 <template>
     <div class="comment-level">
         <div
-                v-for="(comment, index) in displayComments"
+                v-for="comment in displayComments"
                 class="comment-chain-node"
         >
             <div class="aside">
@@ -10,8 +10,8 @@
                         :post-id="comment.id"
                         :post-type-id="PostTypeId.Comment"
                         :initial-upvoted="false"
-                        @upvote="() => comment.votes++"
-                        @upvoteRemoved="() => comment.votes--"
+                        @upvote="() => comment.votesCount++"
+                        @upvoteRemoved="() => comment.votesCount--"
                 />
                 <CommentHider
                         v-if="comment.children.length > 0 && level < lastNestingLevel"
@@ -22,6 +22,7 @@
                 <Comment
                         :comment="comment"
                         :post="post"
+                        :enable-hash-anchor="enableHashAnchor"
                 />
                 <HiddenCommentsDropdown
                         v-if="followingHidden(comment)"
@@ -79,6 +80,9 @@ export default class CommentsLevel extends Vue {
 
     @Prop({required: true})
     level: number
+
+    @Prop({default: true})
+    enableHashAnchor: boolean
 
     @Prop({default: 1})
     lastNestingLevel: number

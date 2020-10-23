@@ -62,21 +62,23 @@
                             @guideDeactivated="onDeactivated"
                     />
                 </div>
-                <InfiniteLoading
-                        v-if="userInfo !== null"
-                        ref="infiniteLoading"
-                        direction="bottom"
-                        @infinite="infiniteHandler"
-                        force-use-infinite-wrapper
-                >
+                <div class="root-content-panel-wrap">
+                    <InfiniteLoading
+                            v-if="userInfo !== null"
+                            ref="infiniteLoading"
+                            direction="bottom"
+                            @infinite="infiniteHandler"
+                            force-use-infinite-wrapper
+                    >
 
-                    <WeakPanel slot="no-results">
-                        No authored guides
-                    </WeakPanel>
-                    <WeakPanel slot="no-more">
-                        No more guides
-                    </WeakPanel>
-                </InfiniteLoading>
+                        <WeakPanel slot="no-results">
+                            No authored guides
+                        </WeakPanel>
+                        <WeakPanel slot="no-more">
+                            No more guides
+                        </WeakPanel>
+                    </InfiniteLoading>
+                </div>
             </div>
         </template>
     </div>

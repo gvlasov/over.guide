@@ -24,6 +24,8 @@ import {CommentReadDto} from "data/dto/CommentReadDto";
 import {RestrictionService} from "src/services/restriction.service";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import ApiErrorId from "data/ApiErrorId";
+import {Notification} from 'src/database/models/Notification'
+import NotificationTypeId from "data/NotificationTypeId";
 
 @Controller('comment')
 export class CommentController {
@@ -63,28 +65,28 @@ export class CommentController {
             response.status(HttpStatus.FORBIDDEN)
             response.send({error: ApiErrorId.UserBannedFromCommenting})
         } else {
-            if (dto.parentId !== null) {
-                await Comment.findOne(
-                    {
-                        where: {
-                            deactivatedById: {
-                                [Op.eq]: null,
-                            },
-                            deactivatedAt: {
-                                [Op.eq]: null,
-                            },
-                            id: dto.parentId,
+            const parentComment = await Comment.findOne(
+                {
+                    where: {
+                        deactivatedById: {
+                            [Op.eq]: null,
                         },
-                    }
-                )
-                    .then(comment => {
-                        if (comment === null) {
-                            response.status(HttpStatus.NOT_FOUND)
-                            response.send()
-                        }
-                    })
+                        deactivatedAt: {
+                            [Op.eq]: null,
+                        },
+                        id: dto.parentId,
+                    },
+                }
+            )
+            if (parentComment === null) {
+                if (dto.parentId !== null) {
+                    response.status(HttpStatus.NOT_FOUND)
+                    response.send()
+                    return
+                }
+            } else {
             }
-            Comment.create(
+            return Comment.create(
                 {
                     ...dto,
                     createdAt: new Date().toISOString(),
@@ -92,7 +94,20 @@ export class CommentController {
                     authorId: user.id,
                 },
             )
-                .then(comment => Comment.findOne({where: {id: comment.id}}))
+                .then(comment =>
+                    Comment.findOne({where: {id: comment.id}})
+                )
+                .then(
+                    comment =>
+                        Notification.create({
+                            userId: parentComment.authorId,
+                            notificationTypeId: NotificationTypeId.CommentReply,
+                            json: JSON.stringify(
+                                comment.toAliveDto()
+                            )
+                        })
+                            .then(() => comment)
+                )
                 .then(comment => {
                     response.status(HttpStatus.CREATED)
                     response.send(comment.toDto())

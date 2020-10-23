@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import formatDistance from 'date-fns/formatDistance'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
 import Vue from 'vue'
+import {formatDistanceToNowStrict} from "date-fns";
 
 
 @Component({
@@ -21,7 +21,7 @@ export default class RelativeTime extends Vue {
 
 
     creationTimeRelative(): string {
-        return formatDistance(this.time, new Date());
+        return formatDistanceToNowStrict(this.time);
     }
 
     absoluteDateText(): string {

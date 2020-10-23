@@ -1,6 +1,9 @@
 <template>
-    <div class="root-content-sizer root-content-panel-wrap">
-        <template v-if="$asyncComputed.head.success">
+    <div class="root-content-sizer">
+        <div
+                v-if="$asyncComputed.head.success"
+                class="root-content-panel-wrap"
+        >
             <BackgroundHeading
                     v-if="head === 404"
             >Guide doesn't exist
@@ -13,8 +16,9 @@
                     v-else
                     :head="head"
                     :search-descriptor="null"
+                    :show-comments-section="true"
             />
-        </template>
+        </div>
     </div>
 </template>
 

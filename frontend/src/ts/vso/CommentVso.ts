@@ -11,7 +11,7 @@ export default class CommentVso {
     content: string|null
     readonly createdAt: Date
     readonly updatedAt: Date
-    votes: number
+    votesCount: number
     readonly author: UserVso
     readonly children: CommentVso[]
     deleted: boolean
@@ -24,7 +24,7 @@ export default class CommentVso {
         this.content = dto.deleted ? null : dto.content;
         this.createdAt = new Date(dto.createdAt)
         this.updatedAt = new Date(dto.updatedAt)
-        this.votes = dto.votes;
+        this.votesCount = dto.votesCount;
         this.author = new UserVso(dto.author)
         this.deleted = dto.deleted;
         this.children = children;

@@ -28,6 +28,8 @@ import ReportPageDto from "data/dto/ReportPageDto";
 import ReportQueryDto from "data/dto/ReportQueryDto";
 import SentenceCreateDto from "data/dto/SentenceCreateDto";
 import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
+import NotificationsPageDto from "data/dto/NotificationsPageDto";
+import NotificationsPageQueryDto from "data/dto/NotificationsPageQueryDto";
 
 const querystring = require('query-string')
 
@@ -64,6 +66,7 @@ export default class Backend {
         let headers = (typeof authToken === 'undefined')
             ? {}
             : {'Authorization': 'Bearer ' + authToken};
+
         return await this.axios.request({
             url: this.rootUrl + url,
             ...(method === 'GET' ? {
@@ -414,6 +417,35 @@ export default class Backend {
             {},
             response => {
             }
+        )
+    }
+
+    async getFeedNotifications(clientAlreadyHasIds: number[]): Promise<NotificationsPageDto> {
+        return this.query(
+            'POST',
+            `/notifications/feed`,
+            {
+                clientAlreadyHasIds: clientAlreadyHasIds,
+            } as NotificationsPageQueryDto,
+            response => response.data
+        )
+    }
+
+    async markNotificationsRead(notificationIds: number[]): Promise<void> {
+        return this.query(
+            'POST',
+            `/notifications/mark-read`,
+            notificationIds,
+            response => {}
+        )
+    }
+
+    async markAllNotificationsRead(): Promise<void> {
+        return this.query(
+            'POST',
+            `/notifications/mark-all-read`,
+            {},
+            response => {}
         )
     }
 
