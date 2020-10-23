@@ -122,7 +122,7 @@ export default class CommentForm extends Vue {
             flex-direction: row;
             justify-content: center;
             background-color: hsla(250, 20%, 31%, 0.70);
-            box-shadow: inset 0 .15em .5em hsla(250, 20%, 31%, .99);
+            box-shadow: inset 0 .1em .5em hsla(250, 20%, 31%, .99);
 
             & ::v-deep .close-button {
                 display: none;
