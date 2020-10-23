@@ -141,14 +141,19 @@ export default class NotificationsSection extends Vue {
 
     @Watch('show')
     onShowChange(newValue) {
+
         if (newValue) {
-            Backend.instance.markNotificationsRead(
-                this.notifications.map(n => n.id)
-            )
+            if (this.auth.authenticated) {
+                Backend.instance.markNotificationsRead(
+                    this.notifications.map(n => n.id)
+                )
+            }
             this.$emit('open')
         } else {
-            for (let notification of this.notifications) {
-                notification.read = true
+            if (this.auth.authenticated) {
+                for (let notification of this.notifications) {
+                    notification.read = true
+                }
             }
             this.$emit('close')
         }
