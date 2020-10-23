@@ -26,6 +26,7 @@ import RestrictionTypeId from "data/RestrictionTypeId";
 import ApiErrorId from "data/ApiErrorId";
 import {Notification} from 'src/database/models/Notification'
 import NotificationTypeId from "data/NotificationTypeId";
+import {Guide} from "src/database/models/Guide";
 
 @Controller('comment')
 export class CommentController {
@@ -84,7 +85,6 @@ export class CommentController {
                     response.send()
                     return
                 }
-            } else {
             }
             return Comment.create(
                 {
@@ -98,10 +98,18 @@ export class CommentController {
                     Comment.findOne({where: {id: comment.id}})
                 )
                 .then(
-                    comment =>
+                    async comment =>
                         Notification.create({
-                            userId: parentComment.authorId,
-                            notificationTypeId: NotificationTypeId.CommentReply,
+                            userId: parentComment === null
+                                ? (await Guide.findOne({
+                                    where: {
+                                        id: dto.postId
+                                    }
+                                })).authorId
+                                : parentComment.authorId,
+                            notificationTypeId: parentComment === null
+                                ? NotificationTypeId.GuideReply
+                                : NotificationTypeId.CommentReply,
                             json: JSON.stringify(
                                 comment.toAliveDto()
                             )
