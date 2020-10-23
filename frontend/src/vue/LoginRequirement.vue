@@ -30,14 +30,12 @@
 <script lang="ts">
 import BattlenetAuthButton from "@/vue/BattlenetAuthButton";
 import OverwatchButton from "@/vue/OverwatchButton";
-import LoginNotice from "@/vue/LoginNotice";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Ref} from "vue-property-decorator";
 
 @Component({
     components: {
-        LoginNotice,
         OverwatchButton,
         BattlenetAuthButton,
     },
