@@ -44,7 +44,28 @@
             <div class="root-content-panel-wrap">
                 <div class="stats">
                     <div class="guide-votes-received-count">
-                        Total guide score: {{userInfo.guideVotesReceivedCount}}
+                        Total guide score: {{ userInfo.guideVotesReceivedCount }}
+                    </div>
+                </div>
+            </div>
+            <div
+                    v-if="userInfo.restrictions !== void 0"
+                    class="root-content-panel-wrap"
+            >
+                <div class="restrictions">
+                    <div
+                            v-for="restriction in userInfo.restrictions"
+                            class="restriction"
+                    >
+                        <font-awesome-icon icon="ban"/>
+                        <div class="content">
+                            <div class="label">
+                                {{ restrictionTypes.get(restriction.id).defenderLabel }}
+                            </div>
+                            <div class="duration">
+                                for {{ restrictionDuration(restriction) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,11 +122,16 @@ import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import InfiniteLoading from "vue-infinite-loading";
+import restrictionTypes from 'data/restrictionTypes'
+import RelativeTime from "@/vue/guides/RelativeTime.vue";
+import {formatDistance} from "date-fns";
+import RestrictionReadDto from "data/dto/RestrictionReadDto";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
 @Component({
     components: {
+        RelativeTime,
         LogoutDangerNotice,
         BackgroundHeading,
         Guide,
@@ -117,6 +143,7 @@ const auth = new Authentication()
     },
 })
 export default class UserInfo extends Vue {
+    restrictionTypes = restrictionTypes
 
     declare $route: any
 
@@ -163,6 +190,13 @@ export default class UserInfo extends Vue {
 
     get battleNetLogoutUrl(): string {
         return auth.battleNetLogoutUrl;
+    }
+
+    restrictionDuration(restriction: RestrictionReadDto): string {
+        return formatDistance(
+            new Date(restriction.end),
+            new Date(),
+        )
     }
 
     onDeactivated(guideId: number) {
@@ -233,6 +267,42 @@ export default class UserInfo extends Vue {
 .stats {
     @include overwatch-panel;
     padding: 1em;
+}
+
+.restrictions {
+    margin-top: 1em;
+    @include overwatch-panel;
+    padding: 1em;
+    background-color: hsla(10, 100%, 7%, .43);
+    display: flex;
+    gap: 1em;
+    text-align: left;
+    justify-content: center;
+
+    .restriction {
+        padding: .6em;
+        background-color: hsl(0, 100%, 50%, .4);
+        border-radius: .3em;
+        box-shadow: 0 0 .1em black;
+        display: flex;
+        align-items: center;
+        gap: .6em;
+
+        svg {
+            color: white;
+            font-size: 2em;
+        }
+
+        .content {
+            .label {
+                font-weight: bold;
+            }
+
+            .duration {
+                color: hsl(50, 90%, 70%);
+            }
+        }
+    }
 }
 
 .loading-notice {

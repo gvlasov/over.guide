@@ -11,7 +11,7 @@ import {
     UseGuards
 } from '@nestjs/common';
 import {AuthService} from "src/services/auth.service";
-import {Response} from "express";
+import {Request, Response} from "express";
 import {AuthenticatedGuard} from "src/services/authenticated.guard";
 import {Sequelize} from "sequelize-typescript";
 import {SEQUELIZE} from "src/constants";
@@ -19,7 +19,6 @@ import {User} from "src/database/models/User";
 import {GuideSearchService} from "src/services/guide-search.service";
 import UsernameChangeDto from "data/dto/UsernameChangeDto";
 import {ValidationError} from "sequelize";
-import UserInfoDto from "data/dto/UserInfoDto";
 
 @Controller('user')
 export class UserController {
@@ -33,11 +32,18 @@ export class UserController {
     }
 
     @Get(':id')
-    get(
-        @Param('id') userId: number,
-        @Res() response: Response
+    async get(
+        @Param('id') userId,
+        @Res() response: Response,
+        @Req() request: Request
     ) {
-        User.scope(['defaultScope', 'withVotesCount']).findOne({
+        const requester = await this.authService.getUser(request)
+        const scopes = ['defaultScope', 'withVotesCount']
+        const isSelf = requester !== null && requester.id === Number.parseInt(userId)
+        if (isSelf) {
+            scopes.push('activeRestrictions')
+        }
+        User.scope(scopes).findOne({
             where: {
                 id: userId
             },
@@ -48,6 +54,14 @@ export class UserController {
                     response.send()
                 } else {
                     response.status(HttpStatus.OK)
+                    let privatePart;
+                    if (isSelf) {
+                        privatePart = {
+                            restrictions: user.sentences.flatMap(s => s.restrictions).map(r => r.toDto()),
+                        }
+                    } else {
+                        privatePart = {}
+                    }
                     response.send(
                         {
                             user: user.toDto(),
@@ -58,7 +72,8 @@ export class UserController {
                                 }
                             ),
                             guideVotesReceivedCount: user.guideVotesReceivedCount,
-                        } as UserInfoDto
+                            ...privatePart
+                        }
                     )
                 }
             });

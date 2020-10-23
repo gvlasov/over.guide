@@ -21,6 +21,7 @@ import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
+    faBan,
     faBell,
     faBrain,
     faExternalLinkAlt,
@@ -37,6 +38,7 @@ library.add(faMedal);
 library.add(faUser);
 library.add(faBell);
 library.add(faExternalLinkAlt);
+library.add(faBan);
 
 const VueResizeObserver = require('vue-resize-observer')
 

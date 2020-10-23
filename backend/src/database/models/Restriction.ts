@@ -11,6 +11,7 @@ import {
 import {DataTypes} from "sequelize";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import {Sentence} from "src/database/models/Sentence";
+import RestrictionReadDto from "data/dto/RestrictionReadDto";
 
 @Table
 export class Restriction extends Model<Restriction> {
@@ -54,5 +55,16 @@ export class Restriction extends Model<Restriction> {
     @AllowNull(false)
     @Column({type: new DataTypes.DATE()})
     end: Date
+
+    toDto(): RestrictionReadDto {
+        return {
+            id: this.id,
+            typeId: this.typeId,
+            objectId: this.objectId,
+            start: this.start.toISOString(),
+            end: this.end.toISOString(),
+            sentenceId: this.sentenceId,
+        }
+    }
 
 }

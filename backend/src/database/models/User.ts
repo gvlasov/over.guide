@@ -7,12 +7,14 @@ import {
     Table,
     Unique
 } from 'sequelize-typescript';
-import Sequelize, {DataTypes} from "sequelize";
+import Sequelize, {DataTypes, Op} from "sequelize";
 import {Guide} from "src/database/models/Guide";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import UserDto from "data/dto/UserDto";
 import {GuideHead} from "src/database/models/GuideHead";
 import {Vote} from "src/database/models/Vote";
+import {Restriction} from "src/database/models/Restriction";
+import {Sentence} from "src/database/models/Sentence";
 
 @Table({
     name: {
@@ -45,7 +47,29 @@ import {Vote} from "src/database/models/Vote";
                 }],
                 group: ['User.id'],
             }
-        }
+        },
+        activeRestrictions: () => {
+            return {
+                include: [
+                    {
+                        model: Sentence,
+                        as: 'sentences',
+                        include: [
+                            {
+                                model: Restriction,
+                                as: 'restrictions',
+                                where: {
+                                    end: {
+                                        [Op.gt]: new Date().toISOString(),
+                                    },
+                                },
+                            },
+                        ],
+                    }
+                ],
+                group: ['User.id', 'sentences.id'],
+            }
+        },
     }
 })
 export class User extends Model<User> {
@@ -101,6 +125,9 @@ export class User extends Model<User> {
         'authorId'
     )
     authoredGuides: Guide[]
+
+    @HasMany(() => Sentence, 'defenderId')
+    sentences: Sentence[]
 
     toDto(): UserDto {
         return {
