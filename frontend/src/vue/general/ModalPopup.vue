@@ -32,8 +32,7 @@ export default class ModalPopup extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.modal-popup {
-    position: fixed;
-    z-index: 200;
+.popup {
+    box-shadow: 0 1em 2.5em hsla(30, 10%, 20%, 1);
 }
 </style>
