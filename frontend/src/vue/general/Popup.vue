@@ -35,7 +35,6 @@ $width: 40rem;
     box-sizing: border-box;
     max-width: native-min($width, 100vw);
     min-width: native-min($width, 100vw);
-    background-color: hsla(0, 0, 20%, .8);
     font-size: 1.5em;
 }
 

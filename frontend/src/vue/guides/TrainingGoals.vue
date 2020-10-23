@@ -2,6 +2,7 @@
     <div class="training-goals root-content-sizer">
         <ModalPopup
                 v-if="!authenticated"
+                @close="$router.go(-1)"
         >
             <LoginRequirement
                     @back="$router.go(-1)"

@@ -1,5 +1,5 @@
 <template>
-    <LoginNotice>
+    <div class="logout-danger-notice">
         <div>This will log you out from
             <strong>every</strong> site that uses this Battle.net account
         </div>
@@ -15,7 +15,7 @@
             >Log me out
             </OverwatchButton>
         </div>
-    </LoginNotice>
+    </div>
 </template>
 
 <script lang="ts">
@@ -38,8 +38,14 @@ export default class LogoutDangerNotice extends Vue {
 <style lang="scss" scoped>
 @import '~@/assets/css/overwatch-ui.scss';
 
-.buttons {
-    margin-top: 2em;
+.logout-danger-notice {
+    padding: 2em;
+    background-color: hsla(320, 30%, 20%, .92);
+    @include overwatch-futura;
+
+    .buttons {
+        margin-top: 2em;
+    }
 }
 
 </style>

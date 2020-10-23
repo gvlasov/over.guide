@@ -14,9 +14,7 @@
                     v-model="head.entry.descriptor"
                     base-path="/guide-editor/"
             />
-            <ModalPopup
-                    v-if="loginRequired"
-            >
+            <ModalPopup v-if="loginRequired" @close="loginRequired = false">
                 <LoginRequirement
                         @back="loginRequired = false"
                 >

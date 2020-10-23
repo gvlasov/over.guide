@@ -10,6 +10,12 @@
         >
             <router-view @contentChange="resetScrollToTop"></router-view>
         </div>
+        <portal-target
+                name="modal"
+                class="modal-portal"
+        >
+
+        </portal-target>
     </div>
 </template>
 
@@ -57,6 +63,7 @@ export default class App extends Vue {
 
 <style lang="scss" scoped>
 @import '~@/assets/css/common.scss';
+
 .app {
     text-align: center;
     margin: 0 auto;
@@ -71,9 +78,15 @@ export default class App extends Vue {
         position: fixed;
         z-index: 1;
     }
+
     .router-content-wrap {
         position: relative;
         z-index: 2;
+    }
+
+    .modal-portal {
+        position: relative;
+        z-index: 4;
     }
 
     .background-heading {

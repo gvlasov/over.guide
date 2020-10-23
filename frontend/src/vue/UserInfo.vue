@@ -17,11 +17,14 @@
                 <BackgroundHeading class="username">{{ userInfo.user.name }}</BackgroundHeading>
                 <template v-if="isThisMe">
                     <div class="buttons-wrap">
-                        <LogoutDangerNotice
+                        <ModalPopup
                                 v-if="promptLogoutDanger"
-                                @back="() => promptLogoutDanger = false"
-                                @confirm="logout"
-                        />
+                        >
+                            <LogoutDangerNotice
+                                    @back="() => promptLogoutDanger = false"
+                                    @confirm="logout"
+                            />
+                        </ModalPopup>
                         <OverwatchButton
                                 v-if="isThisMe"
                                 type="default"
@@ -126,11 +129,13 @@ import restrictionTypes from 'data/restrictionTypes'
 import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import {formatDistance} from "date-fns";
 import RestrictionReadDto from "data/dto/RestrictionReadDto";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
 @Component({
     components: {
+        ModalPopup,
         RelativeTime,
         LogoutDangerNotice,
         BackgroundHeading,

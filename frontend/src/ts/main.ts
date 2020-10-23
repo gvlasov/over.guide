@@ -30,6 +30,7 @@ import {
     faPlusSquare,
     faUser,
 } from '@fortawesome/free-solid-svg-icons'
+import PortalVue from 'portal-vue'
 
 library.add(faBrain);
 library.add(faHome);
@@ -75,10 +76,10 @@ const router = new VueRouter({
         if (to.hash) {
             return {
                 selector: to.hash,
-                offset: { x: 0, y: 50 },
+                offset: {x: 0, y: 50},
             };
         }
-        return { x: 0, y: 0 };
+        return {x: 0, y: 0};
     }
 });
 
@@ -91,6 +92,7 @@ Vue.use(AsyncComputed)
 Vue.use(VueHammer);
 Vue.use(VueObserveVisibility)
 Vue.use(VueResizeObserver);
+Vue.use(PortalVue)
 VueHammer.config.pan = {
     threshold: 5
 };

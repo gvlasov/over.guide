@@ -12,7 +12,10 @@
                     ref="battle-net-auth-button"
             />
         </OverwatchButton>
-        <div class="notice subnotice">
+        <div
+                v-if="$slots.subnotice"
+                class="notice subnotice"
+        >
             <slot name="subnotice"/>
         </div>
         <OverwatchButton
@@ -56,23 +59,22 @@ export default class LoginRequirement extends Vue {
 @import '~@/assets/css/overwatch-ui.scss';
 
 .login-notice {
-    background-color: hsla(250, 30%, 31%, 0.80);
-    font-size: 1.1em;
+    background-color: hsla(250, 30%, 31%, 0.92);
+    font-size: 1.2em;
     @include overwatch-futura;
     padding: 2em;
     display: flex;
+    gap: 1em;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
 
-    &.subnotice {
+    & .subnotice {
         font-size: .8em;
-        margin-bottom: 1.6rem;
     }
 
     .login-button {
-        margin: 3rem 0 2rem 0;
         font-size: 2em;
     }
 

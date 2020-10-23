@@ -1,13 +1,12 @@
 <template>
-    <div class="modal-popup">
+    <portal to="modal">
         <ModalBackground
                 v-hammer:tap="()=>$emit('close')"
         />
-        <Popup
-        >
+        <Popup>
             <slot></slot>
         </Popup>
-    </div>
+    </portal>
 </template>
 
 <script lang="ts">
@@ -20,6 +19,14 @@ import ModalBackground from "@/vue/general/ModalBackground.vue";
     components: {Popup, ModalBackground},
 })
 export default class ModalPopup extends Vue {
+
+    mounted() {
+        window.addEventListener('keyup', (e) => {
+            if (e.code === 'Escape') {
+                this.$emit('close')
+            }
+        })
+    }
 };
 
 </script>
