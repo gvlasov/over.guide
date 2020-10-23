@@ -44,7 +44,7 @@
             <div class="root-content-panel-wrap">
                 <div class="stats">
                     <div class="guide-votes-received-count">
-                        Guides upvoted {{userInfo.guideVotesReceivedCount}} times
+                        Total guide score: {{userInfo.guideVotesReceivedCount}}
                     </div>
                 </div>
             </div>

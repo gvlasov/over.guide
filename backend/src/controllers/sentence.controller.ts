@@ -17,8 +17,10 @@ import {SEQUELIZE} from "src/constants";
 import {Sequelize} from "sequelize-typescript";
 import {Sentence} from "src/database/models/Sentence";
 import {Restriction} from "src/database/models/Restriction";
+import {Notification} from "src/database/models/Notification";
 import {ImmediateAction} from "src/database/models/ImmediateAction";
 import {SentenceImmediateActionService} from "src/services/sentence-immediate-action.service";
+import NotificationTypeId from "data/NotificationTypeId";
 
 @Controller('sentence')
 export class SentenceController {
@@ -57,6 +59,14 @@ export class SentenceController {
                                         sentence,
                                         dto.immediateActions
                                     )
+                                })
+                                .then(() => {
+                                    return Notification.create({
+                                        userId: dto.defenderId,
+                                        notificationTypeId: NotificationTypeId.SentenceCreated,
+                                        json: JSON.stringify(dto),
+                                        read: 0,
+                                    })
                                 })
                         })
                 })
