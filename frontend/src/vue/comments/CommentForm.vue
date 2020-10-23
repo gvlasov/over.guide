@@ -3,7 +3,9 @@
         <div class="textarea-wrap">
             <LoginRequirement
                     v-if="!auth.loggedIn"
-            />
+            >
+                <div slot="subnotice">to comment</div>
+            </LoginRequirement>
             <textarea
                     ref="textarea"
                     name="reply"
