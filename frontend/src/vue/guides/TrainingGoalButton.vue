@@ -83,7 +83,6 @@ $body-size: 1.7em;
 
 .training-goal-button {
     flex-shrink: 0;
-    cursor: pointer;
 
     &.added button ::v-deep .background {
         background-color: rgba($overwatch-button-main-bg-color, 1) !important;

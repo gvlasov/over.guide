@@ -84,7 +84,6 @@ $body-size: 1.7em;
 
 .upvoter {
     flex-shrink: 0;
-    cursor: pointer;
 
     &.upvoted button ::v-deep .background {
         background-color: rgba($overwatch-button-main-bg-color, 1) !important;

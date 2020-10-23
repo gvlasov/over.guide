@@ -49,6 +49,7 @@ button {
 
     &[disabled] {
         pointer-events: none;
+        cursor: default;
 
         & ::v-deep .background {
             background-color: transparent;
