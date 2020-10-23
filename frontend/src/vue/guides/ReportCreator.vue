@@ -14,6 +14,11 @@
             </ul>
             <div class="buttons">
                 <OverwatchButton
+                        type="default"
+                        v-hammer:tap="() => $emit('close')"
+                >Back
+                </OverwatchButton>
+                <OverwatchButton
                         type="main"
                         v-hammer:tap="report"
                 >Report
