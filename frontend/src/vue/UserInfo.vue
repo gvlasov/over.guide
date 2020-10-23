@@ -44,15 +44,15 @@
                     </div>
                 </template>
             </div>
-            <div class="stats">
+            <OverwatchPanel class="stats">
                 <div class="guide-votes-received-count">
                     Total guide score: {{ userInfo.guideVotesReceivedCount }}
                 </div>
-            </div>
+            </OverwatchPanel>
             <div
                     v-if="userInfo.restrictions !== void 0"
             >
-                <div class="restrictions">
+                <OverwatchPanel class="restrictions">
                     <div
                             v-for="restriction in userInfo.restrictions"
                             class="restriction"
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </OverwatchPanel>
             </div>
             <div class="guide-feed">
                 <Guide
@@ -120,6 +120,7 @@ import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import {formatDistance} from "date-fns";
 import RestrictionReadDto from "data/dto/RestrictionReadDto";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
+import OverwatchPanel from '@/vue/general/OverwatchPanel'
 
 const backend = new Backend(axios);
 const auth = new Authentication()
@@ -135,6 +136,7 @@ const auth = new Authentication()
         UsernameInput,
         WeakPanel,
         InfiniteLoading,
+        OverwatchPanel,
     },
 })
 export default class UserInfo extends Vue {
@@ -260,13 +262,11 @@ export default class UserInfo extends Vue {
 }
 
 .stats {
-    @include overwatch-panel;
     padding: 1em;
 }
 
 .restrictions {
     margin-top: 1em;
-    @include overwatch-panel;
     padding: 1em;
     background-color: hsla(10, 100%, 7%, .43);
     display: flex;

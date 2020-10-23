@@ -1,5 +1,5 @@
 <template>
-    <div class="guide-preview">
+    <OverwatchPanel class="guide-preview">
         <GuideMeta
                 :entry="metaEntry"
                 :search-descriptor="searchDescriptor"
@@ -13,7 +13,7 @@
                     :comments-count="head.commentsCount"
             />
         </div>
-    </div>
+    </OverwatchPanel>
 </template>
 
 <script lang="ts">
@@ -35,10 +35,12 @@ import GuideDto from "data/dto/GuideDto";
 import UserDto from "data/dto/UserDto";
 import Authentication from "@/ts/Authentication";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 
 
 @Component({
     components: {
+        OverwatchPanel,
         TrainingGoalButton,
         CommentsSection,
         CommentsButton,
@@ -87,7 +89,6 @@ export default class GuidePreview extends Vue {
 @import '~@/assets/css/tags.scss';
 
 .guide-preview {
-    @include overwatch-panel;
     display: inline-block;
     box-sizing: border-box;
     color: white;

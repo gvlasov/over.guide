@@ -1,7 +1,5 @@
 <template>
-    <div
-            class="report"
-    >
+    <OverwatchPanel class="report">
         <div class="reporter">
             <UserLink
                     :user="report.reporter"
@@ -63,7 +61,7 @@
                 <li>Reports</li>
             </ul>
         </div>
-    </div>
+    </OverwatchPanel>
 </template>
 
 <script lang="ts">
@@ -86,9 +84,11 @@ import restrictionTypes from 'data/restrictionTypes'
 import RestrictionTypeId from "data/RestrictionTypeId";
 import RestrictionTypeDto from "data/dto/RestrictionTypeDto";
 import Backend from "@/ts/Backend";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 
 @Component({
     components: {
+        OverwatchPanel,
         SentenceConstructor,
         RelativeTime,
         UserLink,
@@ -146,7 +146,6 @@ export default class Report extends Vue {
 @import '~@/assets/css/overwatch-ui.scss';
 
 .report {
-    @include overwatch-panel;
     display: flex;
     gap: 1em;
     flex-wrap: wrap;

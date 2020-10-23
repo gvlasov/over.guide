@@ -1,11 +1,15 @@
 <template>
-    <div class="weak-panel">
+    <OverwatchPanel class="weak-panel">
         <slot></slot>
-    </div>
+    </OverwatchPanel>
 </template>
 
 <script>
-export default {};
+import OverwatchPanel from "@/vue/general/OverwatchPanel";
+
+export default {
+    components: {OverwatchPanel}
+};
 
 </script>
 
@@ -15,7 +19,6 @@ export default {};
 
 .weak-panel {
     padding: 1em;
-    @include overwatch-panel;
     background-color: rgba(adjust-hue($overwatch-panel-bg-color, 210), 0.43);
     margin-bottom: 2em;
     margin-top: 2em;

@@ -5,7 +5,7 @@
             v-hammer:tap="onTap"
     >
         <div class="hover-display-container">
-            <div class="background"></div>
+            <OverwatchPanel class="background"></OverwatchPanel>
             <img v-bind:src="imgSrc" class="arrow"/>
             <div class="text">{{ isAtTop ? 'Scroll back' : 'Scroll to top' }}</div>
         </div>
@@ -15,8 +15,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
+import OverwatchPanel from '@/vue/general/OverwatchPanel'
 
-@Component({})
+@Component({
+    components: {
+        OverwatchPanel
+    }
+})
 export default class ScrollToTop extends Vue {
     isShowing: boolean = false
     scrollY: number = 0

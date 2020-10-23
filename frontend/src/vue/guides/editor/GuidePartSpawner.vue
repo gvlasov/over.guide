@@ -1,6 +1,6 @@
 <template>
     <div class="part-spawner">
-        <div
+        <OverwatchPanel
                 v-if="seeding"
                 class="seed"
                 v-bind:style="{order: where === ListPosition.Beginning ? 2 : 1}"
@@ -24,7 +24,7 @@
                     v-hammer:tap="() => {$emit('addVideo', where); seeding = false}"
             >video
             </OverwatchButton>
-        </div>
+        </OverwatchPanel>
             <div
                     v-if="!seeding"
                     class="new-buttons"
@@ -46,10 +46,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import {Prop, Watch} from "vue-property-decorator";
 import ListPosition from "@/ts/ListPosition";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 
 
 @Component({
     components: {
+        OverwatchPanel,
         GuidePart,
         OverwatchButton,
     },
@@ -93,7 +95,6 @@ export default class GuidePartSpawner extends Vue {
     }
 
     .seed {
-        @include overwatch-panel;
         flex: 0 0 100%;
         display: flex;
         justify-content: space-around;

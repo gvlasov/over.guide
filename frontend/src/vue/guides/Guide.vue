@@ -1,5 +1,5 @@
 <template>
-    <div class="guide">
+    <OverwatchPanel class="guide">
         <GuideMeta
                 :entry="head.entry"
                 :search-descriptor="searchDescriptor"
@@ -39,7 +39,7 @@
                 />
             </div>
         </div>
-    </div>
+    </OverwatchPanel>
 </template>
 
 <script lang="ts">
@@ -62,6 +62,7 @@ import GuideButtons from "@/vue/guides/GuideButtons.vue";
 import PostTypeId from "data/PostTypeId";
 import Upvoter from "@/vue/comments/Upvoter.vue";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 
 const auth = new Authentication();
 const backend = new Backend(axios)
@@ -77,6 +78,7 @@ const backend = new Backend(axios)
         GuideVideo,
         GuidePartText,
         OverwatchButton,
+        OverwatchPanel,
         TrainingGoalButton,
     },
 })
@@ -103,7 +105,6 @@ export default class Guide extends Vue {
 @import '~@/assets/css/tags.scss';
 
 .guide {
-    @include overwatch-panel;
     display: block;
     box-sizing: border-box;
     color: white;

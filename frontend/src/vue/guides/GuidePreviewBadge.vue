@@ -20,7 +20,7 @@
                 class="collapsed"
                 v-bind:class="{deleted: ghost}"
         >
-            <div
+            <OverwatchPanel
                     class="opacity"
                     v-hammer:tap="() => {$emit('open')}"
             >
@@ -55,7 +55,7 @@
                         />
                     </AspectRatioBox>
                 </div>
-            </div>
+            </OverwatchPanel>
             <slot/>
         </div>
     </div>
@@ -79,11 +79,13 @@ import GuidePartTextWidget from "@/ts/vso/GuidePartTextWidget";
 import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 
 const backend = new Backend(axios);
 
 @Component({
     components: {
+        OverwatchPanel,
         TagBadges,
         GuidePartText,
         AspectRatioBox,
@@ -139,7 +141,7 @@ export default class GuidePreviewBadge extends Vue {
         display: flex;
         min-height: $training-goal-height;
         cursor: pointer;
-        box-shadow: $overwatch-panel-bg-shadow;
+        box-shadow: 0 .1rem .3rem $overwatch-panel-bg-color;
         border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
 
 
@@ -155,8 +157,8 @@ export default class GuidePreviewBadge extends Vue {
             flex-grow: 1;
             display: flex;
             overflow: hidden;
-            @include overwatch-panel-bg;
             border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
+            box-shadow: none;
 
             .tags {
                 margin-left: .3rem;

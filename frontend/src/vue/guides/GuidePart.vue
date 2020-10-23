@@ -1,5 +1,5 @@
 <template>
-    <div class="guide-part" v-bind:id="elementId(widget)">
+    <OverwatchPanel class="guide-part" v-bind:id="elementId(widget)">
         <template v-if="widget.isText">
             <MarkdownGuide
                     v-if="showMarkdownGuide && !widget.editing && widget.isText"
@@ -67,7 +67,7 @@
                 </OverwatchButton>
             </div>
         </template>
-    </div>
+    </OverwatchPanel>
 </template>
 
 <script lang="ts">
@@ -83,10 +83,12 @@ import Component from "vue-class-component";
 import {Prop, Watch} from "vue-property-decorator";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 
 
 @Component({
     components: {
+        OverwatchPanel,
         OverwatchPanelButton,
         GuidePartVideoEditor,
         OverwatchButton,
@@ -171,7 +173,6 @@ export default class GuidePart extends Vue {
 @import '~@/assets/css/common.scss';
 
 .guide-part {
-    @include overwatch-panel;
     padding: 1em;
     color: white;
     position: relative;

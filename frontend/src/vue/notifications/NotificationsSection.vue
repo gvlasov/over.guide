@@ -119,6 +119,9 @@ export default class NotificationsSection extends Vue {
     notificationCheckIntervalMs = 30 * 1000
 
     async infiniteHandler($state: InfiniteHandlerState) {
+        if (!this.auth.authenticated) {
+            return
+        }
         await Backend.instance.getFeedNotifications(
             this.alreadyLoadedIds
         )
@@ -141,7 +144,6 @@ export default class NotificationsSection extends Vue {
 
     @Watch('show')
     onShowChange(newValue) {
-
         if (newValue) {
             if (this.auth.authenticated) {
                 Backend.instance.markNotificationsRead(
@@ -204,6 +206,9 @@ export default class NotificationsSection extends Vue {
     }
 
     resetInfiniteLoading() {
+        if (!this.auth.authenticated) {
+            return
+        }
         if (this.$refs.infiniteLoading) {
             (this.$refs.infiniteLoading as any).stateChanger.reset();
         }
