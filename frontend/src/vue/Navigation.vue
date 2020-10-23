@@ -1,5 +1,5 @@
 <template>
-    <div class="navigation root-content-panel-wrap">
+    <div class="navigation">
         <router-link
                 to="/search"
                 v-bind:class="{active: currentRouteStartsWith('/search')}"

@@ -8,12 +8,3 @@ $root-content-width: 54rem;
     max-width: native-min($root-content-width, 100vw);
     min-width: native-min($root-content-width, 100vw);
 }
-
-.root-content-panel-wrap {
-    padding-left: .4rem;
-    padding-right: .4rem;
-    @media all and (max-width: $root-content-width) {
-        padding-left: 0;
-        padding-right: 0;
-    }
-}

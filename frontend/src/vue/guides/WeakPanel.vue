@@ -1,5 +1,5 @@
 <template>
-    <div class="weak-panel root-content-panel-wrap">
+    <div class="weak-panel">
         <slot></slot>
     </div>
 </template>

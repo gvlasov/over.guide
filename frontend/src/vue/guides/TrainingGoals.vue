@@ -17,21 +17,17 @@
             Synchronizing
             <div>{{ deliveredCount }}</div>
         </div>
-        <div
+        <WeakPanel
                 v-else-if="trainingGoals.length === 0"
-                class="root-content-panel-wrap"
+                class="no-guides-notice"
         >
-            <WeakPanel
-                    class="no-guides-notice"
-            >
-                <router-link to="/search">Discover guides</router-link>
-                and add those you plan to master to your training goals
-            </WeakPanel>
-        </div>
+            <router-link to="/search">Discover guides</router-link>
+            and add those you plan to master to your training goals
+        </WeakPanel>
         <template v-else>
             <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="isAnyOpen">
                 <TrainingGoal
-                        class="training-goal root-content-sizer root-content-panel-wrap"
+                        class="training-goal root-content-sizer"
                         v-for="trainingGoal in trainingGoals"
                         :key="trainingGoal.head.entry.guideId + '-'+trainingGoal.order"
                         :training-goal="trainingGoal"

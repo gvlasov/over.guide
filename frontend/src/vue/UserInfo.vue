@@ -13,7 +13,7 @@
             User doesn't exist
         </div>
         <template v-else>
-            <div class="root-content-panel-wrap info">
+            <div class="info">
                 <BackgroundHeading class="username">{{ userInfo.user.name }}</BackgroundHeading>
                 <template v-if="isThisMe">
                     <div class="buttons-wrap">
@@ -44,16 +44,13 @@
                     </div>
                 </template>
             </div>
-            <div class="root-content-panel-wrap">
-                <div class="stats">
-                    <div class="guide-votes-received-count">
-                        Total guide score: {{ userInfo.guideVotesReceivedCount }}
-                    </div>
+            <div class="stats">
+                <div class="guide-votes-received-count">
+                    Total guide score: {{ userInfo.guideVotesReceivedCount }}
                 </div>
             </div>
             <div
                     v-if="userInfo.restrictions !== void 0"
-                    class="root-content-panel-wrap"
             >
                 <div class="restrictions">
                     <div
@@ -73,36 +70,29 @@
                 </div>
             </div>
             <div class="guide-feed">
-                <div
-
+                <Guide
                         v-for="head in userInfo.lastAuthoredGuides"
                         :key="head.guideId"
-                        class="root-content-panel-wrap"
+                        :head="head"
+                        :show-training-goal-button="true"
+                        :search-descriptor="null"
+                        @guideDeactivated="onDeactivated"
+                />
+                <InfiniteLoading
+                        v-if="userInfo !== null"
+                        ref="infiniteLoading"
+                        direction="bottom"
+                        @infinite="infiniteHandler"
+                        force-use-infinite-wrapper
                 >
-                    <Guide
-                            :head="head"
-                            :show-training-goal-button="true"
-                            :search-descriptor="null"
-                            @guideDeactivated="onDeactivated"
-                    />
-                </div>
-                <div class="root-content-panel-wrap">
-                    <InfiniteLoading
-                            v-if="userInfo !== null"
-                            ref="infiniteLoading"
-                            direction="bottom"
-                            @infinite="infiniteHandler"
-                            force-use-infinite-wrapper
-                    >
 
-                        <WeakPanel slot="no-results">
-                            No authored guides
-                        </WeakPanel>
-                        <WeakPanel slot="no-more">
-                            No more guides
-                        </WeakPanel>
-                    </InfiniteLoading>
-                </div>
+                    <WeakPanel slot="no-results">
+                        No authored guides
+                    </WeakPanel>
+                    <WeakPanel slot="no-more">
+                        No more guides
+                    </WeakPanel>
+                </InfiniteLoading>
             </div>
         </template>
     </div>

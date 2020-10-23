@@ -1,5 +1,5 @@
 <template>
-    <div class="part-spawner root-content-panel-wrap">
+    <div class="part-spawner">
         <div
                 v-if="seeding"
                 class="seed"

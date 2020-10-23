@@ -10,7 +10,7 @@
             />
         </transition>
         <transition-group
-                class="guide-parts root-content-panel-wrap"
+                class="guide-parts"
                 name="appear"
                 @before-enter="beforeEnter"
                 :enter-to-class="enterToClass"

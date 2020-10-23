@@ -23,51 +23,48 @@
             >
                 <div
                         v-if="auth.authenticated"
-                        class="root-content-panel-wrap"
+                        class="notifications"
                 >
-                    <div class="notifications">
-                        <div
-                                v-if="notifications === null"
-                                class="status-message"
-                        >
-                            Loading notifications
-                        </div>
-                        <template v-else>
-                            <Notification
-                                    v-for="notification in notifications"
-                                    :key="notification.id"
-                                    :notification="notification"
-                                    @navigatedToComment="() => show = false"
-                            />
-                        </template>
-                        <InfiniteLoading
-                                ref="infiniteLoading"
-                                direction="bottom"
-                                @infinite="infiniteHandler"
-                        >
-
-                            <div
-                                    slot="no-results"
-                                    class="notifications-end"
-                            >
-                                No notifications
-                            </div>
-                            <div
-                                    slot="no-more"
-                                    class="notifications-end"
-                            >
-                                No more notifications
-                            </div>
-                        </InfiniteLoading>
+                    <div
+                            v-if="notifications === null"
+                            class="status-message"
+                    >
+                        Loading notifications
                     </div>
+                    <template v-else>
+                        <Notification
+                                v-for="notification in notifications"
+                                :key="notification.id"
+                                :notification="notification"
+                                @navigatedToComment="() => show = false"
+                        />
+                    </template>
+                    <InfiniteLoading
+                            ref="infiniteLoading"
+                            direction="bottom"
+                            @infinite="infiniteHandler"
+                    >
+
+                        <div
+                                slot="no-results"
+                                class="notifications-end"
+                        >
+                            No notifications
+                        </div>
+                        <div
+                                slot="no-more"
+                                class="notifications-end"
+                        >
+                            No more notifications
+                        </div>
+                    </InfiniteLoading>
                 </div>
                 <div
+
                         v-else
-                        class="root-content-panel-wrap"
+                        class="login-requirement"
                 >
-                    <div class="login-requirement">
-                        Log in to receive notifications
-                    </div>
+                    Log in to receive notifications
                 </div>
             </div>
         </transition>
@@ -285,6 +282,7 @@ export default class NotificationsSection extends Vue {
                 color: white;
             }
         }
+
         .login-requirement {
             background-color: hsla(227, 16%, 48%, 0.98);
             padding: 1em;

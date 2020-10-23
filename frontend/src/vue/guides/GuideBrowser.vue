@@ -6,13 +6,11 @@
         >
             <template v-slot:notice>To change your training goals, log in to your account</template>
         </LoginRequirement>
-        <div class="root-content-panel-wrap">
-            <DescriptorBuilder
-                    :search-button-enabled="false"
-                    v-model="localDescriptor"
-            />
-        </div>
-        <div class="guide-feed root-content-panel-wrap">
+        <DescriptorBuilder
+                :search-button-enabled="false"
+                v-model="localDescriptor"
+        />
+        <div class="guide-feed">
             <Guide
                     v-for="guide in guides"
                     :key="guide.guideId"
@@ -30,7 +28,6 @@
                 ref="infiniteLoading"
                 direction="bottom"
                 @infinite="infiniteHandler"
-                class="root-content-panel-wrap"
                 force-use-infinite-wrapper
         >
             <WeakPanel slot="no-results" class="no-results">

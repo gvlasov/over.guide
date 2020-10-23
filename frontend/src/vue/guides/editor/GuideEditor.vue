@@ -32,25 +32,21 @@
                 >
                     What is your guide about?
                 </div>
-                <div
-                        class="root-content-panel-wrap"
+                <DescriptorBuilder
+                        v-model="head.entry.descriptor"
+                        :search-button-enabled="false"
+                        class="descriptor-builder"
+                        v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
                 >
-                    <DescriptorBuilder
-                            v-model="head.entry.descriptor"
-                            :search-button-enabled="false"
-                            class="descriptor-builder"
-                            v-bind:class="{'forced-descriptor': forceDescriptorSelection}"
+                    <div
+                            v-if="!head.entry.descriptor.isEmpty"
+                            class="similar-tag-guides-wrap"
                     >
-                        <div
-                                v-if="!head.entry.descriptor.isEmpty"
-                                class="similar-tag-guides-wrap"
-                        >
-                            <SimilarTagGuides
-                                    :descriptor="head.entry.descriptor"
-                            />
-                        </div>
-                    </DescriptorBuilder>
-                </div>
+                        <SimilarTagGuides
+                                :descriptor="head.entry.descriptor"
+                        />
+                    </div>
+                </DescriptorBuilder>
                 <div
                         v-if="forceDescriptorSelection"
                         class="force-descriptor-buttons"
@@ -101,7 +97,7 @@
             </div>
             <div
                     v-if="preview"
-                    class="preview root-content-panel-wrap"
+                    class="preview"
             >
                 <BackgroundHeading>Preview</BackgroundHeading>
                 <GuidePreview

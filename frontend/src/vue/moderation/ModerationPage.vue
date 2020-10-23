@@ -1,5 +1,5 @@
 <template>
-    <div class="root-content-sizer root-content-panel-wrap reports">
+    <div class="root-content-sizer reports">
         <Report
                 v-for="report in unhandledReports"
                 :key="report.postId+'-'+report.postTypeId+'-'+report.reportReasonId+'-'+report.reporter.id"
