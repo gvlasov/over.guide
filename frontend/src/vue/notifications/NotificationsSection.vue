@@ -22,6 +22,7 @@
                     class="notifications-wrap root-content-sizer"
             >
                 <div
+                        v-if="auth.authenticated"
                         class="root-content-panel-wrap"
                 >
                     <div class="notifications">
@@ -60,6 +61,14 @@
                         </InfiniteLoading>
                     </div>
                 </div>
+                <div
+                        v-else
+                        class="root-content-panel-wrap"
+                >
+                    <div class="login-requirement">
+                        Log in to receive notifications
+                    </div>
+                </div>
             </div>
         </transition>
     </div>
@@ -77,6 +86,7 @@ import Notification from "@/vue/notifications/Notification.vue";
 import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import InfiniteLoading from "vue-infinite-loading";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
+import Authentication from "@/ts/Authentication";
 
 const AnchorRouterLink = require('vue-anchor-router-link').default;
 
@@ -96,6 +106,8 @@ const ClickOutside = require('vue-click-outside')
     }
 })
 export default class NotificationsSection extends Vue {
+
+    auth = Authentication.instance
 
     show: boolean = false
 
@@ -272,6 +284,11 @@ export default class NotificationsSection extends Vue {
                 font-size: 1.5em;
                 color: white;
             }
+        }
+        .login-requirement {
+            background-color: hsla(227, 16%, 48%, 0.98);
+            padding: 1em;
+            box-shadow: 0 .9em .8em hsla(0, 0%, 20%, .5);
         }
 
         .notifications-enter {
