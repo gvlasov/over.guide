@@ -44,13 +44,25 @@ export class NotificationController {
                 },
             },
             limit: countPerPage + 1,
-            order: [['id', 'DESC']],
+            order: [['read', 'ASC'], ['id', 'DESC']],
         })
             .then(
-                notifications => {
+                async notifications => {
                     return {
                         notifications: notifications.slice(0, countPerPage).map(n => n.toDto()),
-                        hasNextPage: notifications.length === countPerPage + 1
+                        hasNextPage: notifications.length === countPerPage + 1,
+                        totalUnread: await this.sequelize.query(
+                            `
+select count(*) as cnt from Notification
+where userId = ${user.id}
+and \`read\` = 0
+`
+                        )
+                            .then(
+                                (result: [unknown[], unknown]) => {
+                                    return ((result[0][0] as any).cnt as number)
+                                }
+                            )
                     }
                 }
             )

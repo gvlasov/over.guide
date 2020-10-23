@@ -10,9 +10,9 @@
             <div class="bell-button-content-wrap">
                 <font-awesome-icon icon="bell"/>
                 <div
-                        v-if="unreadNotificationsCount > 0"
+                        v-if="totalUnread > 0"
                         class="counter"
-                >{{ unreadNotificationsCount }}
+                >{{ totalUnread }}
                 </div>
             </div>
         </div>
@@ -47,11 +47,13 @@
 
                             <div
                                     slot="no-results"
+                                    class="notifications-end"
                             >
                                 No notifications
                             </div>
                             <div
                                     slot="no-more"
+                                    class="notifications-end"
                             >
                                 No more notifications
                             </div>
@@ -101,7 +103,11 @@ export default class NotificationsSection extends Vue {
 
     alreadyLoadedIds: number[] = []
 
-    hasNextPage: boolean = true
+    hasNextPage: boolean | null = true
+
+    totalUnread: number = 0
+
+    notificationCheckIntervalMs = 30 * 1000
 
     async infiniteHandler($state: InfiniteHandlerState) {
         await Backend.instance.getFeedNotifications(
@@ -111,6 +117,7 @@ export default class NotificationsSection extends Vue {
                 if (this.notifications === null) {
                     this.notifications = []
                 }
+                this.totalUnread = page.totalUnread
                 this.notifications.push(...page.notifications);
                 this.alreadyLoadedIds.push(...page.notifications.map(dto => dto.id as number))
                 if (this.notifications.length > 0) {
@@ -126,7 +133,9 @@ export default class NotificationsSection extends Vue {
     @Watch('show')
     onShowChange(newValue) {
         if (newValue) {
-            Backend.instance.markAllNotificationsRead()
+            Backend.instance.markNotificationsRead(
+                this.notifications.map(n => n.id)
+            )
             this.$emit('open')
         } else {
             for (let notification of this.notifications) {
@@ -134,17 +143,6 @@ export default class NotificationsSection extends Vue {
             }
             this.$emit('close')
         }
-    }
-
-    mounted() {
-        window.addEventListener(
-            'keyup',
-            (e) => {
-                if (e.code === 'Escape') {
-                    this.show = false
-                }
-            }
-        )
     }
 
     @Watch('$route')
@@ -168,6 +166,36 @@ export default class NotificationsSection extends Vue {
                 reset: () => void 0,
             }
         )
+        window.addEventListener(
+            'keyup',
+            (e) => {
+                if (e.code === 'Escape') {
+                    this.show = false
+                }
+            }
+        )
+        setInterval(() => {
+            if (!this.show) {
+                this.resetInfiniteLoading()
+                this.infiniteHandler(
+                    {
+                        complete: () => void 0,
+                        error: () => void 0,
+                        loaded: () => void 0,
+                        reset: () => void 0,
+                    }
+                )
+            }
+        }, this.notificationCheckIntervalMs)
+    }
+
+    resetInfiniteLoading() {
+        if (this.$refs.infiniteLoading) {
+            (this.$refs.infiniteLoading as any).stateChanger.reset();
+        }
+        this.alreadyLoadedIds.splice(0, this.alreadyLoadedIds.length)
+        this.notifications.splice(0, this.notifications.length)
+        this.hasNextPage = null;
     }
 
 };
@@ -231,12 +259,13 @@ export default class NotificationsSection extends Vue {
                 height: 2em;
             }
 
-            & ::v-deep .infinite-status-prompt {
+            .notifications-end {
                 background-color: hsla(110, 47%, 48%, 0.98);
                 color: white;
                 padding: .7em;
                 font-size: 1.5em;
             }
+
             .status-message {
                 text-align: center;
                 padding: .7em;
