@@ -23,7 +23,6 @@
             See your current
             <router-link :to="'/user/'+auth.userId+'#restrictions'">restrictions</router-link>
         </div>
-        {{ notification.json }}
     </div>
 </template>
 
