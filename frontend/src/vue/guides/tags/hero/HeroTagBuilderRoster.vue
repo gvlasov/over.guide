@@ -178,6 +178,7 @@ export default class HeroTagBuilderRoster extends mixins(Roster_SelectedHeroesMi
 
 <style lang="scss" scoped>
 @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/common.scss";
 
 .tag-builder-roster-wrap {
     width: 100vw;
@@ -230,6 +231,7 @@ export default class HeroTagBuilderRoster extends mixins(Roster_SelectedHeroesMi
         flex-direction: column;
         justify-content: end;
         margin: 0 auto;
+        @include custom-desktop-scrollbar(rgba(0, 0, 0, 0), hsla(0, 0, 0, .6));
 
         .role-group {
             display: flex;

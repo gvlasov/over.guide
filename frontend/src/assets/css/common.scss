@@ -8,3 +8,25 @@ $root-content-width: 54rem;
     max-width: native-min($root-content-width, 100vw);
     min-width: native-min($root-content-width, 100vw);
 }
+
+@mixin custom-desktop-scrollbar(
+    $background-color,
+    $thumb-color: hsla(0, 0, 0, .2)
+) {
+    @media screen and (hover: hover) {
+        &::-webkit-scrollbar {
+            width: 1em;
+            background-color: $background-color;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            width: 1em;
+            border-radius: .5em;
+            background-color: $thumb-color;
+        }
+
+        &::-webkit-scrollbar-button {
+            height: 0;
+        }
+    }
+}
