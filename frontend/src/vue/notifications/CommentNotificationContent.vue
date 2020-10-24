@@ -30,8 +30,8 @@ import UserLink from "@/vue/guides/UserLink.vue";
 import Comment from "@/vue/comments/Comment.vue";
 import CommentVso from "@/ts/vso/CommentVso";
 import {CommentReadDto} from "data/dto/CommentReadDto";
-import PostVso from "../../ts/vso/PostVso";
-import CommentsLevel from "../comments/CommentsLevel.vue";
+import PostVso from "@/ts/vso/PostVso";
+import CommentsLevel from "@/vue/comments/CommentsLevel.vue";
 
 @Component({
     components: {
@@ -89,11 +89,9 @@ export default class CommentNotificationContent extends Vue {
         right: 0;
         bottom: 0;
         z-index: 1;
-
     }
 
     .comment-level {
-        flex-grow: 1;
         z-index: 2;
         pointer-events: none;
 
@@ -106,17 +104,5 @@ export default class CommentNotificationContent extends Vue {
         }
     }
 
-    .permalink {
-        font-size: 1.5em;
-        color: white;
-        flex-grow: 0;
-        padding: 1em;
-        background-color: hsla(227, 16%, 48%, 0.98);
-        border-radius: .3em;
-
-        &:hover {
-            background-color: hsla(208, 50%, 50%, 0.98);
-        }
-    }
 }
 </style>

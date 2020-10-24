@@ -216,6 +216,7 @@ $strong-color: white;
     flex-direction: column;
     gap: .6em;
     max-width: 100%;
+    font-family: "IBM Plex Sans", 'sans-serif';
 
     .heading {
         width: 100%;

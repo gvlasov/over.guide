@@ -53,19 +53,10 @@ export default class Notification extends Vue {
 @import '~@/assets/css/common.scss';
 
 .notification {
-    text-decoration: none;
-    color: white;
-    font-family: "IBM Plex Sans", 'sans-serif';
     font-variant-caps: normal;
     padding: 1em .5em 1em .5em;
     border-bottom: 1px solid hsl(227, 15%, 60%);
     background-color: hsla(227, 16%, 48%, 0.98);
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    flex-wrap: nowrap;
-    justify-content: stretch;
-    gap: .5em;
     position: relative;
 
     &:hover {
