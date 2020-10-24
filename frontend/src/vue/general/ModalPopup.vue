@@ -1,11 +1,15 @@
 <template>
     <portal to="modal">
-        <ModalBackground
-                v-hammer:tap="()=>$emit('close')"
-        />
-        <Popup>
-            <slot></slot>
-        </Popup>
+        <slot name="background">
+            <ModalBackground
+                    v-hammer:tap="()=>$emit('close')"
+            />
+        </slot>
+        <slot name="popup">
+            <Popup>
+                <slot></slot>
+            </Popup>
+        </slot>
     </portal>
 </template>
 

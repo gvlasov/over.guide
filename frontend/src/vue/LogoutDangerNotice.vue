@@ -7,12 +7,12 @@
             <OverwatchButton
                     type="default"
                     v-hammer:tap="() => $emit('back')"
-            >Cancel
+            >Back
             </OverwatchButton>
             <OverwatchButton
                     type="main"
                     v-hammer:tap="() => $emit('confirm')"
-            >Log me out
+            >Log out
             </OverwatchButton>
         </div>
     </div>
@@ -37,7 +37,7 @@ export default class LogoutDangerNotice extends Vue {
 @import '~@/assets/css/overwatch-ui.scss';
 
 .logout-danger-notice {
-    padding: 2em;
+    padding: 1em;
     background-color: hsla(320, 30%, 20%, .92);
     @include overwatch-futura;
 

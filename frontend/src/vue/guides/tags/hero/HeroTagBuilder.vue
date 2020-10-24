@@ -63,27 +63,51 @@
                 </template>
             </TagGroupFrame>
         </div>
-        <HeroTagBuilderRoster
+        <ModalPopup
                 v-if="selecting && selecting.isPlayer"
-                :gamer-position="gamerPositions.players"
-                v-model="localDescriptor"
-                @tagGroupSelect="($event) => {selecting = $event;}"
-                @save="onRosterDone"
-        />
-        <HeroTagBuilderRoster
+                @close="selecting = null"
+        >
+            <HeroTagBuilderRoster
+                    slot="default"
+                    :gamer-position="gamerPositions.players"
+                    v-model="localDescriptor"
+                    @tagGroupSelect="($event) => {selecting = $event;}"
+                    @save="onRosterDone"
+            />
+            <template slot="background">
+                <ModalBackground class="player-modal-background"/>
+            </template>
+        </ModalPopup>
+        <ModalPopup
                 v-if="selecting && selecting.isTeammate"
-                :gamer-position="gamerPositions.teammates"
-                v-model="localDescriptor"
-                @tagGroupSelect="($event) => {selecting = $event;}"
-                @save="onRosterDone"
-        />
-        <HeroTagBuilderRoster
+                @close="selecting = null"
+        >
+            <HeroTagBuilderRoster
+                    slot="default"
+                    :gamer-position="gamerPositions.teammates"
+                    v-model="localDescriptor"
+                    @tagGroupSelect="($event) => {selecting = $event;}"
+                    @save="onRosterDone"
+            />
+            <template slot="background">
+                <ModalBackground class="teammate-modal-background"/>
+            </template>
+        </ModalPopup>
+        <ModalPopup
                 v-if="selecting && selecting.isEnemy"
-                v-model="localDescriptor"
-                :gamer-position="gamerPositions.enemies"
-                @tagGroupSelect="($event) => {selecting = $event;}"
-                @save="onRosterDone"
-        />
+                @close="selecting = null"
+        >
+            <HeroTagBuilderRoster
+                    slot="default"
+                    v-model="localDescriptor"
+                    :gamer-position="gamerPositions.enemies"
+                    @tagGroupSelect="($event) => {selecting = $event;}"
+                    @save="onRosterDone"
+            />
+            <template slot="background">
+                <ModalBackground class="enemy-modal-background"/>
+            </template>
+        </ModalPopup>
     </div>
 </template>
 
@@ -98,9 +122,13 @@ import GamerPositionVso from "@/ts/vso/GamerPositionVso";
 import Vue from 'vue'
 import {Model} from "vue-property-decorator";
 import Component from "vue-class-component";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
+import ModalBackground from "@/vue/general/ModalBackground.vue";
 
 @Component({
     components: {
+        ModalBackground,
+        ModalPopup,
         TagGroupInvite,
         TagGroupBackground,
         TagGroupFrame,
@@ -137,12 +165,25 @@ export default class HeroTagBuilder extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.selected-tags {
-    display: inline-flex;
-    padding: 0 .5rem 0 .5rem;
+@import "~@/assets/css/tags.scss";
+.tag-builder {
+    .selected-tags {
+        display: inline-flex;
+        padding: 0 .5rem 0 .5rem;
 
-    .tappable-background {
-        cursor: pointer;
+        .tappable-background {
+            cursor: pointer;
+        }
     }
+
+}
+.enemy-modal-background {
+    background-color: rgba(darken($tag-enemy-color, 50%), .9)
+}
+.teammate-modal-background {
+    background-color: rgba(darken($tag-teammate-color, 66%), .9)
+}
+.player-modal-background {
+    background-color: rgba(darken($tag-player-color, 54%), .9)
 }
 </style>

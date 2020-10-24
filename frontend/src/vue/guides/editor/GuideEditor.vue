@@ -14,14 +14,17 @@
                     v-model="head.entry.descriptor"
                     base-path="/guide-editor/"
             />
-            <ModalPopup v-if="loginRequired" @close="loginRequired = false">
+            <NotificationModalPopup
+                    v-if="loginRequired"
+                    @close="loginRequired = false"
+            >
                 <LoginRequirement
                         @back="loginRequired = false"
                 >
                     <template v-slot:notice>Publishing a guide requires logging in with Battle.net</template>
                     <template v-slot:subnotice>Your current guide will be restored right away</template>
                 </LoginRequirement>
-            </ModalPopup>
+            </NotificationModalPopup>
             <div
                     v-if="!preview"
                     class="editor"
@@ -146,6 +149,7 @@ import GuidePreview from "@/vue/guides/GuidePreview.vue";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
+import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 
 const Debounce = require('debounce-decorator').default
 
@@ -155,6 +159,7 @@ const draft = new StoredGuideDraft()
 
 @Component({
     components: {
+        NotificationModalPopup,
         ModalPopup,
         GuidePreview,
         SimilarTagGuides,

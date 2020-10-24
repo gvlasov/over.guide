@@ -68,8 +68,9 @@
                     v-hammer:tap="() => showReportDialogue = !showReportDialogue"
             >Report
             </button>
-            <ModalPopup
+            <NotificationModalPopup
                     v-if="showReportDialogue"
+                    @close="() => showReportDialogue = false"
             >
                 <ReportCreator
                         :post-type-id="PostTypeId.Comment"
@@ -78,7 +79,7 @@
                         :reasons="commentReportReasons"
                         @close="() => showReportDialogue = false"
                 />
-            </ModalPopup>
+            </NotificationModalPopup>
         </div>
         <div
                 v-if="showReplyForm || showEditForm"
@@ -124,6 +125,7 @@ import Backend from "@/ts/Backend";
 import CreateCommentForm from "@/vue/comments/CreateCommentForm.vue";
 import EditCommentForm from "@/vue/comments/EditCommentForm.vue";
 import {Route} from "vue-router";
+import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 
 const commentReportReasons = [
     reportReasons.get(ReportReasonId.Spam),
@@ -132,6 +134,7 @@ const commentReportReasons = [
 
 @Component({
     components: {
+        NotificationModalPopup,
         EditCommentForm,
         CreateCommentForm,
         ReportCreator,

@@ -5,9 +5,9 @@
                 v-hammer:tap="() => creatingReport = !creatingReport"
         >report
         </LinkLikeButton>
-        <ModalPopup
+        <NotificationModalPopup
                 v-if="creatingReport"
-                @close="() =>  creatingReport = false"
+                @close="() => creatingReport = false"
         >
             <ReportCreator
                     :post-id="entry.guideId"
@@ -16,7 +16,7 @@
                     :reasons="reasons"
                     @close="() => creatingReport = false"
             />
-        </ModalPopup>
+        </NotificationModalPopup>
         <LinkLikeButton
                 v-if="canEdit"
                 v-hammer:tap="edit"
@@ -64,11 +64,13 @@ import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
 import ModalPopup from "@/vue/general/ModalPopup.vue";
 import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
+import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 
 const auth = new Authentication();
 
 @Component({
     components: {
+        NotificationModalPopup,
         LinkLikeButton,
         ModalPopup,
         ReportCreator,

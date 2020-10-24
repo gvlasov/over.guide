@@ -24,7 +24,6 @@ export default class Popup extends Vue {
 <style lang="scss" scoped>
 @import "~@/assets/css/common.scss";
 
-$width: 40rem;
 .popup {
     text-align: center;
     left: 50%;
@@ -33,9 +32,6 @@ $width: 40rem;
     position: fixed;
     z-index: 200;
     box-sizing: border-box;
-    max-width: native-min($width, 100vw);
-    min-width: native-min($width, 100vw);
-    font-size: 1.5em;
 }
 
 .popup-enter {
