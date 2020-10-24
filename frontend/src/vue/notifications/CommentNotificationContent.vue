@@ -88,7 +88,7 @@ export default class CommentNotificationContent extends Vue {
         top: 0;
         right: 0;
         bottom: 0;
-        z-index: 1;
+        z-index: -1;
     }
 
     .comment-level {
