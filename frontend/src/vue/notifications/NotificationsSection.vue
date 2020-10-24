@@ -3,19 +3,10 @@
             class="notifications-section"
             v-click-outside="() => show = false"
     >
-        <div
-                class="bell-button"
+        <NotificationsButton
+                :notifications="notifications"
                 v-hammer:tap="() => show = !show"
-        >
-            <div class="bell-button-content-wrap">
-                <font-awesome-icon icon="bell"/>
-                <div
-                        v-if="totalUnread > 0"
-                        class="counter"
-                >{{ totalUnread }}
-                </div>
-            </div>
-        </div>
+        />
         <transition name="notifications" appear>
             <div
                     v-if="show"
@@ -84,6 +75,7 @@ import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import InfiniteLoading from "vue-infinite-loading";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import Authentication from "@/ts/Authentication";
+import NotificationsButton from "./NotificationsButton.vue";
 
 const AnchorRouterLink = require('vue-anchor-router-link').default;
 
@@ -91,6 +83,7 @@ const ClickOutside = require('vue-click-outside')
 
 @Component({
     components: {
+        NotificationsButton,
         Notification,
         UserLink,
         RelativeTime,
@@ -166,13 +159,6 @@ export default class NotificationsSection extends Vue {
         this.show = false
     }
 
-    get unreadNotificationsCount(): number {
-        if (this.notifications === null) {
-            return 0
-        }
-        return this.notifications.filter(n => !n.read).length
-    }
-
     mounted() {
         this.infiniteHandler(
             {
@@ -228,33 +214,6 @@ export default class NotificationsSection extends Vue {
     cursor: pointer;
     text-align: center;
     max-height: 10em;
-
-    .bell-button {
-        font-size: 1em;
-        user-select: none;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .bell-button-content-wrap {
-            position: relative;
-
-            .counter {
-                background-color: hsl(16, 80%, 50%);
-                border-radius: 50%;
-                position: absolute;
-                top: 0;
-                left: 50%;
-                width: 1em;
-                height: 1em;
-                line-height: .9em;
-                padding: .2em;
-                font-size: .5em;
-            }
-        }
-
-    }
 
     .notifications-wrap {
         position: absolute;
