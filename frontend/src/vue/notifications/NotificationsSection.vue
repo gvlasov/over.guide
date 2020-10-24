@@ -301,18 +301,16 @@ export default class NotificationsSection extends Vue {
             box-shadow: 0 .9em .8em hsla(0, 0%, 20%, .5);
         }
 
-        .notifications-enter {
+        &.notifications-enter {
             opacity: 0;
-            top: 1em;
         }
 
-        .notifications-enter-to {
+        &.notifications-enter-to {
             opacity: 1;
-            top: 0;
         }
 
-        .notifications-enter-active {
-            transition: opacity 1s;
+        &.notifications-enter-active {
+            transition: opacity .13s;
         }
     }
 
