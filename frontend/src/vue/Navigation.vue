@@ -64,19 +64,22 @@ export default class Navigation extends Vue {
 @import "~@/assets/css/tags.scss";
 @import "~@/assets/css/common.scss";
 
+$height: 4rem;
 .navigation {
     $underline-width: .3em;
     font-size: 1.7em;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    max-height: $height;
+    overflow: visible;
 
     a, .notifications-section {
         display: flex;
         flex-direction: column;
         justify-content: center;
         flex-grow: 1;
-        height: 4rem;
+        height: $height;
         box-sizing: border-box;
         background-color: hsla(227, 29%, 45%, .7);
         @include overwatch-futura;
