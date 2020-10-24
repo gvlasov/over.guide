@@ -81,6 +81,8 @@ export default class CommentNotificationContent extends Vue {
 @import '~@/assets/css/common.scss';
 
 .comment-notification-content {
+    position: relative;
+    padding: 1em .5em 1em 1.5em;
 
     .overlay-link {
         position: absolute;
@@ -88,12 +90,14 @@ export default class CommentNotificationContent extends Vue {
         top: 0;
         right: 0;
         bottom: 0;
-        z-index: -1;
+        z-index: 1;
     }
 
     .comment-level {
+        position: relative;
         z-index: 2;
         pointer-events: none;
+        padding: 0;
 
         & ::v-deep a,
         & ::v-deep button,

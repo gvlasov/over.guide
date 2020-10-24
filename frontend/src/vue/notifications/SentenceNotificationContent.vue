@@ -85,7 +85,7 @@ export default class CommentNotificationContent extends Vue {
 @import '~@/assets/css/common.scss';
 
 .sentence-notification-content {
-    padding: 0 1em 0 1em;
+    padding: 1em .5em 1em 1.5em;
     font-family: 'IBM Plex Sans', 'sans-serif';
     color: white;
 }

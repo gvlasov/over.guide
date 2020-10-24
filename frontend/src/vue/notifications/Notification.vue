@@ -54,10 +54,10 @@ export default class Notification extends Vue {
 
 .notification {
     font-variant-caps: normal;
-    padding: 1em .5em 1em .5em;
     border-bottom: 1px solid hsl(227, 15%, 60%);
     background-color: hsla(227, 16%, 48%, 0.98);
     position: relative;
+    box-sizing: border-box;
 
     &:hover {
         background-color: hsla(227, 22%, 43%, 0.98);
