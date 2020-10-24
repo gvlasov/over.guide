@@ -1,7 +1,5 @@
 <template>
-    <div
-            class="sentence-notification-content"
-    >
+    <div class="sentence-notification-content">
         <div>Your actions on this site required moderator attention. Now</div>
         <ul>
             <li
@@ -88,5 +86,7 @@ export default class CommentNotificationContent extends Vue {
 
 .sentence-notification-content {
     padding: 0 1em 0 1em;
+    font-family: 'IBM Plex Sans', 'sans-serif';
+    color: white;
 }
 </style>
