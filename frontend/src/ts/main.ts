@@ -11,7 +11,7 @@ import GuideSearch from "@/vue/guides/GuideSearch.vue";
 import AsyncComputed from 'vue-async-computed'
 import {VueHammer} from 'vue2-hammer'
 import TrainingGoals from "@/vue/guides/TrainingGoals.vue";
-import UserInfo from "@/vue/UserInfo.vue";
+import UserPage from "@/vue/UserPage.vue";
 import GuidePage from "@/vue/guides/GuidePage.vue";
 import ModerationPage from "@/vue/moderation/ModerationPage.vue";
 import SiteResetPage from "@/vue/SiteResetPage.vue";
@@ -67,7 +67,7 @@ const router = new VueRouter({
             component: TrainingGoals,
             name: 'My training goals'
         },
-        {path: '/user/:id', component: UserInfo, name: 'Profile'},
+        {path: '/user/:id', component: UserPage, name: 'Profile'},
         {path: '/guide/:id', component: GuidePage},
         {path: '/moderation', component: ModerationPage, name: 'Moderation'},
         {path: '/site-reset', component: SiteResetPage, name: 'Reset storage'},
