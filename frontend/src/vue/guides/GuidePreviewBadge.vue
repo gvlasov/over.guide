@@ -37,21 +37,11 @@
                         :part="firstTextWidget.part"
                 />
                 <div
-                        v-if="false"
                         class="unclickable"
                 >
                     <AspectRatioBox>
-                        <YoutubeVideo
-                                v-if="typeof firstVideoWidget !== 'undefined'"
-                                :video-id="firstVideoWidget.part.excerpt.youtubeVideoId"
-                                :start="firstVideoWidget.part.excerpt.startSeconds"
-                                :end="firstVideoWidget.part.excerpt.endSeconds"
-                                :loop="true"
-                                :autoplay="false"
-                                :mute="true"
-                                :player-element-id="'training-goal-' + head.entry.guideId + '-' + order + '-' + firstVideoWidget.part.excerpt.youtubeVideoId"
-                                class="video"
-                                :enable-controls="false"
+                        <VideoPreview
+                                :excerpt="firstVideoWidget.part.excerpt"
                         />
                     </AspectRatioBox>
                 </div>
@@ -80,11 +70,15 @@ import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
+import VideoLoadingScreen from "@/vue/VideoLoadingScreen.vue";
+import VideoPreview from "@/vue/VideoPreview.vue";
 
 const backend = new Backend(axios);
 
 @Component({
     components: {
+        VideoPreview,
+        VideoLoadingScreen,
         OverwatchPanel,
         TagBadges,
         GuidePartText,
