@@ -98,8 +98,8 @@
         >
             <GuidePreviewBadge
                     v-for="(widget, index) in intersectingGuides"
-                    :key="widget.guide.guideId"
-                    :guide="widget.guide"
+                    :key="widget.head.entry.guideId"
+                    :head="widget.head"
                     :order="widget.order"
                     :open="widget.open"
                     :ghost="false"
@@ -204,8 +204,8 @@ export default class YoutubeExcerptEditor extends Vue {
                 )
                     .length > 0
             )
-            .map((guide, index) => new TrainingGoalWidget(
-                guide.entry,
+            .map((head, index) => new TrainingGoalWidget(
+                head,
                 index,
                 false,
                 false,
