@@ -4,7 +4,7 @@
             v-click-outside="() => show = false"
     >
         <NotificationsButton
-                :notifications="notifications"
+                :notifications="feed.items"
                 v-hammer:tap="() => show = !show"
         />
         <transition name="notifications" appear>
@@ -17,14 +17,14 @@
                         class="notifications"
                 >
                     <div
-                            v-if="notifications === null"
+                            v-if="feed.items === null"
                             class="status-message"
                     >
                         Loading notifications
                     </div>
                     <template v-else>
                         <Notification
-                                v-for="notification in notifications"
+                                v-for="notification in feed.items"
                                 :key="notification.id"
                                 :notification="notification"
                                 @navigatedToComment="() => show = false"
@@ -33,7 +33,7 @@
                     <InfiniteLoading
                             ref="infiniteLoading"
                             direction="bottom"
-                            @infinite="infiniteHandler"
+                            @infinite="(status) => feed.loadNextPage(status)"
                     >
 
                         <div
@@ -65,17 +65,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import NotificationReadDto from "data/dto/NotificationReadDto";
 import Backend from "@/ts/Backend";
 import {Watch} from "vue-property-decorator";
 import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import UserLink from "@/vue/guides/UserLink.vue";
 import Notification from "@/vue/notifications/Notification.vue";
-import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import InfiniteLoading from "vue-infinite-loading";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import Authentication from "@/ts/Authentication";
-import NotificationsButton from "./NotificationsButton.vue";
+import NotificationsButton from "@/vue/notifications/NotificationsButton.vue";
+import NotificationFeedVso from "@/ts/vso/NotificationFeedVso";
 
 const AnchorRouterLink = require('vue-anchor-router-link').default;
 
@@ -97,56 +96,26 @@ const ClickOutside = require('vue-click-outside')
 })
 export default class NotificationsSection extends Vue {
 
+    feed: NotificationFeedVso = new NotificationFeedVso()
+
     auth = Authentication.instance
 
     show: boolean = false
 
-    notifications: NotificationReadDto[] | null = null
-
-    alreadyLoadedIds: number[] = []
-
-    hasNextPage: boolean | null = true
-
-    totalUnread: number = 0
-
     notificationCheckIntervalMs = 30 * 1000
-
-    async infiniteHandler($state: InfiniteHandlerState) {
-        if (!this.auth.authenticated) {
-            return
-        }
-        await Backend.instance.getFeedNotifications(
-            this.alreadyLoadedIds
-        )
-            .then(page => {
-                if (this.notifications === null) {
-                    this.notifications = []
-                }
-                this.totalUnread = page.totalUnread
-                this.notifications.push(...page.notifications);
-                this.alreadyLoadedIds.push(...page.notifications.map(dto => dto.id as number))
-                if (this.notifications.length > 0) {
-                    $state.loaded()
-                }
-                if (!page.hasNextPage) {
-                    $state.complete()
-                }
-                this.hasNextPage = page.hasNextPage
-            })
-    }
 
     @Watch('show')
     onShowChange(newValue) {
         if (newValue) {
             if (this.auth.authenticated) {
                 Backend.instance.markNotificationsRead(
-                    this.notifications.map(n => n.id)
+                    this.feed.items.filter(n => n.read).map(n => n.id)
                 )
             }
             this.$emit('open')
         } else {
             if (this.auth.authenticated) {
-                for (let notification of this.notifications) {
+                for (let notification of this.feed.items) {
                     notification.read = true
                 }
             }
@@ -160,14 +129,7 @@ export default class NotificationsSection extends Vue {
     }
 
     mounted() {
-        this.infiniteHandler(
-            {
-                complete: () => void 0,
-                error: () => void 0,
-                loaded: () => void 0,
-                reset: () => void 0,
-            }
-        )
+        this.feed.loadNextPage()
         window.addEventListener(
             'keyup',
             (e) => {
@@ -178,29 +140,9 @@ export default class NotificationsSection extends Vue {
         )
         setInterval(() => {
             if (!this.show) {
-                this.resetInfiniteLoading()
-                this.infiniteHandler(
-                    {
-                        complete: () => void 0,
-                        error: () => void 0,
-                        loaded: () => void 0,
-                        reset: () => void 0,
-                    }
-                )
+                this.feed = new NotificationFeedVso()
             }
         }, this.notificationCheckIntervalMs)
-    }
-
-    resetInfiniteLoading() {
-        if (!this.auth.authenticated) {
-            return
-        }
-        if (this.$refs.infiniteLoading) {
-            (this.$refs.infiniteLoading as any).stateChanger.reset();
-        }
-        this.alreadyLoadedIds.splice(0, this.alreadyLoadedIds.length)
-        this.notifications.splice(0, this.notifications.length)
-        this.hasNextPage = null;
     }
 
 };

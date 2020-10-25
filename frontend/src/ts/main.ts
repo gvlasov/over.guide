@@ -104,9 +104,3 @@ const app = new Vue({
     },
     router
 });
-
-window.addEventListener('message', (e) => {
-    if (e.data && typeof e.data === 'string' && e.data.match(/webpackHotUpdate/)) {
-        console.clear()
-    }
-})

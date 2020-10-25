@@ -12,12 +12,12 @@
         />
         <div class="guide-feed">
             <Guide
-                    v-for="guide in guides"
+                    v-for="guide in feed.items"
                     :key="guide.guideId"
                     :head="guide"
                     :search-descriptor="descriptor"
                     @loginRequired="() => {loginRequired = true}"
-                    @guideDeactivated="onDeactivated"
+                    @guideDeactivated="feed.removeElementById"
                     @comesIntoVision="onComesIntoVision"
                     @comesOutOfVision="onComesOutOfVision"
                     @play="(player) => pauseOther(player)"
@@ -27,7 +27,7 @@
         <InfiniteLoading
                 ref="infiniteLoading"
                 direction="bottom"
-                @infinite="infiniteHandler"
+                @infinite="(state) => feed.loadNextPage(state)"
                 force-use-infinite-wrapper
         >
             <WeakPanel slot="no-results" class="no-results">
@@ -75,17 +75,14 @@ import TagBadges from "@/vue/guides/TagBadges";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import WeakPanel from "@/vue/guides/WeakPanel";
 import LoginRequirement from "@/vue/LoginRequirement";
-import InfiniteGuideSearchMixin
-    from "@/vue/guides/editor/InfiniteGuideSearchMixin";
 import ViewportPositionY from "@/ts/ViewportPositionY";
 import minBy from 'lodash.minby'
 import {debounce} from "lodash/function";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import {Model, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
-import ExistingGuideHistoryEntryVso
-    from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import ModalBackground from "@/vue/general/ModalBackground.vue";
+import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 
 const playingZonePaddingPx = 50;
 @Component({
@@ -100,17 +97,18 @@ const playingZonePaddingPx = 50;
         WeakPanel,
     },
 })
-export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSearchMixin) {
+export default class GuideBrowser extends mixins(TagLinkMixin) {
     @Model('descriptorChange', {required: true})
     descriptor: GuideDescriptorVso
+
+    feed: GuideSearchFeedVso =
+        new GuideSearchFeedVso(this.descriptor, false)
 
     loginRequired: boolean = false
     visibleVideos: any = []
     bodyRect: DOMRect = document.body.getBoundingClientRect()
     currentlyPlayingVideo: any = null
     players: YT.Player[] = []
-
-    declare guides: ExistingGuideHistoryEntryVso[]
 
     async onSearch(newDescriptor: GuideDescriptorVso) {
         this.$emit('contentChange');
@@ -119,7 +117,7 @@ export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSear
         this.players.slice(0, this.players.length)
     }
 
-    get localDescriptor() : GuideDescriptorVso {
+    get localDescriptor(): GuideDescriptorVso {
         return this.descriptor
     }
 
@@ -127,14 +125,6 @@ export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSear
         if (descriptor.hash !== this.descriptor.hash) {
             this.$emit('descriptorChange', descriptor)
         }
-    }
-
-    onDeactivated(guideId: number) {
-        const deactivated = this.guides.findIndex(g => g.guideId === guideId)
-        if (deactivated === -1) {
-            throw new Error('Unknown guide deactivated')
-        }
-        this.guides.splice(deactivated, 1)
     }
 
     updatePlayingVideoIfNecessary() {
@@ -204,7 +194,6 @@ export default class GuideBrowser extends mixins(TagLinkMixin, InfiniteGuideSear
 
     @Watch('descriptor', {deep: true})
     onDescriptorChange(newValue: GuideDescriptorVso) {
-        (InfiniteGuideSearchMixin as any).options.methods.onDescriptorChange.call(this, newValue)
         this.onSearch(newValue)
     }
 

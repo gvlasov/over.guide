@@ -4,8 +4,8 @@
                 :open="openDropdown"
                 class="dropdown-toggle-button"
                 v-hammer:tap="() => openDropdown = !openDropdown"
-                :disabled="guides.length === 0"
-        >{{ guides.length || 'no' }}{{ hasNextPage ? '+' : '' }} similar guide{{ guides.length === 1 ? '' : 's' }}
+                :disabled="feed.items.length === 0"
+        >{{ feed.items.length || 'no' }}{{ feed.touched && feed.hasNextPage ? '+' : '' }} similar guide{{ feed.items.length === 1 ? '' : 's' }}
         </OverwatchDropdownButton>
         <div
                 v-if="openDropdown"
@@ -42,15 +42,15 @@ import OverwatchButton from "@/vue/OverwatchButton";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import GuidePreviewBadge from "@/vue/guides/GuidePreviewBadge";
 import WeakPanel from "@/vue/guides/WeakPanel";
-import InfiniteGuideSearchMixin
-    from "@/vue/guides/editor/InfiniteGuideSearchMixin";
 import TrainingGoalWidget from "@/ts/vso/TrainingGoalWidget";
 import InfiniteLoading from "vue-infinite-loading";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import OverwatchDropdownButton from "@/vue/OverwatchDropdownButton";
-import {Prop, Watch} from "vue-property-decorator";
-import GuidePartWidget from "../../../js/vso/GuidePartWidget";
-import Component, {mixins} from "vue-class-component";
+import {Prop, Ref, Watch} from "vue-property-decorator";
+import GuidePartWidget from "@/ts/vso/GuidePartWidget";
+import Component from "vue-class-component";
+import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
+import Vue from 'vue'
 
 @Component({
     components: {
@@ -62,35 +62,28 @@ import Component, {mixins} from "vue-class-component";
         InfiniteLoading,
     },
 })
-export default class SimilarTagGuides extends mixins(InfiniteGuideSearchMixin) {
+export default class SimilarTagGuides extends Vue {
+    @Ref('infiniteLoading')
+    infiniteLoading: InfiniteLoading
+
     @Prop({required: true})
-    descriptor!: GuideDescriptorVso
+    descriptor: GuideDescriptorVso
+
+    get feed(): GuideSearchFeedVso {
+        return new GuideSearchFeedVso(this.descriptor, false)
+    }
 
     openDropdown: boolean = false
     exact: boolean = false
     guideWidgets: GuidePartWidget[] = []
 
-    initialLoadGuides() {
-        this.resetInfiniteLoading()
-        this.infiniteHandler({
-            loaded() {
-            },
-            complete() {
-            },
-        })
-    }
-
-    @Watch('descriptor', {deep: true})
-    onDescriptorChange() {
-        this.initialLoadGuides()
-    }
-
-    @Watch('guides')
+    @Watch('feed.items')
     onGuidesChange(newValue) {
         this.guideWidgets = newValue.map(
             (guide, index) => new TrainingGoalWidget(guide, index, false, false)
         )
     }
+
 }
 
 </script>

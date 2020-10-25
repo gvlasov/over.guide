@@ -38,7 +38,7 @@
             </div>
         </OverwatchPanel>
         <OverwatchPanel
-                v-if="userInfo.restrictions !== void 0"
+                v-if="userInfo.restrictions !== void 0 && userInfo.restrictions.length > 0"
                 class="restrictions"
         >
             <div
@@ -58,7 +58,7 @@
         </OverwatchPanel>
         <div class="guide-feed">
             <Guide
-                    v-for="head in userInfo.lastAuthoredGuidesFeed.guides"
+                    v-for="head in userInfo.lastAuthoredGuidesFeed.items"
                     :key="head.guideId"
                     :head="head"
                     :show-training-goal-button="true"

@@ -84,10 +84,9 @@ export class GuideSearchService {
                     order: [['guideHistoryEntryId', 'DESC']]
                 });
         return {
-            guides: nextGuides
+            items: nextGuides
                 .slice(0, GuideSearchService.pageSize)
                 .map(entry => entry.toDto()),
-            pageNumber: query.pageNumber + 1,
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         }
     }
@@ -130,10 +129,9 @@ export class GuideSearchService {
                 order: [['guideId', 'DESC']]
             });
         return {
-            guides: nextGuides
+            items: nextGuides
                 .slice(0, GuideSearchService.pageSize)
                 .map(head => head.toDto()),
-            pageNumber: 0,
             hasNextPage: nextGuides.length > GuideSearchService.pageSize,
         } as GuideSearchPageDto
     }

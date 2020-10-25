@@ -1,7 +1,7 @@
 <template>
     <div class="root-content-sizer reports">
         <Report
-                v-for="report in unhandledReports"
+                v-for="report in feed.unhandledReports"
                 :key="report.postId+'-'+report.postTypeId+'-'+report.reportReasonId+'-'+report.reporter.id"
                 :report="report"
         />
@@ -26,64 +26,32 @@
 import Backend from "@/ts/Backend";
 import Vue from 'vue'
 import Component from "vue-class-component";
-import ReportReadVso from "@/ts/vso/ReportReadVso";
 import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import InfiniteLoading from "vue-infinite-loading";
-import Guide from "@/vue/guides/Guide.vue";
-import Comment from "@/vue/comments/Comment.vue";
-import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
-import UserLink from "@/vue/guides/UserLink.vue";
 import Report from "@/vue/moderation/Report.vue";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
+import ReportFeedVso from "@/ts/vso/ReportFeedVso";
 
 @Component({
     components: {
         Report,
-        UserLink,
-        LinkLikeButton,
-        Comment,
-        Guide,
         InfiniteLoading,
         WeakPanel,
     },
 })
 export default class ModerationPage extends Vue {
 
-    alreadyLoadedReportIds: number[] = []
+    feed: ReportFeedVso = new ReportFeedVso()
 
-    hasNextPage: boolean | null = null
-
-    reports: ReportReadVso[] = []
-
-    async infiniteHandler($state: InfiniteHandlerState) {
+    async infiniteHandler(state: InfiniteHandlerState) {
         await Backend.instance.searchReportsPaginated(
-            this.alreadyLoadedReportIds
+            this.feed.alreadyLoadedIds
         )
             .then(page => {
-                this.reports.push(...page.reports.map(dto => new ReportReadVso(dto)));
-                this.alreadyLoadedReportIds.push(...page.reports.map(dto => dto.id as number))
-                if (this.reports.length > 0) {
-                    $state.loaded()
-                }
-                if (!page.hasNextPage) {
-                    $state.complete()
-                }
-                this.hasNextPage = page.hasNextPage
+                this.feed.loadPage(page, state)
             })
     }
 
-    get unhandledReports(): ReportReadVso[] {
-        return this.reports.filter(report => !report.handled)
-    }
-
-    resetInfiniteLoading() {
-        this.reports = [];
-        this.alreadyLoadedReportIds = [];
-        if (this.$refs.infiniteLoading) {
-            (this.$refs.infiniteLoading as any).stateChanger.reset();
-        }
-        this.hasNextPage = null;
-    }
 }
 
 </script>

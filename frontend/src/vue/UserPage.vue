@@ -20,17 +20,13 @@
 </template>
 
 <script lang="ts">
-import axios from 'axios';
 import Backend from "@/ts/Backend";
 import UserInfoVso from "@/ts/vso/UserInfoVso";
-import Authentication from "@/ts/Authentication";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import AsyncComputedProp from 'vue-async-computed-decorator'
 import UserInfo from "./UserInfo.vue";
 
-const backend = new Backend(axios);
-const auth = new Authentication()
 @Component({
     components: {
         UserInfo,
@@ -43,15 +39,13 @@ export default class UserPage extends Vue {
 
     @AsyncComputedProp()
     userInfo() {
-        return backend.getUserInfo(this.$route.params.id)
-            .then(dto => {
-                return new UserInfoVso(dto);
-            })
+        return Backend.instance.getUserInfo(this.$route.params.id)
+            .then(dto => new UserInfoVso(dto))
             .catch(e => {
-                if (e.response.status === 404) {
-                    return null
-                }
                 throw e
+                if (e.response.status === 404) {
+                    return new Promise((resolve, reject) => resolve(null))
+                }
             })
     }
 }

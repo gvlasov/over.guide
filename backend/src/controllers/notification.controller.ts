@@ -49,7 +49,7 @@ export class NotificationController {
             .then(
                 async notifications => {
                     return {
-                        notifications: notifications.slice(0, countPerPage).map(n => n.toDto()),
+                        items: notifications.slice(0, countPerPage).map(n => n.toDto()),
                         hasNextPage: notifications.length === countPerPage + 1,
                         totalUnread: await this.sequelize.query(
                             `

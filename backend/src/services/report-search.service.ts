@@ -38,7 +38,7 @@ export class ReportSearchService {
                     order: [['createdAt', 'DESC']]
                 });
         return {
-            reports: nextReports
+            items: nextReports
                 .slice(0, ReportSearchService.pageSize)
                 .map(report => report.toDto()),
             hasNextPage: nextReports.length > ReportSearchService.pageSize,
