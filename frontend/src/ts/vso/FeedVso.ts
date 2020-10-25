@@ -15,10 +15,10 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
 
     abstract get feed(): (ids: number[]) => Promise<Page>;
 
-    protected loadMore(heads: Vso[]) {
+    protected loadItems(items: Vso[]) {
         this.touched = true
-        this.items.push(...heads);
-        this.alreadyLoadedIds.push(...heads.map(h => this.vsoId(h)))
+        this.items.push(...items);
+        this.alreadyLoadedIds.push(...items.map(h => this.vsoId(h)))
     }
 
     get isEmpty(): boolean {
@@ -29,7 +29,7 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         page: Page,
         state: InfiniteHandlerState = this.mockState
     ): void {
-        this.loadMore(
+        this.loadItems(
             page.items.map(dto => this.dto2Vso(dto))
         );
         if (!this.isEmpty) {

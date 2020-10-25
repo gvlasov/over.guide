@@ -14,19 +14,19 @@
             <div class="guides-list">
                 <GuidePreviewBadge
                         v-for="(widget, index) in guideWidgets"
-                        :guide="widget.guide"
-                        :key="widget.guide.guideId"
+                        :head="widget.head"
+                        :key="widget.head.entry.guideId"
                         :ghost="false"
                         :open="widget.open"
                         :order="index"
-                        @open="() => {widget.open = true}"
+                        @open="() => onOpen(widget)"
                         @close="() => {widget.open = false}"
                 />
             </div>
             <InfiniteLoading
                     ref="infiniteLoading"
                     direction="bottom"
-                    @infinite="infiniteHandler"
+                    @infinite="(status) => feed.loadNextPage(status)"
                     class="infinite-loading"
                     force-use-infinite-wrapper
             >
@@ -47,7 +47,6 @@ import InfiniteLoading from "vue-infinite-loading";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import OverwatchDropdownButton from "@/vue/OverwatchDropdownButton";
 import {Prop, Ref, Watch} from "vue-property-decorator";
-import GuidePartWidget from "@/ts/vso/GuidePartWidget";
 import Component from "vue-class-component";
 import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 import Vue from 'vue'
@@ -69,19 +68,38 @@ export default class SimilarTagGuides extends Vue {
     @Prop({required: true})
     descriptor: GuideDescriptorVso
 
-    get feed(): GuideSearchFeedVso {
-        return new GuideSearchFeedVso(this.descriptor, false)
-    }
+    feed: GuideSearchFeedVso = new GuideSearchFeedVso(this.descriptor, false)
 
     openDropdown: boolean = false
-    exact: boolean = false
-    guideWidgets: GuidePartWidget[] = []
 
-    @Watch('feed.items')
-    onGuidesChange(newValue) {
-        this.guideWidgets = newValue.map(
-            (guide, index) => new TrainingGoalWidget(guide, index, false, false)
-        )
+    onOpen(widget: TrainingGoalWidget) {
+        widget.open = true
+        console.log(widget.open)
+    }
+
+    guideWidgets: TrainingGoalWidget[] = []
+
+    @Watch('descriptor', {deep: true})
+    onDescriptorChange(newValue) {
+        this.feed = new GuideSearchFeedVso(this.descriptor, false)
+        this.feed.loadNextPage()
+            .then(() => {
+                this.guideWidgets =
+                    this.feed.items.map(
+                        (head, index) => new TrainingGoalWidget(head, index, false, false)
+                    )
+                console.log('load next page', this.feed.items.length)
+            })
+    }
+
+    mounted() {
+        this.feed.loadNextPage()
+        .then(() => {
+            this.guideWidgets =
+                this.feed.items.map(
+                    (head, index) => new TrainingGoalWidget(head, index, false, false)
+                )
+        })
     }
 
 }
@@ -111,14 +129,15 @@ export default class SimilarTagGuides extends Vue {
 
     .dropdown {
         max-width: 100%;
-        overflow: auto;
         margin-top: .4em;
+        overflow: visible;
 
         .guides-list {
             display: flex;
             flex-direction: column;
             gap: 1em;
-            padding: .2em .4em .35em .4em;
+            padding: .2em 0 .35em 0;
+            overflow: visible;
 
             .guide-preview-badge {
                 max-width: 100%;

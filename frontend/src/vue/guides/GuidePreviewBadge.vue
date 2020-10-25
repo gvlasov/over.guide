@@ -97,6 +97,7 @@ const backend = new Backend(axios);
     },
 })
 export default class GuidePreviewBadge extends Vue {
+
     @Prop({required: true})
     head: ExistingGuideHeadVso
 
@@ -116,7 +117,6 @@ export default class GuidePreviewBadge extends Vue {
 
     get firstVideoWidget(): GuidePartVideoWidget {
         return this.head.entry.parts.find(widget => widget.isVideo) as GuidePartVideoWidget
-
     }
 
     get firstTextWidget(): GuidePartTextWidget {
