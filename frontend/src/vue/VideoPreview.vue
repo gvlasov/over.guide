@@ -4,6 +4,7 @@
         'background-image': excerpt === null ? undefined : `url('${thumbnailUrl}')`
              }"
     >
+        <slot/>
     </div>
 </template>
 

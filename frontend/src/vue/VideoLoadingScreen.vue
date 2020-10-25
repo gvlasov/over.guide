@@ -1,8 +1,7 @@
 <template>
-    <div class="loading-screen"
-         v-bind:style="{
-        'background-image': excerpt === null ? undefined : `url('${thumbnailUrl}')`
-             }"
+    <VideoPreview
+            :excerpt="excerpt"
+        class="loading-screen"
     >
         <span class="duration">
             {{ excerpt === null ? '' : durationText }}
@@ -10,7 +9,7 @@
         <div class="play-button">
             <img src="/icons/play.png"/>
         </div>
-    </div>
+    </VideoPreview>
 </template>
 
 <script lang="ts">
@@ -19,15 +18,14 @@ import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
 import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto";
+import VideoPreview from "@/vue/VideoPreview.vue";
 
-@Component({})
+@Component({
+    components: {VideoPreview}
+})
 export default class VideoLoadingScreen extends Vue {
     @Prop({required: true})
     excerpt: YoutubeVideoExcerptDto
-
-    get thumbnailUrl(): string {
-        return `https://i3.ytimg.com/vi/${this.excerpt.youtubeVideoId}/mqdefault.jpg`
-    }
 
     get durationText(): string {
         const duration = Math.round(this.excerpt.endSeconds - this.excerpt.startSeconds);
@@ -43,10 +41,6 @@ export default class VideoLoadingScreen extends Vue {
     font-family: BigNoodleTooOblique, sans-serif;
     font-size: 3em;
     min-height: 100%;
-    background-color: #111;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
 
     &:hover .play-button {
         background-color: hsla(0, 0, 20%, .7);
