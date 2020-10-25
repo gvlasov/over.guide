@@ -177,10 +177,6 @@ export default class NotificationsSection extends Vue {
 
             @include custom-desktop-scrollbar(hsla(227, 16%, 48%, 0.98));
 
-            & ::v-deep .infinite-loading-container {
-                height: 2em;
-            }
-
             .notifications-end {
                 background-color: hsla(110, 47%, 48%, 0.98);
                 color: white;
