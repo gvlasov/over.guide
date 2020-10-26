@@ -70,6 +70,7 @@ and \`read\` = 0
 
     @UseGuards(AuthenticatedGuard)
     @Post('mark-read')
+    @HttpCode(HttpStatus.OK)
     async markRead(
         @Req() request: Request,
         @Body() notificationIds: number[],

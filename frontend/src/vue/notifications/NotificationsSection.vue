@@ -107,11 +107,7 @@ export default class NotificationsSection extends Vue {
     @Watch('show')
     onShowChange(newValue) {
         if (newValue) {
-            if (this.auth.authenticated) {
-                Backend.instance.markNotificationsRead(
-                    this.feed.items.filter(n => n.read).map(n => n.id)
-                )
-            }
+            this.markNotificationsReadIfAvailable()
             this.$emit('open')
         } else {
             if (this.auth.authenticated) {
@@ -120,6 +116,14 @@ export default class NotificationsSection extends Vue {
                 }
             }
             this.$emit('close')
+        }
+    }
+
+    markNotificationsReadIfAvailable() {
+        if (this.auth.authenticated) {
+            Backend.instance.markNotificationsRead(
+                this.feed.items.map(n => n.id)
+            )
         }
     }
 
