@@ -37,6 +37,7 @@
                         :part="firstTextWidget.part"
                 />
                 <div
+                        v-if="firstVideoWidget !== void 0"
                         class="unclickable"
                 >
                     <AspectRatioBox>
@@ -109,7 +110,7 @@ export default class GuidePreviewBadge extends Vue {
             .removeGoal(this.head.entry.guideId)
     }
 
-    get firstVideoWidget(): GuidePartVideoWidget {
+    get firstVideoWidget(): GuidePartVideoWidget|undefined {
         return this.head.entry.parts.find(widget => widget.isVideo) as GuidePartVideoWidget
     }
 

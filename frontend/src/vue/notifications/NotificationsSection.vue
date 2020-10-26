@@ -133,7 +133,9 @@ export default class NotificationsSection extends Vue {
     }
 
     mounted() {
-        this.feed.loadNextPage()
+        this.feed.loadNextPage(
+            (this.$refs.infiniteLoading as InfiniteLoading).stateChanger
+        )
         window.addEventListener(
             'keyup',
             (e) => {

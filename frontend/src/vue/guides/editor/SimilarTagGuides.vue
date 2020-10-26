@@ -8,7 +8,7 @@
         >{{ feed.items.length || 'no' }}{{ feed.touched && feed.hasNextPage ? '+' : '' }} similar guide{{ feed.items.length === 1 ? '' : 's' }}
         </OverwatchDropdownButton>
         <div
-                v-if="openDropdown"
+                v-show="openDropdown"
                 class="dropdown"
         >
             <div class="guides-list">
@@ -74,7 +74,6 @@ export default class SimilarTagGuides extends Vue {
 
     onOpen(widget: TrainingGoalWidget) {
         widget.open = true
-        console.log(widget.open)
     }
 
     guideWidgets: TrainingGoalWidget[] = []
@@ -82,18 +81,17 @@ export default class SimilarTagGuides extends Vue {
     @Watch('descriptor', {deep: true})
     onDescriptorChange(newValue) {
         this.feed = new GuideSearchFeedVso(this.descriptor, false)
-        this.feed.loadNextPage()
+        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
             .then(() => {
                 this.guideWidgets =
                     this.feed.items.map(
                         (head, index) => new TrainingGoalWidget(head, index, false, false)
                     )
-                console.log('load next page', this.feed.items.length)
             })
     }
 
     mounted() {
-        this.feed.loadNextPage()
+        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
         .then(() => {
             this.guideWidgets =
                 this.feed.items.map(
