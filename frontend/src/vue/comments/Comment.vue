@@ -85,7 +85,6 @@
                 v-if="showReplyForm || showEditForm"
                 class="form-wrap"
         >
-            <CommentHider/>
             <CreateCommentForm
                     v-if="showReplyForm"
                     :post="post"

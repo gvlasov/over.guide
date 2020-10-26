@@ -131,6 +131,7 @@ export default class CommentsLevel extends Vue {
     padding-left: 1em;
 
     .aside {
+        box-sizing: border-box;
         padding-top: .5em;
         min-height: 100%;
         display: flex;
