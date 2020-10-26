@@ -16,7 +16,7 @@
                     v-else
                     :head="head"
                     :search-descriptor="null"
-                    :show-comments-section="true"
+                    :initial-show-comments-section="true"
             />
         </div>
     </div>
