@@ -27,7 +27,7 @@
                 v-hammer:tap="() => deletingGuide = true"
         >Delete
         </LinkLikeButton>
-        <ModalPopup
+        <NotificationModalPopup
                 v-if="deletingGuide"
                 @close="() => deletingGuide = false"
         >
@@ -37,12 +37,17 @@
                 </p>
                 <p>The guide will remain in training goals of users who have it added</p>
                 <OverwatchButton
-                        type="default"
+                        type="main"
                         v-hammer:tap="deactivate"
-                >Confirm deletion
+                >Delete
+                </OverwatchButton>
+                <OverwatchButton
+                        type="default"
+                        v-hammer:tap="() => deletingGuide = false"
+                >Back
                 </OverwatchButton>
             </div>
-        </ModalPopup>
+        </NotificationModalPopup>
     </div>
 </template>
 
@@ -62,7 +67,6 @@ import ReportCreator from "@/vue/guides/ReportCreator.vue";
 import PostTypeId from "data/PostTypeId";
 import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
-import ModalPopup from "@/vue/general/ModalPopup.vue";
 import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 
@@ -72,7 +76,6 @@ const auth = new Authentication();
     components: {
         NotificationModalPopup,
         LinkLikeButton,
-        ModalPopup,
         ReportCreator,
         GuideContent,
         GuideVideo,
@@ -150,10 +153,12 @@ export default class GuideButtons extends Vue {
         padding-right: 1em;
     }
 
-    .deletion-dialogue {
-        padding: 1em;
-        @include overwatch-futura-no-smallcaps;
-    }
+}
+
+.deletion-dialogue {
+    padding: 1em;
+    background-color: hsla(0, 0%, 20%, .95);
+    @include overwatch-futura-no-smallcaps;
 }
 
 </style>

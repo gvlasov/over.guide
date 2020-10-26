@@ -46,7 +46,7 @@
                     v-hammer:tap="() => showDeleteDialogue = !showDeleteDialogue"
             >Delete
             </LinkLikeButton>
-            <ModalPopup
+            <NotificationModalPopup
                     v-if="showDeleteDialogue"
                     @close="() => showDeleteDialogue = false"
             >
@@ -55,12 +55,17 @@
                         Are you sure you want to delete this comment?<br/>This can't be undone.
                     </p>
                     <OverwatchButton
-                            type="default"
+                            type="main"
                             v-hammer:tap="deleteComment"
-                    >Confirm deletion
+                    >Delete
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="default"
+                            v-hammer:tap="() => showDeleteDialogue = false"
+                    >Back
                     </OverwatchButton>
                 </div>
-            </ModalPopup>
+            </NotificationModalPopup>
             <LinkLikeButton
                     v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showReportDialogue = !showReportDialogue"
@@ -113,7 +118,6 @@ import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import UserLink from "@/vue/guides/UserLink.vue";
 import Authentication from "@/ts/Authentication";
 import CommentHider from "@/vue/comments/CommentHider.vue";
-import ModalPopup from "@/vue/general/ModalPopup.vue";
 import ReportCreator from "@/vue/guides/ReportCreator.vue";
 import PostTypeId from "data/PostTypeId";
 import reportReasons from 'data/reportReasons'
@@ -137,7 +141,6 @@ const commentReportReasons = [
         EditCommentForm,
         CreateCommentForm,
         ReportCreator,
-        ModalPopup,
         CommentHider,
         UserLink,
         RelativeTime,
@@ -293,10 +296,6 @@ $strong-color: white;
         }
     }
 
-    .deletion-dialogue {
-        padding: 1em;
-        @include overwatch-futura-no-smallcaps;
-    }
 
     &.deleted {
         background-color: hsla(0, 66%, 41%, .3);
@@ -306,6 +305,12 @@ $strong-color: white;
         background-color: hsla(348, 83%, 47%, .3);
         padding: 0 1em 1em 1em;
     }
+}
+
+.deletion-dialogue {
+    padding: 1em;
+    background-color: hsla(0, 0%, 20%, .95);
+    @include overwatch-futura-no-smallcaps;
 }
 
 </style>
