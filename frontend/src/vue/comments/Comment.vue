@@ -55,14 +55,14 @@
                         Are you sure you want to delete this comment?<br/>This can't be undone.
                     </p>
                     <OverwatchButton
-                            type="main"
-                            v-hammer:tap="deleteComment"
-                    >Delete
-                    </OverwatchButton>
-                    <OverwatchButton
                             type="default"
                             v-hammer:tap="() => showDeleteDialogue = false"
                     >Back
+                    </OverwatchButton>
+                    <OverwatchButton
+                            type="main"
+                            v-hammer:tap="deleteComment"
+                    >Delete
                     </OverwatchButton>
                 </div>
             </NotificationModalPopup>

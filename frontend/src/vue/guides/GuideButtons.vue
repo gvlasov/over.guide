@@ -37,14 +37,14 @@
                 </p>
                 <p>The guide will remain in training goals of users who have it added</p>
                 <OverwatchButton
-                        type="main"
-                        v-hammer:tap="deactivate"
-                >Delete
-                </OverwatchButton>
-                <OverwatchButton
                         type="default"
                         v-hammer:tap="() => deletingGuide = false"
                 >Back
+                </OverwatchButton>
+                <OverwatchButton
+                        type="main"
+                        v-hammer:tap="deactivate"
+                >Delete
                 </OverwatchButton>
             </div>
         </NotificationModalPopup>
