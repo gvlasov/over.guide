@@ -95,6 +95,9 @@ export default class App extends Vue {
                 visibility: hidden;
             }
         }
+        @media screen and (orientation: landscape) and (min-aspect-ratio: 21/9) and (min-width: 48em) and (max-height: 30em) {
+            height: .3em;
+        }
     }
 }
 
