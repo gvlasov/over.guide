@@ -162,9 +162,11 @@ export default class NotificationsSection extends Vue {
     max-height: 10em;
 
     .notifications-wrap {
+        box-sizing: border-box;
         position: absolute;
-        top: 100%;
         left: 0;
+        max-height: 100vh;
+        z-index: -1;
 
         .notifications {
             letter-spacing: initial;
@@ -175,9 +177,10 @@ export default class NotificationsSection extends Vue {
             border-radius: 0 0 .2em .2em;
             text-align: left;
             font-size: 1rem;
-            max-height: 80vh;
             overflow-y: scroll;
             overscroll-behavior: none contain;
+            max-height: 100%;
+            height: 100%;
 
             @include custom-desktop-scrollbar(hsla(227, 16%, 48%, 0.98));
 

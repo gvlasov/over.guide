@@ -115,6 +115,11 @@ $height: 4rem;
 
     }
 
+    .notifications-section ::v-deep .notifications-wrap {
+        top: 0;
+        padding-top: $height;
+    }
+
     .battle-net-button {
         &:hover {
             background-color: hsla(227, 29%, 45%, 1);
