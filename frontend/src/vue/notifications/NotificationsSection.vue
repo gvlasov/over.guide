@@ -9,7 +9,7 @@
         />
         <transition name="notifications" appear>
             <div
-                    v-if="show"
+                    v-show="show"
                     class="notifications-wrap root-content-sizer"
             >
                 <div
