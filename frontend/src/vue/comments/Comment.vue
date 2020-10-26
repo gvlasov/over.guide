@@ -29,25 +29,23 @@
         <div v-else class="deleted-comment">
             Deleted
         </div>
-        <div
-                class="buttons"
-        >
-            <button
+        <div class="buttons">
+            <LinkLikeButton
                     v-if="!comment.deleted && auth.loggedIn"
                     class="reply-button"
                     v-hammer:tap="() => showReplyForm = !showReplyForm"
-            ><img src="/icons/arrow-right-white.svg"/> Reply
-            </button>
-            <button
+            >Reply
+            </LinkLikeButton>
+            <LinkLikeButton
                     v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showEditForm = !showEditForm"
             >Edit
-            </button>
-            <button
+            </LinkLikeButton>
+            <LinkLikeButton
                     v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showDeleteDialogue = !showDeleteDialogue"
             >Delete
-            </button>
+            </LinkLikeButton>
             <ModalPopup
                     v-if="showDeleteDialogue"
                     @close="() => showDeleteDialogue = false"
@@ -63,11 +61,11 @@
                     </OverwatchButton>
                 </div>
             </ModalPopup>
-            <button
+            <LinkLikeButton
                     v-if="!comment.deleted && comment.author.id === auth.userId"
                     v-hammer:tap="() => showReportDialogue = !showReportDialogue"
             >Report
-            </button>
+            </LinkLikeButton>
             <NotificationModalPopup
                     v-if="showReportDialogue"
                     @close="() => showReportDialogue = false"
@@ -125,6 +123,7 @@ import CreateCommentForm from "@/vue/comments/CreateCommentForm.vue";
 import EditCommentForm from "@/vue/comments/EditCommentForm.vue";
 import {Route} from "vue-router";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
+import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
 
 const commentReportReasons = [
     reportReasons.get(ReportReasonId.Spam),
@@ -133,6 +132,7 @@ const commentReportReasons = [
 
 @Component({
     components: {
+        LinkLikeButton,
         NotificationModalPopup,
         EditCommentForm,
         CreateCommentForm,
@@ -238,21 +238,19 @@ $strong-color: white;
     form {
         display: block;
         resize: vertical;
+
+        & ::v-deep textarea {
+            margin-bottom: .5em;
+        }
+
+        & ::v-deep button {
+            margin-right: .2em;
+        }
     }
 
     .buttons > button {
-        font-size: 1em;
-        font-weight: bold;
-        background: none;
-        border: none;
-        color: $weak-color;
-        cursor: pointer;
-        border-radius: .3em;
-        padding: .8em;
-        background: hsla(209, 18%, 45%, .15);
-
-        &:hover {
-            background: #5f7589;
+        img {
+            margin-right: .3em;
         }
     }
 
@@ -287,10 +285,7 @@ $strong-color: white;
     }
 
     .form-wrap {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        gap: .5em;
+        display: block;
 
         .hider {
             flex-grow: 0;
@@ -309,7 +304,7 @@ $strong-color: white;
 
     &.linked-to {
         background-color: hsla(348, 83%, 47%, .3);
-        padding: 0 1em 0 1em;
+        padding: 0 1em 1em 1em;
     }
 }
 

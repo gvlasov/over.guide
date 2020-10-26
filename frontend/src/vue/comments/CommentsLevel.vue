@@ -2,6 +2,7 @@
     <div class="comment-level">
         <div
                 v-for="comment in displayComments"
+                :key="comment.id"
                 class="comment-chain-node"
         >
             <div class="aside">
