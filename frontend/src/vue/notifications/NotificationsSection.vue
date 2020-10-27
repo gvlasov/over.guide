@@ -33,7 +33,7 @@
                     <InfiniteLoading
                             ref="infiniteLoading"
                             direction="bottom"
-                            @infinite="(status) => feed.loadNextPage(status)"
+                            @infinite="(status) => feed.loadNextPage()"
                     >
 
                         <div
@@ -66,7 +66,7 @@
 import Vue from 'vue'
 import Component from "vue-class-component";
 import Backend from "@/ts/Backend";
-import {Watch} from "vue-property-decorator";
+import {Ref, Watch} from "vue-property-decorator";
 import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import UserLink from "@/vue/guides/UserLink.vue";
 import Notification from "@/vue/notifications/Notification.vue";
@@ -75,6 +75,8 @@ import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import Authentication from "@/ts/Authentication";
 import NotificationsButton from "@/vue/notifications/NotificationsButton.vue";
 import NotificationFeedVso from "@/ts/vso/NotificationFeedVso";
+
+const Debounce = require('debounce-decorator').default
 
 const AnchorRouterLink = require('vue-anchor-router-link').default;
 
@@ -95,6 +97,9 @@ const ClickOutside = require('vue-click-outside')
     }
 })
 export default class NotificationsSection extends Vue {
+
+    @Ref('infiniteLoading')
+    infiniteLoading: InfiniteLoading
 
     feed: NotificationFeedVso = new NotificationFeedVso()
 
@@ -119,6 +124,12 @@ export default class NotificationsSection extends Vue {
         }
     }
 
+    @Debounce(10 * 1000)
+    checkNotificationsSometimes() {
+        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+    }
+
+
     markNotificationsReadIfAvailable() {
         if (this.auth.authenticated) {
             Backend.instance.markNotificationsRead(
@@ -133,9 +144,7 @@ export default class NotificationsSection extends Vue {
     }
 
     mounted() {
-        this.feed.loadNextPage(
-            (this.$refs.infiniteLoading as InfiniteLoading).stateChanger
-        )
+        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
         window.addEventListener(
             'keyup',
             (e) => {
@@ -146,7 +155,7 @@ export default class NotificationsSection extends Vue {
         )
         setInterval(() => {
             if (!this.show) {
-                this.feed = new NotificationFeedVso()
+                this.feed.reset(this.infiniteLoading.stateChanger)
             }
         }, this.notificationCheckIntervalMs)
     }

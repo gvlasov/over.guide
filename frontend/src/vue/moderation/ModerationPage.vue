@@ -8,7 +8,7 @@
         <InfiniteLoading
                 ref="infiniteLoading"
                 direction="bottom"
-                @infinite="infiniteHandler"
+                @infinite="(state) => feed.loadNextPage(state)"
                 force-use-infinite-wrapper
         >
 
@@ -23,14 +23,13 @@
 </template>
 
 <script lang="ts">
-import Backend from "@/ts/Backend";
 import Vue from 'vue'
 import Component from "vue-class-component";
-import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import InfiniteLoading from "vue-infinite-loading";
 import Report from "@/vue/moderation/Report.vue";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import ReportFeedVso from "@/ts/vso/ReportFeedVso";
+import {Ref} from "vue-property-decorator";
 
 @Component({
     components: {
@@ -40,17 +39,10 @@ import ReportFeedVso from "@/ts/vso/ReportFeedVso";
     },
 })
 export default class ModerationPage extends Vue {
+    @Ref('infiniteLoading')
+    infiniteLoading: InfiniteLoading
 
     feed: ReportFeedVso = new ReportFeedVso()
-
-    async infiniteHandler(state: InfiniteHandlerState) {
-        await Backend.instance.searchReportsPaginated(
-            this.feed.alreadyLoadedIds
-        )
-            .then(page => {
-                this.feed.loadPage(page, state)
-            })
-    }
 
 }
 

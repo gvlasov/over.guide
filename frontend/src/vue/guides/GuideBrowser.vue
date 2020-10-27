@@ -28,7 +28,6 @@
                 ref="infiniteLoading"
                 direction="bottom"
                 @infinite="(state) => feed.loadNextPage(state)"
-                force-use-infinite-wrapper
         >
             <WeakPanel slot="no-results" class="no-results">
                 <div v-if="descriptor.isEmpty">
@@ -79,7 +78,7 @@ import ViewportPositionY from "@/ts/ViewportPositionY";
 import minBy from 'lodash.minby'
 import {debounce} from "lodash/function";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
-import {Model, Watch} from "vue-property-decorator";
+import {Model, Ref, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
 import ModalBackground from "@/vue/general/ModalBackground.vue";
 import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
@@ -98,24 +97,19 @@ const playingZonePaddingPx = 50;
     },
 })
 export default class GuideBrowser extends mixins(TagLinkMixin) {
+    @Ref('infiniteLoading')
+    infiniteLoading: InfiniteLoading
+
     @Model('descriptorChange', {required: true})
     descriptor: GuideDescriptorVso
 
-    feed: GuideSearchFeedVso =
-        new GuideSearchFeedVso(this.descriptor, false)
+    feed = new GuideSearchFeedVso(this.descriptor, false)
 
     loginRequired: boolean = false
     visibleVideos: any = []
     bodyRect: DOMRect = document.body.getBoundingClientRect()
     currentlyPlayingVideo: any = null
     players: YT.Player[] = []
-
-    async onSearch(newDescriptor: GuideDescriptorVso) {
-        this.$emit('contentChange');
-        this.$emit('descriptorChange', newDescriptor);
-        this.visibleVideos.slice(0, this.visibleVideos.length)
-        this.players.slice(0, this.players.length)
-    }
 
     get localDescriptor(): GuideDescriptorVso {
         return this.descriptor
@@ -193,8 +187,12 @@ export default class GuideBrowser extends mixins(TagLinkMixin) {
     }
 
     @Watch('descriptor', {deep: true})
-    onDescriptorChange(newValue: GuideDescriptorVso) {
-        this.onSearch(newValue)
+    onDescriptorChange(newDescriptor: GuideDescriptorVso) {
+        this.$emit('contentChange');
+        this.$emit('descriptorChange', newDescriptor);
+        this.visibleVideos.slice(0, this.visibleVideos.length)
+        this.players.slice(0, this.players.length)
+        this.feed.reset(this.infiniteLoading.stateChanger)
     }
 
     mounted() {

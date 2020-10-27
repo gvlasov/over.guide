@@ -25,10 +25,7 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         return this.items.length === 0
     }
 
-    loadPage(
-        page: Page,
-        state: InfiniteHandlerState = this.mockState
-    ): void {
+    loadPage(page: Page, state: InfiniteHandlerState): void {
         this.loadItems(
             page.items.map(dto => this.dto2Vso(dto))
         );
@@ -42,7 +39,7 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         this.lastPage = page
     }
 
-    loadNextPage(state: InfiniteHandlerState = this.mockState): Promise<void> {
+    loadNextPage(state: InfiniteHandlerState): Promise<void> {
         return this.feed(this.alreadyLoadedIds)
             .then(page => this.loadPage(page, state))
     }
@@ -60,13 +57,22 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         this.items.splice(index, 1)
     }
 
-    get mockState() {
+    static get mockState() {
         return {
             complete: () => void 0,
             error: () => void 0,
             loaded: () => void 0,
             reset: () => void 0,
         }
+    }
+
+    reset(state: InfiniteHandlerState) {
+        this.lastPage = void 0
+        this.hasNextPage = true
+        this.items.splice(0, this.items.length)
+        this.alreadyLoadedIds.splice(0, this.alreadyLoadedIds.length)
+        this.touched = false
+        state.reset()
     }
 
 }

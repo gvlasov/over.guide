@@ -58,18 +58,18 @@
         </OverwatchPanel>
         <div class="guide-feed">
             <Guide
-                    v-for="head in userInfo.lastAuthoredGuidesFeed.items"
+                    v-for="head in lastAuthoredGuidesFeed.items"
                     :key="head.guideId"
                     :head="head"
                     :show-training-goal-button="true"
                     :search-descriptor="null"
-                    @guideDeactivated="userInfo.lastAuthoredGuidesFeed.removeElementById"
+                    @guideDeactivated="(guideId) => lastAuthoredGuidesFeed.removeElementById(guideId)"
             />
             <InfiniteLoading
                     v-if="userInfo !== null"
                     ref="infiniteLoading"
                     direction="bottom"
-                    @infinite="infiniteHandler"
+                    @infinite="(state) => lastAuthoredGuidesFeed.loadNextPage(state)"
                     force-use-infinite-wrapper
             >
 
@@ -87,8 +87,6 @@
 <script lang="ts">
 import TrainingGoal from "@/vue/guides/TrainingGoal";
 import OverwatchButton from "@/vue/OverwatchButton";
-import axios from 'axios';
-import Backend from "@/ts/Backend";
 import Guide from "@/vue/guides/Guide";
 import UserInfoVso from "@/ts/vso/UserInfoVso";
 import UsernameInput from "@/vue/UsernameInput";
@@ -97,7 +95,6 @@ import BackgroundHeading from "@/vue/BackgroundHeading";
 import LogoutDangerNotice from "@/vue/LogoutDangerNotice";
 import Vue from 'vue'
 import Component from "vue-class-component";
-import {InfiniteHandlerState} from "@/ts/InfiniteHandlerState";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import InfiniteLoading from "vue-infinite-loading";
 import restrictionTypes from 'data/restrictionTypes'
@@ -107,10 +104,9 @@ import RestrictionReadDto from "data/dto/RestrictionReadDto";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
 import OverwatchPanel from '@/vue/general/OverwatchPanel'
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
-import {Prop} from "vue-property-decorator";
+import {Prop, Ref} from "vue-property-decorator";
+import GuideAuthorSearchFeedVso from "@/ts/vso/GuideAuthorSearchFeedVso";
 
-const backend = new Backend(axios);
-const auth = new Authentication()
 @Component({
     components: {
         NotificationModalPopup,
@@ -128,6 +124,11 @@ const auth = new Authentication()
     },
 })
 export default class UserInfo extends Vue {
+    @Ref('infiniteLoading')
+    infiniteLoading: InfiniteLoading
+
+    auth = Authentication.instance
+
     restrictionTypes = restrictionTypes
 
     @Prop({required: true})
@@ -138,20 +139,11 @@ export default class UserInfo extends Vue {
     alreadyLoadedGuideIds: number[] = []
     hasNextPage: boolean = true
 
-    async infiniteHandler(state: InfiniteHandlerState) {
-        await Backend.instance.searchGuidesByAuthorPaginated(
-            {
-                clientAlreadyHasGuideIds: this.alreadyLoadedGuideIds,
-                authorId: this.userInfo.user.id,
-            }
-        )
-            .then(page => {
-                this.userInfo.lastAuthoredGuidesFeed.loadPage(page, state)
-            })
-    }
+    lastAuthoredGuidesFeed: GuideAuthorSearchFeedVso =
+        new GuideAuthorSearchFeedVso(this.userInfo.user)
 
     get isThisMe(): boolean {
-        const cookie = auth.userId;
+        const cookie = this.auth.userId;
         if (cookie === void 0) {
             return false;
         }
@@ -167,10 +159,10 @@ export default class UserInfo extends Vue {
 
     logout() {
         const img = document.createElement('img');
-        img.src = auth.battleNetLogoutUrl;
+        img.src = this.auth.battleNetLogoutUrl;
         img.style.display = 'none';
         img.onerror = () => {
-            auth.logoutSite()
+            this.auth.logoutSite()
         }
         this.$el.append(img)
     }

@@ -62,6 +62,7 @@ import Vue from 'vue'
     },
 })
 export default class SimilarTagGuides extends Vue {
+
     @Ref('infiniteLoading')
     infiniteLoading: InfiniteLoading
 
@@ -76,28 +77,20 @@ export default class SimilarTagGuides extends Vue {
         widget.open = true
     }
 
-    guideWidgets: TrainingGoalWidget[] = []
+    get guideWidgets(): TrainingGoalWidget[] {
+        return this.feed.items.map(
+            (head, index) => new TrainingGoalWidget(head, index, false, false)
+        )
+    }
 
     @Watch('descriptor', {deep: true})
     onDescriptorChange(newValue) {
-        this.feed = new GuideSearchFeedVso(this.descriptor, false)
+        this.feed.reset(this.infiniteLoading.stateChanger)
         this.feed.loadNextPage(this.infiniteLoading.stateChanger)
-            .then(() => {
-                this.guideWidgets =
-                    this.feed.items.map(
-                        (head, index) => new TrainingGoalWidget(head, index, false, false)
-                    )
-            })
     }
 
     mounted() {
         this.feed.loadNextPage(this.infiniteLoading.stateChanger)
-        .then(() => {
-            this.guideWidgets =
-                this.feed.items.map(
-                    (head, index) => new TrainingGoalWidget(head, index, false, false)
-                )
-        })
     }
 
 }
