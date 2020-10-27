@@ -1,20 +1,10 @@
 <template>
     <div class="meta">
-        <div
-                class="tags"
+        <GuideDescriptor
                 v-hammer:tap="() => $router.push(tagLink(entry.descriptor)).catch(()=>{})"
                 v-bind:class="{'same-as-search': entry.descriptor.equals(searchDescriptor)}"
-        >
-            <HeroTag
-                    v-if="entry.descriptor.hasHeroes"
-                    class="hero-tag"
-                    :descriptor="entry.descriptor"
-            />
-            <TagBadges
-                    v-if="entry.descriptor.individualTags.length > 0"
-                    :descriptor="entry.descriptor"
-            />
-        </div>
+                :descriptor="entry.descriptor"
+        />
         <div class="authorship">
             <RelativeTime :time="creationTime"/>
             <div class="author">
@@ -26,9 +16,7 @@
 </template>
 
 <script lang="ts">
-import HeroTag from "@/vue/guides/tags/hero/HeroTag";
 import formatDistance from 'date-fns/formatDistance'
-import TagBadges from "@/vue/guides/TagBadges";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 import TagLinkMixin from "@/vue/guides/tags/TagLinkMixin";
 import Authentication from "@/ts/Authentication";
@@ -38,15 +26,15 @@ import RelativeTime from "@/vue/guides/RelativeTime.vue";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import UserLink from "@/vue/guides/UserLink.vue";
+import GuideDescriptor from "@/vue/guides/tags/GuideDescriptor.vue";
 
 const auth = new Authentication();
 
 @Component({
     components: {
+        GuideDescriptor,
         UserLink,
         RelativeTime,
-        TagBadges,
-        HeroTag,
     },
 })
 export default class GuideMeta extends mixins(TagLinkMixin) {
@@ -60,7 +48,6 @@ export default class GuideMeta extends mixins(TagLinkMixin) {
     searchDescriptor: GuideDescriptorVso | null
 
     declare $router: any
-
 
     creationTimeRelative(): string {
         return formatDistance(this.entry.createdAt, new Date());
@@ -85,21 +72,12 @@ export default class GuideMeta extends mixins(TagLinkMixin) {
 
     .tags {
         overflow: hidden;
-        display: flex;
-        gap: .5em;
-        align-items: center;
-        text-align: left;
-        cursor: pointer;
         padding: .13em;
         transition: padding-left .13s;
 
         &:hover {
             padding-left: 1em;
             transition: padding-left .13s;
-        }
-
-        .hero-tag {
-            display: inline-block;
         }
 
         &.same-as-search:hover {
