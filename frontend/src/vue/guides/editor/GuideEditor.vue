@@ -174,6 +174,8 @@ const draft = new StoredGuideDraft()
 })
 export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
+    declare head: NewGuideHeadVso | ExistingGuideHeadVso
+
     loginRequired: boolean = false
     preview: boolean = false
     forceDescriptorSelection: boolean = false
@@ -181,7 +183,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     $scrollTo: any
 
-    @Watch('guide', {deep: true})
+    @Watch('head', {deep: true})
     @Debounce(500)
     onGuideChange(newValue: NewGuideHeadVso | ExistingGuideHeadVso) {
         if (newValue.entry instanceof NewGuideHistoryEntryVso) {
@@ -246,8 +248,6 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     get isRouteForNewGuide(): boolean {
         return this.$route.params.id === void 0 || this.$route.params.id === 'new'
     }
-
-    declare head: NewGuideHeadVso | ExistingGuideHeadVso
 
     @AsyncComputedProp()
     async head() {
