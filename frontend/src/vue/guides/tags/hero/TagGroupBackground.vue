@@ -47,6 +47,7 @@ export default class TagGroupBackground extends Vue {
     padding: .25em;
     box-sizing: content-box;
     outline: 0;
+    cursor: inherit;
 }
 
 .tag-type-player {

@@ -9,11 +9,6 @@
             <BackgroundHeading>Guide not found</BackgroundHeading>
         </div>
         <template v-else>
-            <ParameterDescriptorSynchronizer
-                    v-if="isNewGuide"
-                    v-model="head.entry.descriptor"
-                    base-path="/guide-editor/"
-            />
             <NotificationModalPopup
                     v-if="loginRequired"
                     @close="loginRequired = false"
@@ -49,6 +44,11 @@
                                 :descriptor="head.entry.descriptor"
                         />
                     </div>
+                    <LinkedDescriptorSuggestionSelector
+                            v-if="isNewGuide && $route.params.descriptor"
+                            @select="resetGuideForDescriptor"
+                            @dismiss="dismissDescriptorSuggestion"
+                    />
                 </DescriptorBuilder>
                 <div
                         v-if="forceDescriptorSelection"
@@ -150,6 +150,9 @@ import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
+import LinkedDescriptorSuggestionSelector
+    from "@/vue/guides/editor/LinkedDescriptorSuggestionSelector.vue";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 
 const Debounce = require('debounce-decorator').default
 
@@ -159,6 +162,7 @@ const draft = new StoredGuideDraft()
 
 @Component({
     components: {
+        LinkedDescriptorSuggestionSelector,
         NotificationModalPopup,
         ModalPopup,
         GuidePreview,
@@ -193,6 +197,17 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                 draft.saveDraft(newValue.entry);
             }
         }
+    }
+
+    resetGuideForDescriptor(descriptor: GuideDescriptorVso) {
+        this.head.entry.descriptor = descriptor
+        this.head.entry.parts = []
+        draft.saveDraft(this.head.entry);
+        this.$router.replace('/guide-editor/new')
+    }
+
+    dismissDescriptorSuggestion() {
+        this.$router.replace('/guide-editor/new')
     }
 
     onDone() {
@@ -456,6 +471,10 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
             }
         }
     }
+}
+
+.linked-descriptor-suggestion-selector {
+    width: 100%;
 }
 
 </style>
