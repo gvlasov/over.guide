@@ -33,7 +33,7 @@
                     <InfiniteLoading
                             ref="infiniteLoading"
                             direction="bottom"
-                            @infinite="(status) => feed.loadNextPage()"
+                            @infinite="(status) => feed.loadNextPage(status)"
                     >
 
                         <div
@@ -177,6 +177,7 @@ export default class NotificationsSection extends Vue {
         position: absolute;
         left: 0;
         max-height: 100vh;
+        height: 100vh;
         z-index: -1;
 
         .notifications {
