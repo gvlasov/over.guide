@@ -193,6 +193,7 @@ export default class GuideBrowser extends mixins(TagLinkMixin) {
         this.visibleVideos.slice(0, this.visibleVideos.length)
         this.players.slice(0, this.players.length)
         this.feed.reset(this.infiniteLoading.stateChanger)
+        this.feed.descriptor = newDescriptor
     }
 
     mounted() {

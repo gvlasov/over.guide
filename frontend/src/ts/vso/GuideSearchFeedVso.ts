@@ -7,7 +7,7 @@ import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 
 export default class GuideSearchFeedVso extends FeedVso<ExistingGuideHeadDto, ExistingGuideHeadVso, GuideSearchPageDto> {
 
-    readonly descriptor: GuideDescriptorVso
+    descriptor: GuideDescriptorVso
     readonly exact: boolean
 
     constructor(descriptor: GuideDescriptorVso, exact: boolean) {
