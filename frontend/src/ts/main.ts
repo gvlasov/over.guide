@@ -20,6 +20,7 @@ import VueObserveVisibility from 'vue-observe-visibility'
 import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import {library} from '@fortawesome/fontawesome-svg-core'
+import SupportWebsitePage from "@/vue/SupportWebsitePage.vue"
 import {
     faBan,
     faBell,
@@ -30,6 +31,12 @@ import {
     faPlusSquare,
     faUser,
 } from '@fortawesome/free-solid-svg-icons'
+import {
+    faBitcoin,
+    faPatreon,
+    faPaypal,
+    faTwitch,
+} from '@fortawesome/free-brands-svg-icons'
 import PortalVue from 'portal-vue'
 
 library.add(faBrain);
@@ -40,6 +47,10 @@ library.add(faUser);
 library.add(faBell);
 library.add(faExternalLinkAlt);
 library.add(faBan);
+library.add(faPatreon);
+library.add(faTwitch);
+library.add(faBitcoin);
+library.add(faPaypal);
 
 const VueResizeObserver = require('vue-resize-observer')
 
@@ -71,6 +82,7 @@ const router = new VueRouter({
         {path: '/guide/:id', component: GuidePage},
         {path: '/moderation', component: ModerationPage, name: 'Moderation'},
         {path: '/site-reset', component: SiteResetPage, name: 'Reset storage'},
+        {path: '/support', component: SupportWebsitePage, name: 'Support this website'},
     ],
     scrollBehavior(to) {
         if (to.hash) {
