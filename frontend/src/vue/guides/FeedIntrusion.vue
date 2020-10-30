@@ -46,7 +46,6 @@ export default class FeedIntrusion extends Vue {
         detectAdblock()
             .then(hasAdblock => {
                 this.hasAdblock = hasAdblock
-                console.log(this.hasAdblock)
             })
     }
 
@@ -62,6 +61,7 @@ export default class FeedIntrusion extends Vue {
         padding: 1em;
         font-variant-caps: normal;
         font-family: "IBM Plex Sans", sans-serif;
+
         .support-request {
             display: block;
             text-decoration: none;
@@ -83,6 +83,7 @@ export default class FeedIntrusion extends Vue {
 
         }
     }
+
     & ::v-deep .background {
         background-color: hsla(0, 70%, 29%, .8);
     }
