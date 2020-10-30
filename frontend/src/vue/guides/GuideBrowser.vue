@@ -11,18 +11,25 @@
                 v-model="localDescriptor"
         />
         <div class="guide-feed">
-            <Guide
-                    v-for="guide in feed.items"
-                    :key="guide.guideId"
-                    :head="guide"
-                    :search-descriptor="descriptor"
-                    @loginRequired="() => {loginRequired = true}"
-                    @guideDeactivated="feed.removeElementById"
-                    @comesIntoVision="onComesIntoVision"
-                    @comesOutOfVision="onComesOutOfVision"
-                    @play="(player) => pauseOther(player)"
-                    @playerReady="(player) => players.push(player)"
-            />
+            <template
+                    v-for="head in feedItemsWithAds"
+            >
+                <FeedIntrusion
+                        v-if="head === 'ad'"
+                />
+                <Guide
+                        v-else
+                        :key="head.guideId"
+                        :head="head"
+                        :search-descriptor="descriptor"
+                        @loginRequired="() => {loginRequired = true}"
+                        @guideDeactivated="feed.removeElementById"
+                        @comesIntoVision="onComesIntoVision"
+                        @comesOutOfVision="onComesOutOfVision"
+                        @play="(player) => pauseOther(player)"
+                        @playerReady="(player) => players.push(player)"
+                />
+            </template>
         </div>
         <InfiniteLoading
                 ref="infiniteLoading"
@@ -82,10 +89,15 @@ import {Model, Ref, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
 import ModalBackground from "@/vue/general/ModalBackground.vue";
 import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
+import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
+import FeedIntrusion from "@/vue/guides/FeedIntrusion.vue";
 
 const playingZonePaddingPx = 50;
 @Component({
     components: {
+        FeedIntrusion,
+        OverwatchPanel,
         ModalBackground,
         LoginRequirement,
         TagBadges,
@@ -119,6 +131,19 @@ export default class GuideBrowser extends mixins(TagLinkMixin) {
         if (descriptor.hash !== this.descriptor.hash) {
             this.$emit('descriptorChange', descriptor)
         }
+    }
+
+    get feedItemsWithAds(): (ExistingGuideHeadVso | 'ad')[] {
+        const result = []
+        for (let index in this.feed.items) {
+            if (this.feed.items.hasOwnProperty(index)) {
+                result.push(this.feed.items[index])
+                if ((Number.parseInt(index) + 1) % 5 === 0) {
+                    result.push('ad')
+                }
+            }
+        }
+        return result
     }
 
     updatePlayingVideoIfNecessary() {

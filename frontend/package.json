@@ -37,6 +37,7 @@
     "sass-loader": "^9.0.2",
     "seedrandom": "^3.0.5",
     "vue": "^2.6.11",
+    "vue-adblock-detect": "0.0.2",
     "vue-anchor-router-link": "^0.8.5",
     "vue-async-computed": "^3.8.3",
     "vue-async-computed-decorator": "0.0.5",
