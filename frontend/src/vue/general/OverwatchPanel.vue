@@ -21,7 +21,7 @@ export default class OverwatchPanel extends Vue {
 
 .overwatch-panel  {
     box-shadow: 0 .1rem .3rem $overwatch-panel-bg-color;
-    background-color: rgba($overwatch-panel-bg-color, 0.43);
+    background-color: rgba($overwatch-panel-bg-color, 0.7);
 }
 
 </style>

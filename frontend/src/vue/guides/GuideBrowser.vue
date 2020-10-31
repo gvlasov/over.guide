@@ -1,5 +1,6 @@
 <template>
     <div class="guide-browser root-content-sizer">
+        <InstallPwaButton/>
         <LoginRequirement
                 v-if="loginRequired"
                 @back="() => {loginRequired = false}"
@@ -92,10 +93,12 @@ import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import FeedIntrusion from "@/vue/guides/FeedIntrusion.vue";
+import InstallPwaButton from "@/vue/InstallPwaButton.vue";
 
 const playingZonePaddingPx = 50;
 @Component({
     components: {
+        InstallPwaButton,
         FeedIntrusion,
         OverwatchPanel,
         ModalBackground,

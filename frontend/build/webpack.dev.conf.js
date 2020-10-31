@@ -12,6 +12,7 @@ const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+const fs = require('fs')
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -35,6 +36,11 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       ],
     },
     hot: true,
+
+    https: true,
+    key: fs.readFileSync('../backend/src/test/server.key'),
+    cert: fs.readFileSync('../backend/src/test/server.crt'),
+
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
     disableHostCheck: true,
@@ -69,6 +75,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             },
             {
               from: path.resolve(__dirname, '../src/index.html'),
+              to: config.dev.assetsSubDirectory,
+            },
+            {
+              from: path.resolve(__dirname, '../src/sw.js'),
               to: config.dev.assetsSubDirectory,
             },
           ]

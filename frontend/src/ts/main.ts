@@ -28,6 +28,7 @@ import {
     faExternalLinkAlt,
     faHome,
     faMedal,
+    faPlus,
     faPlusSquare,
     faUser,
 } from '@fortawesome/free-solid-svg-icons'
@@ -51,6 +52,7 @@ library.add(faPatreon);
 library.add(faTwitch);
 library.add(faBitcoin);
 library.add(faPaypal);
+library.add(faPlus);
 
 const VueResizeObserver = require('vue-resize-observer')
 
@@ -82,7 +84,11 @@ const router = new VueRouter({
         {path: '/guide/:id', component: GuidePage},
         {path: '/moderation', component: ModerationPage, name: 'Moderation'},
         {path: '/site-reset', component: SiteResetPage, name: 'Reset storage'},
-        {path: '/support', component: SupportWebsitePage, name: 'Support this website'},
+        {
+            path: '/support',
+            component: SupportWebsitePage,
+            name: 'Support this website'
+        },
     ],
     scrollBehavior(to) {
         if (to.hash) {
@@ -116,3 +122,15 @@ const app = new Vue({
     },
     router
 });
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('/sw.js')
+        .then(function () {
+            console.log('Service Worker Registered');
+        });
+}
+window.deferredPrompt = null
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault()
+    deferredPrompt = e
+})
