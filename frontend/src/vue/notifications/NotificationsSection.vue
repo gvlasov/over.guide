@@ -107,10 +107,11 @@ export default class NotificationsSection extends Vue {
 
     show: boolean = false
 
-    notificationCheckIntervalMs = 30 * 1000
+    static notificationCheckIntervalMs = 10 * 1000
 
     @Watch('show')
     onShowChange(newValue) {
+        console.log(this.feed.items.length)
         if (newValue) {
             this.markNotificationsReadIfAvailable()
             this.$emit('open')
@@ -124,7 +125,7 @@ export default class NotificationsSection extends Vue {
         }
     }
 
-    @Debounce(10 * 1000)
+    @Debounce(NotificationsSection.notificationCheckIntervalMs)
     checkNotificationsSometimes() {
         this.feed.loadNextPage(this.infiniteLoading.stateChanger)
     }
@@ -156,8 +157,9 @@ export default class NotificationsSection extends Vue {
         setInterval(() => {
             if (!this.show) {
                 this.feed.reset(this.infiniteLoading.stateChanger)
+                this.feed.loadNextPage(this.infiniteLoading.stateChanger)
             }
-        }, this.notificationCheckIntervalMs)
+        }, NotificationsSection.notificationCheckIntervalMs)
     }
 
 };
