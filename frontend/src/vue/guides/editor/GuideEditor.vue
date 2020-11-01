@@ -86,6 +86,7 @@
                             </OverwatchButton>
                         </transition>
                     </div>
+                    <hr/>
                     <GuideEditorPartsList :entry="head.entry"/>
                     <OverwatchButton
                             type="main"
@@ -331,6 +332,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 @import '~@/assets/css/fonts.scss';
 @import '~@/assets/css/overwatch-ui.scss';
 @import '~@/assets/css/common.scss';
+@import '~@/assets/css/tags.scss';
 
 .wrap {
     display: inline-flex;
@@ -341,6 +343,15 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
         display: flex;
         flex-direction: column;
         min-height: 100vh;
+        hr {
+            width: 100%;
+            height: 1px;
+            background-color: $overwatch-panel-bg-color;
+            opacity: .13;
+            border: 0;
+            border-radius: 3em;
+            box-shadow: 0 0 .2em $overwatch-panel-bg-color;
+        }
 
         .parts-list {
             z-index: 1;
