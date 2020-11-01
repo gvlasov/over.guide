@@ -36,6 +36,7 @@
                 direction="bottom"
                 @infinite="(state) => feed.loadNextPage(state)"
         >
+            <SpinnerBlock slot="spinner"/>
             <WeakPanel slot="no-results" class="no-results">
                 <div v-if="descriptor.isEmpty">
                     No guides on the site
@@ -92,10 +93,12 @@ import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import FeedIntrusion from "@/vue/guides/FeedIntrusion.vue";
+import SpinnerBlock from "@/vue/SpinnerBlock.vue";
 
 const playingZonePaddingPx = 50;
 @Component({
     components: {
+        SpinnerBlock,
         FeedIntrusion,
         OverwatchPanel,
         ModalBackground,

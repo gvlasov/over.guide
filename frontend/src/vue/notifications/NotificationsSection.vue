@@ -35,7 +35,7 @@
                             direction="bottom"
                             @infinite="(status) => feed.loadNextPage(status)"
                     >
-
+                        <SpinnerBlock slot="spinner"/>
                         <div
                                 slot="no-results"
                                 class="notifications-end"
@@ -75,6 +75,7 @@ import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import Authentication from "@/ts/Authentication";
 import NotificationsButton from "@/vue/notifications/NotificationsButton.vue";
 import NotificationFeedVso from "@/ts/vso/NotificationFeedVso";
+import SpinnerBlock from "../SpinnerBlock.vue";
 
 const Debounce = require('debounce-decorator').default
 
@@ -84,6 +85,7 @@ const ClickOutside = require('vue-click-outside')
 
 @Component({
     components: {
+        SpinnerBlock,
         NotificationsButton,
         Notification,
         UserLink,

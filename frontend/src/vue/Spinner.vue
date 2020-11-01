@@ -14,7 +14,7 @@ export default class Spinner extends Vue {
     interval = null
     shiftPx = 0;
 
-    mounted() {
+    created() {
         this.interval = setInterval(
             () => {
                 this.shiftPx += 40;

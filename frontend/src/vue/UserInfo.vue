@@ -72,7 +72,7 @@
                     @infinite="(state) => lastAuthoredGuidesFeed.loadNextPage(state)"
                     force-use-infinite-wrapper
             >
-
+                <SpinnerBlock slot="spinner"/>
                 <WeakPanel slot="no-results">
                     No authored guides
                 </WeakPanel>
@@ -106,9 +106,11 @@ import OverwatchPanel from '@/vue/general/OverwatchPanel'
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 import {Prop, Ref} from "vue-property-decorator";
 import GuideAuthorSearchFeedVso from "@/ts/vso/GuideAuthorSearchFeedVso";
+import SpinnerBlock from "@/vue/SpinnerBlock.vue";
 
 @Component({
     components: {
+        SpinnerBlock,
         NotificationModalPopup,
         ModalPopup,
         RelativeTime,

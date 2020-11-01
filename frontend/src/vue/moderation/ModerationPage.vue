@@ -11,7 +11,7 @@
                 @infinite="(state) => feed.loadNextPage(state)"
                 force-use-infinite-wrapper
         >
-
+            <SpinnerBlock slot="spinner"/>
             <WeakPanel slot="no-results">
                 All clear!
             </WeakPanel>
@@ -30,9 +30,11 @@ import Report from "@/vue/moderation/Report.vue";
 import WeakPanel from "@/vue/guides/WeakPanel.vue";
 import ReportFeedVso from "@/ts/vso/ReportFeedVso";
 import {Ref} from "vue-property-decorator";
+import SpinnerBlock from "@/vue/SpinnerBlock.vue";
 
 @Component({
     components: {
+        SpinnerBlock,
         Report,
         InfiniteLoading,
         WeakPanel,
