@@ -168,13 +168,17 @@ export default class GuidePreviewBadge extends Vue {
                     height: 100%;
                     display: flex;
                     align-items: center;
-                    gap: .25rem
+                    gap: .25rem;
+                    + .badge-tags-wrap {
+                        margin-left: 0;
+                    }
                 }
 
                 .badge-tags-wrap {
                     display: inline-block;
                     text-wrap: none;
                     white-space: nowrap;
+                    margin-left: .8em;
                 }
             }
 
@@ -192,6 +196,11 @@ export default class GuidePreviewBadge extends Vue {
                 //& > *:not() {
                 //
                 //}
+                & ::v-deep .markdown {
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                }
 
                 & ::v-deep * {
                     margin: 0;
