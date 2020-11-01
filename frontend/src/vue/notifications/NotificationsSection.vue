@@ -145,7 +145,15 @@ export default class NotificationsSection extends Vue {
     }
 
     mounted() {
-        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+        if (this.auth.authenticated) {
+            this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+            setInterval(() => {
+                if (!this.show) {
+                    this.feed.reset(this.infiniteLoading.stateChanger)
+                    this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+                }
+            }, NotificationsSection.notificationCheckIntervalMs)
+        }
         window.addEventListener(
             'keyup',
             (e) => {
@@ -154,12 +162,6 @@ export default class NotificationsSection extends Vue {
                 }
             }
         )
-        setInterval(() => {
-            if (!this.show) {
-                this.feed.reset(this.infiniteLoading.stateChanger)
-                this.feed.loadNextPage(this.infiniteLoading.stateChanger)
-            }
-        }, NotificationsSection.notificationCheckIntervalMs)
     }
 
 };
