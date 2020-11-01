@@ -20,7 +20,7 @@
                         :open="widget.open"
                         :order="index"
                         @open="() => onOpen(widget)"
-                        @close="() => {widget.open = false}"
+                        @close="() => onClose(widget)"
                 />
             </div>
             <InfiniteLoading
@@ -85,7 +85,14 @@ export default class SimilarTagGuides extends Vue {
 
     onOpen(widget: TrainingGoalWidget) {
         widget.open = true
+        this.$forceUpdate()
     }
+
+    onClose(widget: TrainingGoalWidget) {
+        widget.open = false
+        this.$forceUpdate()
+    }
+
 
     get guideWidgets(): TrainingGoalWidget[] {
         return this.feed.items.map(
