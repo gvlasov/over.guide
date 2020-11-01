@@ -8,6 +8,7 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
     readonly alreadyLoadedIds: number[] = []
     lastPage?: Page
     touched: boolean = false
+    currentPromise: Promise<void> | null = null
 
     abstract dto2Vso(dto: Dto): Vso
 
@@ -39,9 +40,21 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         this.lastPage = page
     }
 
+    get isRequestPending(): boolean {
+        return this.currentPromise !== null
+    }
+
     loadNextPage(state: InfiniteHandlerState): Promise<void> {
-        return this.feed(this.alreadyLoadedIds)
-            .then(page => this.loadPage(page, state))
+        const promise = this.feed(this.alreadyLoadedIds)
+            .then(page => {
+                if (this.currentPromise === promise) {
+                    // If has not been aborted by a reset
+                    this.loadPage(page, state);
+                    this.currentPromise = null
+                }
+            })
+        this.currentPromise = promise
+        return promise
     }
 
     removeElementById(id: number) {
@@ -72,6 +85,7 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         this.items.splice(0, this.items.length)
         this.alreadyLoadedIds.splice(0, this.alreadyLoadedIds.length)
         this.touched = false
+        this.currentPromise = null
         state.reset()
     }
 

@@ -30,6 +30,7 @@
                     class="infinite-loading"
                     force-use-infinite-wrapper
             >
+                <SpinnerBlock slot="spinner"/>
                 <span slot="no-more"></span>
                 <span slot="no-results"></span>
             </InfiniteLoading>
@@ -50,9 +51,11 @@ import {Prop, Ref, Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
 import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 import Vue from 'vue'
+import SpinnerBlock from "@/vue/SpinnerBlock.vue";
 
 @Component({
     components: {
+        SpinnerBlock,
         OverwatchDropdownButton,
         OverwatchPanelButton,
         GuidePreviewBadge,
@@ -102,9 +105,7 @@ export default class SimilarTagGuides extends Vue {
 
     @Watch('descriptor', {deep: true})
     onDescriptorChange(newValue: GuideDescriptorVso, oldValue: GuideDescriptorVso) {
-        if (newValue.equals(oldValue)) {
-            return
-        }
+        this.feed.descriptor = newValue
         this.feed.reset(this.infiniteLoading.stateChanger)
         this.feed.loadNextPage(this.infiniteLoading.stateChanger)
     }
