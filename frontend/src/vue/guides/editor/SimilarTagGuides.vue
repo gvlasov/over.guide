@@ -101,7 +101,15 @@ export default class SimilarTagGuides extends Vue {
     }
 
     @Watch('descriptor', {deep: true})
-    onDescriptorChange(newValue) {
+    onDescriptorChange(newValue: GuideDescriptorVso, oldValue: GuideDescriptorVso) {
+        if (newValue.equals(oldValue)) {
+            return
+        }
+        this.feed.reset(this.infiniteLoading.stateChanger)
+        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+    }
+
+    mounted() {
         this.feed.reset(this.infiniteLoading.stateChanger)
         this.feed.loadNextPage(this.infiniteLoading.stateChanger)
     }
