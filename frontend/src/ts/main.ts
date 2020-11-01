@@ -126,11 +126,10 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
         .register('/sw.js')
         .then(function () {
-            console.log('Service Worker Registered');
         });
 }
 (window as any).deferredPrompt = null;
-(window as any).addEventListener('beforeinstallprompt', (e: any) => {
-    (window as any).deferredPrompt = e
-    e.preventDefault()
+window.addEventListener('beforeinstallprompt', (e: any) => {
+    (window as any).deferredPrompt = e;
+    e.preventDefault();
 })

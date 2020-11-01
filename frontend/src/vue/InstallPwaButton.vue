@@ -2,7 +2,7 @@
     <OverwatchPanelButton
             type="main"
             class="install-pwa-button"
-            v-hammer:tap="promptInstall"
+            v-hammer:tap="() => A2HS.instance.installEvent.prompt()"
     >
         <font-awesome-icon icon="plus"/>
         Add to home screen
@@ -12,35 +12,18 @@
 <script lang="ts">
 
 import OverwatchPanelButton from "./OverwatchPanelButton.vue";
-import Component, {mixins} from "vue-class-component";
-import {VuePwaInstallMixin} from "vue-pwa-install";
+import Component from "vue-class-component";
+import A2HS from "@/ts/A2HS";
+import Vue from 'vue'
 
 @Component({
     components: {
         OverwatchPanelButton,
     },
 })
-export default class InstallPwaButton extends mixins(VuePwaInstallMixin) {
+export default class InstallPwaButton extends Vue {
 
-    promptInstall() {
-        this.event().prompt()
-    }
-
-    event() {
-        return (window as any).deferredPrompt
-    }
-
-    get isAlreadyInstalled(): boolean {
-        return window.matchMedia('(display-mode: standalone)').matches
-    }
-
-    created() {
-        if (this.isAlreadyInstalled) {
-            // alert('installed')
-        } else {
-            // alert('not installed')
-        }
-    }
+    A2HS = A2HS
 
 };
 

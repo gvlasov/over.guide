@@ -8,11 +8,15 @@ self.addEventListener('install', function(e) {
         })
     );
 });
-//
-// self.addEventListener('fetch', function(e) {
-//     e.respondWith(
-//         caches.match(e.request).then(function(response) {
-//             return response || fetch(e.request);
-//         })
-//     );
-// });
+
+self.addEventListener('fetch', function(e) {
+    /*
+    * Fetch event handler is a must to enable beforeinstallprompt event
+    * https://stackoverflow.com/a/51248010/1542343
+    */
+    // e.respondWith(
+    //     caches.match(e.request).then(function(response) {
+    //         return response || fetch(e.request);
+    //     })
+    // );
+});
