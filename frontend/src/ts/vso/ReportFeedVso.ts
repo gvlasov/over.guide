@@ -19,7 +19,9 @@ export default class ReportFeedVso extends FeedVso<ReportReadDto, ReportReadVso,
     }
 
     get feed(): (ids: number[]) => Promise<ReportPageDto> {
-        return Backend.instance.searchReportsPaginated
+        return (ids: number[]) => {
+            return Backend.instance.searchReportsPaginated(ids)
+        }
     }
 
 }
