@@ -129,8 +129,8 @@ if ('serviceWorker' in navigator) {
             console.log('Service Worker Registered');
         });
 }
-window.deferredPrompt = null
-window.addEventListener('beforeinstallprompt', (e) => {
+(window as any).deferredPrompt = null;
+(window as any).addEventListener('beforeinstallprompt', (e: any) => {
+    (window as any).deferredPrompt = e
     e.preventDefault()
-    deferredPrompt = e
 })

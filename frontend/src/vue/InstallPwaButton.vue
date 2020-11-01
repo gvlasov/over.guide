@@ -23,7 +23,23 @@ import {VuePwaInstallMixin} from "vue-pwa-install";
 export default class InstallPwaButton extends mixins(VuePwaInstallMixin) {
 
     promptInstall() {
-        (window as any).deferredPrompt.prompt()
+        this.event().prompt()
+    }
+
+    event() {
+        return (window as any).deferredPrompt
+    }
+
+    get isAlreadyInstalled(): boolean {
+        return window.matchMedia('(display-mode: standalone)').matches
+    }
+
+    created() {
+        if (this.isAlreadyInstalled) {
+            // alert('installed')
+        } else {
+            // alert('not installed')
+        }
     }
 
 };
