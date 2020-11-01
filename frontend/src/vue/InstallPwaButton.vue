@@ -4,8 +4,12 @@
             class="install-pwa-button"
             v-hammer:tap="() => A2HS.instance.installEvent.prompt()"
     >
-        <font-awesome-icon icon="plus"/>
-        Add to home screen
+        <slot>
+            <font-awesome-icon icon="plus"/>
+            <div>
+                Add app to home screen
+            </div>
+        </slot>
     </OverwatchPanelButton>
 </template>
 
@@ -34,7 +38,11 @@ export default class InstallPwaButton extends Vue {
 
 .install-pwa-button {
     & ::v-deep .content {
-        padding: .3em;
+        padding: .5em;
+        display: flex;
+        align-items: center;
+        gap: .5em;
+
     }
 
     svg {
