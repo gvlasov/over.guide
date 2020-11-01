@@ -8,7 +8,7 @@ type CommentChildrenRegistry = {
 type Node = {
     dto: CommentReadDto,
     children: CommentReadDto[],
-    getParent: () => Node|null,
+    getParent: () => Node | null,
 }
 
 export default class CommentForest {
@@ -57,11 +57,20 @@ export default class CommentForest {
             }
             deletedLeaves = newDeletedLeaves
         }
-        firstLevel.sort((a, b) => b.votesCount - a.votesCount)
+        firstLevel.sort((a, b) => this.sort(a, b))
         for (let node of Object.values(tree)) {
             node.children.sort((a, b) => b.votesCount - a.votesCount)
         }
         this.firstLevelComments = this.buildCommentsTree(firstLevel, tree)
+    }
+
+    sort(a: CommentReadDto, b: CommentReadDto): number {
+        const votesDiff = b.votesCount - a.votesCount
+        if (votesDiff === 0) {
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        } else {
+            return votesDiff
+        }
     }
 
     private buildCommentsTree(
