@@ -73,6 +73,16 @@ export default class SimilarTagGuides extends Vue {
 
     openDropdown: boolean = false
 
+    @Watch('openDropdown')
+    onDropdownOpen(newValue: boolean) {
+        if (!newValue) {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth',
+            })
+        }
+    }
+
     onOpen(widget: TrainingGoalWidget) {
         widget.open = true
     }
