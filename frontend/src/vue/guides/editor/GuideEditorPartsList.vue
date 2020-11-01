@@ -27,7 +27,7 @@
         <transition name="new-buttons-appear">
             <GuidePartSpawner
                     v-if="endSpawnerEnabled"
-                    :where="ListPosition.Beginning"
+                    :where="ListPosition.End"
                     :initial-seeding="false"
                     @addVideo="createNewVideoPart"
                     @addText="createNewTextPart"
@@ -101,6 +101,7 @@ export default class GuideEditorPartsList extends Vue {
     }
 
     spawnPart(how: () => GuidePartTextWidget | GuidePartVideoWidget, where: ListPosition) {
+        console.log(where)
         this[`${where}SpawnerHidden`] = true;
         const widget = how();
         this.enterToClass = (widget.isText)
