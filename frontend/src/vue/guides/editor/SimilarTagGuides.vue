@@ -106,10 +106,6 @@ export default class SimilarTagGuides extends Vue {
         this.feed.loadNextPage(this.infiniteLoading.stateChanger)
     }
 
-    mounted() {
-        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
-    }
-
 }
 
 </script>
