@@ -28,7 +28,6 @@ import {
     faExternalLinkAlt,
     faHome,
     faMedal,
-    faPlus,
     faPlusSquare,
     faUser,
 } from '@fortawesome/free-solid-svg-icons'
@@ -52,7 +51,6 @@ library.add(faPatreon);
 library.add(faTwitch);
 library.add(faBitcoin);
 library.add(faPaypal);
-library.add(faPlus);
 
 const VueResizeObserver = require('vue-resize-observer')
 

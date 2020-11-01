@@ -37,6 +37,9 @@
                 />
             </draggable>
         </template>
+        <div class="a2hs">
+            <InstallPwaButton/>
+        </div>
     </div>
 </template>
 
@@ -58,11 +61,13 @@ import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
+import InstallPwaButton from "@/vue/InstallPwaButton.vue";
 
 const backend = new Backend(axios);
 const auth = new Authentication()
 @Component({
     components: {
+        InstallPwaButton,
         NotificationModalPopup,
         ModalPopup,
         TestingGround,
@@ -184,5 +189,9 @@ export default class TrainingGoals extends Vue {
 .synchronization {
     font-family: BigNoodleTooOblique, sans-serif;
     font-size: 4em;
+}
+.a2hs {
+    margin-top: 3em;
+    margin-bottom: 3em;
 }
 </style>

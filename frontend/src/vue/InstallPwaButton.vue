@@ -5,10 +5,7 @@
             v-hammer:tap="() => A2HS.instance.installEvent.prompt()"
     >
         <slot>
-            <font-awesome-icon icon="plus"/>
-            <div>
-                Add app to home screen
-            </div>
+            Add to home screen
         </slot>
     </OverwatchPanelButton>
 </template>
