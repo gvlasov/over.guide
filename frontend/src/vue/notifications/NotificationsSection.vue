@@ -109,7 +109,7 @@ export default class NotificationsSection extends Vue {
 
     show: boolean = false
 
-    static notificationCheckIntervalMs = 10 * 1000
+    static notificationCheckIntervalMs = 10 * 1000;
 
     @Watch('show')
     onShowChange(newValue) {
@@ -151,7 +151,6 @@ export default class NotificationsSection extends Vue {
             this.feed.loadNextPage(this.infiniteLoading.stateChanger)
             setInterval(() => {
                 if (!this.show) {
-                    this.feed.reset(this.infiniteLoading.stateChanger)
                     this.feed.loadNextPage(this.infiniteLoading.stateChanger)
                 }
             }, NotificationsSection.notificationCheckIntervalMs)
