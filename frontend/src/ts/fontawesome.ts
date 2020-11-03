@@ -7,6 +7,7 @@ import {
     faHome,
     faMedal,
     faPlusSquare,
+    faTabletAlt,
     faUser
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -28,4 +29,5 @@ library.add(faPatreon);
 library.add(faTwitch);
 library.add(faBitcoin);
 library.add(faPaypal);
+library.add(faTabletAlt);
 export default library

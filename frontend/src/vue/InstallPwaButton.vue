@@ -35,11 +35,12 @@ export default class InstallPwaButton extends Vue {
 
 .install-pwa-button {
     & ::v-deep .content {
+        position: relative;
         padding: .5em;
         display: flex;
+        flex-direction: column;
         align-items: center;
         gap: .5em;
-
     }
 
     svg {

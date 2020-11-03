@@ -12,13 +12,9 @@
         />
         <div class="guide-feed">
             <template
-                    v-for="head in feedItemsWithAds"
+                    v-for="(head, index) in feed.items"
             >
-                <FeedIntrusion
-                        v-if="head === 'ad'"
-                />
                 <Guide
-                        v-else
                         :key="head.guideId"
                         :head="head"
                         :search-descriptor="descriptor"
@@ -28,6 +24,10 @@
                         @comesOutOfVision="onComesOutOfVision"
                         @play="(player) => pauseOther(player)"
                         @playerReady="(player) => players.push(player)"
+                />
+                <FeedIntrusion
+                        v-if="intruder.intrusionForIndex(index) !== null"
+                        :what-to-display="intruder.intrusionForIndex(index)"
                 />
             </template>
         </div>
@@ -90,10 +90,10 @@ import {Model, Ref, Watch} from "vue-property-decorator";
 import Component, {mixins} from "vue-class-component";
 import ModalBackground from "@/vue/general/ModalBackground.vue";
 import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
-import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import FeedIntrusion from "@/vue/guides/FeedIntrusion.vue";
 import SpinnerBlock from "@/vue/SpinnerBlock.vue";
+import FeedIntruder from "@/ts/FeedIntruder";
 
 const playingZonePaddingPx = 50;
 @Component({
@@ -120,6 +120,8 @@ export default class GuideBrowser extends mixins(TagLinkMixin) {
 
     feed = new GuideSearchFeedVso(this.descriptor, false)
 
+    intruder = new FeedIntruder()
+
     loginRequired: boolean = false
     visibleVideos: any = []
     bodyRect: DOMRect = document.body.getBoundingClientRect()
@@ -134,19 +136,6 @@ export default class GuideBrowser extends mixins(TagLinkMixin) {
         if (descriptor.hash !== this.descriptor.hash) {
             this.$emit('descriptorChange', descriptor)
         }
-    }
-
-    get feedItemsWithAds(): (ExistingGuideHeadVso | 'ad')[] {
-        const result = []
-        for (let index in this.feed.items) {
-            if (this.feed.items.hasOwnProperty(index)) {
-                result.push(this.feed.items[index])
-                if ((Number.parseInt(index) + 1) % 5 === 0) {
-                    result.push('ad')
-                }
-            }
-        }
-        return result
     }
 
     updatePlayingVideoIfNecessary() {
