@@ -19,38 +19,10 @@ import VueScrollTo from 'vue-scrollto';
 import VueObserveVisibility from 'vue-observe-visibility'
 import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import {library} from '@fortawesome/fontawesome-svg-core'
 import SupportWebsitePage from "@/vue/SupportWebsitePage.vue"
-import {
-    faBan,
-    faBell,
-    faBrain,
-    faExternalLinkAlt,
-    faHome,
-    faMedal,
-    faPlusSquare,
-    faUser,
-} from '@fortawesome/free-solid-svg-icons'
-import {
-    faBitcoin,
-    faPatreon,
-    faPaypal,
-    faTwitch,
-} from '@fortawesome/free-brands-svg-icons'
 import PortalVue from 'portal-vue'
 
-library.add(faBrain);
-library.add(faHome);
-library.add(faPlusSquare);
-library.add(faMedal);
-library.add(faUser);
-library.add(faBell);
-library.add(faExternalLinkAlt);
-library.add(faBan);
-library.add(faPatreon);
-library.add(faTwitch);
-library.add(faBitcoin);
-library.add(faPaypal);
+require('./fontawesome')
 
 const VueResizeObserver = require('vue-resize-observer')
 
