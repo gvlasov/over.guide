@@ -52,6 +52,11 @@ const data = [
         name: 'Technique',
         dataName: 'technique',
     },
+    {
+        id: GuideTheme.Roles,
+        name: 'Roles',
+        dataName: 'Roles',
+    },
 ]
 const map = new Map<string, ThematicTagDto>()
 data.forEach(
