@@ -4,13 +4,13 @@ import PickContextDto from "data/dto/PickContextDto";
 import AlternativeDto from "data/dto/AlternativeDto";
 import heroes from "src/data/heroes"
 import Role from 'src/data/Role';
-import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
+import {OldJsonMatchupEvaluationService} from "src/services/old-json-matchup-evaluation.service";
 import sum from 'lodash.sum';
 
 @Injectable()
 export class SuggestPickService {
     constructor(
-        private readonly evaluation: MatchupEvaluationService
+        private readonly evaluation: OldJsonMatchupEvaluationService
     ) {
     }
 

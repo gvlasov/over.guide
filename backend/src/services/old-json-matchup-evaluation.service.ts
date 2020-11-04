@@ -4,7 +4,7 @@ import HeroDto from "data/dto/HeroDto";
 import countersData from "src/data/counters.json"
 
 @Injectable()
-export class MatchupEvaluationService {
+export class OldJsonMatchupEvaluationService {
 
     evaluate(subject: HeroDto, object: HeroDto): number {
         const find = countersData.find(record => record[0] === subject.dataName && record[1] === object.dataName);

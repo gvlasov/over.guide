@@ -29,8 +29,6 @@ describe(
                     (await MatchupEvaluation.findAll()).length
                 ).toBe(0)
                 await request(ctx.app.getHttpServer())
-                    .get('/test')
-                await request(ctx.app.getHttpServer())
                     .put('/matchup-evaluation')
                     .send({subject: 'ana', object: 'pharah', score: 4})
                     .set({Authorization: `Bearer ${token}`})

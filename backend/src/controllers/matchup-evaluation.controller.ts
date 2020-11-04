@@ -2,40 +2,26 @@ import {
     BadRequestException,
     Body,
     Controller,
-    Get,
     HttpStatus,
     Put,
     Req,
     Res,
     UnauthorizedException
 } from '@nestjs/common';
-import heroes from "src/data/heroes"
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
 import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 import {Hero} from "src/database/models/Hero";
 import {Request, Response} from "express";
 import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
-import {MatchupEvaluationService} from "src/services/matchup-evaluation.service";
-import HeroId from "data/HeroId";
 import {Patch} from "src/database/models/Patch";
 
 @Controller('matchup-evaluation')
-
 export class MatchupEvaluationController {
     constructor(
-        private readonly service: MatchupEvaluationService,
         private readonly authService: AuthService
     ) {
 
-    }
-
-    @Get()
-    evaluate(subject: HeroId, object: HeroId) {
-        return this.service.evaluate(
-            heroes.get(subject),
-            heroes.get(object)
-        )
     }
 
     @Put()
