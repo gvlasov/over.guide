@@ -449,5 +449,14 @@ export default class Backend {
         )
     }
 
+    async getMyMatchupEvaluations(): Promise<void> {
+        return this.query(
+            'GET',
+            `/matchup-evaluation/my`,
+            {},
+            response => {}
+        )
+    }
+
 }
 
