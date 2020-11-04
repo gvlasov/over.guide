@@ -1,5 +1,7 @@
+import HeroId from "data/HeroId";
+
 export default interface MatchupEvaluationDto {
-    readonly subject: string
-    readonly object: string
+    readonly subjectId: HeroId
+    readonly objectId: HeroId
     readonly score: number
 }

@@ -1,7 +1,7 @@
 import {
-    BadRequestException,
     Body,
     Controller,
+    Get,
     HttpStatus,
     Put,
     Req,
@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
 import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
-import {Hero} from "src/database/models/Hero";
 import {Request, Response} from "express";
 import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
@@ -30,24 +29,14 @@ export class MatchupEvaluationController {
     async createEvaluation(
         @Res() response: Response,
         @Req() request: Request,
-        @Body() matchupEvaluation: MatchupEvaluationDto,
+        @Body() dto: MatchupEvaluationDto,
     ) {
         const currentUser: User = await this.authService.getUser(request)
-        const subject = await Hero.findOne({where: {dataName: matchupEvaluation.subject}});
-        if (subject === null) {
-            throw new BadRequestException()
-        }
-        const subjectId = subject.id;
-        const object = await Hero.findOne({where: {dataName: matchupEvaluation.object}});
-        if (object === null) {
-            throw new BadRequestException()
-        }
-        const objectId = object.id;
         const existingEvaluation = await MatchupEvaluation.findOne({
             where: {
                 createdById: currentUser.id,
-                subjectId: subjectId,
-                objectId: objectId
+                subjectId: dto.subjectId,
+                objectId: dto.objectId,
             }
         });
         const patch = await Patch.findOne({
@@ -55,9 +44,9 @@ export class MatchupEvaluationController {
         })
         if (existingEvaluation === null) {
             await MatchupEvaluation.create({
-                subjectId: subjectId,
-                objectId: objectId,
-                score: matchupEvaluation.score,
+                subjectId: dto.subjectId,
+                objectId: dto.objectId,
+                score: dto.score,
                 createdById: currentUser.id,
                 ip: request.ip,
                 patchId: patch.id,
@@ -65,9 +54,9 @@ export class MatchupEvaluationController {
             response.status(HttpStatus.CREATED)
         } else {
             await existingEvaluation.update({
-                subjectId: subjectId,
-                objectId: objectId,
-                score: matchupEvaluation.score,
+                subjectId: dto.subjectId,
+                objectId: dto.objectId,
+                score: dto.score,
                 createdById: currentUser.id,
                 ip: request.ip,
                 patchId: patch.id,
@@ -76,5 +65,21 @@ export class MatchupEvaluationController {
         }
         response.send()
     }
+
+    @UseGuards(AuthenticatedGuard)
+    @Get('my')
+    async myEvaluations(
+        @Req() request: Request,
+    ) {
+        const currentUser: User = await this.authService.getUser(request)
+        return MatchupEvaluation.findAll({
+            where: {
+                createdById: currentUser.id
+            },
+        })
+            .then(evaluations => evaluations.map(evaluation => evaluation.toDto()))
+
+    }
+
 
 }

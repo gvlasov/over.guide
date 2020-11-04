@@ -10,6 +10,7 @@ import {Hero} from "./Hero";
 import {DataTypes} from "sequelize";
 import {Patch} from "./Patch";
 import {User} from "src/database/models/User";
+import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 
 @Table
 export class MatchupEvaluation extends Model<MatchupEvaluation> {
@@ -52,5 +53,13 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
 
     @BelongsTo(() => Patch, 'patchId')
     patch: Patch
+
+    toDto() : MatchupEvaluationDto {
+        return {
+            subjectId: this.subjectId,
+            objectId: this.objectId,
+            score: this.score,
+        }
+    }
 
 }
