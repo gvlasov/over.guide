@@ -41,6 +41,10 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
     @Column({type: new DataTypes.STRING({length: 45})})
     ip: string
 
+    @AllowNull(false)
+    @Column({type: new DataTypes.INTEGER()})
+    createdById: number
+
     @ForeignKey(() => Patch)
     @AllowNull(false)
     @Column

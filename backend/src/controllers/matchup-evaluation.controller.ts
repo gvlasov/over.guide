@@ -6,7 +6,7 @@ import {
     Put,
     Req,
     Res,
-    UnauthorizedException
+    UseGuards
 } from '@nestjs/common';
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
 import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
@@ -15,6 +15,7 @@ import {Request, Response} from "express";
 import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
 import {Patch} from "src/database/models/Patch";
+import {AuthenticatedGuard} from "src/services/authenticated.guard";
 
 @Controller('matchup-evaluation')
 export class MatchupEvaluationController {
@@ -24,6 +25,7 @@ export class MatchupEvaluationController {
 
     }
 
+    @UseGuards(AuthenticatedGuard)
     @Put()
     async createEvaluation(
         @Res() response: Response,
@@ -31,9 +33,6 @@ export class MatchupEvaluationController {
         @Body() matchupEvaluation: MatchupEvaluationDto,
     ) {
         const currentUser: User = await this.authService.getUser(request)
-        if (currentUser === null) {
-            throw new UnauthorizedException()
-        }
         const subject = await Hero.findOne({where: {dataName: matchupEvaluation.subject}});
         if (subject === null) {
             throw new BadRequestException()
@@ -59,7 +58,7 @@ export class MatchupEvaluationController {
                 subjectId: subjectId,
                 objectId: objectId,
                 score: matchupEvaluation.score,
-                createdBy: currentUser,
+                createdById: currentUser.id,
                 ip: request.ip,
                 patchId: patch.id,
             })
@@ -69,7 +68,7 @@ export class MatchupEvaluationController {
                 subjectId: subjectId,
                 objectId: objectId,
                 score: matchupEvaluation.score,
-                createdBy: currentUser,
+                createdById: currentUser.id,
                 ip: request.ip,
                 patchId: patch.id,
             })

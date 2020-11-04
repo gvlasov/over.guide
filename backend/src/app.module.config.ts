@@ -5,6 +5,7 @@ import {DatabaseModule} from './database/database.module';
 import {SuggestPickController} from './controllers/suggest-pick.controller';
 import {MatchupEvaluationController} from './controllers/matchup-evaluation.controller';
 import {YoutubeVideoExcerptController} from './controllers/youtube-video-excerpt.controller';
+import {OldJsonMatchupEvaluationService} from "src/services/old-json-matchup-evaluation.service";
 import {SuggestPickService} from "src/services/suggest-pick.service";
 import {BattlenetAuthController} from "src/controllers/battlenet-auth.controller";
 import {BattlenetService} from "src/services/battlenet.service";
@@ -59,6 +60,7 @@ const config = {
     ],
     providers: [
         AppService,
+        OldJsonMatchupEvaluationService,
         AuthService,
         SuggestPickService,
         BattlenetService,

@@ -27,7 +27,14 @@ describe(
                 })
                 expect(
                     (await MatchupEvaluation.findAll()).length
-                ).toBe(0)
+                ).toStrictEqual(0)
+                await request(ctx.app.getHttpServer())
+                    .put('/matchup-evaluation')
+                    .send({subject: 'ana', object: 'pharah', score: 4})
+                    .expect(HttpStatus.FORBIDDEN)
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(0)
                 await request(ctx.app.getHttpServer())
                     .put('/matchup-evaluation')
                     .send({subject: 'ana', object: 'pharah', score: 4})
@@ -35,7 +42,7 @@ describe(
                     .expect(HttpStatus.CREATED)
                 expect(
                     (await MatchupEvaluation.findAll()).length
-                ).toBe(1)
+                ).toStrictEqual(1)
             });
             it('updates matchup evaluation as logged in user', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture)
@@ -47,18 +54,47 @@ describe(
                     date: '2020-01-01 12:00:00',
                     title: 'fuck off',
                 })
-                MatchupEvaluation.create({
+                const oldScore = 4;
+                await MatchupEvaluation.create({
                     id: 1,
                     subjectId: (await Hero.findOne({where: {dataName: 'ana'}})).id,
                     objectId: (await Hero.findOne({where: {dataName: 'pharah'}})).id,
-                    score: 4,
+                    createdById: user.id,
+                    score: oldScore,
                     ip: '127.0.0.1',
                     patchId: patch.id,
                 })
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(1)
+                const newScore = oldScore - 1;
+                await request(ctx.app.getHttpServer())
+                    .put('/matchup-evaluation')
+                    .send({
+                        subject: 'ana',
+                        object: 'pharah',
+                        score: newScore
+                    })
+                    .expect(HttpStatus.FORBIDDEN)
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(1)
+                expect(
+                    (await MatchupEvaluation.findOne()).score
+                ).toStrictEqual(oldScore)
+                await request(ctx.app.getHttpServer())
+                    .put('/matchup-evaluation')
+                    .send({
+                        subject: 'ana',
+                        object: 'pharah',
+                        score: newScore
+                    })
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.ACCEPTED)
             });
-            // it('fails to create matchup evaluation as not logged in user', async () => {
-            //     await ctx.fixtures(singleUserFixture)
-            // });
+            // it('returns list of evaluations by user', async () => {
+            //
+            // })
         }
     )
 )
