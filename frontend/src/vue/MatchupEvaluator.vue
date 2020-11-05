@@ -216,11 +216,11 @@ export default class MatchupEvaluator extends Vue {
             }
 
             &.matchup-counters ::v-deep .background {
-                background-color: hsl(71, 59%, 46%);
+                background-color: hsl(170, 59%, 42%);
             }
 
             &.matchup-hard-counters ::v-deep .background {
-                background-color: hsl(99, 69%, 44%);
+                background-color: hsl(180, 76%, 45%);
             }
 
             &.remaining-enter, &.remaining-leave-to {
