@@ -1,14 +1,19 @@
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {
+    faAngleDoubleLeft,
+    faAngleDoubleRight,
+    faAngleLeft,
+    faAngleRight,
     faBan,
     faBell,
     faBrain,
+    faCircle,
     faExternalLinkAlt,
     faHome,
     faMedal,
     faPlusSquare,
     faTabletAlt,
-    faUser
+    faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import {
     faBitcoin,
@@ -30,4 +35,9 @@ library.add(faTwitch);
 library.add(faBitcoin);
 library.add(faPaypal);
 library.add(faTabletAlt);
+library.add(faAngleLeft);
+library.add(faAngleRight);
+library.add(faAngleDoubleRight);
+library.add(faAngleDoubleLeft);
+library.add(faCircle);
 export default library
