@@ -7,6 +7,7 @@ import guideTestingFixture from '@fixtures/guideTesting'
 import reportsFixture from '@fixtures/reportsFixture'
 import abilitiesFixture from '@fixtures/abilities'
 import commentsFixture from "@fixtures/commentsFixture";
+import patchFixture from "@fixtures/patchFixture";
 
 @Controller('fixture')
 export class FixtureController {
@@ -29,6 +30,7 @@ export class FixtureController {
     @Get('load-default')
     loadDefault() {
         this.service.loadFixturesClear(
+            patchFixture,
             heroesFixture,
             mapsFixture,
             abilitiesFixture,

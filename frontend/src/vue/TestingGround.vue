@@ -1,27 +1,36 @@
 <template>
-    <div class="wrap" style="text-align: center;">
-        <TrainingGoals style="margin: 0 auto;"/>
+    <div class="testing-ground">
+        <MatchupEvaluator
+                :object="object"
+                :subject="subject"
+        />
     </div>
 </template>
 
 <script lang="ts">
-import Backend from "@/ts/Backend";
-import axios from 'axios';
 import TrainingGoals from "@/vue/guides/TrainingGoals";
 import Vue from 'vue'
 import Component from "vue-class-component";
+import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
+import heroes from 'data/heroes'
+import HeroId from "data/HeroId";
 
-const backend = new Backend(axios);
 
 @Component({
     components: {
+        MatchupEvaluator,
         TrainingGoals,
     },
 })
 export default class TestingGround extends Vue {
+    object = heroes.get(HeroId.Baptiste)
+    subject = heroes.get(HeroId.Doomfist)
 };
 
 </script>
 
 <style lang="scss" scoped>
+.testing-ground {
+    text-align: center;
+}
 </style>
