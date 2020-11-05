@@ -6,7 +6,6 @@
     >
         <HeroPortrait
                 :hero="value.hero"
-                class="hero-portrait"
                 :base-url="'/images/roster-portraits/'"
         />
         <div class="icon-row">
