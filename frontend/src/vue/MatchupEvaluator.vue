@@ -173,6 +173,8 @@ export default class MatchupEvaluator extends Vue {
     box-shadow: 0 0 0 transparent;
     transition: box-shadow .13s, background-color .13s;
     max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: visible;
 
     &.sending {
         box-shadow: 0 0 1em hsla(0, 100%, 100%, .3);
