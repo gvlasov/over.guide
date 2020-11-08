@@ -8,30 +8,32 @@
                     :hero="subject"
                     v-bind:style="{transform: `scale(${scale(coeff)})`, opacity: coeff}"
             />
-            <transition-group
-                    tag="div"
-                    name="remaining"
-                    class="selected-option-wrap"
-                    @mouseleave.native="() => {if (selectedScore === null) { coeff = 1.0}}"
-            >
-                <OverwatchPanelButton
-                        v-for="option in options"
-                        v-if="option.score === selectedScore"
-                        :key="option.score"
-                        type="default"
-                        class="option"
-                        v-bind:class="`matchup-${option.classSuffix}`"
-                        @mouseover.native="() => {if (selectedScore === null) { coeff = option.coeff}}"
-                        disabled="disabled"
-                >{{ option.label }}
-                </OverwatchPanelButton>
+            <div class="state">
+                <transition-group
+                        tag="div"
+                        name="remaining"
+                        class="selected-option-wrap"
+                        @mouseleave.native="() => {if (selectedScore === null) { coeff = 1.0}}"
+                >
+                    <OverwatchPanelButton
+                            v-for="option in options"
+                            v-if="option.score === selectedScore"
+                            :key="option.score"
+                            type="default"
+                            class="option"
+                            v-bind:class="`matchup-${option.classSuffix}`"
+                            @mouseover.native="() => {if (selectedScore === null) { coeff = option.coeff}}"
+                            disabled="disabled"
+                    >{{ option.label }}
+                    </OverwatchPanelButton>
+                </transition-group>
                 <div
                         v-if="selectedScore === null"
                         class="no-selection"
                 >
-                    No selection
+                    Rate this matchup
                 </div>
-            </transition-group>
+            </div>
             <HeroPortrait
                     :hero="object"
                     v-bind:style="{transform: `scale(${scale(2-coeff)})`, opacity: 2-coeff}"
@@ -119,7 +121,7 @@ export default class MatchupEvaluator extends Vue {
         },
         {
             score: -4,
-            label: 'countered',
+            label: 'countered by',
             icon: 'angle-right',
             shortLabel: '>',
             classSuffix: 'countered',
@@ -127,7 +129,7 @@ export default class MatchupEvaluator extends Vue {
         },
         {
             score: -8,
-            label: 'hard countered',
+            label: 'hard countered by',
             icon: 'angle-double-right',
             shortLabel: '>>',
             classSuffix: 'hard-countered',
@@ -168,13 +170,13 @@ export default class MatchupEvaluator extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/css/overwatch-ui.scss";
+
 .matchup-evaluator {
     background-color: transparent;
     box-shadow: 0 0 0 transparent;
     transition: box-shadow .13s, background-color .13s;
     max-width: 100vw;
-    overflow-x: hidden;
-    overflow-y: visible;
 
     &.sending {
         box-shadow: 0 0 1em hsla(0, 100%, 100%, .3);
@@ -197,52 +199,63 @@ export default class MatchupEvaluator extends Vue {
             border-radius: 2em;
         }
 
-        .selected-option-wrap {
-            position: relative;
-            flex-shrink: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: stretch;
-            gap: .8em;
+        .state {
             overflow: visible;
             flex-basis: 17em;
             max-width: 17em;
 
-            $option-height: 2em;
+            .selected-option-wrap {
+                position: relative;
+                flex-shrink: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: stretch;
+                gap: .8em;
+                overflow: visible;
+                flex-basis: 17em;
+                max-width: 17em;
 
-            .option {
-                cursor: pointer;
-                font-size: 1.5em;
-                height: $option-height;
-                opacity: 1;
-                text-shadow: 1px 1px 1px #345;
+                $option-height: 2em;
 
-                button {
-                    width: 100%;
-                }
+                .option {
+                    cursor: pointer;
+                    font-size: 1.5em;
+                    height: $option-height;
+                    opacity: 1;
+                    text-shadow: 1px 1px 1px #345;
 
-                &:disabled ::v-deep .background {
-                    border: 0 !important;
-                    box-shadow: none !important;
-                }
+                    button {
+                        width: 100%;
+                    }
 
-                & ::v-deep .content {
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    padding: 0 1em;
-                }
+                    &:disabled ::v-deep .background {
+                        border: 0 !important;
+                        box-shadow: none !important;
+                    }
 
-                &.remaining-enter, &.remaining-leave-to {
-                    height: 0;
-                    opacity: 0;
-                }
+                    & ::v-deep .content {
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        padding: 0 1em;
+                    }
 
-                &.remaining-enter-active, &.remaining-leave-active {
-                    transition: height .13s, opacity .13s;
+                    &.remaining-enter, &.remaining-leave-to {
+                        height: 0;
+                        opacity: 0;
+                    }
+
+                    &.remaining-enter-active, &.remaining-leave-active {
+                        transition: height .13s, opacity .13s;
+                    }
+
                 }
 
             }
 
+            .no-selection {
+                @include overwatch-futura;
+                font-size: 1.4em;
+            }
         }
     }
 

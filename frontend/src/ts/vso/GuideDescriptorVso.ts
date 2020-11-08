@@ -9,6 +9,7 @@ import GamerPositionVso from "@/ts/vso/GamerPositionVso";
 import ThematicTagVso from "@/ts/vso/ThematicTagVso";
 import MapTagVso from "@/ts/vso/MapTagVso";
 import IndividualTagVso from "@/ts/vso/IndividualTagVso";
+import HeroOpposition from "@/ts/vso/HeroOpposition";
 
 export default class GuideDescriptorVso {
 
@@ -120,5 +121,31 @@ export default class GuideDescriptorVso {
             this.teammates.heroes.length > 0 ||
             this.enemies.heroes.length > 0;
     }
+
+    get matchup(): HeroOpposition | null {
+        const isSinglePlayer = this.players.heroes.length === 1
+        const isSingleTeammate = this.teammates.heroes.length === 1
+        const isSingleEnemy = this.enemies.heroes.length === 1
+        if ((isSinglePlayer || isSingleTeammate) && !(isSinglePlayer && isSingleTeammate)) {
+            if (isSingleEnemy) {
+                if (isSinglePlayer) {
+                    return {
+                        left: this.players.heroes[0],
+                        right: this.enemies.heroes[0]
+                    }
+                } else {
+                    return {
+                        left: this.teammates.heroes[0],
+                        right: this.enemies.heroes[0]
+                    }
+                }
+            } else {
+                return null
+            }
+        } else {
+            return null
+        }
+    }
+
 
 }

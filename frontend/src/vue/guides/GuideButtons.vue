@@ -1,6 +1,12 @@
 <template>
     <div class="guide-buttons">
         <LinkLikeButton
+                v-if="entry.descriptor.matchup !== null"
+                :disabled="!auth.loggedIn"
+                v-hammer:tap="() => $emit('requestMatchupRatingForm')"
+        >rate matchup
+        </LinkLikeButton>
+        <LinkLikeButton
                 :disabled="!auth.loggedIn"
                 v-hammer:tap="() => creatingReport = !creatingReport"
         >report

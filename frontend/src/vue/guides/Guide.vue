@@ -8,7 +8,13 @@
         <GuideButtons
                 :entry="head.entry"
                 @guideDeactivated="guideId => $emit('guideDeactivated', guideId)"
+                @requestMatchupRatingForm="() => showMatchupRate = true"
         />
+        <MatchupEvaluator
+                v-if="showMatchupRate"
+                :subject="head.entry.descriptor.matchup.left"
+                :object="head.entry.descriptor.matchup.right"
+            />
         <GuideContent
                 :entry="head.entry"
         />
@@ -63,12 +69,14 @@ import PostTypeId from "data/PostTypeId";
 import Upvoter from "@/vue/comments/Upvoter.vue";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
+import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
 
 const auth = new Authentication();
 const backend = new Backend(axios)
 
 @Component({
     components: {
+        MatchupEvaluator,
         Upvoter,
         GuideButtons,
         CommentsSection,
@@ -96,6 +104,8 @@ export default class Guide extends Vue {
     initialShowCommentsSection: boolean
 
     showCommentsSection: boolean = this.initialShowCommentsSection
+
+    showMatchupRate: boolean = false
 
 };
 
