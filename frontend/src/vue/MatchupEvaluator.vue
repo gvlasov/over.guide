@@ -10,7 +10,7 @@
             />
             <div class="state">
                 <div class="subject-name">
-                    {{subject.name}}
+                    {{ subject.name }}
                 </div>
                 <transition-group
                         tag="div"
@@ -34,9 +34,10 @@
                 <div
                         v-if="selectedScore === null"
                         class="no-selection"
-                >VS</div>
+                >VS
+                </div>
                 <div class="object-name">
-                    {{object.name}}
+                    {{ object.name }}
                 </div>
             </div>
             <HeroPortrait
@@ -61,7 +62,6 @@
 </template>
 
 <script lang="ts">
-import Backend from "@/ts/Backend";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
@@ -69,6 +69,8 @@ import HeroDto from "data/dto/HeroDto";
 import HeroPortrait from "./HeroPortrait.vue";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
+import MatchupEvaluatorService from "@/ts/MatchupEvaluatorService";
+import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
 
 type Option = {
     score: number,
@@ -95,7 +97,8 @@ export default class MatchupEvaluator extends Vue {
 
     coeff: number = 1.0
 
-    selectedScore: number | null = null
+    selectedScore: MatchupEvaluationUserScore | null =
+        MatchupEvaluatorService.instance.getScore(this.subject, this.object)
 
     sending = false
 
@@ -161,12 +164,11 @@ export default class MatchupEvaluator extends Vue {
         setTimeout(() => {
             this.sending = false
         }, 180)
-        Backend.instance
-            .evaluateMatchup(
-                this.subject,
-                this.object,
-                option.score
-            );
+        MatchupEvaluatorService.instance.evaluateMatchup(
+            this.subject,
+            this.object,
+            option.score
+        )
         this.selectedScore = option.score
         this.coeff = option.coeff
     }
@@ -194,8 +196,8 @@ export default class MatchupEvaluator extends Vue {
         align-items: center;
         justify-content: center;
         flex-wrap: nowrap;
-        gap: 1em;
-        padding: 0 .5em;
+        gap: .5em;
+        padding: 0 .3em;
 
         .hero-portrait {
             max-height: 5em;
@@ -206,8 +208,8 @@ export default class MatchupEvaluator extends Vue {
 
         .state {
             overflow: visible;
-            flex-basis: 17em;
-            max-width: 17em;
+            flex-basis: max(17em, 100%);
+            max-width: max(17em, 100%);
             position: relative;
 
             .subject-name, .object-name {
@@ -219,38 +221,39 @@ export default class MatchupEvaluator extends Vue {
 
             .subject-name {
                 text-align: left;
+                padding-left: .2em;
             }
 
             .object-name {
                 text-align: right;
+                padding-right: .2em;
             }
 
-            $option-height: 3.6rem;
+            $option-height: 2em;
 
             .selected-option-wrap {
+                position: relative;
                 flex-shrink: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: stretch;
                 overflow: visible;
-                flex-basis: 17em;
-                max-width: 17em;
+                flex-basis: max(17em, 100%);
+                max-width: max(17em, 100%);
                 height: $option-height;
+                width: 100%;
 
                 &.empty {
                     display: none;
                 }
 
-                .option {
+                button.option {
                     cursor: pointer;
                     font-size: 1.5em;
-                    height: $option-height;
+                    height: 100%;
+                    width: 100%;
                     opacity: 1;
                     text-shadow: 1px 1px 1px #345;
-
-                    button {
-                        width: 100%;
-                    }
 
                     &:disabled ::v-deep .background {
                         border: 0 !important;
@@ -258,10 +261,9 @@ export default class MatchupEvaluator extends Vue {
                     }
 
                     & ::v-deep .content {
-                        text-overflow: ellipsis;
-                        overflow: hidden;
                         padding: 0 1em;
                     }
+
 
                     &.remaining-enter, &.remaining-leave-to {
                         height: 0;
@@ -269,23 +271,42 @@ export default class MatchupEvaluator extends Vue {
                     }
 
                     &.remaining-enter-active, &.remaining-leave-active {
-                        transition: height .15s, opacity .15s;
-                    }
-
-                    &.remaining-enter-to {
-                        height: $option-height;
+                        transition: height 0.15s, opacity .15s;
                     }
                 }
+
 
             }
 
             .no-selection {
-                height: $option-height;
+                height: $option-height/2;
                 font-family: BigNoodleTooOblique, sans-serif;
-                font-size: 1.4em;
                 vertical-align: middle;
-                line-height: $option-height;
+                line-height: $option-height/2;
+                font-size: 2em;
+            }
+        }
+    }
 
+    @media screen and (max-width: 35em) {
+        .opposition {
+            .state {
+                $smaller-font-size: .7em;
+                .selected-option-wrap {
+                    font-size: $smaller-font-size;
+                    button.option {
+                        & ::v-deep .content {
+                            padding: 0 .5em;
+                        }
+                    }
+                }
+                .no-selection {
+                    font-size: $smaller-font-size*2;
+                }
+            }
+
+            .hero-portrait {
+                max-height: 3em;
             }
         }
     }

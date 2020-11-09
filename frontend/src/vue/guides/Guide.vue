@@ -215,7 +215,7 @@ export default class Guide extends Vue {
 }
 .matchup-evaluator-notification {
     background-color: hsla(290, 20%, 29%, .95);
-    padding: 1em;
+    padding: 1em 0;
     & > button {
         margin-top: .5em;
     }
