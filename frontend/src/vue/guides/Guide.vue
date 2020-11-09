@@ -10,11 +10,22 @@
                 @guideDeactivated="guideId => $emit('guideDeactivated', guideId)"
                 @requestMatchupRatingForm="() => showMatchupRate = true"
         />
-        <MatchupEvaluator
+        <NotificationModalPopup
                 v-if="showMatchupRate"
-                :subject="head.entry.descriptor.matchup.left"
-                :object="head.entry.descriptor.matchup.right"
-            />
+                @close="() => showMatchupRate = false"
+        >
+            <div class="matchup-evaluator-notification">
+                <MatchupEvaluator
+                        v-if="showMatchupRate"
+                        :subject="head.entry.descriptor.matchup.left"
+                        :object="head.entry.descriptor.matchup.right"
+                />
+                <OverwatchButton
+                        type="main"
+                        v-hammer:tap="() => showMatchupRate = false"
+                >Confirm</OverwatchButton>
+            </div>
+        </NotificationModalPopup>
         <GuideContent
                 :entry="head.entry"
         />
@@ -70,12 +81,16 @@ import Upvoter from "@/vue/comments/Upvoter.vue";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
+import ModalPopup from "@/vue/general/ModalPopup.vue";
+import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 
 const auth = new Authentication();
 const backend = new Backend(axios)
 
 @Component({
     components: {
+        NotificationModalPopup,
+        ModalPopup,
         MatchupEvaluator,
         Upvoter,
         GuideButtons,
@@ -196,6 +211,16 @@ export default class Guide extends Vue {
                 background-color: $training-goal-color;
             }
         }
+    }
+}
+.matchup-evaluator-notification {
+    background-color: hsla(290, 20%, 29%, .95);
+    padding: 1em;
+    & > button {
+        margin-top: .5em;
+    }
+    .matchup-evaluator {
+        padding: .5em;
     }
 }
 

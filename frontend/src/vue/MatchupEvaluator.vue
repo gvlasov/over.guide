@@ -6,14 +6,18 @@
         <div class="opposition">
             <HeroPortrait
                     :hero="subject"
-                    v-bind:style="{transform: `scale(${scale(coeff)})`, opacity: coeff}"
+                    v-bind:style="{transform: `scale(${scale(coeff)})`}"
             />
             <div class="state">
+                <div class="subject-name">
+                    {{subject.name}}
+                </div>
                 <transition-group
                         tag="div"
                         name="remaining"
                         class="selected-option-wrap"
                         @mouseleave.native="() => {if (selectedScore === null) { coeff = 1.0}}"
+                        v-bind:class="selectedScore === null ? 'empty' : ''"
                 >
                     <OverwatchPanelButton
                             v-for="option in options"
@@ -30,13 +34,14 @@
                 <div
                         v-if="selectedScore === null"
                         class="no-selection"
-                >
-                    Rate this matchup
+                >VS</div>
+                <div class="object-name">
+                    {{object.name}}
                 </div>
             </div>
             <HeroPortrait
                     :hero="object"
-                    v-bind:style="{transform: `scale(${scale(2-coeff)})`, opacity: 2-coeff}"
+                    v-bind:style="{transform: `scale(${scale(2-coeff)})`}"
             />
         </div>
         <div class="options">
@@ -193,9 +198,9 @@ export default class MatchupEvaluator extends Vue {
         padding: 0 .5em;
 
         .hero-portrait {
-            max-height: 7em;
+            max-height: 5em;
             width: auto;
-            transition: transform .13s, opacity .13s;
+            transition: transform .15s, opacity 0.15s;
             border-radius: 2em;
         }
 
@@ -203,19 +208,38 @@ export default class MatchupEvaluator extends Vue {
             overflow: visible;
             flex-basis: 17em;
             max-width: 17em;
+            position: relative;
+
+            .subject-name, .object-name {
+                font-family: 'BigNoodleTooOblique', 'sans-serif';
+                font-size: 1.3em;
+                text-shadow: 0 0 2px #333333;
+                padding: .2em 0;
+            }
+
+            .subject-name {
+                text-align: left;
+            }
+
+            .object-name {
+                text-align: right;
+            }
+
+            $option-height: 3.6rem;
 
             .selected-option-wrap {
-                position: relative;
                 flex-shrink: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: stretch;
-                gap: .8em;
                 overflow: visible;
                 flex-basis: 17em;
                 max-width: 17em;
+                height: $option-height;
 
-                $option-height: 2em;
+                &.empty {
+                    display: none;
+                }
 
                 .option {
                     cursor: pointer;
@@ -245,16 +269,23 @@ export default class MatchupEvaluator extends Vue {
                     }
 
                     &.remaining-enter-active, &.remaining-leave-active {
-                        transition: height .13s, opacity .13s;
+                        transition: height .15s, opacity .15s;
                     }
 
+                    &.remaining-enter-to {
+                        height: $option-height;
+                    }
                 }
 
             }
 
             .no-selection {
-                @include overwatch-futura;
+                height: $option-height;
+                font-family: BigNoodleTooOblique, sans-serif;
                 font-size: 1.4em;
+                vertical-align: middle;
+                line-height: $option-height;
+
             }
         }
     }
