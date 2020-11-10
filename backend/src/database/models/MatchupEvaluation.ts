@@ -11,6 +11,7 @@ import {DataTypes} from "sequelize";
 import {Patch} from "./Patch";
 import {User} from "src/database/models/User";
 import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
+import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
 
 @Table
 export class MatchupEvaluation extends Model<MatchupEvaluation> {
@@ -32,8 +33,8 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
     object: Hero
 
     @AllowNull(false)
-    @Column
-    score: number
+    @Column({type: new DataTypes.INTEGER()})
+    score: MatchupEvaluationUserScore
 
     @BelongsTo(() => User, 'createdById')
     createdBy: User

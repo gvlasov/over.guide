@@ -30,6 +30,7 @@ import SentenceCreateDto from "data/dto/SentenceCreateDto";
 import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
 import NotificationsPageDto from "data/dto/NotificationsPageDto";
 import NotificationsPageQueryDto from "data/dto/NotificationsPageQueryDto";
+import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
 
 const querystring = require('query-string')
 
@@ -168,7 +169,11 @@ export default class Backend {
         )
     }
 
-    async evaluateMatchup(subject: HeroDto, object: HeroDto, score: number): Promise<MatchupEvaluationDto> {
+    async evaluateMatchup(
+        subject: HeroDto,
+        object: HeroDto,
+        score: MatchupEvaluationUserScore
+    ): Promise<MatchupEvaluationDto> {
         return this.query(
             'PUT',
             '/matchup-evaluation',
