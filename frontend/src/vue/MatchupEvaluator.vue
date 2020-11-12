@@ -16,8 +16,8 @@
                         tag="div"
                         name="remaining"
                         class="selected-option-wrap"
-                        @mouseleave.native="() => {if (selectedScore === null) { coeff = 1.0}}"
-                        v-bind:class="selectedScore === null ? 'empty' : ''"
+                        @mouseleave.native="() => {if (!isOptionSelected) { coeff = 1.0}}"
+                        v-bind:class="isOptionSelected ? '' : 'empty'"
                 >
                     <OverwatchPanelButton
                             v-for="option in options"
@@ -26,13 +26,13 @@
                             type="default"
                             class="option"
                             v-bind:class="`matchup-${option.classSuffix}`"
-                            @mouseover.native="() => {if (selectedScore === null) { coeff = option.coeff}}"
+                            @mouseover.native="() => {if (!isOptionSelected) { coeff = option.coeff}}"
                             disabled="disabled"
                     >{{ option.label }}
                     </OverwatchPanelButton>
                 </transition-group>
                 <div
-                        v-if="selectedScore === null"
+                        v-if="!isOptionSelected"
                         class="no-selection"
                 >VS
                 </div>
@@ -53,9 +53,22 @@
                     class="option"
                     v-bind:class="`matchup-${option.classSuffix}`"
                     v-hammer:tap="() => onOptionTap(option)"
-                    @mouseover.native="() => {if (selectedScore === null) { coeff = option.coeff}}"
+                    @mouseover.native="() => {if (!isOptionSelected) { coeff = option.coeff}}"
             >
                 <font-awesome-icon :icon="option.icon"/>
+            </OverwatchPanelButton>
+        </div>
+        <div class="footer">
+            <OverwatchPanelButton
+                    type="default"
+                    class="i-dont-know"
+                    v-hammer:tap="onDontKnowTap"
+            >I don't know
+            </OverwatchPanelButton>
+            <OverwatchPanelButton
+                    type="default"
+                    v-hammer:tap="() => $emit('back')"
+            >Back
             </OverwatchPanelButton>
         </div>
     </div>
@@ -104,7 +117,7 @@ export default class MatchupEvaluator extends Vue {
 
     options: Option[] = [
         {
-            score: 8,
+            score: MatchupEvaluationUserScore.HardCounters,
             label: 'hard counters',
             shortLabel: '<<',
             icon: 'angle-double-left',
@@ -112,7 +125,7 @@ export default class MatchupEvaluator extends Vue {
             coeff: 1.5,
         },
         {
-            score: 4,
+            score: MatchupEvaluationUserScore.Counters,
             label: 'counters',
             shortLabel: '<',
             icon: 'angle-left',
@@ -120,7 +133,7 @@ export default class MatchupEvaluator extends Vue {
             coeff: 1.3,
         },
         {
-            score: 0,
+            score: MatchupEvaluationUserScore.Ok,
             label: 'is ok against',
             shortLabel: '=',
             icon: 'circle',
@@ -128,7 +141,7 @@ export default class MatchupEvaluator extends Vue {
             coeff: 1.0,
         },
         {
-            score: -4,
+            score: MatchupEvaluationUserScore.Countered,
             label: 'countered by',
             icon: 'angle-right',
             shortLabel: '>',
@@ -136,7 +149,7 @@ export default class MatchupEvaluator extends Vue {
             coeff: 0.7,
         },
         {
-            score: -8,
+            score: MatchupEvaluationUserScore.HardCountered,
             label: 'hard countered by',
             icon: 'angle-double-right',
             shortLabel: '>>',
@@ -144,6 +157,11 @@ export default class MatchupEvaluator extends Vue {
             coeff: 0.5,
         },
     ]
+
+    get isOptionSelected(): boolean {
+        return this.selectedScore !== null &&
+            this.selectedScore !== MatchupEvaluationUserScore.DontKnow;
+    }
 
     scale(coeff: number) {
         if (coeff < 1) {
@@ -155,22 +173,29 @@ export default class MatchupEvaluator extends Vue {
 
     onOptionTap(option: Option) {
         if (this.selectedScore !== option.score) {
-            this.createEvaluation(option)
+            this.selectOption(option)
         }
     }
 
-    createEvaluation(option: Option) {
-        this.sending = true
-        setTimeout(() => {
-            this.sending = false
-        }, 180)
+    onDontKnowTap() {
+        if (this.selectedScore !== MatchupEvaluationUserScore.DontKnow) {
+            this.createEvaluation(MatchupEvaluationUserScore.DontKnow)
+        }
+    }
+
+    selectOption(option: Option) {
+        this.createEvaluation(option.score)
+        this.coeff = option.coeff
+    }
+
+    createEvaluation(score: MatchupEvaluationUserScore) {
+        this.selectedScore = score
         MatchupEvaluatorService.instance.evaluateMatchup(
             this.subject,
             this.object,
-            option.score
+            score
         )
-        this.selectedScore = option.score
-        this.coeff = option.coeff
+        this.$emit('evaluate', score)
     }
 }
 
@@ -292,14 +317,17 @@ export default class MatchupEvaluator extends Vue {
         .opposition {
             .state {
                 $smaller-font-size: .7em;
+
                 .selected-option-wrap {
                     font-size: $smaller-font-size;
+
                     button.option {
                         & ::v-deep .content {
                             padding: 0 .5em;
                         }
                     }
                 }
+
                 .no-selection {
                     font-size: $smaller-font-size*2;
                 }
@@ -333,14 +361,38 @@ export default class MatchupEvaluator extends Vue {
 
     .options {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: stretch;
         max-width: 30em;
         margin: 0 auto;
-
         padding-top: 1em;
+        gap: .4em;
 
-        button ::v-deep .content {
-            padding: .2em .4em;
+        button {
+            flex-grow: 1;
+            flex-shrink: 0;
+
+            & ::v-deep .content {
+                padding: .2em .4em;
+            }
+        }
+    }
+
+    .footer {
+        display: flex;
+        justify-content: stretch;
+        width: 100%;
+        padding-top: 3em;
+        gap: 1em;
+
+        button {
+            flex-grow: 1;
+            flex-shrink: 0;
+        }
+
+        .i-dont-know {
+            & ::v-deep .background {
+                background-color: hsla(38, 56%, 58%, .8);
+            }
         }
     }
 

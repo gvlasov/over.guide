@@ -14,17 +14,12 @@
                 v-if="showMatchupRate"
                 @close="() => showMatchupRate = false"
         >
-            <div class="matchup-evaluator-notification">
-                <MatchupEvaluator
-                        v-if="showMatchupRate"
-                        :subject="head.entry.descriptor.matchup.left"
-                        :object="head.entry.descriptor.matchup.right"
-                />
-                <OverwatchButton
-                        type="main"
-                        v-hammer:tap="() => showMatchupRate = false"
-                >Confirm</OverwatchButton>
-            </div>
+            <MatchupEvaluator
+                    v-if="showMatchupRate"
+                    :subject="head.entry.descriptor.matchup.left"
+                    :object="head.entry.descriptor.matchup.right"
+                    @back="() => showMatchupRate = false"
+            />
         </NotificationModalPopup>
         <GuideContent
                 :entry="head.entry"
@@ -213,14 +208,12 @@ export default class Guide extends Vue {
         }
     }
 }
-.matchup-evaluator-notification {
+
+.matchup-evaluator {
     background-color: hsla(290, 20%, 29%, .95);
-    padding: 1em 0;
-    & > button {
-        margin-top: .5em;
-    }
-    .matchup-evaluator {
-        padding: .5em;
+    padding: 1em;
+    @media screen and (max-width: 35em) {
+        padding: 1em 0;
     }
 }
 
