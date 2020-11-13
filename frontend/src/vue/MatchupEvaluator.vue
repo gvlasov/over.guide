@@ -3,21 +3,30 @@
             class="matchup-evaluator"
             v-bind:class="{sending: sending}"
     >
-        <div class="opposition">
+        <div
+                v-if="noMoreSuggestions"
+                class="no-more"
+        >
+            <div class="text">No more</div>
+        </div>
+        <div
+                v-else
+                class="opposition"
+        >
             <HeroPortrait
-                    :hero="subject"
+                    :hero="opposition.left"
                     v-bind:style="{transform: `scale(${scale(coeff)})`}"
             />
             <div class="state">
                 <div class="subject-name">
-                    {{ subject.name }}
+                    {{ opposition.left.name }}
                 </div>
                 <transition-group
                         tag="div"
                         name="remaining"
                         class="selected-option-wrap"
-                        @mouseleave.native="() => {if (!isOptionSelected) { coeff = 1.0}}"
-                        v-bind:class="isOptionSelected ? '' : 'empty'"
+                        @mouseleave.native="() => {if (!isEvaluated) { coeff = 1.0}}"
+                        v-bind:class="isEvaluated ? '' : 'empty'"
                 >
                     <OverwatchPanelButton
                             v-for="option in options"
@@ -26,22 +35,22 @@
                             type="default"
                             class="option"
                             v-bind:class="`matchup-${option.classSuffix}`"
-                            @mouseover.native="() => {if (!isOptionSelected) { coeff = option.coeff}}"
+                            @mouseover.native="() => {if (!isEvaluated) { coeff = option.coeff}}"
                             disabled="disabled"
                     >{{ option.label }}
                     </OverwatchPanelButton>
                 </transition-group>
                 <div
-                        v-if="!isOptionSelected"
+                        v-if="!isEvaluated"
                         class="no-selection"
                 >VS
                 </div>
                 <div class="object-name">
-                    {{ object.name }}
+                    {{ opposition.right.name }}
                 </div>
             </div>
             <HeroPortrait
-                    :hero="object"
+                    :hero="opposition.right"
                     v-bind:style="{transform: `scale(${scale(2-coeff)})`}"
             />
         </div>
@@ -53,7 +62,8 @@
                     class="option"
                     v-bind:class="`matchup-${option.classSuffix}`"
                     v-hammer:tap="() => onOptionTap(option)"
-                    @mouseover.native="() => {if (!isOptionSelected) { coeff = option.coeff}}"
+                    @mouseover.native="() => {if (!isEvaluated) { coeff = option.coeff}}"
+                    :disabled="noMoreSuggestions"
             >
                 <font-awesome-icon :icon="option.icon"/>
             </OverwatchPanelButton>
@@ -78,12 +88,12 @@
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import HeroDto from "data/dto/HeroDto";
 import HeroPortrait from "./HeroPortrait.vue";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import MatchupEvaluatorService from "@/ts/MatchupEvaluatorService";
 import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
+import HeroOpposition from "@/ts/vso/HeroOpposition";
 
 type Option = {
     score: number,
@@ -103,17 +113,23 @@ type Option = {
 })
 export default class MatchupEvaluator extends Vue {
     @Prop({required: true})
-    subject: HeroDto
+    initialOpposition: HeroOpposition|null
 
-    @Prop({required: true})
-    object: HeroDto
+    opposition = this.initialOpposition ?? MatchupEvaluatorService.instance.getRandomUnevaluatedOpposition()
 
     coeff: number = 1.0
 
-    selectedScore: MatchupEvaluationUserScore | null =
-        MatchupEvaluatorService.instance.getScore(this.subject, this.object)
+    get selectedScore(): MatchupEvaluationUserScore | null {
+        return this.opposition === null
+            ? null
+            : MatchupEvaluatorService.instance.getScore(this.opposition.left, this.opposition.right);
+    }
 
     sending = false
+
+    get noMoreSuggestions() : boolean {
+        return this.opposition === null
+    }
 
     options: Option[] = [
         {
@@ -158,7 +174,7 @@ export default class MatchupEvaluator extends Vue {
         },
     ]
 
-    get isOptionSelected(): boolean {
+    get isEvaluated(): boolean {
         return this.selectedScore !== null &&
             this.selectedScore !== MatchupEvaluationUserScore.DontKnow;
     }
@@ -174,28 +190,36 @@ export default class MatchupEvaluator extends Vue {
     onOptionTap(option: Option) {
         if (this.selectedScore !== option.score) {
             this.selectOption(option)
+            this.loadNextMatchup()
         }
     }
 
     onDontKnowTap() {
         if (this.selectedScore !== MatchupEvaluationUserScore.DontKnow) {
             this.createEvaluation(MatchupEvaluationUserScore.DontKnow)
+            this.loadNextMatchup()
         }
     }
 
-    selectOption(option: Option) {
-        this.createEvaluation(option.score)
-        this.coeff = option.coeff
+    loadNextMatchup() {
+        this.opposition = MatchupEvaluatorService.instance.getRandomUnevaluatedOpposition()
     }
 
-    createEvaluation(score: MatchupEvaluationUserScore) {
-        this.selectedScore = score
-        MatchupEvaluatorService.instance.evaluateMatchup(
-            this.subject,
-            this.object,
+    async selectOption(option: Option) {
+        this.coeff = option.coeff
+        return this.createEvaluation(option.score)
+    }
+
+    async createEvaluation(score: MatchupEvaluationUserScore) {
+        if (this.opposition === null) {
+            throw new Error()
+        }
+        this.$emit('evaluate', score)
+        return MatchupEvaluatorService.instance.evaluateMatchup(
+            this.opposition.left,
+            this.opposition.right,
             score
         )
-        this.$emit('evaluate', score)
     }
 }
 
@@ -247,11 +271,13 @@ export default class MatchupEvaluator extends Vue {
             .subject-name {
                 text-align: left;
                 padding-left: .2em;
+                font-size: 1.0em;
             }
 
             .object-name {
                 text-align: right;
                 padding-right: .2em;
+                font-size: 1.0em;
             }
 
             $option-height: 2em;
@@ -311,6 +337,18 @@ export default class MatchupEvaluator extends Vue {
                 font-size: 2em;
             }
         }
+    }
+
+    .no-more {
+        font-family: BigNoodleTooOblique, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text {
+            font-size: 2em;
+        }
+
+        height: 5em;
     }
 
     @media screen and (max-width: 35em) {

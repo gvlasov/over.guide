@@ -16,8 +16,7 @@
         >
             <MatchupEvaluator
                     v-if="showMatchupRate"
-                    :subject="head.entry.descriptor.matchup.left"
-                    :object="head.entry.descriptor.matchup.right"
+                    :initial-opposition="head.entry.descriptor.matchup"
                     @back="() => showMatchupRate = false"
             />
         </NotificationModalPopup>
