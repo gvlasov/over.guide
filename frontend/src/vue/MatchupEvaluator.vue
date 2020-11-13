@@ -419,7 +419,7 @@ export default class MatchupEvaluator extends Vue {
         display: flex;
         justify-content: stretch;
         width: 100%;
-        padding-top: 3em;
+        padding-top: 2em;
         gap: 1em;
 
         button {
