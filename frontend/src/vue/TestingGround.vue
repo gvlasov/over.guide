@@ -1,8 +1,7 @@
 <template>
     <div class="testing-ground">
         <MatchupEvaluator
-                :object="object"
-                :subject="subject"
+                :opposition-feed="feed"
         />
     </div>
 </template>
@@ -12,8 +11,7 @@ import TrainingGoals from "@/vue/guides/TrainingGoals";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
-import heroes from 'data/heroes'
-import HeroId from "data/HeroId";
+import RandomOppositionFeed from "@/ts/RandomOppositionFeed";
 
 
 @Component({
@@ -23,8 +21,7 @@ import HeroId from "data/HeroId";
     },
 })
 export default class TestingGround extends Vue {
-    object = heroes.get(HeroId.Baptiste)
-    subject = heroes.get(HeroId.Doomfist)
+    feed = new RandomOppositionFeed()
 };
 
 </script>

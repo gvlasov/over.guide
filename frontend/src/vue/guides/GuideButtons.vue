@@ -1,9 +1,19 @@
 <template>
     <div class="guide-buttons">
+        <NotificationModalPopup
+                v-if="showMatchupRate"
+                @close="() => showMatchupRate = false"
+        >
+            <MatchupEvaluator
+                    v-if="showMatchupRate"
+                    :opposition-feed="feed"
+                    @back="() => showMatchupRate = false"
+            />
+        </NotificationModalPopup>
         <LinkLikeButton
                 v-if="entry.descriptor.matchup !== null"
                 :disabled="!auth.loggedIn"
-                v-hammer:tap="() => $emit('requestMatchupRatingForm')"
+                v-hammer:tap="() => showMatchupRate = true"
         >rate matchup
         </LinkLikeButton>
         <LinkLikeButton
@@ -75,6 +85,9 @@ import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
 import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
+import OppositionFeed from "@/ts/OppositionFeed";
+import SingleOppositionFeed from "@/ts/SingleOppositionFeed";
+import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
 
 const auth = new Authentication();
 
@@ -87,6 +100,7 @@ const auth = new Authentication();
         GuideVideo,
         GuidePartText,
         OverwatchButton,
+        MatchupEvaluator,
     },
 })
 export default class GuideButtons extends Vue {
@@ -100,6 +114,7 @@ export default class GuideButtons extends Vue {
 
     deletingGuide: boolean = false
 
+    showMatchupRate: boolean = false
 
     auth: Authentication = auth
 
@@ -123,6 +138,14 @@ export default class GuideButtons extends Vue {
 
     get canEdit(): boolean {
         return auth.canEditGuide(this.entry)
+    }
+
+    get feed(): OppositionFeed {
+        const opposition = this.entry.descriptor.matchup;
+        if (opposition === null) {
+            throw new Error()
+        }
+        return new SingleOppositionFeed(opposition)
     }
 
 };
@@ -165,6 +188,14 @@ export default class GuideButtons extends Vue {
     padding: 1em;
     background-color: hsla(0, 0%, 20%, .95);
     @include overwatch-futura-no-smallcaps;
+}
+
+.matchup-evaluator {
+    background-color: hsla(290, 20%, 29%, .95);
+    padding: 1em;
+    @media screen and (max-width: 35em) {
+        padding: 1em 0;
+    }
 }
 
 </style>

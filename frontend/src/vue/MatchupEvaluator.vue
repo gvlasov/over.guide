@@ -1,8 +1,5 @@
 <template>
-    <div
-            class="matchup-evaluator"
-            v-bind:class="{sending: sending}"
-    >
+    <div class="matchup-evaluator">
         <div
                 v-if="noMoreSuggestions"
                 class="no-more"
@@ -93,7 +90,7 @@ import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import MatchupEvaluatorService from "@/ts/MatchupEvaluatorService";
 import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
-import HeroOpposition from "@/ts/vso/HeroOpposition";
+import OppositionFeed, {FeedEndState} from "@/ts/OppositionFeed";
 
 type Option = {
     score: number,
@@ -113,22 +110,27 @@ type Option = {
 })
 export default class MatchupEvaluator extends Vue {
     @Prop({required: true})
-    initialOpposition: HeroOpposition|null
+    oppositionFeed: OppositionFeed
 
-    opposition = this.initialOpposition ?? MatchupEvaluatorService.instance.getRandomUnevaluatedOpposition()
+    opposition = this.oppositionFeed.getNext()
+
+    oppositions = [this.opposition]
 
     coeff: number = 1.0
 
     get selectedScore(): MatchupEvaluationUserScore | null {
-        return this.opposition === null
-            ? null
-            : MatchupEvaluatorService.instance.getScore(this.opposition.left, this.opposition.right);
+        if (this.opposition === FeedEndState.End) {
+            return null
+        } else if (this.opposition === FeedEndState.ThatWasOnly) {
+            return null
+        } else {
+            return MatchupEvaluatorService.instance.getScore(this.opposition.left, this.opposition.right);
+        }
     }
 
-    sending = false
-
-    get noMoreSuggestions() : boolean {
-        return this.opposition === null
+    get noMoreSuggestions(): boolean {
+        return this.opposition === FeedEndState.End ||
+            this.opposition === FeedEndState.ThatWasOnly;
     }
 
     options: Option[] = [
@@ -202,7 +204,8 @@ export default class MatchupEvaluator extends Vue {
     }
 
     loadNextMatchup() {
-        this.opposition = MatchupEvaluatorService.instance.getRandomUnevaluatedOpposition()
+        this.opposition = this.oppositionFeed.getNext()
+        this.oppositions.push(this.opposition)
     }
 
     async selectOption(option: Option) {
@@ -211,7 +214,10 @@ export default class MatchupEvaluator extends Vue {
     }
 
     async createEvaluation(score: MatchupEvaluationUserScore) {
-        if (this.opposition === null) {
+        if (
+            this.opposition === FeedEndState.End
+            || this.opposition === FeedEndState.ThatWasOnly
+        ) {
             throw new Error()
         }
         this.$emit('evaluate', score)
@@ -233,12 +239,6 @@ export default class MatchupEvaluator extends Vue {
     box-shadow: 0 0 0 transparent;
     transition: box-shadow .13s, background-color .13s;
     max-width: 100vw;
-
-    &.sending {
-        box-shadow: 0 0 1em hsla(0, 100%, 100%, .3);
-        background-color: hsla(0, 100%, 100%, .3);
-        transition: box-shadow .13s, background-color .13s;
-    }
 
     .opposition {
         display: flex;
@@ -344,6 +344,7 @@ export default class MatchupEvaluator extends Vue {
         display: flex;
         align-items: center;
         justify-content: center;
+
         .text {
             font-size: 2em;
         }

@@ -8,18 +8,7 @@
         <GuideButtons
                 :entry="head.entry"
                 @guideDeactivated="guideId => $emit('guideDeactivated', guideId)"
-                @requestMatchupRatingForm="() => showMatchupRate = true"
         />
-        <NotificationModalPopup
-                v-if="showMatchupRate"
-                @close="() => showMatchupRate = false"
-        >
-            <MatchupEvaluator
-                    v-if="showMatchupRate"
-                    :initial-opposition="head.entry.descriptor.matchup"
-                    @back="() => showMatchupRate = false"
-            />
-        </NotificationModalPopup>
         <GuideContent
                 :entry="head.entry"
         />
@@ -74,7 +63,6 @@ import PostTypeId from "data/PostTypeId";
 import Upvoter from "@/vue/comments/Upvoter.vue";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
-import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 
@@ -85,7 +73,6 @@ const backend = new Backend(axios)
     components: {
         NotificationModalPopup,
         ModalPopup,
-        MatchupEvaluator,
         Upvoter,
         GuideButtons,
         CommentsSection,
@@ -113,8 +100,6 @@ export default class Guide extends Vue {
     initialShowCommentsSection: boolean
 
     showCommentsSection: boolean = this.initialShowCommentsSection
-
-    showMatchupRate: boolean = false
 
 };
 
@@ -205,14 +190,6 @@ export default class Guide extends Vue {
                 background-color: $training-goal-color;
             }
         }
-    }
-}
-
-.matchup-evaluator {
-    background-color: hsla(290, 20%, 29%, .95);
-    padding: 1em;
-    @media screen and (max-width: 35em) {
-        padding: 1em 0;
     }
 }
 
