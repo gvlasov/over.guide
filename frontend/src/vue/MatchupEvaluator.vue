@@ -153,6 +153,7 @@ export default class MatchupEvaluator extends Vue {
     box-shadow: 0 0 0 transparent;
     transition: box-shadow .13s, background-color .13s;
     max-width: 100vw;
+    font-size: 1.5em;
 
     .no-more {
         font-family: BigNoodleTooOblique, sans-serif;

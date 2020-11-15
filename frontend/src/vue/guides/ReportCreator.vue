@@ -110,7 +110,7 @@ export default class GuideButtons extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 
 .report-creator {
-    font-size: .8em;
+    font-size: 1.2em;
     text-align: left;
     background-color: hsla(11, 39%, 44%, .97);
     padding: 1em;
