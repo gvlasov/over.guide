@@ -12,7 +12,7 @@
         >
             <div class="evaluations-list">
                 <MatchupEvaluation
-                        v-for="(evaluation, index) in evaluations"
+                        v-for="(evaluation, index) in showingEvaluations"
                         :evaluation="evaluation"
                         :hovered-score="evaluationIndex === index ? hoveredScore : null"
                 />
@@ -92,6 +92,15 @@ export default class MatchupEvaluator extends Vue {
     hoveredScore = null
 
     noMoreSuggestions = false
+
+    showingEvaluationsMaxCount = 3
+
+    get showingEvaluations(): MatchupEvaluationVso[] {
+        return this.evaluations.slice(
+            Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount+1, 0),
+            this.evaluationIndex + 1
+        );
+    }
 
     get currentEvaluation(): MatchupEvaluationVso {
         return this.evaluations[this.evaluationIndex]
