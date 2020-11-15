@@ -10,13 +10,18 @@
                 v-else
                 class="evaluations"
         >
-            <div class="evaluations-list">
+            <transition-group
+                    tag="div"
+                    class="evaluations-list"
+                    name="evaluations"
+            >
                 <MatchupEvaluation
                         v-for="(evaluation, index) in showingEvaluations"
+                        :key="evaluation.opposition.right.id+'_'+evaluation.opposition.left.id"
                         :evaluation="evaluation"
                         :hovered-score="evaluationIndex === index ? hoveredScore : null"
                 />
-            </div>
+            </transition-group>
         </div>
         <div
                 class="options"
@@ -97,7 +102,7 @@ export default class MatchupEvaluator extends Vue {
 
     get showingEvaluations(): MatchupEvaluationVso[] {
         return this.evaluations.slice(
-            Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount+1, 0),
+            Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount + 1, 0),
             this.evaluationIndex + 1
         );
     }
@@ -174,14 +179,30 @@ export default class MatchupEvaluator extends Vue {
         height: 10em;
         position: relative;
         overflow: hidden;
+
         .evaluations-list {
-            overflow: visible;
             position: absolute;
             bottom: 0;
             width: 100%;
+
             .matchup-evaluation {
-                overflow: visible;
+                overflow: hidden;
                 width: 100%;
+
+                &.evaluations-enter, &.evaluations-leave-to {
+                    opacity: 0;
+                    max-height: 0;
+                }
+
+                &.evaluations-enter-to, &.evaluations-leave {
+                    opacity: 1;
+                    max-height: 8em;
+                }
+
+                &.evaluations-enter-active, .evaluations-leave-active {
+                    transition: opacity .5s, max-height .5s;
+                }
+
             }
         }
     }
