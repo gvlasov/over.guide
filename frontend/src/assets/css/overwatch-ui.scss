@@ -79,9 +79,6 @@
   opacity: .9;
   letter-spacing: 0.03em;
   border-radius: .06em;
-  :disabled {
-    background-color: transparent;
-  }
   :active {
     opacity: .88;
   }

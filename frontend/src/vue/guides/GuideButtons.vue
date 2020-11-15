@@ -4,9 +4,9 @@
                 v-if="showMatchupRate"
                 @close="() => showMatchupRate = false"
         >
-            <MatchupEvaluator
+            <SingleOppositionMatchupEvaluator
                     v-if="showMatchupRate"
-                    :opposition-feed="feed"
+                    :opposition="entry.descriptor.matchup"
                     @back="() => showMatchupRate = false"
             />
         </NotificationModalPopup>
@@ -85,14 +85,14 @@ import ReportReasonDto from "data/dto/ReportReasonDto";
 import reportReasons from 'data/reportReasons'
 import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
-import OppositionFeed from "@/ts/OppositionFeed";
-import SingleOppositionFeed from "@/ts/SingleOppositionFeed";
-import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
+import SingleOppositionMatchupEvaluator
+    from "@/vue/SingleOppositionMatchupEvaluator.vue";
 
 const auth = new Authentication();
 
 @Component({
     components: {
+        SingleOppositionMatchupEvaluator,
         NotificationModalPopup,
         LinkLikeButton,
         ReportCreator,
@@ -100,7 +100,6 @@ const auth = new Authentication();
         GuideVideo,
         GuidePartText,
         OverwatchButton,
-        MatchupEvaluator,
     },
 })
 export default class GuideButtons extends Vue {
@@ -140,13 +139,6 @@ export default class GuideButtons extends Vue {
         return auth.canEditGuide(this.entry)
     }
 
-    get feed(): OppositionFeed {
-        const opposition = this.entry.descriptor.matchup;
-        if (opposition === null) {
-            throw new Error()
-        }
-        return new SingleOppositionFeed(opposition)
-    }
 
 };
 

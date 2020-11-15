@@ -24,6 +24,14 @@ type MissingUserEvaluations = {
     [subjectId: number]: number[]
 }
 
+export type EvaluationOption = {
+    score: number,
+    label: string,
+    shortLabel: string,
+    icon: string,
+    classSuffix: string,
+}
+
 export default class MatchupEvaluatorService {
 
     private static _instance: MatchupEvaluatorService
@@ -35,6 +43,52 @@ export default class MatchupEvaluatorService {
     private readonly userId: number
 
     private _rest: MissingEvaluationCache | null = null
+
+    options: EvaluationOption[] = [
+        {
+            score: MatchupEvaluationUserScore.HardCounters,
+            label: 'hard counters',
+            shortLabel: '<<',
+            icon: 'angle-double-left',
+            classSuffix: 'hard-counters',
+        },
+        {
+            score: MatchupEvaluationUserScore.Counters,
+            label: 'counters',
+            shortLabel: '<',
+            icon: 'angle-left',
+            classSuffix: 'counters',
+        },
+        {
+            score: MatchupEvaluationUserScore.Ok,
+            label: 'is ok against',
+            shortLabel: '=',
+            icon: 'circle',
+            classSuffix: 'ok',
+        },
+        {
+            score: MatchupEvaluationUserScore.Countered,
+            label: 'countered by',
+            icon: 'angle-right',
+            shortLabel: '>',
+            classSuffix: 'countered',
+        },
+        {
+            score: MatchupEvaluationUserScore.HardCountered,
+            label: 'hard countered by',
+            icon: 'angle-double-right',
+            shortLabel: '>>',
+            classSuffix: 'hard-countered',
+        },
+    ]
+
+    dontKnowOption: EvaluationOption = {
+        score: MatchupEvaluationUserScore.DontKnow,
+        label: 'don\'t know',
+        icon: 'dont-know',
+        shortLabel: '??',
+        classSuffix: 'dont-know',
+    }
 
     static get instance(): MatchupEvaluatorService {
         if (MatchupEvaluatorService._instance === void 0) {
@@ -76,8 +130,8 @@ export default class MatchupEvaluatorService {
             })
     }
 
-    getScore(subject: HeroDto, object: HeroDto): MatchupEvaluationUserScore | null {
-        const score = this.cache[this.userId]?.[subject.id]?.[object.id];
+    getScore(opposition: HeroOpposition): MatchupEvaluationUserScore | null {
+        const score = this.cache[this.userId]?.[opposition.left.id]?.[opposition.right.id];
         if (score === undefined) {
             return null
         }
