@@ -10,11 +10,13 @@
                 v-else
                 class="evaluations"
         >
-            <MatchupEvaluation
-                    v-for="(evaluation, index) in evaluations"
-                    :evaluation="evaluation"
-                    :hovered-score="evaluationIndex === index ? hoveredScore : null"
-            />
+            <div class="evaluations-list">
+                <MatchupEvaluation
+                        v-for="(evaluation, index) in evaluations"
+                        :evaluation="evaluation"
+                        :hovered-score="evaluationIndex === index ? hoveredScore : null"
+                />
+            </div>
         </div>
         <div
                 class="options"
@@ -149,11 +151,31 @@ export default class MatchupEvaluator extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 
 .matchup-evaluator {
+    display: flex;
+    flex-direction: column;
     background-color: transparent;
     box-shadow: 0 0 0 transparent;
     transition: box-shadow .13s, background-color .13s;
     max-width: 100vw;
     font-size: 1.5em;
+    overflow: visible;
+
+    .evaluations {
+        flex-grow: 1;
+        height: 10em;
+        position: relative;
+        overflow: hidden;
+        .evaluations-list {
+            overflow: visible;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            .matchup-evaluation {
+                overflow: visible;
+                width: 100%;
+            }
+        }
+    }
 
     .no-more {
         font-family: BigNoodleTooOblique, sans-serif;
@@ -175,6 +197,7 @@ export default class MatchupEvaluator extends Vue {
         margin: 0 auto;
         padding-top: 1em;
         gap: .4em;
+        width: 100%;
 
         button {
             flex-grow: 1;

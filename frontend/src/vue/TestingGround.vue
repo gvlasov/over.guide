@@ -29,5 +29,7 @@ export default class TestingGround extends Vue {
 <style lang="scss" scoped>
 .testing-ground {
     text-align: center;
+    max-height: 18em;
+    overflow: visible;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="opposition">
+    <div class="matchup-evaluation">
         <HeroPortrait
                 :hero="evaluation.opposition.left"
                 v-bind:style="{transform: visibleScore !== null ? `scale(${coeffsLeft[visibleScore]})` : ''}"
@@ -106,7 +106,7 @@ export default class MatchupEvaluation extends Vue {
 <style lang="scss" scoped>
 @import "~@/assets/css/overwatch-ui.scss";
 
-.opposition {
+.matchup-evaluation {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,7 +206,7 @@ export default class MatchupEvaluation extends Vue {
 }
 
 @media screen and (max-width: 35em) {
-    .opposition {
+    .matchup-evaluation {
         .state {
             $smaller-font-size: .7em;
 
