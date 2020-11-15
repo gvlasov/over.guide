@@ -177,6 +177,7 @@ export default class GuideButtons extends Vue {
 }
 
 .deletion-dialogue {
+    font-size: 1.5em;
     padding: 1em;
     background-color: hsla(0, 0%, 20%, .95);
     @include overwatch-futura-no-smallcaps;

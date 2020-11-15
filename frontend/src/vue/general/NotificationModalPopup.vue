@@ -36,6 +36,5 @@ $width: 40rem;
     box-shadow: 0 1em 2.5em hsla(30, 10%, 20%, 1);
     max-width: native-min($width, 100vw);
     min-width: native-min($width, 100vw);
-    font-size: 1.5em;
 }
 </style>

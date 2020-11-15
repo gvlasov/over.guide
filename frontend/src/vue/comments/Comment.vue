@@ -309,6 +309,7 @@ $strong-color: white;
 
 .deletion-dialogue {
     padding: 1em;
+    font-size: 1.5em;
     background-color: hsla(0, 0%, 20%, .95);
     @include overwatch-futura-no-smallcaps;
 }
