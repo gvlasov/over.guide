@@ -103,12 +103,19 @@ export default class MatchupEvaluator extends Vue {
     @Prop({required: true})
     oppositionFeed: OppositionFeed
 
-    evaluations: MatchupEvaluationVso[] = [
-        new MatchupEvaluationVso(
-            this.oppositionFeed.getNext() as HeroOpposition,
-            null
-        )
-    ]
+    evaluations: MatchupEvaluationVso[] = this.initialEvaluations
+
+    get initialEvaluations(): MatchupEvaluationVso[] {
+        const opposition = this.oppositionFeed.getNext() as HeroOpposition;
+        return [
+            new MatchupEvaluationVso(
+                opposition,
+                MatchupEvaluatorService.instance.getScore(
+                    opposition
+                )
+            )
+        ]
+    }
 
     evaluationIndex: number = 0
 
