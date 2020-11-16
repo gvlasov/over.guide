@@ -15,6 +15,7 @@
                     tag="div"
                     class="evaluations-list"
                     name="evaluations"
+                    v-hammer:swipe="onSwipe"
             >
                 <MatchupEvaluation
                         v-for="indexedEvaluation in showingEvaluationsIndexed"
@@ -116,6 +117,16 @@ export default class MatchupEvaluator extends Vue {
     noMoreSuggestions = false
 
     showingEvaluationsMaxCount = 2
+
+    onSwipe(event) {
+        if (event.overallVelocityY > 0.2) {
+            this.tryMoveToPrevious()
+        } else if (event.overallVelocityY < -0.2) {
+            this.tryMoveToNext()
+        } else {
+            console.log(event)
+        }
+    }
 
     get showingEvaluationsIndexed(): IndexedEvaluation[] {
         const start = Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount + 1, 0);
