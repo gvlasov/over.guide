@@ -9,6 +9,7 @@
         <div
                 v-else
                 class="evaluations"
+                @wheel="onWheel"
         >
             <transition-group
                     tag="div"
@@ -21,7 +22,7 @@
                         :evaluation="indexedEvaluation.evaluation"
                         :hovered-score="evaluationIndex === indexedEvaluation.index ? hoveredScore : null"
                         v-hammer:tap="() => onEvaluationTap(indexedEvaluation)"
-                        @wheel.native="onWheel"
+                        v-bind:class="{current: indexedEvaluation.index === evaluationIndex}"
                 />
             </transition-group>
         </div>
@@ -46,7 +47,7 @@
                     type="default"
                     class="i-dont-know"
                     v-hammer:tap="() => onOptionTap(MatchupEvaluatorService.instance.dontKnowOption)"
-            >I don't know
+            >skip
             </OverwatchPanelButton>
             <OverwatchPanelButton
                     type="default"
@@ -126,32 +127,36 @@ export default class MatchupEvaluator extends Vue {
         if (this.currentEvaluation.score !== option.score) {
             this.currentEvaluation.score = option.score
             this.createEvaluation()
-            this.moveToNext()
+            this.moveToNextAfterEnd()
         }
     }
 
     onEvaluationTap(indexedEvaluation: IndexedEvaluation) {
-        this.moveToPrevious()
+        this.tryMoveToPrevious()
     }
 
     onWheel(event: WheelEvent) {
         event.preventDefault()
         if (event.deltaY > 0) {
-            if (this.evaluationIndex < this.evaluations.length - 1) {
-                this.moveToNext()
-            }
+            this.tryMoveToNext()
         } else {
-            this.moveToPrevious()
+            this.tryMoveToPrevious()
         }
     }
 
-    moveToPrevious() {
+    tryMoveToPrevious() {
         if (this.evaluationIndex > 0) {
             this.evaluationIndex--
         }
     }
 
-    moveToNext() {
+    tryMoveToNext() {
+        if (this.evaluationIndex < this.evaluations.length - 1) {
+            this.evaluationIndex++
+        }
+    }
+
+    moveToNextAfterEnd() {
         if (this.evaluationIndex < this.evaluations.length - 1) {
             this.evaluationIndex = this.evaluations.length - 1;
         } else {
@@ -230,7 +235,7 @@ export default class MatchupEvaluator extends Vue {
                 width: 100%;
                 opacity: .5;
                 transform: scale(.7);
-                transition: opacity .5s, max-height .5s, transform .15s ease-in;
+                transition: opacity .15s, max-height .15s, transform .2s;
                 cursor: pointer;
 
                 &:hover {
@@ -250,11 +255,8 @@ export default class MatchupEvaluator extends Vue {
                     max-height: 8em;
                 }
 
-                //&.evaluations-enter-active, .evaluations-leave-active {
-                //    transition: opacity .5s, max-height .5s, transform .15s ease-in;
-                //}
 
-                &:last-child {
+                &.current {
                     opacity: 1;
                     transform: scale(1);
                 }
