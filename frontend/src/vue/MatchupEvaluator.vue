@@ -21,6 +21,7 @@
                         :evaluation="indexedEvaluation.evaluation"
                         :hovered-score="evaluationIndex === indexedEvaluation.index ? hoveredScore : null"
                         v-hammer:tap="() => onEvaluationTap(indexedEvaluation)"
+                        @wheel.native="onWheel"
                 />
             </transition-group>
         </div>
@@ -130,6 +131,21 @@ export default class MatchupEvaluator extends Vue {
     }
 
     onEvaluationTap(indexedEvaluation: IndexedEvaluation) {
+        this.moveToPrevious()
+    }
+
+    onWheel(event: WheelEvent) {
+        event.preventDefault()
+        if (event.deltaY > 0) {
+            if (this.evaluationIndex < this.evaluations.length - 1) {
+                this.moveToNext()
+            }
+        } else {
+            this.moveToPrevious()
+        }
+    }
+
+    moveToPrevious() {
         if (this.evaluationIndex > 0) {
             this.evaluationIndex--
         }
@@ -202,6 +218,7 @@ export default class MatchupEvaluator extends Vue {
         position: relative;
         overflow: hidden;
         user-select: none;
+        overscroll-behavior: contain;
 
         .evaluations-list {
             position: absolute;
@@ -215,7 +232,8 @@ export default class MatchupEvaluator extends Vue {
                 transform: scale(.7);
                 transition: opacity .5s, max-height .5s, transform .15s ease-in;
                 cursor: pointer;
-                &:hover{
+
+                &:hover {
                     opacity: .65;
                     transform: scale(.73);
                 }
