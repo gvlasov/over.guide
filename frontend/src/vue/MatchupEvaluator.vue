@@ -54,7 +54,7 @@
                         type="default"
                         v-hammer:tap="tryMoveToPrevious"
                         :disabled="evaluationIndex === 0"
-                >previous
+                >prev
                 </OverwatchPanelButton>
                 <OverwatchPanelButton
                         type="default"
@@ -136,8 +136,12 @@ export default class MatchupEvaluator extends Vue {
     }
 
     onOptionTap(option: EvaluationOption) {
-        if (this.currentEvaluation.score !== option.score) {
-            this.currentEvaluation.score = option.score
+        const currentEvaluation = this.currentEvaluation
+        if (currentEvaluation.score !== option.score) {
+            currentEvaluation.score = option.score
+            this.evaluations.splice(this.evaluationIndex, 1)
+            this.evaluations.push(currentEvaluation)
+            this.evaluationIndex = this.evaluations.length - 1
             this.createEvaluation()
             this.moveToNextAfterEnd()
         }
@@ -318,12 +322,13 @@ export default class MatchupEvaluator extends Vue {
         display: flex;
         justify-content: stretch;
         width: 100%;
-        padding-top: 2em;
-        gap: 1em;
+        padding-top: 1.5em;
+        gap: 1%;
 
         button {
             flex-shrink: 1;
             flex-basis: 20%;
+
             &:first-child {
                 flex-basis: 60%;
             }
