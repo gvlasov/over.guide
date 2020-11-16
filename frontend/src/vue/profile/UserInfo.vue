@@ -36,6 +36,7 @@
             <div class="guide-votes-received-count">
                 Total guide score: {{ userInfo.guideVotesReceivedCount }}
             </div>
+            <EvaluationsStats/>
         </OverwatchPanel>
         <OverwatchPanel
                 v-if="userInfo.restrictions !== void 0 && userInfo.restrictions.length > 0"
@@ -107,9 +108,11 @@ import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 import {Prop, Ref} from "vue-property-decorator";
 import GuideAuthorSearchFeedVso from "@/ts/vso/GuideAuthorSearchFeedVso";
 import SpinnerBlock from "@/vue/SpinnerBlock.vue";
+import EvaluationsStats from "@/vue/profile/EvaluationsStats.vue";
 
 @Component({
     components: {
+        EvaluationsStats,
         SpinnerBlock,
         NotificationModalPopup,
         ModalPopup,

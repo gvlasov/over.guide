@@ -184,6 +184,24 @@ export default class MatchupEvaluatorService {
         return rest
     }
 
+    get myEvaluatedOppositionsCount(): number {
+        const userCache = this.cache[this.userId];
+        let count = 0
+        for (let subjectId in userCache) {
+            if (userCache.hasOwnProperty(subjectId)) {
+                count += Object.keys(userCache[subjectId]).length
+            }
+        }
+        return count
+    }
+
+    get possibleEvaluationsCount(): number {
+        const heroesNumber = Array.from(Object.values(HeroId))
+            .filter(v => typeof v === 'number')
+            .length;
+        return heroesNumber * (heroesNumber - 1)
+    }
+
     private saveCache() {
         localStorage.setItem(
             MatchupEvaluatorService.cacheKey,
