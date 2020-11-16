@@ -123,6 +123,7 @@ export default class MatchupEvaluator extends Vue {
     onOptionTap(option: EvaluationOption) {
         if (this.currentEvaluation.score !== option.score) {
             this.currentEvaluation.score = option.score
+            this.createEvaluation()
             this.moveToNext()
         }
     }
@@ -155,7 +156,8 @@ export default class MatchupEvaluator extends Vue {
         }
     }
 
-    async createEvaluation(evaluation: MatchupEvaluationVso) {
+    async createEvaluation() {
+        const evaluation = this.currentEvaluation
         this.$emit('evaluate', evaluation.score)
         if (evaluation.score === null) {
             throw new Error()
