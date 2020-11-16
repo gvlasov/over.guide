@@ -16,10 +16,10 @@
                     name="evaluations"
             >
                 <MatchupEvaluation
-                        v-for="(evaluation, index) in showingEvaluations"
-                        :key="evaluation.opposition.right.id+'_'+evaluation.opposition.left.id"
-                        :evaluation="evaluation"
-                        :hovered-score="evaluationIndex === index ? hoveredScore : null"
+                        v-for="indexedEvaluation in showingEvaluationsIndexed"
+                        :key="indexedEvaluation.evaluation.opposition.right.id+'_'+indexedEvaluation.evaluation.opposition.left.id"
+                        :evaluation="indexedEvaluation.evaluation"
+                        :hovered-score="evaluationIndex === indexedEvaluation.index ? hoveredScore : null"
                 />
             </transition-group>
         </div>
@@ -69,6 +69,11 @@ import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
 import MatchupEvaluation from "@/vue/MatchupEvaluation.vue";
 import MatchupEvaluationButton from "@/vue/MatchupEvaluationButton.vue";
 
+type IndexedEvaluation = {
+    evaluation: MatchupEvaluationVso,
+    index: number,
+};
+
 @Component({
     components: {
         MatchupEvaluationButton,
@@ -100,11 +105,15 @@ export default class MatchupEvaluator extends Vue {
 
     showingEvaluationsMaxCount = 3
 
-    get showingEvaluations(): MatchupEvaluationVso[] {
-        return this.evaluations.slice(
-            Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount + 1, 0),
-            this.evaluationIndex + 1
-        );
+
+    get showingEvaluationsIndexed(): IndexedEvaluation[] {
+        const start = Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount + 1, 0);
+        const end = this.evaluationIndex + 1;
+        return this.evaluations
+            .slice(start, end)
+            .map((evaluation, index) => {
+                return {evaluation, index: start + index}
+            })
     }
 
     get currentEvaluation(): MatchupEvaluationVso {

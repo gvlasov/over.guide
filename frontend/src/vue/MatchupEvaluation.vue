@@ -95,10 +95,6 @@ export default class MatchupEvaluation extends Vue {
         [MatchupEvaluationUserScore.DontKnow]: 1.0,
     }
 
-    created() {
-        console.log(this.evaluation)
-    }
-
 }
 
 </script>
