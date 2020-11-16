@@ -108,7 +108,7 @@ export default class MatchupEvaluation extends Vue {
     justify-content: center;
     flex-wrap: nowrap;
     gap: .5em;
-    padding: 0 .3em;
+    box-sizing: border-box;
 
     .hero-portrait {
         max-height: 5em;
@@ -203,6 +203,7 @@ export default class MatchupEvaluation extends Vue {
 
 @media screen and (max-width: 35em) {
     .matchup-evaluation {
+        padding: 0 .3em;
         .state {
             $smaller-font-size: .7em;
 

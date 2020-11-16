@@ -316,7 +316,7 @@ export default class MatchupEvaluator extends Vue {
         max-width: 30em;
         margin: 0 auto;
         padding-top: 1em;
-        gap: .4em;
+        gap: 2%;
         width: 100%;
 
         button {
@@ -334,11 +334,11 @@ export default class MatchupEvaluator extends Vue {
         justify-content: stretch;
         width: 100%;
         padding-top: 1.5em;
-        gap: 1%;
+        gap: 2%;
 
         button {
             flex-shrink: 1;
-            flex-basis: 20%;
+            flex-basis: 19%;
 
             &:first-child {
                 flex-basis: 60%;

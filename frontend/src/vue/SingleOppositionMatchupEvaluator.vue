@@ -6,7 +6,7 @@
                 slot="right-button"
                 type="default"
                 v-hammer:tap="() => $emit('back')"
-                style="flex-basis: 40%;"
+                style="flex-basis: 39%;"
         >Back</OverwatchPanelButton>
     </MatchupEvaluator>
 </template>
