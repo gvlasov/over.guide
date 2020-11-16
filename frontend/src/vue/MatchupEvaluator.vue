@@ -201,6 +201,7 @@ export default class MatchupEvaluator extends Vue {
         height: 10em;
         position: relative;
         overflow: hidden;
+        user-select: none;
 
         .evaluations-list {
             position: absolute;
@@ -210,10 +211,20 @@ export default class MatchupEvaluator extends Vue {
             .matchup-evaluation {
                 overflow: hidden;
                 width: 100%;
+                opacity: .5;
+                transform: scale(.7);
+                transition: opacity .5s, max-height .5s, transform .15s ease-in;
+                cursor: pointer;
+                &:hover{
+                    opacity: .65;
+                    transform: scale(.73);
+                }
+
 
                 &.evaluations-enter, &.evaluations-leave-to {
                     opacity: 0;
                     max-height: 0;
+                    transform: scale(.9);
                 }
 
                 &.evaluations-enter-to, &.evaluations-leave {
@@ -221,8 +232,13 @@ export default class MatchupEvaluator extends Vue {
                     max-height: 8em;
                 }
 
-                &.evaluations-enter-active, .evaluations-leave-active {
-                    transition: opacity .5s, max-height .5s;
+                //&.evaluations-enter-active, .evaluations-leave-active {
+                //    transition: opacity .5s, max-height .5s, transform .15s ease-in;
+                //}
+
+                &:last-child {
+                    opacity: 1;
+                    transform: scale(1);
                 }
 
             }
