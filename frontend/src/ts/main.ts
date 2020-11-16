@@ -11,7 +11,7 @@ import GuideSearch from "@/vue/guides/GuideSearch.vue";
 import AsyncComputed from 'vue-async-computed'
 import {VueHammer} from 'vue2-hammer'
 import TrainingGoals from "@/vue/guides/TrainingGoals.vue";
-import UserPage from "@/vue/UserPage.vue";
+import UserPage from "@/vue/profile/UserPage.vue";
 import GuidePage from "@/vue/guides/GuidePage.vue";
 import ModerationPage from "@/vue/moderation/ModerationPage.vue";
 import SiteResetPage from "@/vue/SiteResetPage.vue";

@@ -89,7 +89,7 @@ import TrainingGoal from "@/vue/guides/TrainingGoal";
 import OverwatchButton from "@/vue/OverwatchButton";
 import Guide from "@/vue/guides/Guide";
 import UserInfoVso from "@/ts/vso/UserInfoVso";
-import UsernameInput from "@/vue/UsernameInput";
+import UsernameInput from "@/vue/profile/UsernameInput";
 import Authentication from "@/ts/Authentication";
 import BackgroundHeading from "@/vue/BackgroundHeading";
 import LogoutDangerNotice from "@/vue/LogoutDangerNotice";
