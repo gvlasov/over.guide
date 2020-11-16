@@ -49,11 +49,20 @@
                     v-hammer:tap="() => onOptionTap(MatchupEvaluatorService.instance.dontKnowOption)"
             >skip
             </OverwatchPanelButton>
-            <OverwatchPanelButton
-                    type="default"
-                    v-hammer:tap="() => $emit('back')"
-            >Back
-            </OverwatchPanelButton>
+            <slot name="right-button">
+                <OverwatchPanelButton
+                        type="default"
+                        v-hammer:tap="tryMoveToPrevious"
+                        :disabled="evaluationIndex === 0"
+                >previous
+                </OverwatchPanelButton>
+                <OverwatchPanelButton
+                        type="default"
+                        v-hammer:tap="tryMoveToNext"
+                        :disabled="isAtEnd"
+                >next
+                </OverwatchPanelButton>
+            </slot>
         </div>
     </div>
 </template>
@@ -106,8 +115,7 @@ export default class MatchupEvaluator extends Vue {
 
     noMoreSuggestions = false
 
-    showingEvaluationsMaxCount = 3
-
+    showingEvaluationsMaxCount = 2
 
     get showingEvaluationsIndexed(): IndexedEvaluation[] {
         const start = Math.max(this.evaluationIndex - this.showingEvaluationsMaxCount + 1, 0);
@@ -117,6 +125,10 @@ export default class MatchupEvaluator extends Vue {
             .map((evaluation, index) => {
                 return {evaluation, index: start + index}
             })
+    }
+
+    get isAtEnd(): boolean {
+        return this.evaluationIndex === this.evaluations.length - 1
     }
 
     get currentEvaluation(): MatchupEvaluationVso {
@@ -132,6 +144,9 @@ export default class MatchupEvaluator extends Vue {
     }
 
     onEvaluationTap(indexedEvaluation: IndexedEvaluation) {
+        if (this.evaluationIndex === indexedEvaluation.index) {
+            return
+        }
         this.tryMoveToPrevious()
     }
 
@@ -221,7 +236,6 @@ export default class MatchupEvaluator extends Vue {
         flex-grow: 1;
         height: 10em;
         position: relative;
-        overflow: hidden;
         user-select: none;
         overscroll-behavior: contain;
 
@@ -231,11 +245,10 @@ export default class MatchupEvaluator extends Vue {
             width: 100%;
 
             .matchup-evaluation {
-                overflow: hidden;
                 width: 100%;
                 opacity: .5;
                 transform: scale(.7);
-                transition: opacity .15s, max-height .15s, transform .2s;
+                transition: opacity .2s, max-height .2s, transform .2s;
                 cursor: pointer;
 
                 &:hover {
@@ -248,6 +261,10 @@ export default class MatchupEvaluator extends Vue {
                     opacity: 0;
                     max-height: 0;
                     transform: scale(.9);
+                }
+
+                &.evaluations-enter-active:last-child, &.evaluations-leave-active:last-child {
+                    //overflow: hidden;
                 }
 
                 &.evaluations-enter-to, &.evaluations-leave {
@@ -305,8 +322,11 @@ export default class MatchupEvaluator extends Vue {
         gap: 1em;
 
         button {
-            flex-grow: 1;
-            flex-shrink: 0;
+            flex-shrink: 1;
+            flex-basis: 20%;
+            &:first-child {
+                flex-basis: 60%;
+            }
         }
 
         .i-dont-know {
