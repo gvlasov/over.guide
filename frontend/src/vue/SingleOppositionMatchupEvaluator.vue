@@ -35,4 +35,7 @@ export default class SingleOppositionMatchupEvaluator extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.matchup-evaluator {
+    max-height: 11.1em;
+}
 </style>
