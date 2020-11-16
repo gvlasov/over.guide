@@ -20,6 +20,7 @@
                         :key="indexedEvaluation.evaluation.opposition.right.id+'_'+indexedEvaluation.evaluation.opposition.left.id"
                         :evaluation="indexedEvaluation.evaluation"
                         :hovered-score="evaluationIndex === indexedEvaluation.index ? hoveredScore : null"
+                        v-hammer:tap="() => onEvaluationTap(indexedEvaluation)"
                 />
             </transition-group>
         </div>
@@ -128,8 +129,18 @@ export default class MatchupEvaluator extends Vue {
         }
     }
 
+    onEvaluationTap(indexedEvaluation: IndexedEvaluation) {
+        if (this.evaluationIndex > 0) {
+            this.evaluationIndex--
+        }
+    }
+
     moveToNext() {
-        this.evaluationIndex++
+        if (this.evaluationIndex < this.evaluations.length - 1) {
+            this.evaluationIndex = this.evaluations.length - 1;
+        } else {
+            this.evaluationIndex = this.evaluations.length;
+        }
         if (this.evaluationIndex >= this.evaluations.length) {
             const oldLength = this.evaluations.length
             this.loadNextMatchup()
