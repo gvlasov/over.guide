@@ -21,6 +21,7 @@ import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import SupportWebsitePage from "@/vue/SupportWebsitePage.vue"
 import PortalVue from 'portal-vue'
+import MatchupEvaluationsPage from '@/vue/MatchupEvaluationsPage.vue'
 
 require('./fontawesome')
 
@@ -54,6 +55,7 @@ const router = new VueRouter({
         {path: '/guide/:id', component: GuidePage},
         {path: '/moderation', component: ModerationPage, name: 'Moderation'},
         {path: '/site-reset', component: SiteResetPage, name: 'Reset storage'},
+        {path: '/matchup-evaluations', component: MatchupEvaluationsPage, name: 'My matchup evaluations'},
         {
             path: '/support',
             component: SupportWebsitePage,

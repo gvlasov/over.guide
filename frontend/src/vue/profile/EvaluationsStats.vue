@@ -1,26 +1,28 @@
 <template>
-    <OverwatchPanelButton
-            class="evaluation-stats"
-            type="default"
-    >
-        <div class="images">
-            <div
-                    v-for="hero in heroes"
-                    class="portrait-wrap"
-            >
-                <HeroPortrait
-                        :hero="hero"
-                        base-url="/images/roster-portraits/"
-                />
+    <RouterLink :to="'/matchup-evaluations'">
+        <OverwatchPanelButton
+                class="evaluation-stats"
+                type="default"
+        >
+            <div class="images">
+                <div
+                        v-for="hero in heroes"
+                        class="portrait-wrap"
+                >
+                    <HeroPortrait
+                            :hero="hero"
+                            base-url="/images/roster-portraits/"
+                    />
+                </div>
             </div>
-        </div>
-        <div>
-            My matchup evaluations
-        </div>
-        <div class="stats">
-            {{ evaluatedCount }}/{{ possibleEvaluationsCount }}
-        </div>
-    </OverwatchPanelButton>
+            <div>
+                My matchup evaluations
+            </div>
+            <div class="stats">
+                {{ evaluatedCount }}/{{ possibleEvaluationsCount }}
+            </div>
+        </OverwatchPanelButton>
+    </RouterLink>
 </template>
 
 <script lang="ts">
@@ -92,6 +94,7 @@ export default class EvaluationsStats extends Vue {
                 position: relative;
                 left: -.5em;
                 width: 1.6em;
+
                 .hero-portrait {
                     height: 2em;
                     width: auto;
