@@ -227,7 +227,6 @@ export default class MatchupEvaluator extends Vue {
 
     async createEvaluation() {
         const evaluation = this.currentEvaluation
-        this.$emit('evaluate', evaluation.score)
         if (evaluation.score === null) {
             throw new Error()
         }
@@ -236,6 +235,9 @@ export default class MatchupEvaluator extends Vue {
             evaluation.opposition.right,
             evaluation.score
         )
+        .then(() => {
+            this.$emit('evaluationSaved', evaluation)
+        })
     }
 }
 

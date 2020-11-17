@@ -198,6 +198,20 @@ export default class MatchupEvaluatorService {
         return count
     }
 
+    get skippedCount(): number {
+        const userCache = this.cache[this.userId];
+        let count = 0
+        for (let subjectId in userCache) {
+            if (userCache.hasOwnProperty(subjectId)) {
+                count +=
+                    Object.values(userCache[subjectId])
+                        .filter(value => value === MatchupEvaluationUserScore.DontKnow)
+                        .length
+            }
+        }
+        return count
+    }
+
     get possibleEvaluationsCount(): number {
         const heroesNumber = Array.from(Object.values(HeroId))
             .filter(v => typeof v === 'number')

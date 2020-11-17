@@ -18,9 +18,6 @@
             <div>
                 My matchup evaluations
             </div>
-            <div class="stats">
-                {{ evaluatedCount }}/{{ possibleEvaluationsCount }}
-            </div>
         </OverwatchPanelButton>
     </RouterLink>
 </template>
@@ -29,7 +26,6 @@
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton";
 import Vue from 'vue'
 import Component from "vue-class-component";
-import MatchupEvaluatorService from "@/ts/MatchupEvaluatorService";
 import HeroPortrait from "@/vue/HeroPortrait.vue";
 import heroes from 'data/heroes'
 import SeededShuffler from "data/generators/SeededShuffler";
@@ -46,14 +42,6 @@ export default class EvaluationsStats extends Vue {
         new SeededShuffler(new Date().getTime()).shuffle(
             Array.from(heroes.values())
         )
-
-    get evaluatedCount(): number {
-        return MatchupEvaluatorService.instance.myEvaluatedOppositionsCount
-    }
-
-    get possibleEvaluationsCount(): number {
-        return MatchupEvaluatorService.instance.possibleEvaluationsCount
-    }
 
 };
 
