@@ -189,7 +189,10 @@ export default class MatchupEvaluatorService {
         let count = 0
         for (let subjectId in userCache) {
             if (userCache.hasOwnProperty(subjectId)) {
-                count += Object.keys(userCache[subjectId]).length
+                count +=
+                    Object.values(userCache[subjectId])
+                        .filter(value => value !== MatchupEvaluationUserScore.DontKnow)
+                        .length
             }
         }
         return count
