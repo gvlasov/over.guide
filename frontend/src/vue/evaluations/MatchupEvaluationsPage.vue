@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
+import MatchupEvaluator from "@/vue/evaluations/MatchupEvaluator.vue";
 import RandomOppositionFeed from "@/ts/RandomOppositionFeed";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import MatchupEvaluatorService from "@/ts/MatchupEvaluatorService";

@@ -86,7 +86,7 @@ import reportReasons from 'data/reportReasons'
 import LinkLikeButton from "@/vue/general/LinkLikeButton.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 import SingleOppositionMatchupEvaluator
-    from "@/vue/SingleOppositionMatchupEvaluator.vue";
+    from "@/vue/evaluations/SingleOppositionMatchupEvaluator.vue";
 
 const auth = new Authentication();
 

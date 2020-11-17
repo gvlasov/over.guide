@@ -21,7 +21,8 @@ import '@/ts/utils/vue-array-replace'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import SupportWebsitePage from "@/vue/SupportWebsitePage.vue"
 import PortalVue from 'portal-vue'
-import MatchupEvaluationsPage from '@/vue/MatchupEvaluationsPage.vue'
+import MatchupEvaluationsPage
+    from '@/vue/evaluations/MatchupEvaluationsPage.vue'
 
 require('./fontawesome')
 

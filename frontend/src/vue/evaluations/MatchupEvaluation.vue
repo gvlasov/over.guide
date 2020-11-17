@@ -44,13 +44,14 @@
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import HeroPortrait from "./HeroPortrait.vue";
+import HeroPortrait from "@/vue/HeroPortrait.vue";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
 import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
 import MatchupEvaluatorService from "@/ts/MatchupEvaluatorService";
-import MatchupEvaluationButton from "@/vue/MatchupEvaluationButton.vue";
+import MatchupEvaluationButton
+    from "@/vue/evaluations/MatchupEvaluationButton.vue";
 
 @Component({
     components: {

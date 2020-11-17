@@ -72,15 +72,16 @@
 import Vue from 'vue'
 import Component from "vue-class-component";
 import {Prop} from "vue-property-decorator";
-import HeroPortrait from "./HeroPortrait.vue";
+import HeroPortrait from "@/vue/HeroPortrait.vue";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import MatchupEvaluatorService, {EvaluationOption} from "@/ts/MatchupEvaluatorService";
 import OppositionFeed, {FeedEndState} from "@/ts/OppositionFeed";
 import HeroOpposition from "@/ts/vso/HeroOpposition";
 import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
-import MatchupEvaluation from "@/vue/MatchupEvaluation.vue";
-import MatchupEvaluationButton from "@/vue/MatchupEvaluationButton.vue";
+import MatchupEvaluation from "@/vue/evaluations/MatchupEvaluation.vue";
+import MatchupEvaluationButton
+    from "@/vue/evaluations/MatchupEvaluationButton.vue";
 
 type IndexedEvaluation = {
     evaluation: MatchupEvaluationVso,

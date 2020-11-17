@@ -10,7 +10,7 @@
 import TrainingGoals from "@/vue/guides/TrainingGoals";
 import Vue from 'vue'
 import Component from "vue-class-component";
-import MatchupEvaluator from "@/vue/MatchupEvaluator.vue";
+import MatchupEvaluator from "@/vue/evaluations/MatchupEvaluator.vue";
 import RandomOppositionFeed from "@/ts/RandomOppositionFeed";
 
 
