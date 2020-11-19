@@ -6,9 +6,11 @@ import {TokenService} from "src/services/token.service";
 import request from 'supertest'
 import {MatchupEvaluation} from "src/database/models/MatchupEvaluation";
 import heroesFixture from "@fixtures/heroes";
+import patchFixture from "@fixtures/patchFixture";
 import {HttpStatus} from "@nestjs/common";
 import {Patch} from "src/database/models/Patch";
 import HeroId from "data/HeroId";
+import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
 
 describe(
     MatchupEvaluationController,
@@ -16,52 +18,43 @@ describe(
         MatchupEvaluationController,
         (ctx) => {
             it('creates matchup evaluation as logged in user', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, patchFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                await Patch.create({
-                    version: '1.3.21',
-                    date: '2020-01-01 12:00:00',
-                    title: 'fuck off',
-                })
                 expect(
                     (await MatchupEvaluation.findAll()).length
                 ).toStrictEqual(0)
                 await request(ctx.app.getHttpServer())
                     .put('/matchup-evaluation')
-                    .send({
+                    .send([{
                         subjectId: HeroId.Ana,
                         objectId: HeroId.Pharah,
                         score: 4
-                    })
+                    }])
                     .expect(HttpStatus.FORBIDDEN)
                 expect(
                     (await MatchupEvaluation.findAll()).length
                 ).toStrictEqual(0)
                 await request(ctx.app.getHttpServer())
                     .put('/matchup-evaluation')
-                    .send({
+                    .send([{
                         subjectId: HeroId.Ana,
                         objectId: HeroId.Pharah,
                         score: 4
-                    })
+                    }])
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.CREATED)
+                    .expect(HttpStatus.OK)
                 expect(
                     (await MatchupEvaluation.findAll()).length
                 ).toStrictEqual(1)
             });
             it('updates matchup evaluation as logged in user', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, patchFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                const patch = await Patch.create({
-                    version: '1.3.21',
-                    date: '2020-01-01 12:00:00',
-                    title: 'fuck off',
-                })
+                const patch = await Patch.findOne()
                 const oldScore = 4;
                 await MatchupEvaluation.create({
                     subjectId: HeroId.Ana,
@@ -77,11 +70,11 @@ describe(
                 const newScore = oldScore - 1;
                 await request(ctx.app.getHttpServer())
                     .put('/matchup-evaluation')
-                    .send({
+                    .send([{
                         subjectId: HeroId.Ana,
                         objectId: HeroId.Pharah,
                         score: newScore
-                    })
+                    }])
                     .expect(HttpStatus.FORBIDDEN)
                 expect(
                     (await MatchupEvaluation.findAll()).length
@@ -91,24 +84,20 @@ describe(
                 ).toStrictEqual(oldScore)
                 await request(ctx.app.getHttpServer())
                     .put('/matchup-evaluation')
-                    .send({
+                    .send([{
                         subjectId: HeroId.Ana,
                         objectId: HeroId.Pharah,
                         score: newScore
-                    })
+                    }])
                     .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.ACCEPTED)
+                    .expect(HttpStatus.OK)
             });
             it('returns list of evaluations by user', async () => {
-                await ctx.fixtures(singleUserFixture, heroesFixture)
+                await ctx.fixtures(singleUserFixture, heroesFixture, patchFixture)
                 const user = await User.findOne();
                 const tokenService = ctx.app.get(TokenService)
                 const token = tokenService.getToken(user)
-                const patch = await Patch.create({
-                    version: '1.3.21',
-                    date: '2020-01-01 12:00:00',
-                    title: 'fuck off',
-                })
+                const patch = await Patch.findOne()
                 const anotherUser = await User.create({
                     name: "another user",
                     battleNetUserId: '34234234',
@@ -153,6 +142,85 @@ describe(
                         ).toStrictEqual(2)
                     })
             })
+            it('removes matchup evaluations', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, patchFixture)
+                const user = await User.findOne();
+                const anotherUser = await User.create({
+                    name: "another user",
+                    battleNetUserId: '34234234',
+                    banned: 0,
+                })
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const patch = await Patch.findOne()
+
+                const userEvaluation1 = await MatchupEvaluation.create({
+                    subjectId: HeroId.Ana,
+                    objectId: HeroId.Zenyatta,
+                    score: MatchupEvaluationUserScore.HardCountered,
+                    createdById: user.id,
+                    patchId: patch.id,
+                    ip: '127.0.0.1',
+                })
+                const userEvaluation2 = await MatchupEvaluation.create({
+                    subjectId: HeroId.Baptiste,
+                    objectId: HeroId.Zenyatta,
+                    score: MatchupEvaluationUserScore.Countered,
+                    createdById: user.id,
+                    patchId: patch.id,
+                    ip: '127.0.0.1',
+                })
+                const userEvaluation3 = await MatchupEvaluation.create({
+                    subjectId: HeroId.Echo,
+                    objectId: HeroId.Reinhardt,
+                    score: MatchupEvaluationUserScore.DontKnow,
+                    createdById: user.id,
+                    patchId: patch.id,
+                    ip: '127.0.0.1',
+                })
+                const anotherUserEvaluation1 = await MatchupEvaluation.create({
+                    subjectId: HeroId.Ana,
+                    objectId: HeroId.Zenyatta,
+                    score: MatchupEvaluationUserScore.HardCounters,
+                    createdById: anotherUser.id,
+                    patchId: patch.id,
+                    ip: '127.0.0.1',
+                })
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(4)
+                await request(ctx.app.getHttpServer())
+                    .post('/matchup-evaluation/remove')
+                    .send([
+                        [HeroId.Ana, HeroId.Zenyatta],
+                        [HeroId.Baptiste, HeroId.Zenyatta],
+                        [HeroId.Ana, HeroId.Zenyatta],
+                    ])
+                    .expect(HttpStatus.FORBIDDEN)
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(4)
+                await request(ctx.app.getHttpServer())
+                    .post('/matchup-evaluation/remove')
+                    .send([
+                        [HeroId.Ana, HeroId.Zenyatta],
+                        [HeroId.Baptiste, HeroId.Zenyatta],
+                        [HeroId.Ana, HeroId.Zenyatta],
+                    ])
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(2)
+                await expect(async () => {
+                    await userEvaluation1.reload()
+                }).rejects.toThrow()
+                await expect(async () => {
+                    await userEvaluation2.reload()
+                }).rejects.toThrow()
+                userEvaluation3.reload();
+                anotherUserEvaluation1.reload();
+            });
         }
     )
 )

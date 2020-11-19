@@ -3,6 +3,7 @@ import {
     Controller,
     Get,
     HttpStatus,
+    Post,
     Put,
     Req,
     Res,
@@ -15,6 +16,7 @@ import {AuthService} from "src/services/auth.service";
 import {User} from "src/database/models/User";
 import {Patch} from "src/database/models/Patch";
 import {AuthenticatedGuard} from "src/services/authenticated.guard";
+import {Op} from "sequelize";
 
 @Controller('matchup-evaluation')
 export class MatchupEvaluationController {
@@ -29,40 +31,76 @@ export class MatchupEvaluationController {
     async createEvaluation(
         @Res() response: Response,
         @Req() request: Request,
-        @Body() dto: MatchupEvaluationDto,
+        @Body() dtos: MatchupEvaluationDto[],
     ) {
         const currentUser: User = await this.authService.getUser(request)
-        const existingEvaluation = await MatchupEvaluation.findOne({
-            where: {
-                createdById: currentUser.id,
-                subjectId: dto.subjectId,
-                objectId: dto.objectId,
+        for (let dto of dtos) {
+            const existingEvaluation = await MatchupEvaluation.findOne({
+                where: {
+                    createdById: currentUser.id,
+                    subjectId: dto.subjectId,
+                    objectId: dto.objectId,
+                }
+            });
+            const patch = await Patch.findOne({
+                order: [['date', 'DESC']]
+            })
+            if (existingEvaluation === null) {
+                await MatchupEvaluation.create({
+                    subjectId: dto.subjectId,
+                    objectId: dto.objectId,
+                    score: dto.score,
+                    createdById: currentUser.id,
+                    ip: request.ip,
+                    patchId: patch.id,
+                })
+            } else {
+                await existingEvaluation.update({
+                    subjectId: dto.subjectId,
+                    objectId: dto.objectId,
+                    score: dto.score,
+                    createdById: currentUser.id,
+                    ip: request.ip,
+                    patchId: patch.id,
+                })
             }
-        });
+        }
+        response.status(HttpStatus.OK)
+        response.send()
+    }
+
+    @UseGuards(AuthenticatedGuard)
+    @Post('remove')
+    async removeEvaluations(
+        @Res() response: Response,
+        @Req() request: Request,
+        @Body() oppositions: [number, number][],
+    ) {
+        const currentUser: User = await this.authService.getUser(request)
         const patch = await Patch.findOne({
             order: [['date', 'DESC']]
         })
-        if (existingEvaluation === null) {
-            await MatchupEvaluation.create({
-                subjectId: dto.subjectId,
-                objectId: dto.objectId,
-                score: dto.score,
-                createdById: currentUser.id,
-                ip: request.ip,
-                patchId: patch.id,
-            })
-            response.status(HttpStatus.CREATED)
-        } else {
-            await existingEvaluation.update({
-                subjectId: dto.subjectId,
-                objectId: dto.objectId,
-                score: dto.score,
-                createdById: currentUser.id,
-                ip: request.ip,
-                patchId: patch.id,
-            })
-            response.status(HttpStatus.ACCEPTED)
-        }
+        await MatchupEvaluation.destroy({
+            where: {
+                [Op.and]: [
+                    {
+                        [Op.or]:
+                            oppositions.map(o => {
+                                return {
+                                    subjectId: o[0],
+                                    objectId: o[1]
+                                }
+                            })
+                    },
+                    {
+                        createdById: currentUser.id,
+                        patchId: patch.id,
+                    }
+                ]
+            },
+            force: true,
+        })
+        response.status(HttpStatus.OK)
         response.send()
     }
 
