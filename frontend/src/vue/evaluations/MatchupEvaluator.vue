@@ -40,7 +40,14 @@
                     @mouseover.native="() => hoveredScore = option.score"
                     :disabled="noMoreSuggestions"
             >
-                <font-awesome-icon :icon="option.icon"/>
+                <font-awesome-icon
+                        v-if="option.icon !== null"
+                        :icon="option.icon"
+                />
+                <span
+                        v-else
+                        style="position:relative; top: -.04em;"
+                >ok</span>
             </MatchupEvaluationButton>
         </div>
         <div class="footer">
@@ -48,7 +55,7 @@
                     type="default"
                     class="i-dont-know"
                     v-hammer:tap="() => onOptionTap(MatchupEvaluatorService.instance.dontKnowOption)"
-            >skip
+            >{{currentEvaluation.isEvaluated ? 'clear' : 'skip'}}
             </OverwatchPanelButton>
             <slot name="right-button">
                 <OverwatchPanelButton
@@ -166,11 +173,14 @@ export default class MatchupEvaluator extends Vue {
         const currentEvaluation = this.currentEvaluation
         if (currentEvaluation.score !== option.score) {
             currentEvaluation.score = option.score
-            this.evaluations.splice(this.evaluationIndex, 1)
-            this.evaluations.push(currentEvaluation)
-            this.evaluationIndex = this.evaluations.length - 1
             this.createEvaluation()
-            this.moveToNextAfterEnd()
+            if (this.evaluationIndex === this.evaluations.length - 1) {
+                this.moveToNextAfterEnd()
+            } else {
+                this.evaluations.splice(this.evaluationIndex, 1)
+                this.evaluations.splice(this.evaluations.length-1, 0, currentEvaluation)
+                this.evaluationIndex = this.evaluations.length - 1
+            }
         }
     }
 

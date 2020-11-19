@@ -106,12 +106,15 @@ export default class MatchupEvaluationsPage extends Vue {
     position: relative;
 
     .stats {
-        width: 5em;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
         white-space: nowrap;
         text-align: left;
         @include overwatch-futura;
         font-size: 1.5em;
-        margin: 0 auto;
+        margin: 2em auto;
     }
 }
 
@@ -130,7 +133,7 @@ export default class MatchupEvaluationsPage extends Vue {
     }
 
     button {
-        height: 4em;
+        min-height: 2em;
     }
 }
 </style>
