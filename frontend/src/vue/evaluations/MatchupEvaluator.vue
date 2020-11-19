@@ -71,7 +71,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import {Prop} from "vue-property-decorator";
+import {Prop, Watch} from "vue-property-decorator";
 import HeroPortrait from "@/vue/HeroPortrait.vue";
 import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
@@ -116,6 +116,14 @@ export default class MatchupEvaluator extends Vue {
                 )
             )
         ]
+    }
+
+    @Watch('oppositionFeed')
+    onOppositionFeedChange(newValue: OppositionFeed) {
+        this.evaluations = this.initialEvaluations
+        this.evaluationIndex = 0
+        this.hoveredScore = null
+        this.noMoreSuggestions = false
     }
 
     evaluationIndex: number = 0

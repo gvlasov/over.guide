@@ -85,7 +85,7 @@ export default class MatchupEvaluatorService {
     dontKnowOption: EvaluationOption = {
         score: MatchupEvaluationUserScore.DontKnow,
         label: 'don\'t know',
-        icon: 'dont-know',
+        icon: 'question',
         shortLabel: '??',
         classSuffix: 'dont-know',
     }

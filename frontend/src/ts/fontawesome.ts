@@ -11,7 +11,9 @@ import {
     faExternalLinkAlt,
     faHome,
     faMedal,
+    faPeopleArrows,
     faPlusSquare,
+    faQuestion,
     faTabletAlt,
     faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -32,6 +34,8 @@ library.add(faExternalLinkAlt);
 library.add(faBan);
 library.add(faPatreon);
 library.add(faTwitch);
+library.add(faPeopleArrows);
+library.add(faQuestion);
 library.add(faBitcoin);
 library.add(faPaypal);
 library.add(faTabletAlt);
