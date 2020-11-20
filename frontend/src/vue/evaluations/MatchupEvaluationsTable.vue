@@ -54,10 +54,6 @@
                     >
                         <font-awesome-icon icon="people-arrows"/>
                     </OverwatchPanelButton>
-                    <!--                    <font-awesome-icon-->
-                    <!--                            v-if="scoreIcon(rowHero, colHero) !== null"-->
-                    <!--                            :icon="scoreIcon(rowHero, colHero)"-->
-                    <!--                    />-->
                 </td>
             </tr>
         </table>
