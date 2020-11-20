@@ -9,12 +9,26 @@ export default class MatchupEvaluationBatcher {
 
     batch: MatchupEvaluationVso[] = []
 
+    original: MatchupEvaluationVso[] = []
+
     sent: MatchupEvaluationVso[] = []
 
     sending: boolean = false
 
 
     add(evaluation: MatchupEvaluationVso) {
+        const existingOriginal = this.original.find(
+            (e) => e.opposition.left.id === evaluation.opposition.left.id
+                && e.opposition.right.id === evaluation.opposition.right.id
+        )
+        if (existingOriginal === void 0) {
+           this.original.push(
+               new MatchupEvaluationVso(
+                   evaluation.opposition,
+                   MatchupEvaluatorService.instance.getScore(evaluation.opposition)
+               )
+           )
+        }
         const existingEvaluationIndex = this.batch.findIndex(
             (e) => e.opposition.left.id === evaluation.opposition.left.id
                 && e.opposition.right.id === evaluation.opposition.right.id
@@ -56,11 +70,12 @@ export default class MatchupEvaluationBatcher {
     }
 
     async undo() {
-        for(let evaluation of this.sent) {
-            MatchupEvaluatorService.instance.removeEvaluation(evaluation)
-        }
-        return Backend.instance.removeMatchupEvaluations(
-            this.sent.map(e => e.opposition)
+        this.batch.splice(0, this.batch.length, ...this.original)
+        return this.sendDebounced(
+            () => {
+                this.sent.splice(0, this.send.length)
+                this.original.splice(0, this.original.length)
+            }
         )
     }
 }

@@ -59,7 +59,7 @@
                         type="main"
                         class="undo-mischief-button"
                         v-hammer:tap="undo"
-                >I was messing around<br/> undo last {{evaluations.length-1}} evaluations
+                >I was messing around<br/> undo last {{ evaluations.length - 1 }} evaluations
                 </OverwatchPanelButton>
             </div>
         </transition>
@@ -68,10 +68,18 @@
                 class="footer"
         >
             <OverwatchPanelButton
+                    v-if="currentEvaluation.score === null"
                     type="default"
-                    class="i-dont-know"
+                    class="skip"
                     v-hammer:tap="() => onOptionTap(MatchupEvaluatorService.instance.dontKnowOption)"
-            >{{ currentEvaluation.isEvaluated ? 'clear' : 'skip' }}
+            >skip
+            </OverwatchPanelButton>
+            <OverwatchPanelButton
+                    v-else-if="currentEvaluation.score !== null"
+                    type="default"
+                    class="clear"
+                    v-hammer:tap="() => onOptionTap(MatchupEvaluatorService.instance.clearOption)"
+            >clear
             </OverwatchPanelButton>
             <slot name="right-button">
                 <OverwatchPanelButton
@@ -208,7 +216,7 @@ export default class MatchupEvaluator extends Vue {
             return
         }
         if (currentEvaluation.score !== option.score) {
-            currentEvaluation.score = option.score
+            currentEvaluation.score = option.score;
             this.batcher.add(currentEvaluation)
             this.addTimes.push(new Date().getTime())
             this.sendEvaluations()
@@ -224,7 +232,7 @@ export default class MatchupEvaluator extends Vue {
 
     async sendEvaluations(): Promise<void> {
         const evaluation = this.currentEvaluation
-        if (evaluation === null || evaluation.score === null) {
+        if (evaluation === null) {
             throw new Error()
         }
         return this.batcher.sendDebounced(
@@ -449,7 +457,7 @@ export default class MatchupEvaluator extends Vue {
             }
         }
 
-        .i-dont-know {
+        .skip, .clear {
             & ::v-deep .background {
                 background-color: hsla(38, 56%, 58%, .8);
             }

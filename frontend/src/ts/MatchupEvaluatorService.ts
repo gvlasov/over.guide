@@ -24,7 +24,7 @@ type MissingUserEvaluations = {
 }
 
 export type EvaluationOption = {
-    score: number,
+    score: MatchupEvaluationUserScore | null,
     label: string,
     shortLabel: string,
     icon: string | null,
@@ -83,10 +83,18 @@ export default class MatchupEvaluatorService {
 
     dontKnowOption: EvaluationOption = {
         score: MatchupEvaluationUserScore.DontKnow,
-        label: 'don\'t know',
+        label: 'skip',
         icon: 'question',
         shortLabel: '??',
         classSuffix: 'dont-know',
+    }
+
+    clearOption: EvaluationOption = {
+        score: null,
+        label: 'clear',
+        icon: 'question',
+        shortLabel: 'xx',
+        classSuffix: 'clear',
     }
 
     static get instance(): MatchupEvaluatorService {
@@ -125,20 +133,25 @@ export default class MatchupEvaluatorService {
         evaluation: MatchupEvaluationVso
     ) {
         if (evaluation.score === null) {
-            throw new Error()
+            delete this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id]
+        } else {
+            if (this.cache[this.userId] === void 0) {
+                this.cache[this.userId] = {}
+            }
+            if (this.cache[this.userId][evaluation.opposition.left.id] === void 0) {
+                this.cache[this.userId][evaluation.opposition.left.id] = {}
+            }
+            this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = evaluation.score
         }
-        if (this.cache[this.userId] === void 0) {
-            this.cache[this.userId] = {}
-        }
-        if (this.cache[this.userId][evaluation.opposition.left.id] === void 0) {
-            this.cache[this.userId][evaluation.opposition.left.id] = {}
-        }
-        this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = evaluation.score
         this.saveCache()
-        const restIndex = this.rest[this.userId][evaluation.opposition.left.id]
-            .indexOf(evaluation.opposition.right.id);
-        if (restIndex > -1) {
-            this.rest[this.userId][evaluation.opposition.left.id].splice(restIndex, 1)
+        if (evaluation.score === null) {
+            this.rest[this.userId][evaluation.opposition.left.id].push(evaluation.opposition.right.id)
+        } else {
+            const restIndex = this.rest[this.userId][evaluation.opposition.left.id]
+                .indexOf(evaluation.opposition.right.id);
+            if (restIndex > -1) {
+                this.rest[this.userId][evaluation.opposition.left.id].splice(restIndex, 1)
+            }
         }
     }
 
