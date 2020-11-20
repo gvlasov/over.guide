@@ -30,7 +30,8 @@ import SentenceCreateDto from "data/dto/SentenceCreateDto";
 import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
 import NotificationsPageDto from "data/dto/NotificationsPageDto";
 import NotificationsPageQueryDto from "data/dto/NotificationsPageQueryDto";
-import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
+import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
+import HeroOpposition from "@/ts/vso/HeroOpposition";
 
 const querystring = require('query-string')
 
@@ -169,19 +170,35 @@ export default class Backend {
         )
     }
 
-    async evaluateMatchup(
-        subject: HeroDto,
-        object: HeroDto,
-        score: MatchupEvaluationUserScore
+    async evaluateMatchups(
+        evaluations: MatchupEvaluationVso[]
     ): Promise<MatchupEvaluationDto> {
         return this.query(
             'PUT',
             '/matchup-evaluation',
-            {
-                subjectId: subject.id,
-                objectId: object.id,
-                score: score
-            },
+            evaluations.map((e => {
+                if (e.score === null) {
+                    throw new Error(
+                        'Unevaluated matchup ' + JSON.stringify(e.opposition)
+                    )
+                }
+                return {
+                    subjectId: e.opposition.left.id,
+                    objectId: e.opposition.right.id,
+                    score: e.score
+                }
+            })),
+            response => response.data as MatchupEvaluationDto
+        )
+    };
+
+    async removeMatchupEvaluations(
+        oppositions: HeroOpposition[]
+    ): Promise<MatchupEvaluationDto> {
+        return this.query(
+            'POST',
+            '/matchup-evaluation/remove',
+            oppositions.map((o => [o.left.id, o.right.id])),
             response => response.data as MatchupEvaluationDto
         )
     };
@@ -441,7 +458,8 @@ export default class Backend {
             'POST',
             `/notifications/mark-read`,
             notificationIds,
-            response => {}
+            response => {
+            }
         )
     }
 
@@ -450,7 +468,8 @@ export default class Backend {
             'POST',
             `/notifications/mark-all-read`,
             {},
-            response => {}
+            response => {
+            }
         )
     }
 
@@ -459,7 +478,8 @@ export default class Backend {
             'GET',
             `/matchup-evaluation/my`,
             {},
-            response => {}
+            response => {
+            }
         )
     }
 

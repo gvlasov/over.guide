@@ -1,10 +1,9 @@
-import Backend from "@/ts/Backend";
 import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
-import HeroDto from "data/dto/HeroDto";
 import HeroId from "data/HeroId";
 import Authentication from "@/ts/Authentication";
 import heroes from 'data/heroes'
 import HeroOpposition from "@/ts/vso/HeroOpposition";
+import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
 
 type EvaluationCache = {
     [userId: number]: UserEvaluations
@@ -28,7 +27,7 @@ export type EvaluationOption = {
     score: number,
     label: string,
     shortLabel: string,
-    icon: string|null,
+    icon: string | null,
     classSuffix: string,
 }
 
@@ -114,22 +113,6 @@ export default class MatchupEvaluatorService {
         }
     }
 
-    evaluateMatchup(
-        subject: HeroDto,
-        object: HeroDto,
-        score: MatchupEvaluationUserScore
-    ) {
-        return Backend.instance
-            .evaluateMatchup(subject, object, score)
-            .then(() => {
-                this.cacheEvaluation(
-                    subject.id,
-                    object.id,
-                    score
-                )
-            })
-    }
-
     getScore(opposition: HeroOpposition): MatchupEvaluationUserScore | null {
         const score = this.cache[this.userId]?.[opposition.left.id]?.[opposition.right.id];
         if (score === undefined) {
@@ -138,22 +121,24 @@ export default class MatchupEvaluatorService {
         return score;
     }
 
-    private cacheEvaluation(
-        subjectId: HeroId,
-        objectId: HeroId,
-        score: MatchupEvaluationUserScore
+    cacheEvaluation(
+        evaluation: MatchupEvaluationVso
     ) {
+        if (evaluation.score === null) {
+            throw new Error()
+        }
         if (this.cache[this.userId] === void 0) {
             this.cache[this.userId] = {}
         }
-        if (this.cache[this.userId][subjectId] === void 0) {
-            this.cache[this.userId][subjectId] = {}
+        if (this.cache[this.userId][evaluation.opposition.left.id] === void 0) {
+            this.cache[this.userId][evaluation.opposition.left.id] = {}
         }
-        this.cache[this.userId][subjectId][objectId] = score
+        this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = evaluation.score
         this.saveCache()
-        const restIndex = this.rest[this.userId][subjectId].indexOf(objectId);
+        const restIndex = this.rest[this.userId][evaluation.opposition.left.id]
+            .indexOf(evaluation.opposition.right.id);
         if (restIndex > -1) {
-            this.rest[this.userId][subjectId].splice(restIndex, 1)
+            this.rest[this.userId][evaluation.opposition.left.id].splice(restIndex, 1)
         }
     }
 
@@ -255,14 +240,6 @@ export default class MatchupEvaluatorService {
         for (let subjectId of subjectIdsAsc) {
             if (subjectId2LastCumulIndex[subjectId] >= randomPosition) {
                 const rightObjectIndex = subjectId2LastCumulIndex[subjectId] - randomPosition;
-                console.log(
-                    subjectId2LastCumulIndex[subjectId],
-                    randomPosition,
-                    rightObjectIndex,
-                    userRest[subjectId][rightObjectIndex],
-                    userRest[subjectId],
-                    cumul,
-                )
                 return {
                     left: heroes.get(subjectId)!,
                     right: heroes.get(userRest[subjectId][rightObjectIndex])!,

@@ -1,7 +1,7 @@
 <template>
     <div class="matchup-evaluator">
         <div
-                v-if="noMoreSuggestions"
+                v-if="!hasMoreSuggestions"
                 class="no-more"
         >
             <div class="text">No more</div>
@@ -38,7 +38,7 @@
                     :class-suffix="option.classSuffix"
                     v-hammer:tap="() => onOptionTap(option)"
                     @mouseover.native="() => hoveredScore = option.score"
-                    :disabled="noMoreSuggestions"
+                    :disabled="!hasMoreSuggestions"
             >
                 <font-awesome-icon
                         v-if="option.icon !== null"
@@ -50,12 +50,28 @@
                 >ok</span>
             </MatchupEvaluationButton>
         </div>
-        <div class="footer">
+        <transition name="mischief">
+            <div
+                    v-if="hasMischief"
+                    class="mischief-notification"
+            >
+                <OverwatchPanelButton
+                        type="main"
+                        class="undo-mischief-button"
+                        v-hammer:tap="undo"
+                >I was messing around, undo
+                </OverwatchPanelButton>
+            </div>
+        </transition>
+        <div
+                v-if="currentEvaluation !== null"
+                class="footer"
+        >
             <OverwatchPanelButton
                     type="default"
                     class="i-dont-know"
                     v-hammer:tap="() => onOptionTap(MatchupEvaluatorService.instance.dontKnowOption)"
-            >{{currentEvaluation.isEvaluated ? 'clear' : 'skip'}}
+            >{{ currentEvaluation.isEvaluated ? 'clear' : 'skip' }}
             </OverwatchPanelButton>
             <slot name="right-button">
                 <OverwatchPanelButton
@@ -84,11 +100,11 @@ import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
 import MatchupEvaluatorService, {EvaluationOption} from "@/ts/MatchupEvaluatorService";
 import OppositionFeed, {FeedEndState} from "@/ts/OppositionFeed";
-import HeroOpposition from "@/ts/vso/HeroOpposition";
 import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
 import MatchupEvaluation from "@/vue/evaluations/MatchupEvaluation.vue";
 import MatchupEvaluationButton
     from "@/vue/evaluations/MatchupEvaluationButton.vue";
+import MatchupEvaluationBatcher from "@/ts/MatchupEvaluationBatcher";
 
 type IndexedEvaluation = {
     evaluation: MatchupEvaluationVso,
@@ -114,32 +130,46 @@ export default class MatchupEvaluator extends Vue {
     evaluations: MatchupEvaluationVso[] = this.initialEvaluations
 
     get initialEvaluations(): MatchupEvaluationVso[] {
-        const opposition = this.oppositionFeed.getNext() as HeroOpposition;
-        return [
-            new MatchupEvaluationVso(
-                opposition,
-                MatchupEvaluatorService.instance.getScore(
-                    opposition
+        const opposition = this.oppositionFeed.getNext()
+        if (opposition === FeedEndState.End || opposition === FeedEndState.ThatWasOnly) {
+            return []
+        } else {
+            return [
+                new MatchupEvaluationVso(
+                    opposition,
+                    MatchupEvaluatorService.instance.getScore(
+                        opposition
+                    )
                 )
-            )
-        ]
+            ]
+        }
     }
 
     @Watch('oppositionFeed')
     onOppositionFeedChange(newValue: OppositionFeed) {
+        this.reset()
+    }
+
+    reset() {
         this.evaluations = this.initialEvaluations
         this.evaluationIndex = 0
         this.hoveredScore = null
-        this.noMoreSuggestions = false
+        this.addTimes.splice(0, this.addTimes.length)
     }
 
     evaluationIndex: number = 0
 
     hoveredScore = null
 
-    noMoreSuggestions = false
+    get hasMoreSuggestions(): boolean {
+        return this.evaluations.length > 0
+    }
 
     showingEvaluationsMaxCount = 2
+
+    batcher = new MatchupEvaluationBatcher()
+
+    addTimes: number[] = []
 
     onSwipe(event) {
         if (event.overallVelocityY > 0.2) {
@@ -147,7 +177,6 @@ export default class MatchupEvaluator extends Vue {
         } else if (event.overallVelocityY < -0.2) {
             this.tryMoveToNext()
         } else {
-            console.log(event)
         }
     }
 
@@ -165,23 +194,62 @@ export default class MatchupEvaluator extends Vue {
         return this.evaluationIndex === this.evaluations.length - 1
     }
 
-    get currentEvaluation(): MatchupEvaluationVso {
-        return this.evaluations[this.evaluationIndex]
+    get currentEvaluation(): MatchupEvaluationVso | null {
+        if (this.evaluations.length === 0) {
+            return null
+        } else {
+            return this.evaluations[this.evaluationIndex]
+        }
     }
 
     onOptionTap(option: EvaluationOption) {
         const currentEvaluation = this.currentEvaluation
+        if (currentEvaluation === null) {
+            return
+        }
         if (currentEvaluation.score !== option.score) {
             currentEvaluation.score = option.score
-            this.createEvaluation()
+            this.batcher.add(currentEvaluation)
+            this.addTimes.push(new Date().getTime())
+            this.sendEvaluations()
             if (this.evaluationIndex === this.evaluations.length - 1) {
                 this.moveToNextAfterEnd()
             } else {
                 this.evaluations.splice(this.evaluationIndex, 1)
-                this.evaluations.splice(this.evaluations.length-1, 0, currentEvaluation)
+                this.evaluations.splice(this.evaluations.length - 1, 0, currentEvaluation)
                 this.evaluationIndex = this.evaluations.length - 1
             }
         }
+    }
+
+    async sendEvaluations(): Promise<void> {
+        const evaluation = this.currentEvaluation
+        if (evaluation === null || evaluation.score === null) {
+            throw new Error()
+        }
+        return this.batcher.sendDebounced(
+            () => {
+                this.$emit('evaluationsSaved', evaluation)
+            }
+        )
+    }
+
+    get hasMischief(): boolean {
+        let fastCount = 0;
+        for (let i = 1; i < this.addTimes.length; i++) {
+            if (this.addTimes[i] - this.addTimes[i - 1] < MatchupEvaluationBatcher.debounceTimeMs) {
+                fastCount++
+                if (fastCount > 2) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    undo() {
+        this.batcher.undo()
+        this.reset()
     }
 
     onEvaluationTap(indexedEvaluation: IndexedEvaluation) {
@@ -233,7 +301,6 @@ export default class MatchupEvaluator extends Vue {
         if (opposition === FeedEndState.ThatWasOnly) {
 
         } else if (opposition === FeedEndState.End) {
-            this.noMoreSuggestions = true
         } else {
             this.evaluations.push(
                 new MatchupEvaluationVso(
@@ -244,20 +311,6 @@ export default class MatchupEvaluator extends Vue {
         }
     }
 
-    async createEvaluation() {
-        const evaluation = this.currentEvaluation
-        if (evaluation.score === null) {
-            throw new Error()
-        }
-        return MatchupEvaluatorService.instance.evaluateMatchup(
-            evaluation.opposition.left,
-            evaluation.opposition.right,
-            evaluation.score
-        )
-        .then(() => {
-            this.$emit('evaluationSaved', evaluation)
-        })
-    }
 }
 
 </script>
@@ -354,6 +407,25 @@ export default class MatchupEvaluator extends Vue {
             & ::v-deep .content {
                 padding: .2em .4em;
             }
+        }
+    }
+
+    .mischief-notification {
+        padding-top: 1em;
+        overflow: hidden;
+
+        &.mischief-enter, &.mischief-leave-to {
+            padding-top: 0;
+            max-height: 0;
+        }
+
+        &.mischief-leave, &.mischief-enter-to {
+            padding-top: 1em;
+            max-height: 10em;
+        }
+
+        &.mischief-enter-active, &.mischief-appear-active {
+            transition: padding-top .2s, max-height .2s;
         }
     }
 

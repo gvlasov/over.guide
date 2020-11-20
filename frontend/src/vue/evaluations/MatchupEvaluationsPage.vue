@@ -2,7 +2,7 @@
     <OverwatchPanel class="matchup-evaluations-page">
         <MatchupEvaluator
                 :opposition-feed="feed"
-                @evaluationSaved="onEvaluationSaved"
+                @evaluationsSaved="onEvaluationsSaved"
         />
         <div class="stats">
             <div>{{ evaluatedCount }} evaluated</div>
@@ -83,7 +83,7 @@ export default class MatchupEvaluationsPage extends Vue {
 
     skippedCount = this.service.skippedCount
 
-    onEvaluationSaved() {
+    onEvaluationsSaved() {
         this.updateNonReactive()
     }
 
