@@ -28,11 +28,18 @@
                 </td>
                 <td
                         v-for="(colHero, colIndex) in heroes"
-                        @mouseenter="() => onOppositionTap(rowIndex, colIndex)"
-                        v-bind:class="{selected: shouldHighlight(rowIndex, colIndex), ['matchup-'+scoreClassSuffix(rowHero, colHero)]: true}"
+                        @mouseenter="() => onOppositionHover(rowIndex, colIndex)"
+                        @mouseleave="() => {selectedRow = null; selectedCol = null}"
+                        v-bind:class="{['matchup-'+scoreClassSuffix(rowHero, colHero)]: true}"
                 >
+                    <HeroPortrait
+                            v-if="colIndex === rowIndex"
+                            :hero="colHero"
+                            base-url="/images/roster-portraits"
+                            class="neutral-hero"
+                    />
                     <div
-                            v-if="rowIndex === selectedRow && colIndex === selectedCol"
+                            v-if="rowIndex !== colIndex && rowIndex === selectedRow && colIndex === selectedCol"
                             class="selected-opposition"
                     >
                         <HeroPortrait
@@ -47,7 +54,7 @@
                         />
                     </div>
                     <OverwatchPanelButton
-                            v-if="rowIndex === selectedRow && colIndex === selectedCol"
+                            v-if="rowIndex !== colIndex && rowIndex === selectedRow && colIndex === selectedCol"
                             type="default"
                             class="evaluate-button"
                             v-hammer:tap="() => $emit('selectOpposition', {left: rowHero, right: colHero})"
@@ -86,7 +93,7 @@ export default class MatchupEvaluationsTable extends Vue {
 
     selectedCol = -1
 
-    onOppositionTap(rowIndex: number, colIndex: number) {
+    onOppositionHover(rowIndex: number, colIndex: number) {
         this.selectedRow = rowIndex
         this.selectedCol = colIndex
     }
@@ -123,7 +130,7 @@ export default class MatchupEvaluationsTable extends Vue {
     $bgcolor: hsla(227, 16%, 48%, 0.94);
     background-color: $bgcolor;
     @include custom-desktop-scrollbar($bgcolor);
-    overflow:auto;
+    overflow: auto;
     max-height: 100vh;
     width: 100%;
 
@@ -131,6 +138,7 @@ export default class MatchupEvaluationsTable extends Vue {
         border-spacing: 0;
         border-collapse: collapse;
         position: relative;
+
         td.corner {
             font-weight: bold;
         }
@@ -190,10 +198,19 @@ export default class MatchupEvaluationsTable extends Vue {
                     transform: translateX(100%);
                 }
             }
+
             .evaluate-button {
                 font-size: 1.5em;
                 width: 100%;
                 height: 100%;
+            }
+
+            .neutral-hero {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: .3;
+                cursor: default;
             }
         }
 
