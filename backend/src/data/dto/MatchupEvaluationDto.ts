@@ -4,5 +4,5 @@ import MatchupEvaluationUserScore from "data/MatchupEvaluationUserScore";
 export default interface MatchupEvaluationDto {
     readonly subjectId: HeroId
     readonly objectId: HeroId
-    readonly score: MatchupEvaluationUserScore
+    readonly score: MatchupEvaluationUserScore|null
 }

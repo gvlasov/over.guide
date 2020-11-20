@@ -221,6 +221,65 @@ describe(
                 userEvaluation3.reload();
                 anotherUserEvaluation1.reload();
             });
+            it('removes matchup evaluations when putting them with null score', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, patchFixture)
+                const user = await User.findOne();
+                const tokenService = ctx.app.get(TokenService)
+                const token = tokenService.getToken(user)
+                const patch = await Patch.findOne()
+                const oldScore = MatchupEvaluationUserScore.HardCounters;
+                const newScore = MatchupEvaluationUserScore.Counters;
+                const eval1 = await MatchupEvaluation.create({
+                    subjectId: HeroId.Ana,
+                    objectId: HeroId.Pharah,
+                    createdById: user.id,
+                    score: oldScore,
+                    ip: '127.0.0.1',
+                    patchId: patch.id,
+                })
+                const eval2 = await MatchupEvaluation.create({
+                    subjectId: HeroId.Ana,
+                    objectId: HeroId.Baptiste,
+                    createdById: user.id,
+                    score: MatchupEvaluationUserScore.DontKnow,
+                    ip: '127.0.0.1',
+                    patchId: patch.id,
+                })
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(2)
+                await request(ctx.app.getHttpServer())
+                    .put('/matchup-evaluation')
+                    .send([
+                        {
+                            subjectId: HeroId.Ana,
+                            objectId: HeroId.Pharah,
+                            score: newScore // update
+                        },
+                        {
+                            subjectId: HeroId.Ana,
+                            objectId: HeroId.Baptiste,
+                            score: null // delete
+                        },
+                        {
+                            subjectId: HeroId.Zenyatta,
+                            objectId: HeroId.Zarya,
+                            score: MatchupEvaluationUserScore.HardCountered // create
+                        },
+                    ])
+                    .set({Authorization: `Bearer ${token}`})
+                    .expect(HttpStatus.OK)
+                expect(
+                    (await MatchupEvaluation.findAll()).length
+                ).toStrictEqual(2)
+                await eval1.reload()
+                    .then((it) => {
+                        expect(it.score).toStrictEqual(newScore)
+                    });
+                await expect(async () => {
+                    await eval2.reload()
+                }).rejects.toThrow()
+            });
         }
     )
 )

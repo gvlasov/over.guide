@@ -34,35 +34,47 @@ export class MatchupEvaluationController {
         @Body() dtos: MatchupEvaluationDto[],
     ) {
         const currentUser: User = await this.authService.getUser(request)
+        const patch = await Patch.findOne({
+            order: [['date', 'DESC']]
+        })
         for (let dto of dtos) {
-            const existingEvaluation = await MatchupEvaluation.findOne({
-                where: {
-                    createdById: currentUser.id,
-                    subjectId: dto.subjectId,
-                    objectId: dto.objectId,
-                }
-            });
-            const patch = await Patch.findOne({
-                order: [['date', 'DESC']]
-            })
-            if (existingEvaluation === null) {
-                await MatchupEvaluation.create({
-                    subjectId: dto.subjectId,
-                    objectId: dto.objectId,
-                    score: dto.score,
-                    createdById: currentUser.id,
-                    ip: request.ip,
-                    patchId: patch.id,
+            if (dto.score === null) {
+                await MatchupEvaluation.destroy({
+                    where: {
+                        createdById: currentUser.id,
+                        subjectId: dto.subjectId,
+                        objectId: dto.objectId,
+                        patchId: patch.id
+                    }
                 })
             } else {
-                await existingEvaluation.update({
-                    subjectId: dto.subjectId,
-                    objectId: dto.objectId,
-                    score: dto.score,
-                    createdById: currentUser.id,
-                    ip: request.ip,
-                    patchId: patch.id,
-                })
+                const existingEvaluation = await MatchupEvaluation.findOne({
+                    where: {
+                        createdById: currentUser.id,
+                        subjectId: dto.subjectId,
+                        objectId: dto.objectId,
+                        patchId: patch.id
+                    }
+                });
+                if (existingEvaluation === null) {
+                    await MatchupEvaluation.create({
+                        subjectId: dto.subjectId,
+                        objectId: dto.objectId,
+                        score: dto.score,
+                        createdById: currentUser.id,
+                        ip: request.ip,
+                        patchId: patch.id,
+                    })
+                } else {
+                    await existingEvaluation.update({
+                        subjectId: dto.subjectId,
+                        objectId: dto.objectId,
+                        score: dto.score,
+                        createdById: currentUser.id,
+                        ip: request.ip,
+                        patchId: patch.id,
+                    })
+                }
             }
         }
         response.status(HttpStatus.OK)

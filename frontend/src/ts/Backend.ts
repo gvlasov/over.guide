@@ -177,11 +177,6 @@ export default class Backend {
             'PUT',
             '/matchup-evaluation',
             evaluations.map((e => {
-                if (e.score === null) {
-                    throw new Error(
-                        'Unevaluated matchup ' + JSON.stringify(e.opposition)
-                    )
-                }
                 return {
                     subjectId: e.opposition.left.id,
                     objectId: e.opposition.right.id,
