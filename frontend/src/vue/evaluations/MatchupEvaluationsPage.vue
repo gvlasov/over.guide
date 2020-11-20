@@ -16,6 +16,7 @@
         </OverwatchButton>
         <NotificationModalPopup
                 v-if="showTableModal"
+                @close="() => showTableModal = false"
         >
             <div class="modal-content">
                 <MatchupEvaluationsTable
@@ -104,6 +105,7 @@ export default class MatchupEvaluationsPage extends Vue {
 .matchup-evaluations-page {
     padding: 1em;
     position: relative;
+    overflow: hidden;
 
     .stats {
         display: flex;
