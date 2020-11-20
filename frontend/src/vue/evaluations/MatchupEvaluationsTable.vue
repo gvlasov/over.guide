@@ -190,7 +190,7 @@ export default class MatchupEvaluationsTable extends Vue {
 
                 .row-portrait {
                     transform: translateX(-100%);
-                    left: 0
+                    left: -1px;
                 }
 
                 .col-portrait {
