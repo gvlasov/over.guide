@@ -52,11 +52,13 @@ export default class MatchupEvaluationBatcher {
                 this.sent.push(...this.batch)
                 this.batch.splice(0, this.batch.length)
                 this.sending = false
-                console.log('then')
             })
     }
 
     async undo() {
+        for(let evaluation of this.sent) {
+            MatchupEvaluatorService.instance.removeEvaluation(evaluation)
+        }
         return Backend.instance.removeMatchupEvaluations(
             this.sent.map(e => e.opposition)
         )

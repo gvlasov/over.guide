@@ -59,7 +59,7 @@
                         type="main"
                         class="undo-mischief-button"
                         v-hammer:tap="undo"
-                >I was messing around, undo
+                >I was messing around<br/> undo last {{evaluations.length-1}} evaluations
                 </OverwatchPanelButton>
             </div>
         </transition>
@@ -229,7 +229,7 @@ export default class MatchupEvaluator extends Vue {
         }
         return this.batcher.sendDebounced(
             () => {
-                this.$emit('evaluationsSaved', evaluation)
+                this.$emit('evaluationsSaved')
             }
         )
     }
@@ -239,7 +239,7 @@ export default class MatchupEvaluator extends Vue {
         for (let i = 1; i < this.addTimes.length; i++) {
             if (this.addTimes[i] - this.addTimes[i - 1] < MatchupEvaluationBatcher.debounceTimeMs) {
                 fastCount++
-                if (fastCount > 2) {
+                if (fastCount > 3) {
                     return true
                 }
             }
@@ -249,6 +249,9 @@ export default class MatchupEvaluator extends Vue {
 
     undo() {
         this.batcher.undo()
+            .then(() => {
+                this.$emit('evaluationsSaved')
+            })
         this.reset()
     }
 
@@ -412,7 +415,7 @@ export default class MatchupEvaluator extends Vue {
 
     .mischief-notification {
         padding-top: 1em;
-        overflow: hidden;
+        overflow: visible;
 
         &.mischief-enter, &.mischief-leave-to {
             padding-top: 0;
@@ -426,6 +429,7 @@ export default class MatchupEvaluator extends Vue {
 
         &.mischief-enter-active, &.mischief-appear-active {
             transition: padding-top .2s, max-height .2s;
+            overflow: hidden;
         }
     }
 

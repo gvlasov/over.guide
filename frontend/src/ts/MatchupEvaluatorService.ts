@@ -249,5 +249,13 @@ export default class MatchupEvaluatorService {
         return null
     }
 
+    removeEvaluation(evaluation: MatchupEvaluationVso) {
+        if (
+            this.cache?.[this.userId]?.[evaluation.opposition.left.id]?.[evaluation.opposition.right.id]
+            !== void 0
+        ) {
+            delete this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id]
+        }
+    }
 }
 

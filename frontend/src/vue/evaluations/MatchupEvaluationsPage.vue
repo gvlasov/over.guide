@@ -12,7 +12,7 @@
         <OverwatchButton
                 type="default"
                 v-hammer:tap="() => showTableModal = true"
-        >view all
+        >My evaluations table
         </OverwatchButton>
         <NotificationModalPopup
                 v-if="showTableModal"
