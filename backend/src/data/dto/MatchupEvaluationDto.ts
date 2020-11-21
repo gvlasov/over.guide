@@ -5,4 +5,5 @@ export default interface MatchupEvaluationDto {
     readonly subjectId: HeroId
     readonly objectId: HeroId
     readonly score: MatchupEvaluationUserScore|null
+    readonly patchId: number
 }

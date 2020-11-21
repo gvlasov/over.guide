@@ -1,9 +1,7 @@
 import AlternativeDto from "data/dto/AlternativeDto";
 import PickSuggestion from "./PickSuggestion";
-import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 import axios, {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
-import HeroDto from "data/dto/HeroDto"
 import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto";
 import env from '../env/dev'
 import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
@@ -103,18 +101,6 @@ export default class Backend {
         )
     }
 
-    async getMatchupScore(subject: HeroDto, object: HeroDto): Promise<MatchupEvaluationDto> {
-        return this.query(
-            'GET',
-            '/matchup-evaluation',
-            {
-                subject: subject.id,
-                object: object.id,
-            },
-            response => response.data as MatchupEvaluationDto
-        )
-    };
-
     async getMyTrainingGoals(): Promise<OrderedGuideHeadDto[]> {
         return this.query(
             'GET',
@@ -172,7 +158,7 @@ export default class Backend {
 
     async evaluateMatchups(
         evaluations: MatchupEvaluationVso[]
-    ): Promise<MatchupEvaluationDto> {
+    ): Promise<void> {
         return this.query(
             'PUT',
             '/matchup-evaluation',
@@ -183,18 +169,18 @@ export default class Backend {
                     score: e.score
                 }
             })),
-            response => response.data as MatchupEvaluationDto
+            response => {}
         )
     };
 
     async removeMatchupEvaluations(
         oppositions: HeroOpposition[]
-    ): Promise<MatchupEvaluationDto> {
+    ): Promise<void> {
         return this.query(
             'POST',
             '/matchup-evaluation/remove',
             oppositions.map((o => [o.left.id, o.right.id])),
-            response => response.data as MatchupEvaluationDto
+            response => {}
         )
     };
 

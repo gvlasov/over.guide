@@ -60,6 +60,7 @@ export class MatchupEvaluation extends Model<MatchupEvaluation> {
             subjectId: this.subjectId,
             objectId: this.objectId,
             score: this.score,
+            patchId: this.patchId,
         }
     }
 
