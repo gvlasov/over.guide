@@ -44,8 +44,6 @@ export default class MatchupEvaluatorService {
 
     private static _instance: MatchupEvaluatorService
 
-    private static cacheKey = 'matchup-evaluation'
-
     private readonly cache: EvaluationCache
 
     private readonly userId: number
@@ -127,18 +125,13 @@ export default class MatchupEvaluatorService {
     }
 
     private constructor(userId: number, patchId: number) {
-        const cached = localStorage.getItem(MatchupEvaluatorService.cacheKey);
         this.userId = userId
         this.patchId = patchId
         this.cache = {}
         Backend.instance.getMyMatchupEvaluations()
             .then((evaluations) => {
-                this.dropCache()
                 this.cacheAll(evaluations)
             })
-        // if (cached !== null) {
-        //     this.cache = JSON.parse(cached)
-        // }
     }
 
     getScore(opposition: HeroOpposition): MatchupEvaluationUserScore | null {
@@ -180,7 +173,6 @@ export default class MatchupEvaluatorService {
                 evaluation.score
             ]
         }
-        this.saveCache()
         if (evaluation.score === null) {
             this.rest[this.userId][evaluation.opposition.left.id].push(evaluation.opposition.right.id)
         } else {
@@ -252,19 +244,6 @@ export default class MatchupEvaluatorService {
             .filter(v => typeof v === 'number')
             .length;
         return heroesNumber * (heroesNumber - 1)
-    }
-
-    private saveCache() {
-        localStorage.setItem(
-            MatchupEvaluatorService.cacheKey,
-            JSON.stringify(this.cache)
-        )
-    }
-
-    private dropCache() {
-        localStorage.removeItem(
-            MatchupEvaluatorService.cacheKey
-        )
     }
 
     getRandomUnevaluatedOpposition(): HeroOpposition | null {
