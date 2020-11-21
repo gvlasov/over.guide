@@ -179,6 +179,8 @@ export default class MatchupEvaluator extends Vue {
 
     addTimes: number[] = []
 
+    addTimesLookupDepth = 10
+
     onSwipe(event) {
         if (event.overallVelocityY > 0.2) {
             this.tryMoveToPrevious()
@@ -219,6 +221,11 @@ export default class MatchupEvaluator extends Vue {
             currentEvaluation.score = option.score;
             this.batcher.add(currentEvaluation)
             this.addTimes.push(new Date().getTime())
+            this.addTimes.splice(
+                0,
+                this.addTimes.length,
+                ...this.addTimes.slice(-this.addTimesLookupDepth)
+            )
             this.sendEvaluations()
             if (this.evaluationIndex === this.evaluations.length - 1) {
                 this.moveToNextAfterEnd()
