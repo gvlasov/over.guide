@@ -120,6 +120,10 @@ export default class MatchupEvaluatorService {
                     (value) => value.id
                 ) as PatchDto).id
             )
+            Backend.instance.getMyMatchupEvaluations()
+                .then((evaluations) => {
+                    MatchupEvaluatorService._instance.cacheAll(evaluations)
+                })
         }
         return MatchupEvaluatorService._instance;
     }
@@ -128,10 +132,6 @@ export default class MatchupEvaluatorService {
         this.userId = userId
         this.patchId = patchId
         this.cache = {}
-        Backend.instance.getMyMatchupEvaluations()
-            .then((evaluations) => {
-                this.cacheAll(evaluations)
-            })
     }
 
     getScore(opposition: HeroOpposition): MatchupEvaluationUserScore | null {
