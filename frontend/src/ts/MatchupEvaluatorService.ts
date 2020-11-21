@@ -154,14 +154,10 @@ export default class MatchupEvaluatorService {
             if (this.cache[this.userId][evaluation.opposition.left.id] === void 0) {
                 this.cache[this.userId][evaluation.opposition.left.id] = {}
             }
-            if (this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] === void 0) {
-                this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = [
-                    this.patchId,
-                    evaluation.score
-                ]
-            } else {
-                this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id][scoreIndex] = evaluation.score
-            }
+            this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = [
+                this.patchId,
+                evaluation.score
+            ]
         }
         this.saveCache()
         if (evaluation.score === null) {

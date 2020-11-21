@@ -247,7 +247,7 @@ export default class MatchupEvaluator extends Vue {
         for (let i = 1; i < this.addTimes.length; i++) {
             if (this.addTimes[i] - this.addTimes[i - 1] < MatchupEvaluationBatcher.debounceTimeMs) {
                 fastCount++
-                if (fastCount > 3) {
+                if (fastCount > 2) {
                     return true
                 }
             }
