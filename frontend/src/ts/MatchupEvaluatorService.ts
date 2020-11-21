@@ -7,6 +7,9 @@ import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
 import patches from 'data/patches';
 import _ from 'lodash'
 import PatchDto from "data/dto/PatchDto";
+import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
+import HeroDto from "data/dto/HeroDto";
+import Backend from "@/ts/Backend";
 
 const scoreIndex = 1
 const patchIndex = 0
@@ -127,11 +130,15 @@ export default class MatchupEvaluatorService {
         const cached = localStorage.getItem(MatchupEvaluatorService.cacheKey);
         this.userId = userId
         this.patchId = patchId
-        if (cached !== null) {
-            this.cache = JSON.parse(cached)
-        } else {
-            this.cache = {}
-        }
+        this.cache = {}
+        Backend.instance.getMyMatchupEvaluations()
+            .then((evaluations) => {
+                this.dropCache()
+                this.cacheAll(evaluations)
+            })
+        // if (cached !== null) {
+        //     this.cache = JSON.parse(cached)
+        // }
     }
 
     getScore(opposition: HeroOpposition): MatchupEvaluationUserScore | null {
@@ -140,6 +147,20 @@ export default class MatchupEvaluatorService {
             return null
         }
         return patchScore[scoreIndex];
+    }
+
+    cacheAll(evaluations: MatchupEvaluationDto[]) {
+        for (let evaluation of evaluations) {
+            this.cacheEvaluation(
+                new MatchupEvaluationVso(
+                    {
+                        left: heroes.get(evaluation.subjectId) as HeroDto,
+                        right: heroes.get(evaluation.objectId) as HeroDto,
+                    },
+                    evaluation.score
+                )
+            )
+        }
     }
 
     cacheEvaluation(
@@ -237,6 +258,12 @@ export default class MatchupEvaluatorService {
         localStorage.setItem(
             MatchupEvaluatorService.cacheKey,
             JSON.stringify(this.cache)
+        )
+    }
+
+    private dropCache() {
+        localStorage.removeItem(
+            MatchupEvaluatorService.cacheKey
         )
     }
 

@@ -30,6 +30,7 @@ import NotificationsPageDto from "data/dto/NotificationsPageDto";
 import NotificationsPageQueryDto from "data/dto/NotificationsPageQueryDto";
 import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
 import HeroOpposition from "@/ts/vso/HeroOpposition";
+import MatchupEvaluationDto from "data/dto/MatchupEvaluationDto";
 
 const querystring = require('query-string')
 
@@ -454,13 +455,12 @@ export default class Backend {
         )
     }
 
-    async getMyMatchupEvaluations(): Promise<void> {
+    async getMyMatchupEvaluations(): Promise<MatchupEvaluationDto[]> {
         return this.query(
             'GET',
             `/matchup-evaluation/my`,
             {},
-            response => {
-            }
+            response => response.data as MatchupEvaluationDto[]
         )
     }
 
