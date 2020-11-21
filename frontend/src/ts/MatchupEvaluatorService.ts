@@ -4,6 +4,12 @@ import Authentication from "@/ts/Authentication";
 import heroes from 'data/heroes'
 import HeroOpposition from "@/ts/vso/HeroOpposition";
 import MatchupEvaluationVso from "@/ts/vso/MatchupEvaluationVso";
+import patches from 'data/patches';
+import _ from 'lodash'
+import PatchDto from "data/dto/PatchDto";
+
+const scoreIndex = 1
+const patchIndex = 0
 
 type EvaluationCache = {
     [userId: number]: UserEvaluations
@@ -11,7 +17,7 @@ type EvaluationCache = {
 
 type UserEvaluations = {
     [subjectId: number]: {
-        [objectId: number]: MatchupEvaluationUserScore
+        [objectId: number]: [number, MatchupEvaluationUserScore],
     }
 }
 
@@ -40,6 +46,8 @@ export default class MatchupEvaluatorService {
     private readonly cache: EvaluationCache
 
     private readonly userId: number
+
+    private readonly patchId: number
 
     private _rest: MissingEvaluationCache | null = null
 
@@ -105,15 +113,20 @@ export default class MatchupEvaluatorService {
                 throw new Error('User not authenticated')
             }
             MatchupEvaluatorService._instance = new MatchupEvaluatorService(
-                Authentication.instance.userId
+                Authentication.instance.userId,
+                (_.maxBy(
+                    Array.from(patches.values()),
+                    (value) => value.id
+                ) as PatchDto).id
             )
         }
         return MatchupEvaluatorService._instance;
     }
 
-    private constructor(userId: number) {
+    private constructor(userId: number, patchId: number) {
         const cached = localStorage.getItem(MatchupEvaluatorService.cacheKey);
         this.userId = userId
+        this.patchId = patchId
         if (cached !== null) {
             this.cache = JSON.parse(cached)
         } else {
@@ -122,11 +135,11 @@ export default class MatchupEvaluatorService {
     }
 
     getScore(opposition: HeroOpposition): MatchupEvaluationUserScore | null {
-        const score = this.cache[this.userId]?.[opposition.left.id]?.[opposition.right.id];
-        if (score === undefined) {
+        const patchScore = this.cache[this.userId]?.[opposition.left.id]?.[opposition.right.id];
+        if (patchScore === undefined) {
             return null
         }
-        return score;
+        return patchScore[scoreIndex];
     }
 
     cacheEvaluation(
@@ -141,7 +154,14 @@ export default class MatchupEvaluatorService {
             if (this.cache[this.userId][evaluation.opposition.left.id] === void 0) {
                 this.cache[this.userId][evaluation.opposition.left.id] = {}
             }
-            this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = evaluation.score
+            if (this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] === void 0) {
+                this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id] = [
+                    this.patchId,
+                    evaluation.score
+                ]
+            } else {
+                this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id][scoreIndex] = evaluation.score
+            }
         }
         this.saveCache()
         if (evaluation.score === null) {
@@ -189,7 +209,7 @@ export default class MatchupEvaluatorService {
             if (userCache.hasOwnProperty(subjectId)) {
                 count +=
                     Object.values(userCache[subjectId])
-                        .filter(value => value !== MatchupEvaluationUserScore.DontKnow)
+                        .filter(value => value[scoreIndex] !== MatchupEvaluationUserScore.DontKnow)
                         .length
             }
         }
@@ -203,7 +223,7 @@ export default class MatchupEvaluatorService {
             if (userCache.hasOwnProperty(subjectId)) {
                 count +=
                     Object.values(userCache[subjectId])
-                        .filter(value => value === MatchupEvaluationUserScore.DontKnow)
+                        .filter(value => value[scoreIndex] === MatchupEvaluationUserScore.DontKnow)
                         .length
             }
         }
@@ -222,10 +242,6 @@ export default class MatchupEvaluatorService {
             MatchupEvaluatorService.cacheKey,
             JSON.stringify(this.cache)
         )
-    }
-
-    get currentUserData(): UserEvaluations {
-        return this.cache[this.userId]
     }
 
     getRandomUnevaluatedOpposition(): HeroOpposition | null {
@@ -262,13 +278,5 @@ export default class MatchupEvaluatorService {
         return null
     }
 
-    removeEvaluation(evaluation: MatchupEvaluationVso) {
-        if (
-            this.cache?.[this.userId]?.[evaluation.opposition.left.id]?.[evaluation.opposition.right.id]
-            !== void 0
-        ) {
-            delete this.cache[this.userId][evaluation.opposition.left.id][evaluation.opposition.right.id]
-        }
-    }
 }
 
