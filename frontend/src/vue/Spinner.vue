@@ -1,11 +1,5 @@
 <template>
-    <v-sprite
-            :id="'sprite'"
-            :spritesheet="'/icons/spinner-sprite-modified.png'"
-            :json="json"
-            :yoyo="false"
-            :fps="fps"
-    />
+    <img src="/icons/spinner-balls.gif"/>
 </template>
 
 <script lang="ts">
