@@ -8,7 +8,7 @@
                 v-hammer:tap="onTap"
                 :disabled="!auth.loggedIn"
         >
-            <font-awesome-icon icon="brain"/>
+            <font-awesome-icon icon="bookmark"/>
         </OverwatchButton>
     </div>
 </template>

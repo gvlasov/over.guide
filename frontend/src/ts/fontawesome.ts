@@ -6,11 +6,11 @@ import {
     faAngleRight,
     faBan,
     faBell,
+    faBookmark,
     faBrain,
     faCircle,
     faExternalLinkAlt,
     faHome,
-    faMedal,
     faPeopleArrows,
     faPlusSquare,
     faQuestion,
@@ -27,7 +27,7 @@ import {
 library.add(faBrain);
 library.add(faHome);
 library.add(faPlusSquare);
-library.add(faMedal);
+library.add(faBookmark);
 library.add(faUser);
 library.add(faBell);
 library.add(faExternalLinkAlt);

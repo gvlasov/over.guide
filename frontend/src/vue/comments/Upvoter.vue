@@ -8,7 +8,7 @@
                 v-hammer:tap="onTap"
                 :disabled="!auth.loggedIn"
         >
-            <font-awesome-icon icon="medal"/>
+            <font-awesome-icon icon="brain"/>
         </OverwatchButton>
     </div>
 </template>
@@ -21,9 +21,13 @@ import OverwatchButton from "@/vue/OverwatchButton.vue";
 import Authentication from "@/ts/Authentication";
 import PostTypeId from "data/PostTypeId";
 import UpvoteCache from "@/ts/UpvoteCache";
+import AbilityIcon from "@/vue/AbilityIcon.vue";
 
 @Component({
-    components: {OverwatchButton}
+    components: {
+        AbilityIcon,
+        OverwatchButton,
+    }
 })
 export default class Upvoter extends Vue {
 
@@ -116,6 +120,15 @@ $body-size: 1.7em;
 
         & ::v-deep .content {
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         img {
