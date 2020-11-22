@@ -52,6 +52,8 @@ export default class MatchupEvaluatorService {
 
     private _rest: MissingEvaluationCache | null = null
 
+    public changed: number = 0
+
     options: EvaluationOption[] = [
         {
             score: MatchupEvaluationUserScore.HardCounters,
@@ -122,7 +124,8 @@ export default class MatchupEvaluatorService {
             )
             Backend.instance.getMyMatchupEvaluations()
                 .then((evaluations) => {
-                    MatchupEvaluatorService._instance.cacheAll(evaluations)
+                    MatchupEvaluatorService._instance.cacheAll(evaluations);
+                    MatchupEvaluatorService._instance.changed++;
                 })
         }
         return MatchupEvaluatorService._instance;

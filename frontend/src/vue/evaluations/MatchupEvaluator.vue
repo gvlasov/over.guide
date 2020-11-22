@@ -153,6 +153,11 @@ export default class MatchupEvaluator extends Vue {
         }
     }
 
+    @Watch('MatchupEvaluatorService.instance.changed')
+    onDataDownload() {
+        this.$emit('evaluationsLoaded')
+    }
+
     @Watch('oppositionFeed')
     onOppositionFeedChange(newValue: OppositionFeed) {
         this.reset()
