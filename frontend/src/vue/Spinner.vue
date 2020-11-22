@@ -1,43 +1,27 @@
 <template>
-    <div class="spinner"
-         v-bind:style="{backgroundPositionX: this.shiftPx+'px'}"
+    <v-sprite
+            :id="'sprite'"
+            :spritesheet="'/icons/spinner-sprite-modified.png'"
+            :json="json"
+            :yoyo="false"
+            :fps="fps"
     />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
 
 @Component({})
 export default class Spinner extends Vue {
+    @Prop({default: 24})
+    fps: number
 
-    interval = null
-    shiftPx = 0;
-
-    created() {
-        this.interval = setInterval(
-            () => {
-                this.shiftPx += 40;
-                if (this.shiftPx > 21 * 40) {
-                    this.shiftPx = 0
-                }
-            },
-            1000/40
-        )
-    }
-
-    destroyed() {
-        clearInterval(this.interval)
-    }
+    json = require('@/assets/icons/spinner-spritesheet.json')
 };
 
 </script>
 
 <style scoped>
-.spinner {
-    background-image: url('/icons/spinner-sprite-modified.png');
-    width: 40px;
-    height: 40px;
-    opacity: .5;
-}
 </style>

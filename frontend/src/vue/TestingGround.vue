@@ -1,8 +1,7 @@
 <template>
     <div class="testing-ground">
-        <MatchupEvaluator
-                :opposition-feed="feed"
-        />
+        <Spinner
+            />
     </div>
 </template>
 
@@ -10,13 +9,13 @@
 import TrainingGoals from "@/vue/guides/TrainingGoals";
 import Vue from 'vue'
 import Component from "vue-class-component";
-import MatchupEvaluator from "@/vue/evaluations/MatchupEvaluator.vue";
+import Spinner from "@/vue/Spinner";
 import RandomOppositionFeed from "@/ts/RandomOppositionFeed";
 
 
 @Component({
     components: {
-        MatchupEvaluator,
+        Spinner,
         TrainingGoals,
     },
 })

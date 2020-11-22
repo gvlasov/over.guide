@@ -24,6 +24,8 @@ import PortalVue from 'portal-vue'
 import MatchupEvaluationsPage
     from '@/vue/evaluations/MatchupEvaluationsPage.vue'
 
+const VueSpriteAnimator = require('vue-sprite-animator').default
+
 require('./fontawesome')
 
 const VueResizeObserver = require('vue-resize-observer')
@@ -84,6 +86,7 @@ Vue.use(VueHammer);
 Vue.use(VueObserveVisibility)
 Vue.use(VueResizeObserver);
 Vue.use(PortalVue)
+Vue.use(VueSpriteAnimator)
 VueHammer.config.pan = {
     threshold: 5
 };
