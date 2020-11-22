@@ -1,4 +1,6 @@
 'use strict'
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer/lib/BundleAnalyzerPlugin")
+
 const utils = require('./utils')
 const webpack = require('webpack')
 const config = require('./config')
@@ -83,7 +85,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             },
           ]
         }
-    )
+    ),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+    })
   ]
 })
 
