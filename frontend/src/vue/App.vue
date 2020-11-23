@@ -1,14 +1,18 @@
 <template>
     <div class="app root-content-sizer">
+        <div class="navigation-bar">
+            <Navigation class="root-content-sizer"/>
+        </div>
         <ScrollToTop ref="scrollToTop"/>
-        <Navigation/>
-        <BackgroundHeading
-        >{{ $route.name || ' ' }}
-        </BackgroundHeading>
-        <div
-                class="router-content-wrap"
-        >
-            <router-view @contentChange="resetScrollToTop"></router-view>
+        <div class="below-navigation root-content-sizer">
+            <BackgroundHeading
+            >{{ $route.name || ' ' }}
+            </BackgroundHeading>
+            <div
+                    class="router-content-wrap"
+            >
+                <router-view @contentChange="resetScrollToTop"></router-view>
+            </div>
         </div>
         <portal-target
                 name="modal"
@@ -68,14 +72,35 @@ export default class App extends Vue {
     text-align: center;
     margin: 0 auto;
     min-height: 100vh;
+    min-width: 100%;
 
-    .navigation {
-        position: relative;
+    @media screen and (orientation: portrait) {
+        padding-bottom: 4em;
+    }
+
+    .navigation-bar {
+        display: flex;
+        justify-content: center;
+        position: sticky;
+        top: 0;
         z-index: 3;
+        background-color: #727dab;
+        @media screen and (orientation: portrait) {
+            position: fixed;
+            bottom: 0;
+            top: auto;
+        }
+
+        .navigation {
+            width: 100%;
+        }
+    }
+
+    .below-navigation {
+        margin: 0 auto;
     }
 
     .scroll-to-top {
-        position: fixed;
         z-index: 1;
     }
 

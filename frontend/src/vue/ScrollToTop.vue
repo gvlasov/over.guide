@@ -82,7 +82,7 @@ $aside-width: 10rem;
 
     .hover-display-container {
         text-align: center;
-        padding: 1.5em 1em 0 1em;
+        padding: 6em 1em 0 1em;
         height: 100%;
         width: $aside-width;
         box-sizing: border-box;

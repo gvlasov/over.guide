@@ -64,24 +64,25 @@ export default class Navigation extends Vue {
 @import "~@/assets/css/tags.scss";
 @import "~@/assets/css/common.scss";
 
-$height: 4rem;
+$height: 3.5rem;
 .navigation {
     $underline-width: .3em;
     font-size: 1.7em;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
     max-height: $height;
     overflow: visible;
+    position: relative;
 
     a, .notifications-section {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        flex-shrink: 1;
         flex-grow: 1;
         height: $height;
         box-sizing: border-box;
-        background-color: hsla(227, 29%, 45%, .7);
         @include overwatch-futura;
         text-decoration: none;
         white-space: nowrap;
@@ -115,10 +116,13 @@ $height: 4rem;
 
     }
 
-    .notifications-section ::v-deep .notifications-wrap {
-        top: 0;
-        padding-top: $height;
+    .notifications-section {
+        & ::v-deep .notifications-wrap {
+            top: 0;
+            padding-top: $height;
+        }
     }
+
 
     .battle-net-button {
         &:hover {

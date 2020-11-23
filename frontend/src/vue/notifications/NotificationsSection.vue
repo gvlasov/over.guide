@@ -197,7 +197,6 @@ export default class NotificationsSection extends Vue {
             overflow-y: scroll;
             overscroll-behavior: none contain;
             max-height: 100%;
-            height: 100%;
 
             @include custom-desktop-scrollbar(hsla(227, 16%, 48%, 0.98));
 

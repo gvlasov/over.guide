@@ -26,8 +26,8 @@
         <template v-else-if="whatToDisplay === 'a2hs'">
             <div class="a2hs">
                 <InstallPwaButton>
-                    <div>Like this site?</div>
-                    <div>Add it to home screen</div>
+                    <div>Find these guides helpful?</div>
+                    <div>Add us to home screen</div>
                     <font-awesome-icon icon="tablet-alt"/>
                 </InstallPwaButton>
             </div>
