@@ -52,6 +52,7 @@ export default class NotificationsSection extends Vue {
 
     .bell-button-content-wrap {
         position: relative;
+        top: .1em;
 
         .counter {
             background-color: hsl(16, 80%, 50%);
