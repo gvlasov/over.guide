@@ -192,6 +192,9 @@ export default class NotificationsSection extends Vue {
             white-space: normal;
             box-shadow: 0 .9em .8em hsla(0, 0%, 20%, .5);
             border-radius: 0 0 .2em .2em;
+            @media screen and (orientation: portrait) {
+                border-radius: 0;
+            }
             text-align: left;
             font-size: 1rem;
             overflow-y: scroll;

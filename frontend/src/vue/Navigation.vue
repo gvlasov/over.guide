@@ -18,7 +18,7 @@
                 to="/training-goals"
                 v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
         >
-            <font-awesome-icon icon="brain"/>
+            <font-awesome-icon icon="bookmark"/>
             <div class="item-name">Training goals</div>
         </router-link>
         <BattlenetAuthButton v-if="username === null"/>
@@ -89,6 +89,8 @@ $height: 3.5rem;
         border-bottom: $underline-width solid transparent;
         min-width: 2.5em;
 
+        background-color: hsl(228, 25%, 56%);
+
         &.active, &:hover {
             background-color: $overwatch-button-default-bg-color;
             border-bottom: $underline-width solid $tag-teammate-color;
@@ -103,12 +105,12 @@ $height: 3.5rem;
             margin: 0 auto;
         }
 
-        @media screen and (max-width: 48em) {
+        @media screen and (max-width: 54em) {
             div {
                 display: none;
             }
         }
-        @media screen and (min-width: 48em) {
+        @media screen and (min-width: 54em) {
             svg {
                 display: none;
             }
@@ -120,6 +122,12 @@ $height: 3.5rem;
         & ::v-deep .notifications-wrap {
             top: 0;
             padding-top: $height;
+            @media screen and (hover: none) {
+                padding-top: $height;
+                padding-bottom: 0;
+                bottom: 0;
+                transform: translateY(-100%);
+            }
         }
     }
 

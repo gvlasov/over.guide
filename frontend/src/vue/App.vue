@@ -84,8 +84,9 @@ export default class App extends Vue {
         position: sticky;
         top: 0;
         z-index: 3;
-        background-color: #727dab;
-        @media screen and (orientation: portrait) {
+        background-color: hsl(228, 25%, 56%);
+        width: 100%;
+        @media screen and (hover: none) {
             position: fixed;
             bottom: 0;
             top: auto;
