@@ -1,0 +1,33 @@
+@import "~@/assets/css/common.scss";
+
+html {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+body {
+    background-color: #f8f9ff;
+    margin: 0;
+    background-image: url('/images/candy.jpg');
+    background-attachment: fixed;
+    background-position: center top;
+    background-size: cover;
+    font-family: "Helvetica", sans-serif;
+    color: white;
+}
+
+input, textarea, button {
+    outline: 0 auto;
+}
+
+textarea {
+    display: block;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: hsl(227, 40%, 80%);
+}
