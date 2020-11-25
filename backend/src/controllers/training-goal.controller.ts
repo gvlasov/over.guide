@@ -218,7 +218,7 @@ export class TrainingGoalController {
         )
             .then(async (rows: any) => {
                 if (rows.find(r => r.guideId === guide.id)) {
-                    response.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    response.status(HttpStatus.OK)
                     response.send('already added')
                     return;
                 }

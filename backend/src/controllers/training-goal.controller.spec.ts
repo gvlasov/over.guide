@@ -291,26 +291,20 @@ describe(
                     guideId: guide1.id,
                     order: 1
                 })
-                await request(ctx.app.getHttpServer())
-                    .post(`/my-training-goals/${guide1.id}`)
-                    .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-                await request(ctx.app.getHttpServer())
-                    .post(`/my-training-goals/${guide1.id}`)
-                    .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
-                await request(ctx.app.getHttpServer())
-                    .delete(`/my-training-goals/${guide1.id}`)
-                    .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.NO_CONTENT)
-                await request(ctx.app.getHttpServer())
-                    .post(`/my-training-goals/${guide1.id}`)
-                    .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.CREATED)
-                await request(ctx.app.getHttpServer())
-                    .post(`/my-training-goals/${guide1.id}`)
-                    .set({Authorization: `Bearer ${token}`})
-                    .expect(HttpStatus.UNPROCESSABLE_ENTITY)
+                expect(
+                    (await User2TrainingGoal.findAll()).length,
+                )
+                    .toStrictEqual(1)
+                for (let i=0; i<3; i++) {
+                    await request(ctx.app.getHttpServer())
+                        .post(`/my-training-goals/${guide1.id}`)
+                        .set({Authorization: `Bearer ${token}`})
+                        .expect(HttpStatus.OK)
+                }
+                expect(
+                    (await User2TrainingGoal.findAll()).length,
+                )
+                    .toStrictEqual(1)
             });
             it('can add training goal at certain place in the list', async () => {
                 await ctx.fixtures(
