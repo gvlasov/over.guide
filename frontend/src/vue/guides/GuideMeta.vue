@@ -7,10 +7,15 @@
         />
         <div class="authorship">
             <RelativeTime :time="creationTime"/>
-            <div class="author">
+            <div
+                    v-if="entry.isPublic"
+                    class="author">
                 by
                 <UserLink :user="entry.author"/>
             </div>
+            <PrivateLabel
+                    v-else
+            ></PrivateLabel>
         </div>
     </div>
 </template>
@@ -27,11 +32,13 @@ import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import UserLink from "@/vue/guides/UserLink.vue";
 import GuideDescriptor from "@/vue/guides/tags/GuideDescriptor.vue";
+import PrivateLabel from "@/vue/guides/PrivateLabel.vue";
 
 const auth = new Authentication();
 
 @Component({
     components: {
+        PrivateLabel,
         GuideDescriptor,
         UserLink,
         RelativeTime,
@@ -95,6 +102,11 @@ export default class GuideMeta extends mixins(TagLinkMixin) {
     .authorship {
         white-space: nowrap;
         @include overwatch-futura-no-smallcaps;
+
+        .private-label {
+            display: block;
+            margin-top: .5em;
+        }
 
     }
 }

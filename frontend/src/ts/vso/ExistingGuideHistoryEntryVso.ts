@@ -17,6 +17,7 @@ export default class ExistingGuideHistoryEntryVso extends NewGuideHistoryEntryVs
         this.author = entry.guide.author && new UserVso(entry.guide.author as UserDto);
         this.createdAt = new Date(entry.guide.createdAt)
         this.updatedAt = new Date(entry.updatedAt)
+        this.isPublic = entry.guide.isPublic
     }
 
     toDto(): GuideHistoryEntryAppendDto {

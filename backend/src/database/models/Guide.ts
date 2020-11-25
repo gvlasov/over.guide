@@ -104,7 +104,8 @@ export class Guide extends Model<Guide> {
         return {
             id: this.id,
             author: this.author.toDto(),
-            createdAt: this.createdAt
+            createdAt: this.createdAt,
+            isPublic: this.isPublic === 1,
         } as GuideDto
     }
 

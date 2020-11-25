@@ -18,7 +18,7 @@
         <div
                 v-else
                 class="collapsed"
-                v-bind:class="{deleted: ghost}"
+                v-bind:class="{deleted: ghost, private: !head.entry.isPublic}"
         >
             <OverwatchPanel
                     class="opacity"
@@ -110,7 +110,7 @@ export default class GuidePreviewBadge extends Vue {
             .removeGoal(this.head.entry.guideId)
     }
 
-    get firstVideoWidget(): GuidePartVideoWidget|undefined {
+    get firstVideoWidget(): GuidePartVideoWidget | undefined {
         return this.head.entry.parts.find(widget => widget.isVideo) as GuidePartVideoWidget
     }
 
@@ -139,6 +139,16 @@ export default class GuidePreviewBadge extends Vue {
         box-shadow: 0 .1rem .3rem $overwatch-panel-bg-color;
         border-radius: var(--left-border-radius) 0 0 var(--left-border-radius);
 
+
+        $private-color: hsl(170, 0, 32%);
+
+        &.private > .overwatch-panel {
+            background-color: rgba($private-color, .7);
+        }
+
+        &.private {
+            box-shadow: 0 .1rem .3rem rgba($private-color, .5);
+        }
 
         &.deleted {
             box-shadow: 0 .1em .3em rgba($overwatch-panel-bg-color, .5);
@@ -169,6 +179,7 @@ export default class GuidePreviewBadge extends Vue {
                     display: flex;
                     align-items: center;
                     gap: .25rem;
+
                     + .badge-tags-wrap {
                         margin-left: 0;
                     }
