@@ -90,6 +90,7 @@ export default class App extends Vue {
             position: fixed;
             bottom: 0;
             top: auto;
+            box-shadow: 0 0 .5em hsl(227, 20%, 20%);
         }
 
         .navigation {
