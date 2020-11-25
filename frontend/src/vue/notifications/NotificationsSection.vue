@@ -113,7 +113,6 @@ export default class NotificationsSection extends Vue {
 
     @Watch('show')
     onShowChange(newValue) {
-        console.log(this.feed.items.length)
         if (newValue) {
             this.markNotificationsReadIfAvailable()
             this.$emit('open')

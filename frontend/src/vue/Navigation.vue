@@ -16,7 +16,11 @@
         </router-link>
         <router-link
                 to="/training-goals"
-                v-bind:class="{active: currentRouteStartsWith('/training-goals')}"
+                v-bind:class="{
+            active: currentRouteStartsWith('/training-goals'),
+            'add-blink': trainingGoalAddBlinkOn,
+            'remove-blink': trainingGoalRemoveBlinkOn,
+        }"
         >
             <font-awesome-icon icon="bookmark"/>
             <div class="item-name">Training goals</div>
@@ -40,6 +44,9 @@ import Authentication from "@/ts/Authentication";
 import Vue from 'vue'
 import Component from "vue-class-component";
 import NotificationsSection from "@/vue/notifications/NotificationsSection.vue";
+import {EventBus} from '@/ts/EventBus'
+
+const Debounce = require('debounce-decorator').default
 
 @Component({
     components: {
@@ -53,9 +60,45 @@ export default class Navigation extends Vue {
     username: string = Authentication.instance.username || null
     userId: number = Authentication.instance.userId || null
 
+    trainingGoalAddBlinkOn: boolean = false
+    trainingGoalRemoveBlinkOn: boolean = false
+
     currentRouteStartsWith(path) {
         return this.$route.path.startsWith(path);
     }
+
+    onAddTrainingGoal() {
+        console.log('add training goal')
+        this.trainingGoalAddBlinkOn = true
+        this.debounceAddUnblink()
+    }
+
+    onRemoveTrainingGoal() {
+        console.log('remove training goal')
+        this.trainingGoalRemoveBlinkOn = true
+        this.debounceRemoveUnblink()
+    }
+
+    @Debounce(300)
+    debounceAddUnblink() {
+        this.trainingGoalAddBlinkOn = false
+    }
+
+    @Debounce(300)
+    debounceRemoveUnblink() {
+        this.trainingGoalRemoveBlinkOn = false
+    }
+
+    mounted() {
+        EventBus.instance.$on('removeTrainingGoal', this.onRemoveTrainingGoal)
+        EventBus.instance.$on('addTrainingGoal', this.onAddTrainingGoal)
+    }
+
+    destroyed() {
+        EventBus.instance.$off('removeTrainingGoal', this.onRemoveTrainingGoal)
+        EventBus.instance.$off('addTrainingGoal', this.onAddTrainingGoal)
+    }
+
 }
 </script>
 
@@ -88,12 +131,25 @@ $height: 3.5rem;
         white-space: nowrap;
         border-bottom: $underline-width solid transparent;
         min-width: 2.5em;
+        transition: background-color .2s, transform .2s, box-shadow .2s;
 
         background-color: hsl(228, 25%, 56%);
 
         &.active, &:hover {
             background-color: $overwatch-button-default-bg-color;
             border-bottom: $underline-width solid $tag-teammate-color;
+        }
+
+        &.add-blink {
+            transition: background-color .2s, transform .2s, box-shadow .2s;
+            background-color: $overwatch-button-main-bg-color;
+            box-shadow: 0 0 .9em $overwatch-button-main-bg-color;
+        }
+
+        &.remove-blink {
+            transition: background-color .2s, transform .2s, box-shadow .2s;
+            background-color: $overwatch-button-default-bg-color;
+            box-shadow: 0 0 .9em $overwatch-button-default-bg-color;
         }
 
         div, svg {

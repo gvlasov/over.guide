@@ -22,6 +22,7 @@ import Authentication from "@/ts/Authentication";
 import MyTrainingGoalsCache from "@/ts/MyTrainingGoalsCache";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import {EventBus} from '@/ts/EventBus'
 
 const myTrainingGoalsCache = MyTrainingGoalsCache.instance()
 
@@ -45,13 +46,17 @@ export default class Upvoter extends Vue {
         }
         this.tappable = false
         if (!this.added) {
-            this.$emit('remove')
+            this.$emit('add')
+            console.log('add training goal - initial')
+            EventBus.instance.$emit('addTrainingGoal')
             this.cache.addGoal(this.entry.guideId)
                 .finally(() => {
                     this.tappable = true
                 })
         } else {
-            this.$emit('add')
+            this.$emit('remove')
+            console.log('remove training goal - initial')
+            EventBus.instance.$emit('removeTrainingGoal')
             const hadItPending = this.cache.pendingGoalIds.includes(this.entry.guideId)
             this.cache.removeGoal(this.entry.guideId)
                 .catch((e) => {

@@ -19,7 +19,6 @@ export default abstract class GuideHistoryEntryVso<D = GuideHistoryEntryReadDto 
                     : new GuidePartVideoWidget(part)
         );
         this.isPublic = entry.isPublic
-        console.log(entry)
     }
 
     get isEmpty(): boolean {
