@@ -76,6 +76,7 @@ import Authentication from "@/ts/Authentication";
 import NotificationsButton from "@/vue/notifications/NotificationsButton.vue";
 import NotificationFeedVso from "@/ts/vso/NotificationFeedVso";
 import SpinnerBlock from "../SpinnerBlock.vue";
+import FeedVso from "../../ts/vso/FeedVso";
 
 const Debounce = require('debounce-decorator').default
 
@@ -150,7 +151,7 @@ export default class NotificationsSection extends Vue {
             this.feed.loadNextPage(this.infiniteLoading.stateChanger)
             setInterval(() => {
                 if (!this.show) {
-                    this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+                    this.feed.loadNextPage(FeedVso.mockState)
                 }
             }, NotificationsSection.notificationCheckIntervalMs)
         }
