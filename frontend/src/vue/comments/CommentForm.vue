@@ -71,7 +71,7 @@ export default class CommentForm extends Vue {
 
     auth: Authentication = Authentication.instance
 
-    onSubmitTap(e) {
+    onSubmitTap() {
         this.$emit('submit', this.message);
         this.message = ''
     }
@@ -85,6 +85,11 @@ export default class CommentForm extends Vue {
         if (this.$route.hash === '') {
             this.textarea.focus()
         }
+        this.textarea.addEventListener('keypress', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                this.onSubmitTap()
+            }
+        })
     }
 
 }
