@@ -11,7 +11,6 @@ export default class ParamsDescriptorMixin extends Vue {
     obtainParamsDescriptor(paramsText?: string) {
         if (paramsText === undefined) {
             if (!this.$route.params.hasOwnProperty('descriptor')) {
-                console.log(this.$route)
                 throw new Error('No "descriptor" param in current route')
             }
             paramsText = this.$route.params.descriptor

@@ -47,7 +47,6 @@ export default class Upvoter extends Vue {
         this.tappable = false
         if (!this.added) {
             this.$emit('add')
-            console.log('add training goal - initial')
             EventBus.instance.$emit('addTrainingGoal')
             this.cache.addGoal(this.entry.guideId)
                 .finally(() => {
@@ -55,7 +54,6 @@ export default class Upvoter extends Vue {
                 })
         } else {
             this.$emit('remove')
-            console.log('remove training goal - initial')
             EventBus.instance.$emit('removeTrainingGoal')
             const hadItPending = this.cache.pendingGoalIds.includes(this.entry.guideId)
             this.cache.removeGoal(this.entry.guideId)

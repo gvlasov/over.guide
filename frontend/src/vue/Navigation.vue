@@ -68,13 +68,11 @@ export default class Navigation extends Vue {
     }
 
     onAddTrainingGoal() {
-        console.log('add training goal')
         this.trainingGoalAddBlinkOn = true
         this.debounceAddUnblink()
     }
 
     onRemoveTrainingGoal() {
-        console.log('remove training goal')
         this.trainingGoalRemoveBlinkOn = true
         this.debounceRemoveUnblink()
     }
