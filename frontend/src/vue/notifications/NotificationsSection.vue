@@ -1,7 +1,7 @@
 <template>
     <div
             class="notifications-section"
-            v-click-outside="() => show = false"
+            v-click-outside="onTapOutside"
     >
         <NotificationsButton
                 :notifications="feed.items"
@@ -81,7 +81,6 @@ import FeedVso from "../../ts/vso/FeedVso";
 const Debounce = require('debounce-decorator').default
 
 const AnchorRouterLink = require('vue-anchor-router-link').default;
-
 const ClickOutside = require('vue-click-outside')
 
 @Component({
@@ -97,7 +96,7 @@ const ClickOutside = require('vue-click-outside')
     },
     directives: {
         ClickOutside,
-    }
+    },
 })
 export default class NotificationsSection extends Vue {
 
@@ -144,6 +143,12 @@ export default class NotificationsSection extends Vue {
     @Watch('$route')
     onRouteChange() {
         this.show = false
+    }
+
+    onTapOutside() {
+        if (this.show) {
+            this.show = false
+        }
     }
 
     mounted() {
