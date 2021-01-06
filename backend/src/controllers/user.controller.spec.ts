@@ -43,7 +43,7 @@ describe(
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(
-                            response.body.lastAuthoredGuides.guides
+                            response.body.lastAuthoredGuides.items
                         ).toHaveLength(0)
                     })
                 await Guide.findOne({})
@@ -63,7 +63,7 @@ describe(
                     .expect(HttpStatus.OK)
                     .then(response => {
                         expect(
-                            response.body.lastAuthoredGuides.guides
+                            response.body.lastAuthoredGuides.items
                         ).toHaveLength(1)
                         expect(
                             response.body.guideVotesReceivedCount

@@ -128,9 +128,9 @@ export class GuideController {
         if (
             dto.isPublic === true
             && await this.restrictionService.hasActiveRestriction(
-                user,
-                RestrictionTypeId.ForceGuidePrivate,
-                dto.guideId
+            user,
+            RestrictionTypeId.ForceGuidePrivate,
+            dto.guideId
             )
         ) {
             response.status(HttpStatus.FORBIDDEN)
@@ -229,12 +229,7 @@ export class GuideController {
     async searchPost(
         @Body() query: GuideSearchQuery
     ): Promise<GuideSearchPageDto> {
-        return this.cacheManager.wrap(
-            JSON.stringify(query),
-            () => {
-                return this.guideSearchService.search(query)
-            }
-        )
+        return this.guideSearchService.search(query)
     }
 
     @Get('search-by-video/:videoId')

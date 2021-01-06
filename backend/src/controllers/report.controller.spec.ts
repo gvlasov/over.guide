@@ -199,13 +199,13 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.reports.length).toStrictEqual(2)
+                        expect(response.body.items.length).toStrictEqual(2)
                         expect(
-                            response.body.reports[0].post.guideHistoryEntry.guide.id
+                            response.body.items[0].post.guideHistoryEntry.guide.id
                         )
                             .toStrictEqual(guide.id)
                         expect(
-                            response.body.reports[1].post.content
+                            response.body.items[1].post.content
                         )
                             .toStrictEqual(commentText)
                     })

@@ -744,7 +744,7 @@ describe(
                     }))
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(3)
+                        expect(response.body.items.length).toBe(3)
                     })
                 await request(ctx.app.getHttpServer())
                     .post('/guide/search')
@@ -754,14 +754,14 @@ describe(
                     }))
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(1)
+                        expect(response.body.items.length).toBe(1)
                     })
                 await request(ctx.app.getHttpServer())
                     .post('/guide/search')
                     .send(new GuideSearchQueryQuickie({}))
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(3)
+                        expect(response.body.items.length).toBe(3)
                     })
             })
             it('finds only active guides', async () => {
@@ -792,7 +792,7 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(1)
+                        expect(response.body.items.length).toBe(1)
                     });
                 await entry.$get('guide')
                     .then(guide => guide.deactivate(user))
@@ -804,7 +804,8 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(0)
+                        console.log(response.body)
+                        expect(response.body.items.length).toBe(0)
                     })
             })
             it('search returns only guide heads', async () => {
@@ -850,9 +851,9 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(2)
+                        expect(response.body.items.length).toBe(2)
                         expect(
-                            response.body.guides.map(
+                            response.body.items.map(
                                 (guide: ExistingGuideHeadDto) =>
                                     (guide.guideHistoryEntry.parts[0] as GuidePartTextDto).contentMd
                             )
@@ -905,9 +906,9 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(1)
+                        expect(response.body.items.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideHistoryEntry.guide.id
+                            response.body.items[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -948,9 +949,9 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(1)
+                        expect(response.body.items.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideHistoryEntry.guide.id
+                            response.body.items[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -991,9 +992,9 @@ describe(
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(1)
+                        expect(response.body.items.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideHistoryEntry.guide.id
+                            response.body.items[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -1114,9 +1115,9 @@ describe(
                     )
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides.length).toBe(1)
+                        expect(response.body.items.length).toBe(1)
                         expect(
-                            response.body.guides[0].guideHistoryEntry.guide.id
+                            response.body.items[0].guideHistoryEntry.guide.id
                         ).toBe(correctEntry.guideId)
                     })
             })
@@ -1226,7 +1227,7 @@ describe(
                     )
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        for (let guide of response.body.guides) {
+                        for (let guide of response.body.items) {
                             expect(guide.guideHistoryEntry.isPublic)
                             expect(guide.guideHistoryEntry.guide.id).not.toStrictEqual(privateGuide.id)
                         }
@@ -1483,8 +1484,8 @@ describe(
                     })
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides).toHaveLength(2)
-                        const foundGuideIds = response.body.guides.map(head => head.guideHistoryEntry.guide.id);
+                        expect(response.body.items).toHaveLength(2)
+                        const foundGuideIds = response.body.items.map(head => head.guideHistoryEntry.guide.id);
                         expect(foundGuideIds).toContain(guide1.id)
                         expect(foundGuideIds).not.toContain(guide2.id)
                         expect(foundGuideIds).toContain(guide3.id)
@@ -1497,8 +1498,8 @@ describe(
                     })
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides).toHaveLength(1)
-                        const foundGuideIds = response.body.guides.map(head => head.guideHistoryEntry.guide.id);
+                        expect(response.body.items).toHaveLength(1)
+                        const foundGuideIds = response.body.items.map(head => head.guideHistoryEntry.guide.id);
                         expect(foundGuideIds).not.toContain(guide1.id)
                         expect(foundGuideIds).not.toContain(guide2.id)
                         expect(foundGuideIds).toContain(guide3.id)
@@ -1511,8 +1512,8 @@ describe(
                     })
                     .expect(HttpStatus.OK)
                     .then(response => {
-                        expect(response.body.guides).toHaveLength(1)
-                        const foundGuideIds = response.body.guides.map(head => head.guideHistoryEntry.guide.id);
+                        expect(response.body.items).toHaveLength(1)
+                        const foundGuideIds = response.body.items.map(head => head.guideHistoryEntry.guide.id);
                         expect(foundGuideIds).not.toContain(guide1.id)
                         expect(foundGuideIds).toContain(guide2.id)
                         expect(foundGuideIds).not.toContain(guide3.id)
