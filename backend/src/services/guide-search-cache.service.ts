@@ -1,16 +1,32 @@
 import {Injectable} from '@nestjs/common';
 import GuideDescriptorDto from "data/dto/GuideDescriptorDto";
 import {DescriptorGroup} from "data/dto/DescriptorGroup";
-import GuideDescriptorQuickie from "data/dto/GuideDescriptorQuickie";
+import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
 
 type CacheLevel<T> = {
     subnodes: Map<string, CacheLevel<T>> | null,
-    value: T | null
+    pages: PageBranch<T>
+}
+
+type PageBranch<T> = {
+    [key in number]: {
+        exact?: T,
+        nonExact?: T
+    }
 }
 
 
 function hash(group: DescriptorGroup<any>, value: number) {
     return group.id + "_" + value
+}
+
+function pageBranchKey(query: GuideSearchQueryDto): number {
+    let hash = 0;
+    for (let id of query.clientAlreadyHasGuideIds) {
+        // https://stackoverflow.com/a/2285861/1542343
+        hash = (hash + (324723947 + id)) ^ 93485734985;
+    }
+    return hash
 }
 
 
@@ -19,35 +35,41 @@ export default class GuideSearchCacheService<T> {
 
     private root: CacheLevel<T> = {
         subnodes: new Map(),
-        value: null,
+        pages: {},
     }
 
     constructor() {
     }
 
     set(
-        descriptor: GuideDescriptorDto,
-        page: T
+        query: GuideSearchQueryDto,
+        value: T
     ) {
-        this.obtainNode(descriptor).value = page
+        const key = pageBranchKey(query);
+        const node = this.obtainNode(query);
+        let page = node.pages[key]
+        if (page === undefined) {
+            node.pages[key] = page = {}
+        }
+        page[query.exact ? 'exact' : 'nonExact'] = value
     }
 
     clear(descriptor: GuideDescriptorDto): void {
         const node = this.obtainNode(descriptor);
         if (node !== null) {
-            node.value = null
+            node.pages = {}
             node.subnodes = new Map()
         }
     }
 
     get(
-        descriptor: GuideDescriptorDto
+        query: GuideSearchQueryDto
     ): T | null {
         let peak = this.root
         for (let group of DescriptorGroup.values) {
             for (
                 let component
-                of group.valuesOf(descriptor).sort((a, b) => b - a)
+                of group.valuesOf(query).sort((a, b) => b - a)
                 ) {
                 peak = peak.subnodes.get(
                     hash(group, component)
@@ -57,21 +79,28 @@ export default class GuideSearchCacheService<T> {
                 }
             }
         }
-        return peak.value
+        return peak.pages?.[pageBranchKey(query)]?.[query.exact ? 'exact' : 'nonExact'] ?? null
     }
 
-    getAll(): T | null {
-        return this.get(
-            new GuideDescriptorQuickie({})
-        )
+    async getOrSet(
+        query: GuideSearchQueryDto,
+        obtainer: () => Promise<T>
+    ): Promise<T> {
+        const existing = this.get(query)
+        if (existing !== null) {
+            return existing
+        }
+        const value = await obtainer()
+        this.set(query, value)
+        return value
     }
 
-    private obtainNode(descriptor: GuideDescriptorDto): CacheLevel<T> {
+    private obtainNode(query: GuideDescriptorDto): CacheLevel<T> {
         let peak = this.root
         for (let group of DescriptorGroup.values) {
             for (
                 let value of
-                group.valuesOf(descriptor).sort((a, b) => b - a)
+                group.valuesOf(query).sort((a, b) => b - a)
                 ) {
                 let previousPeak = peak
                 const key = hash(group, value);
@@ -80,7 +109,7 @@ export default class GuideSearchCacheService<T> {
                     peak =
                         {
                             subnodes: new Map(),
-                            value: null
+                            pages: {}
                         }
                     previousPeak.subnodes.set(
                         key,

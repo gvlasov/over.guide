@@ -35,6 +35,7 @@ import ApiErrorId from "data/ApiErrorId";
 import {RestrictionService} from "src/services/restriction.service";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
+import GuideSearchCacheService from "src/services/guide-search-cache.service";
 
 @Controller('guide')
 export class GuideController {
@@ -45,6 +46,7 @@ export class GuideController {
         private readonly moderationService: ModerationService,
         private readonly guideSearchService: GuideSearchService,
         private readonly restrictionService: RestrictionService,
+        private readonly guideSearchCache: GuideSearchCacheService<GuideSearchPageDto>,
         @Inject(CACHE_MANAGER) private readonly cacheManager
     ) {
     }
@@ -229,7 +231,10 @@ export class GuideController {
     async searchPost(
         @Body() query: GuideSearchQuery
     ): Promise<GuideSearchPageDto> {
-        return this.guideSearchService.search(query)
+        return this.guideSearchCache.getOrSet(
+            query,
+            () => this.guideSearchService.search(query)
+        )
     }
 
     @Get('search-by-video/:videoId')

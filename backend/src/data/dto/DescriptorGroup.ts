@@ -23,14 +23,14 @@ export class DescriptorGroup<T> {
     static readonly MapTags =
         new DescriptorGroup<MapId>(7, 'mapTags')
 
-    private constructor(
+    protected constructor(
         readonly id: number,
         readonly name: DescriptorGroupName
     ) {
     }
 
-    valuesOf(descriptor: GuideDescriptorDto) {
-        return descriptor[this.name]
+    valuesOf(query: GuideDescriptorDto) {
+        return query[this.name]
     }
 
     static get values(): DescriptorGroup<any>[] {
