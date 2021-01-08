@@ -3,7 +3,8 @@ import {Fixture, FixtureService} from "src/services/fixture.service";
 import heroesFixture from '@fixtures/heroes'
 import mapsFixture from '@fixtures/maps'
 import thematicTagsFixture from '@fixtures/thematicTags'
-import guideTestingFixture from '@fixtures/guideTesting'
+import regularGuideTestingFixture from '@fixtures/regular-guide-testing'
+import hugeGuideTestingFixture from '@fixtures/huge-guide-testing'
 import reportsFixture from '@fixtures/reportsFixture'
 import abilitiesFixture from '@fixtures/abilities'
 import commentsFixture from "@fixtures/commentsFixture";
@@ -35,7 +36,21 @@ export class FixtureController {
             mapsFixture,
             abilitiesFixture,
             thematicTagsFixture,
-            guideTestingFixture,
+            regularGuideTestingFixture,
+            commentsFixture,
+            reportsFixture,
+        )
+    }
+
+    @Get('load-huge')
+    loadHuge() {
+        this.service.loadFixturesClear(
+            patchFixture,
+            heroesFixture,
+            mapsFixture,
+            abilitiesFixture,
+            thematicTagsFixture,
+            hugeGuideTestingFixture,
             commentsFixture,
             reportsFixture,
         )
