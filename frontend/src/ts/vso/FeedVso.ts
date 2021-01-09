@@ -18,7 +18,7 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
 
     protected loadItems(items: Vso[]) {
         this.touched = true
-        this.items.unshift(...items);
+        this.items.push(...items);
         this.alreadyLoadedIds.push(...items.map(h => this.vsoId(h)))
     }
 
