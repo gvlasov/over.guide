@@ -36,9 +36,6 @@ export class GuideSearchQuery implements GuideSearchQueryDto {
     user: number;
 
     @IsDefined({always: true})
-    pageNumber: number
-
-    @IsDefined({always: true})
     clientAlreadyHasGuideIds: number[];
 
     exact: boolean

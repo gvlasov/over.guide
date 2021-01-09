@@ -13,7 +13,6 @@ export default class GuideSearchQueryQuickie implements GuideSearchQueryDto {
     public enemyAbilities: AbilityId[] = [];
     public mapTags: MapId[] = [];
     public thematicTags: GuideTheme[] = [];
-    public pageNumber: number = 0;
     public clientAlreadyHasGuideIds: number[] = [];
     public exact: boolean = false;
 
@@ -27,7 +26,6 @@ export default class GuideSearchQueryQuickie implements GuideSearchQueryDto {
             enemyAbilities?: AbilityId[],
             mapTags?: MapId[],
             thematicTags?: GuideTheme[],
-            pageNumber?: number,
             clientAlreadyHasGuideIds?: number[],
             exact?: boolean
         }
@@ -40,7 +38,6 @@ export default class GuideSearchQueryQuickie implements GuideSearchQueryDto {
         this.enemyAbilities = dto.enemyAbilities || [];
         this.mapTags = dto.mapTags || [];
         this.thematicTags = dto.thematicTags || [];
-        this.pageNumber = dto.pageNumber || 0;
         this.clientAlreadyHasGuideIds = dto.clientAlreadyHasGuideIds || [];
         this.exact = dto.exact || false;
     }

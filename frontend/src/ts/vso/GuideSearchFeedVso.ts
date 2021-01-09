@@ -36,7 +36,6 @@ export default class GuideSearchFeedVso extends FeedVso<ExistingGuideHeadDto, Ex
                 mapTags: this.descriptor.maps.map(it => it.id),
                 thematicTags: this.descriptor.thematicTags.map(it => it.id),
                 clientAlreadyHasGuideIds: ids,
-                pageNumber: 0,
                 exact: this.exact,
             })
         }
