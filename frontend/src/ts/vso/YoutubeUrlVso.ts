@@ -3,26 +3,39 @@ export default class YoutubeUrlVso {
     private static GOOGLE_API_KEY = 'AIzaSyAQO9TNzTy3xcj0L4Ic2pGQjP1a_vjAX50'
 
     constructor(public url: URL) {
-        if (!this.isValidYoutubeVideoUrl) {
+        if (!this.isValidUrl) {
             throw new TypeError(
                 this.url.href + ' is not a valid Youtube URL'
             )
         }
     }
+    private get isValidUrl(): boolean {
+        return this.isValidShortUrl || this.isValidLongUrl
+    }
 
-    private get isValidYoutubeVideoUrl() {
-        return this.url.hostname.match(/youtube\.com$/)
-            && this.url.search.match(/v=([^&]+)(&|$)/);
+    private get isValidLongUrl(): boolean {
+        return !!this.url.hostname.match(/youtube\.com$/) &&
+            !!this.url.search.match(/v=([^&]+)(&|$)/);
+    }
+
+    private get isValidShortUrl(): boolean {
+        return !!this.url.hostname.match(/youtu\.be$/) &&
+            this.url.pathname.substr(1).length > 8
     }
 
     get videoId(): string {
-        const match = this.url.search.match(/v=([^&]+)(&|$)/);
-        if (match === null) {
-            throw new TypeError(
-                this.url.href + ' is not a valid Youtube URL'
-            )
+        if (this.isValidShortUrl) {
+            return this.url.pathname.substr(1)
+        } else {
+            const longUrlMatch = this.url.search.match(/v=([^&]+)(&|$)/);
+            if (longUrlMatch === null) {
+                throw new TypeError(
+                    this.url.href + ' is not a valid Youtube URL'
+                )
+            } else {
+                return longUrlMatch[1]
+            }
         }
-        return match[1]
     }
 
     async apiJson(): Promise<any> {
