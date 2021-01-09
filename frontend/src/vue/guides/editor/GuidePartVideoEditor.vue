@@ -138,7 +138,7 @@ export default class GuidePartVideoEditor extends Vue {
             }
         }
         const youtubeUrl = new YoutubeUrlVso(new URL(this.youtubeVideoUrl));
-        this.$emit('videoSelection', youtubeUrl.videoId)
+        this.$emit('videoSelection', youtubeUrl)
     }
 }
 </script>

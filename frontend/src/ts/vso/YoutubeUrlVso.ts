@@ -9,6 +9,7 @@ export default class YoutubeUrlVso {
             )
         }
     }
+
     private get isValidUrl(): boolean {
         return this.isValidShortUrl || this.isValidLongUrl
     }
@@ -38,15 +39,22 @@ export default class YoutubeUrlVso {
         }
     }
 
+    get timestampSeconds(): number | null {
+        const match = this.url.search.match(/t=([^&]+)(&|$)/);
+        if (match === null) {
+            return null
+        }
+        return Number.parseInt(match[1]);
+    }
+
     async apiJson(): Promise<any> {
-        const result = await fetch(
+        return await fetch(
             "https://www.googleapis.com/youtube/v3/videos?id=" + this.videoId + "&key=" + YoutubeUrlVso.GOOGLE_API_KEY + "&part=contentDetails",
             {}
         ).then(
             response =>
                 response.json()
-        );
-        return result
+        )
     }
 
     private parseISO8601DurationToSeconds(iso8601Duration: string): number {

@@ -15,7 +15,7 @@
         </template>
         <div class="move-guide-buttons">
             <div class="guide-part-number">
-                {{index+1}}/{{parts.length}}
+                {{ index + 1 }}/{{ parts.length }}
             </div>
             <OverwatchPanelButton
                     :disabled="index === parts.length - 1"
@@ -42,7 +42,7 @@
                     v-if="widget.isVideo"
                     :widget="widget"
                     :index="index"
-                    @videoSelection="(videoId) => {widget.part.excerpt = {youtubeVideoId: videoId, startSeconds: 0, endSeconds: null}}"
+                    @videoSelection="onVideoSelection"
             />
             <div class="guide-part-buttons">
                 <OverwatchButton
@@ -84,6 +84,7 @@ import {Prop, Watch} from "vue-property-decorator";
 import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
+import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
 
 
 @Component({
@@ -110,6 +111,23 @@ export default class GuidePart extends Vue {
     declare $scrollTo: any
 
     showMarkdownGuide: boolean = false
+
+    onVideoSelection(url: YoutubeUrlVso) {
+        const timestampSeconds = url.timestampSeconds;
+        let startSeconds, endSeconds;
+        if (timestampSeconds !== null) {
+            startSeconds = url.timestampSeconds - 4
+            endSeconds = url.timestampSeconds + 1
+        } else {
+            startSeconds = 0
+            endSeconds = null
+        }
+        (this.widget.part as GuidePartVideoDto).excerpt = {
+            youtubeVideoId: url.videoId,
+            startSeconds: startSeconds,
+            endSeconds: endSeconds,
+        };
+    }
 
     onMarkdownGuideBack() {
         this.showMarkdownGuide = false;
@@ -192,6 +210,7 @@ export default class GuidePart extends Vue {
         display: block;
         text-align: right;
         overflow: visible;
+
         .guide-part-number {
             @include overwatch-futura;
             font-size: 1.3em;
