@@ -158,13 +158,17 @@ export default class GuidePartVideoEditor extends Vue {
         max-width: 100%;
         width: 30em;
         box-sizing: border-box;
-        @include overwatch-futura;
+        font-family: 'IBM Plex Sans', 'sans-serif';
+        font-weight: bold;
         color: black;
         font-size: 1.2em;
         text-align: center;
 
-        &:focus::-webkit-input-placeholder {
-            color: transparent;
+        &:focus{
+            text-decoration: underline;
+            &::-webkit-input-placeholder {
+                visibility: hidden;
+            }
         }
     }
 
