@@ -3,6 +3,7 @@
         <OverwatchDropdownButton
                 :open="openDropdown"
                 class="dropdown-toggle-button"
+                v-bind:class="{'dropdown-toggle-button-open': openDropdown}"
                 v-hammer:tap="() => openDropdown = !openDropdown"
                 :disabled="feed.items.length === 0"
         >{{ feed.items.length || 'no' }}{{ feed.touched && feed.hasNextPage ? '+' : '' }} similar guide{{ feed.items.length === 1 ? '' : 's' }}
@@ -130,6 +131,10 @@ export default class SimilarTagGuides extends Vue {
         position: sticky;
         top: 1em;
         z-index: 2;
+
+        &.dropdown-toggle-button-open {
+            box-shadow: 0 0 2em #313333, 0 0 2em #313333 !important;
+        }
 
         &:disabled {
             background-color: hsla(130, 80%, 45%, .7);
