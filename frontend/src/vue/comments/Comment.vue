@@ -3,7 +3,7 @@
             class="comment"
             v-bind:class="{deleted: comment.deleted, 'linked-to': enableHashAnchor && linkedTo}"
     >
-        <a v-if="enableHashAnchor" v-bind:id="anchorHash"></a>
+        <a v-if="enableHashAnchor" v-bind:id="anchorHash" class="hash-anchor" ref="anchor"></a>
         <div class="heading">
             <UserLink
                     :user="comment.author"
@@ -108,7 +108,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {Prop} from "vue-property-decorator";
+import {Prop, Ref} from "vue-property-decorator";
 import Component from "vue-class-component";
 import CommentVso from "@/ts/vso/CommentVso";
 import OverwatchButton from "@/vue/OverwatchButton.vue";
@@ -149,6 +149,10 @@ const commentReportReasons = [
     }
 })
 export default class Comment extends Vue {
+
+    @Ref('anchor')
+    anchor: HTMLAnchorElement
+
     PostTypeId = PostTypeId
 
     commentReportReasons = commentReportReasons
@@ -200,7 +204,9 @@ export default class Comment extends Vue {
 
     mounted() {
         if (this.enableHashAnchor && this.$route.hash === '#' + this.anchorHash) {
-            this.$scrollTo(this.$el, 300)
+            this.$scrollTo(this.anchor, {
+                duration: 300,
+            })
             this.linkedTo = true
         }
     }
@@ -211,6 +217,7 @@ export default class Comment extends Vue {
 
 <style lang="scss" scoped>
 @import "~@/assets/css/overwatch-ui.scss";
+@import "~@/assets/css/sticky-header.scss";
 
 $weak-color: #d2d2d2;
 $strong-color: white;
@@ -304,6 +311,12 @@ $strong-color: white;
     &.linked-to {
         background-color: hsla(348, 83%, 47%, .3);
         padding: 0 1em 1em 1em;
+    }
+
+    .hash-anchor {
+        top: -$sticky-header-height - 1rem;
+        position: relative;
+        display: block;
     }
 }
 

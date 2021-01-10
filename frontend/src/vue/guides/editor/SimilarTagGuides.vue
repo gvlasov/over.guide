@@ -121,6 +121,7 @@ export default class SimilarTagGuides extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/css/sticky-header.scss";
 .similar-tag-guides {
     position: relative;
 
@@ -129,7 +130,7 @@ export default class SimilarTagGuides extends Vue {
         background-color: #5f7589;
         width: 100%;
         position: sticky;
-        top: 1em;
+        top: $sticky-header-height + 1rem;
         z-index: 2;
 
         &.dropdown-toggle-button-open {

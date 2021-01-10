@@ -5,7 +5,6 @@
         <router-link
                 :key="notification.id"
                 :to="{path: `/guide/${notification.json.postId}`, hash: commentElementHash}"
-                v-scroll-to="scrollConfig"
                 class="overlay-link"
         >
         </router-link>

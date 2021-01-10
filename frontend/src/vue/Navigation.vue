@@ -104,8 +104,9 @@ export default class Navigation extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 @import "~@/assets/css/tags.scss";
 @import "~@/assets/css/common.scss";
+@import "~@/assets/css/sticky-header.scss";
 
-$height: 3.5rem;
+$height: $sticky-header-height;
 .navigation {
     $underline-width: .3em;
     font-size: 1.7em;
