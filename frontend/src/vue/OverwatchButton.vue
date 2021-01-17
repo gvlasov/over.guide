@@ -30,8 +30,11 @@ export default class OverwatchButton extends Vue {
 
 .overwatch-button {
     @include overwatch-inline-button;
-    background-color: transparent;
+    background-color: rgba($transparent-button-mount-bg-color, .5);
     z-index: 1;
+    &:disabled {
+        background-color: transparent;
+    }
 }
 
 .overwatch-button > .content {

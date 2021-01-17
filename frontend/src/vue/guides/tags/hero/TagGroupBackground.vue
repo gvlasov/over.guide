@@ -63,6 +63,6 @@ export default class TagGroupBackground extends Vue {
 }
 
 .tag-type-invite {
-    background-color: #5f7589;
+    background-color: $invite-bg-color;
 }
 </style>

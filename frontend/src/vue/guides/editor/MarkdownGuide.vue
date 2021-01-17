@@ -11,12 +11,14 @@
                 <Markdown :code="item"/>
             </tr>
         </table>
-        <OverwatchButton
-                type="default"
-                class="back-button"
-                v-hammer:tap="() => $emit('back')"
-        >Back
-        </OverwatchButton>
+        <StickyHoverer>
+            <OverwatchButton
+                    type="default"
+                    class="back-button"
+                    v-hammer:tap="() => $emit('back')"
+            >Back
+            </OverwatchButton>
+        </StickyHoverer>
     </div>
 </template>
 
@@ -26,9 +28,11 @@ import Markdown from "@/vue/guides/Markdown";
 import OverwatchButton from "@/vue/OverwatchButton";
 import Vue from 'vue'
 import Component from "vue-class-component";
+import StickyHoverer from "@/vue/StickyHoverer.vue";
 
 @Component({
     components: {
+        StickyHoverer,
         OverwatchButton,
         Markdown,
     }
@@ -68,17 +72,19 @@ export default class MarkdownGuide extends Vue {
 
 <style lang="scss" scoped>
 @import '~@/assets/css/fonts.scss';
+@import '~@/assets/css/overwatch-ui.scss';
 
 .markdown-guide {
     margin: 0 auto 1em auto;
     max-width: 30em;
     text-align: center;
 
-    .back-button {
+    .sticky-hoverer {
         margin-top: 1em;
-        position: sticky;
-        bottom: 1.1em;
-        font-size: 2.5em;
+        bottom: 2.75em;
+        button {
+            font-size: 2.5em;
+        }
     }
 
     table {

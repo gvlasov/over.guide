@@ -1,13 +1,15 @@
 <template>
     <div class="similar-tag-guides">
-        <OverwatchDropdownButton
-                :open="openDropdown"
-                class="dropdown-toggle-button"
-                v-bind:class="{'dropdown-toggle-button-open': openDropdown}"
-                v-hammer:tap="() => openDropdown = !openDropdown"
-                :disabled="feed.items.length === 0"
-        >{{ feed.items.length || 'no' }}{{ feed.touched && feed.hasNextPage ? '+' : '' }} similar guide{{ feed.items.length === 1 ? '' : 's' }}
-        </OverwatchDropdownButton>
+        <StickyHoverer>
+            <OverwatchDropdownButton
+                    :open="openDropdown"
+                    class="dropdown-toggle-button"
+                    v-bind:class="{'dropdown-toggle-button-open': openDropdown}"
+                    v-hammer:tap="() => openDropdown = !openDropdown"
+                    :disabled="feed.items.length === 0"
+            >{{ feed.items.length || 'no' }}{{ feed.touched && feed.hasNextPage ? '+' : '' }} similar guide{{ feed.items.length === 1 ? '' : 's' }}
+            </OverwatchDropdownButton>
+        </StickyHoverer>
         <div
                 v-show="openDropdown"
                 class="dropdown"
@@ -53,9 +55,11 @@ import Component from "vue-class-component";
 import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 import Vue from 'vue'
 import SpinnerBlock from "@/vue/SpinnerBlock.vue";
+import StickyHoverer from "@/vue/StickyHoverer.vue";
 
 @Component({
     components: {
+        StickyHoverer,
         SpinnerBlock,
         OverwatchDropdownButton,
         OverwatchPanelButton,
@@ -122,26 +126,25 @@ export default class SimilarTagGuides extends Vue {
 
 <style lang="scss" scoped>
 @import "~@/assets/css/sticky-header.scss";
+@import "~@/assets/css/overwatch-ui.scss";
 .similar-tag-guides {
     position: relative;
 
-    .dropdown-toggle-button {
-        text-align: center;
-        background-color: #5f7589;
-        width: 100%;
-        position: sticky;
+    .sticky-hoverer {
         top: $sticky-header-height + 1rem;
         z-index: 2;
+        display: block;
+        .dropdown-toggle-button {
+            text-align: center;
+            background-color: $transparent-button-mount-bg-color;
+            width: 100%;
 
-        &.dropdown-toggle-button-open {
-            box-shadow: 0 0 2em #313333, 0 0 2em #313333 !important;
-        }
+            &:disabled {
+                background-color: hsla(130, 80%, 45%, .7);
 
-        &:disabled {
-            background-color: hsla(130, 80%, 45%, .7);
-
-            & ::v-deep .background {
-                box-shadow: none;
+                & ::v-deep .background {
+                    box-shadow: none;
+                }
             }
         }
     }
