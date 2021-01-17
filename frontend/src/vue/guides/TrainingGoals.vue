@@ -21,8 +21,8 @@
                 v-else-if="trainingGoals.length === 0"
                 class="no-guides-notice"
         >
-            <router-link to="/search">Discover guides</router-link>
-            and add those you plan to master to your training goals
+            <font-awesome-icon icon="bookmark"/> <router-link to="/search">Discover guides</router-link>
+            and add  those you plan to master to your training goals
         </WeakPanel>
         <template v-else>
             <draggable class="draggable" v-model="trainingGoals" draggable=".training-goal" :disabled="isAnyOpen">
@@ -163,6 +163,12 @@ export default class TrainingGoals extends Vue {
 
 .no-guides-notice {
     @include overwatch-futura;
+    svg {
+        position: relative;
+        top: .1em;
+        font-size: .9em;
+        margin-right: .5em;
+    }
 }
 
 .training-goals {
