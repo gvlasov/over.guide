@@ -7,7 +7,7 @@
                 type="default"
                 v-hammer:tap="() => $emit('back')"
                 style="flex-basis: 39%;"
-        >Back</OverwatchPanelButton>
+        >Close</OverwatchPanelButton>
     </MatchupEvaluator>
 </template>
 
