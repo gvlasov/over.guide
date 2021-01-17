@@ -34,7 +34,7 @@
         </div>
         <OverwatchPanel class="stats">
             <div class="guide-votes-received-count">
-                Total guide score: {{ userInfo.guideVotesReceivedCount }}
+                {{ userInfo.guideVotesReceivedCount }} <font-awesome-icon icon="brain"/> received
             </div>
             <EvaluationsStats/>
         </OverwatchPanel>
@@ -181,6 +181,9 @@ export default class UserInfo extends Vue {
 @import '~@/assets/css/overwatch-ui.scss';
 
 .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4em;
     .info {
         display: flex;
         justify-content: space-between;
@@ -271,6 +274,12 @@ export default class UserInfo extends Vue {
 
     .stats {
         padding: 1em;
+        .guide-votes-received-count {
+            text-align: left;
+            padding: .2em 0 .8em 0;
+            font-family: "Futura Demi Bold", sans-serif;
+            font-size: 1.4rem;
+        }
     }
 
     .guide-feed {
