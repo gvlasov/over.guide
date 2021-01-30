@@ -34,6 +34,10 @@ const VueResizeObserver = require('vue-resize-observer')
 const router = new VueRouter({
     routes: [
         {
+            path: '/',
+            redirect: '/search/'
+        },
+        {
             path: '/counters-practice',
             component: CountersPractice,
             name: 'Counters practice'
