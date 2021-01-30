@@ -38,7 +38,7 @@ export default class CommentVso {
                 }
                 return [c, ...c.recursiveChildren]
             }
-        )
+        );
     }
 
     get strayPost(): PostVso {
