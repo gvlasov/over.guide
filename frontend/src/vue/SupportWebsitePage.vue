@@ -1,7 +1,7 @@
 <template>
     <OverwatchPanel class="support-website">
         <p>
-            My name is Georgy Vlasov. Gitgud.game is my personal endeavor. I'm working on it full-time, alone.
+            Hi, my name is Georgy Vlasov. <a>smol.guides</a> is my personal endeavor.
         </p>
         <div class="methods">
             <a
@@ -23,9 +23,8 @@
             </a>
         </div>
         <p>I love developing this project and hope to make a living off of it, growing it into a well-organized no-bullshit repository of knowledge. My goal is to help Overwatch players learn the game and ultimately git gud, so we have a healthier community and our games are more fun.</p>
-        <p>I'm a Gold hardstuck. When I watch my team do stupid things, I know I deserve these teammates because I'm no better.</p>
-        <p>But learning every relevant aspect of the game is hard. I watch a lot of educational videos in hope to get better. In these videos I find
-            <strong>nuggets&nbsp;of&nbsp;knowledge</strong> that I know I must internalize in order to get better. When these nuggets are separated from unimportant information, collected and categorized, it is easy to learn them.
+        <p>Learning every relevant aspect of the game is hard. I watch a lot of educational videos in hope to get better. In these videos I find
+            nuggets&nbsp;of&nbsp;knowledge that I know I must internalize in order to get better. When these nuggets are separated from unimportant information, collected and categorized, it is easy for anyone to learn them.
         </p>
         <p>If you like what I do, please support me, so I can do that more and better.</p>
     </OverwatchPanel>
