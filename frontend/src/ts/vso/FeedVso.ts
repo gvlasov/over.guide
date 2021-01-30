@@ -22,6 +22,12 @@ export default abstract class FeedVso<Dto, Vso, Page extends FeedPortionDto<Dto>
         this.alreadyLoadedIds.push(...items.map(h => this.vsoId(h)))
     }
 
+    prependItems(items: Vso[]) {
+        this.touched = true
+        this.items.unshift(...items);
+        this.alreadyLoadedIds.push(...items.map(h => this.vsoId(h)))
+    }
+
     get isEmpty(): boolean {
         return this.items.length === 0
     }

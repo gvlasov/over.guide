@@ -76,7 +76,10 @@ import Authentication from "@/ts/Authentication";
 import NotificationsButton from "@/vue/notifications/NotificationsButton.vue";
 import NotificationFeedVso from "@/ts/vso/NotificationFeedVso";
 import SpinnerBlock from "../SpinnerBlock.vue";
-import FeedVso from "../../ts/vso/FeedVso";
+import io from "socket.io-client";
+import env from "@/env/dev";
+import NotificationReadDto
+    from "../../../../backend/src/data/dto/NotificationReadDto";
 
 const Debounce = require('debounce-decorator').default
 
@@ -103,9 +106,9 @@ export default class NotificationsSection extends Vue {
     @Ref('infiniteLoading')
     infiniteLoading: InfiniteLoading
 
-    feed: NotificationFeedVso = new NotificationFeedVso()
-
     auth = Authentication.instance
+
+    feed: NotificationFeedVso = new NotificationFeedVso(this.auth)
 
     show: boolean = false
 
@@ -125,12 +128,6 @@ export default class NotificationsSection extends Vue {
             this.$emit('close')
         }
     }
-
-    @Debounce(NotificationsSection.notificationCheckIntervalMs)
-    checkNotificationsSometimes() {
-        this.feed.loadNextPage(this.infiniteLoading.stateChanger)
-    }
-
 
     markNotificationsReadIfAvailable() {
         if (this.auth.authenticated) {
@@ -153,12 +150,16 @@ export default class NotificationsSection extends Vue {
 
     mounted() {
         if (this.auth.authenticated) {
-            this.feed.loadNextPage(this.infiniteLoading.stateChanger)
-            setInterval(() => {
-                if (!this.show) {
-                    this.feed.loadNextPage(FeedVso.mockState)
-                }
-            }, NotificationsSection.notificationCheckIntervalMs)
+            const socket = io(env.WEBSOCKET_BASE_URL);
+            socket.on('connect', () => {
+                socket.emit('auth', this.auth.authToken, (data: NotificationReadDto[]) => {
+                    this.feed = new NotificationFeedVso(socket)
+                    this.feed.loadNextPage(this.infiniteLoading.stateChanger)
+                })
+            })
+            socket.on('new', (notification: NotificationReadDto) => {
+                this.feed.prependItems([notification])
+            })
         }
         window.addEventListener(
             'keyup',

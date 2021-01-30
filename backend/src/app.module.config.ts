@@ -32,6 +32,9 @@ import {RestrictionService} from "src/services/restriction.service";
 import {SentenceController} from "src/controllers/sentence.controller";
 import {NotificationController} from "src/controllers/notification.controller";
 import GuideSearchCacheService from "src/services/guide-search-cache.service";
+import {NotificationsGateway} from "src/controllers/notifications.gateway";
+import {OnlineUsersRepository} from "src/services/online-users.repository";
+import {NotificationService} from "src/services/notification.service";
 
 const config = {
     imports: [
@@ -77,6 +80,9 @@ const config = {
         SentenceImmediateActionService,
         RestrictionService,
         GuideSearchCacheService,
+        NotificationsGateway,
+        OnlineUsersRepository,
+        NotificationService,
     ],
 }
 export default config

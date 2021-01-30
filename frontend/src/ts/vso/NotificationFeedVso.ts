@@ -1,9 +1,14 @@
 import FeedVso from "@/ts/vso/FeedVso";
 import NotificationReadDto from "data/dto/NotificationReadDto";
 import NotificationsPageDto from "data/dto/NotificationsPageDto";
-import Backend from "@/ts/Backend";
+import Socket = SocketIOClient.Socket;
 
 export default class NotificationFeedVso extends FeedVso<NotificationReadDto, NotificationReadDto, NotificationsPageDto> {
+
+
+    constructor(private readonly socket: Socket) {
+        super();
+    }
 
     dto2Vso(dto: NotificationReadDto): NotificationReadDto {
         return dto
@@ -22,7 +27,12 @@ export default class NotificationFeedVso extends FeedVso<NotificationReadDto, No
     }
 
     get feed(): (ids: number[]) => Promise<NotificationsPageDto> {
-        return (ids: number[]) => Backend.instance.getFeedNotifications(ids)
+        return (ids: number[]) =>
+            new Promise((resolve, reject) => {
+                this.socket.emit('show-more', ids, (data: NotificationsPageDto) => {
+                    resolve(data)
+                })
+            })
     }
 
 }

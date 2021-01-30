@@ -24,9 +24,9 @@ import {CommentReadDto} from "data/dto/CommentReadDto";
 import {RestrictionService} from "src/services/restriction.service";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import ApiErrorId from "data/ApiErrorId";
-import {Notification} from 'src/database/models/Notification'
 import NotificationTypeId from "data/NotificationTypeId";
 import {Guide} from "src/database/models/Guide";
+import {NotificationService} from "src/services/notification.service";
 
 @Controller('comment')
 export class CommentController {
@@ -34,7 +34,8 @@ export class CommentController {
     constructor(
         @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
         private readonly authService: AuthService,
-        private readonly restrictionService: RestrictionService
+        private readonly restrictionService: RestrictionService,
+        private readonly notificationService: NotificationService
     ) {
     }
 
@@ -98,23 +99,22 @@ export class CommentController {
                     Comment.findOne({where: {id: comment.id}})
                 )
                 .then(
-                    async comment =>
-                        Notification.create({
-                            userId: parentComment === null
+                    async comment => {
+                        this.notificationService.notify(
+                            parentComment === null
                                 ? (await Guide.findOne({
                                     where: {
                                         id: dto.postId
                                     }
-                                })).authorId
-                                : parentComment.authorId,
-                            notificationTypeId: parentComment === null
+                                })).author
+                                : parentComment.author,
+                            parentComment === null
                                 ? NotificationTypeId.GuideReply
                                 : NotificationTypeId.CommentReply,
-                            json: JSON.stringify(
-                                comment.toAliveDto()
-                            )
-                        })
-                            .then(() => comment)
+                            comment.toAliveDto()
+                        )
+                        return comment
+                    }
                 )
                 .then(comment => {
                     response.status(HttpStatus.CREATED)

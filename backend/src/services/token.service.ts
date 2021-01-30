@@ -15,13 +15,18 @@ export class TokenService {
     }
 
     async getUser(token: string): Promise<User | null> {
-        // https://stackoverflow.com/a/22601457/1542343
-        const battleNetUserId = this.CryptoJS.Rabbit.decrypt(
-            token,
-            TOKEN_CIPHER_SECRET
-        ).toString(this.CryptoJS.enc.Utf8);
-        return await User.findOne({where: {battleNetUserId: battleNetUserId}});
+        return User.findOne({
+            where: {
+                battleNetUserId: this.getBattleNetUserId(token)
+            },
+        })
     }
 
+    getBattleNetUserId(token: string): string {
+        // https://stackoverflow.com/a/22601457/1542343
+        return this.CryptoJS.Rabbit
+            .decrypt(token, TOKEN_CIPHER_SECRET)
+            .toString(this.CryptoJS.enc.Utf8);
+    }
 
 }

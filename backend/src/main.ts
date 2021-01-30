@@ -13,9 +13,10 @@ async function bootstrap() {
             }
         }
     );
-    app.enableCors({
+    const cors = {
         origin: "*"
-    })
+    };
+    app.enableCors(cors)
     app.use(function (req, res, next) {
         res.header('X-Powered-By', 'ur mom');
         next();

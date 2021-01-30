@@ -21,6 +21,8 @@ import {Notification} from "src/database/models/Notification";
 import {ImmediateAction} from "src/database/models/ImmediateAction";
 import {SentenceImmediateActionService} from "src/services/sentence-immediate-action.service";
 import NotificationTypeId from "data/NotificationTypeId";
+import {OnlineUsersRepository} from "src/services/online-users.repository";
+import {NotificationService} from "src/services/notification.service";
 
 @Controller('sentence')
 export class SentenceController {
@@ -28,7 +30,9 @@ export class SentenceController {
     constructor(
         private readonly authService: AuthService,
         @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
-        private readonly actionService: SentenceImmediateActionService
+        private readonly actionService: SentenceImmediateActionService,
+        private readonly notificationService: NotificationService,
+        private readonly onlineUsersRepository: OnlineUsersRepository
     ) {
     }
 
@@ -60,13 +64,16 @@ export class SentenceController {
                                         dto.immediateActions
                                     )
                                 })
-                                .then(() => {
-                                    return Notification.create({
+                                .then(async () => {
+
+                                    const notification = await Notification.create({
                                         userId: dto.defenderId,
                                         notificationTypeId: NotificationTypeId.SentenceCreated,
                                         json: JSON.stringify(dto),
                                         read: 0,
-                                    })
+                                    });
+                                    notification.toDto()
+                                    return notification
                                 })
                         })
                 })
