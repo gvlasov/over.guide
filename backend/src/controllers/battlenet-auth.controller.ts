@@ -45,6 +45,7 @@ export class BattlenetAuthController {
                 const cookieOptions = {
                     expires: new Date('Tue, 19 Jan 2038 03:14:07 GMT'),
                     path: '/',
+                    domain: process.env.COOKIE_DOMAIN,
                 } as CookieOptions;
                 response.cookie(
                     'auth-token',
