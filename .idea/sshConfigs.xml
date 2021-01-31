@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="OPEN_SSH" host="smol.guide" id="256c1251-72dc-4f9e-b03e-717b4fa72ef9" port="22" customName="site@smol.guide" nameFormat="CUSTOM" username="site">
+        <option name="customName" value="site@smol.guide" />
+      </sshConfig>
+      <sshConfig authType="OPEN_SSH" host="smol.guide" id="73f65c37-0d87-4ce8-9c1c-b7a96b502aff" port="22" customName="root@smol.guide" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="root@smol.guide" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

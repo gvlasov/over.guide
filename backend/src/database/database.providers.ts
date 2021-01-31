@@ -16,15 +16,15 @@ export const databaseProviders = [
                 dialect: 'mysql',
                 host: host,
                 port: port,
-                username: 'root',
-                password: '1',
-                database: 'overwatch',
+                username: process.env.DB_USER || 'root',
+                password: process.env.DB_PASSWORD || '1',
+                database: process.env.DB_NAME || 'overwatch',
                 define: {
                     freezeTableName: true,
                 },
                 pool: {
                     min: 0,
-                    max: 2,
+                    max: 5,
                 },
                 dialectOptions: {
                     multipleStatements: true,
