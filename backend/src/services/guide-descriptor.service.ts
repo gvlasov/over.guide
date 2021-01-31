@@ -97,11 +97,12 @@ export class GuideDescriptorService {
                 `
                     select *
                     from GuideDescriptor
-                    where id in (
-                        (
-                        ${parts.join(`) intersect (`)}
-                    )
-                )
+                    where 
+                        ${
+                parts
+                    .map(part => `id in (${part})`)
+                    .join(` and `)
+            }
             `,
             {
                 type: QueryTypes.SELECT,
