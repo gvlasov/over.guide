@@ -1,0 +1,4 @@
+DB_USER=site
+DB_HOST=127.0.0.1
+DB_NAME=overwatch
+DB_PASSWORD=banEyMVr3DgUHnpQ
