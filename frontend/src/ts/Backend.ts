@@ -3,7 +3,6 @@ import PickSuggestion from "./PickSuggestion";
 import axios, {AxiosResponse, AxiosStatic, Method} from "axios";
 import PickContext from "./PickContext";
 import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto";
-import env from '../env/dev'
 import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import GuideSearchQueryDto from "data/dto/GuideSearchQueryDto";
@@ -50,11 +49,10 @@ export default class Backend {
 
     constructor(axios: AxiosStatic) {
         this.axios = axios;
-        this.rootUrl = window.location.protocol
-            + "//"
-            + (window.location.hostname === env.DOCKER_FRONTEND_HOST ? env.DOCKER_BACKEND_HOST : window.location.hostname)
-            + ":"
-            + env.BACKEND_PORT;
+        if (process.env.BACKEND_BASE_URL === void 0) {
+            throw new Error('Backend URL not set')
+        }
+        this.rootUrl = process.env.BACKEND_BASE_URL
     }
 
     protected async query<R>(

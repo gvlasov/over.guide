@@ -77,7 +77,6 @@ import NotificationsButton from "@/vue/notifications/NotificationsButton.vue";
 import NotificationFeedVso from "@/ts/vso/NotificationFeedVso";
 import SpinnerBlock from "../SpinnerBlock.vue";
 import io from "socket.io-client";
-import env from "@/env/dev";
 import NotificationReadDto
     from "../../../../backend/src/data/dto/NotificationReadDto";
 
@@ -150,7 +149,7 @@ export default class NotificationsSection extends Vue {
 
     mounted() {
         if (this.auth.authenticated) {
-            const socket = io(env.WEBSOCKET_BASE_URL);
+            const socket = io(process.env.BACKEND_BASE_URL);
             socket.on('connect', () => {
                 socket.emit('auth', this.auth.authToken, (data: NotificationReadDto[]) => {
                     this.feed = new NotificationFeedVso(socket)

@@ -6,7 +6,6 @@
 import Vue from 'vue'
 import Component from "vue-class-component";
 import Authentication from "@/ts/Authentication";
-import env from '@/env/dev'
 
 @Component({
     components: {},
@@ -17,7 +16,7 @@ export default class SiteResetPage extends Vue {
         Authentication.instance
             .removeAuthCookies();
         localStorage.clear()
-        fetch(env.BACKEND_BASE_URL + '/fixture/load-default')
+        fetch(process.env.BACKEND_BASE_URL + '/fixture/load-default')
             .then(() => {
                 this.$router.push('/search')
             })

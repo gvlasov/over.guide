@@ -10,15 +10,14 @@
 </template>
 
 <script lang="ts">
-import env from '../env/dev'
 import Vue from 'vue'
 import Component from "vue-class-component";
 
 @Component({})
 export default class BattlenetAuthButton extends Vue {
 
-    redirectUri: string = env.BATTLE_NET_REDIRECT_URI
-    clientId: string = env.BATTLE_NET_CLIENT_ID
+    redirectUri: string = process.env.BATTLE_NET_REDIRECT_URI
+    clientId: string = process.env.BATTLE_NET_CLIENT_ID
 
     get url(): string {
         return 'https://eu.battle.net/oauth/authorize?access_type=online&client_id='

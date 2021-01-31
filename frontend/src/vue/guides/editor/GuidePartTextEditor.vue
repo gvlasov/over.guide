@@ -24,7 +24,6 @@ import Vue from 'vue'
 import Component from "vue-class-component"
 import {Prop, Ref, Watch} from "vue-property-decorator";
 import GuidePartTextDto from "data/dto/GuidePartTextDto"
-import env from '@/env/dev.ts'
 
 @Component({
     components: {
@@ -68,12 +67,14 @@ export default class GuidePartTextEditor extends Vue {
                         if (result instanceof ArrayBuffer) {
                             // https://developers.google.com/web/updates/2012/06/How-to-convert-ArrayBuffer-to-and-from-String
                             result = String.fromCharCode.apply(null, new Uint16Array(result)) as string
+                        } else if (result === null) {
+                            throw new Error('File result is null')
                         }
                         formData.append('image', result)
                         await fetch('https://api.imgur.com/3/image', {
                             method: 'POST',
                             headers: {
-                                'Authorization': `Client-ID ${env.IMGUR_CLIENT_ID}`
+                                'Authorization': 'Client-ID ' + process.env.IMGUR_CLIENT_ID
                             },
                             body: result.substr(22)
                         }).then(
