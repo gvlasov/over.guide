@@ -1,9 +1,9 @@
-DB_USER=site
-DB_HOST=127.0.0.1
+DB_USER=root
+DB_HOST=mariadb
 DB_NAME=overwatch
-DB_PASSWORD=banEyMVr3DgUHnpQ
-BATTLE_NET_REDIRECT_URI=https://backend.smol.guide/battlenet-auth
+DB_PASSWORD=1
+BATTLE_NET_REDIRECT_URI=https://192.168.1.39:8080/battlenet-auth
 BATTLE_NET_CLIENT_SECRET=Rif8Ug708T47DUw7rxftqCOuonwgETOu
 BATTLE_NET_CLIENT_ID=9b012b6e1edf492085cfc5eded56adae
-FRONTEND_ROOT_URL=https://smol.guide/
+FRONTEND_ROOT_URL=https://192.168.1.39:8000/
 TOKEN_CIPHER_SECRET=9hello beau&tiful ladee horse!

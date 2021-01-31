@@ -2,7 +2,6 @@ import {Controller, Get, Query, Req, Res,} from '@nestjs/common';
 import {BattlenetService} from "src/services/battlenet.service";
 import {User} from "src/database/models/User";
 import {CookieOptions, Request, Response} from 'express'
-import {FRONTEND_ROOT_URL} from "src/constants";
 import {TokenService} from "src/services/token.service";
 
 
@@ -62,7 +61,7 @@ export class BattlenetAuthController {
                     user.id,
                     cookieOptions
                 )
-                response.redirect(FRONTEND_ROOT_URL)
+                response.redirect(process.env.FRONTEND_ROOT_URL)
             })
     }
 

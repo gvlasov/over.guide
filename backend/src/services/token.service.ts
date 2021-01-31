@@ -1,6 +1,5 @@
 import {Injectable} from '@nestjs/common';
 import {User} from "src/database/models/User";
-import {TOKEN_CIPHER_SECRET} from "src/constants";
 
 @Injectable()
 export class TokenService {
@@ -10,7 +9,7 @@ export class TokenService {
     getToken(user: User): string {
         return this.CryptoJS.Rabbit.encrypt(
             user.battleNetUserId.toString(),
-            TOKEN_CIPHER_SECRET
+            process.env.TOKEN_CIPHER_SECRET
         ).toString();
     }
 
@@ -25,7 +24,7 @@ export class TokenService {
     getBattleNetUserId(token: string): string {
         // https://stackoverflow.com/a/22601457/1542343
         return this.CryptoJS.Rabbit
-            .decrypt(token, TOKEN_CIPHER_SECRET)
+            .decrypt(token, process.env.TOKEN_CIPHER_SECRET)
             .toString(this.CryptoJS.enc.Utf8);
     }
 

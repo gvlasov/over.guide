@@ -8,11 +8,6 @@
       <jdbc-url>jdbc:mariadb://localhost:4306/overwatch</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
-        <property name="zeroDateTimeBehavior" value="convertToNull" />
-        <property name="tinyInt1isBit" value="false" />
-        <property name="characterEncoding" value="utf8" />
-        <property name="characterSetResults" value="utf8" />
-        <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
     <data-source source="LOCAL" name="auto test" uuid="164147ed-ecf1-43d0-9568-1ca7d2c0d803">
