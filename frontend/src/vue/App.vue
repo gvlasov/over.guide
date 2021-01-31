@@ -55,7 +55,6 @@ export default class App extends Vue {
     }
 
     mounted() {
-        console.log(process.env)
         const path = localStorage.getItem('pathBeforeBnetAuth');
         if (path !== null) {
             localStorage.removeItem('pathBeforeBnetAuth')
