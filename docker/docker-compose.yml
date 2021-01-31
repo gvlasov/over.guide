@@ -19,11 +19,19 @@ services:
     working_dir: "/home/node/app"
     expose:
       - "8080"
-    ports:
-      - "8080:8080"
     volumes:
       - ..:/home/node/app
     command: "sh -c 'cd backend; npm run start:dev'"
+  backend-https-proxy:
+    image: nginx:1.12-alpine
+    ports:
+      - 8080:8080
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
+      - ./nginx/server.crt:/etc/nginx/server.crt
+      - ./nginx/server.key:/etc/nginx/server.key
+    depends_on:
+      - backend
 #  redis:
 #    image: redis:alpine
   mariadb:

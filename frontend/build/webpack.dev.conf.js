@@ -26,6 +26,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
 
+  output: {
+    path: config.build.assetsRoot,
+    filename: utils.assetsPath('js/[name].[hash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[hash].js')
+  },
+
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',
@@ -88,7 +94,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     ),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
-    })
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      template: 'src/index.html',
+      inject: true,
+      minify: {
+        removeComments: false,
+        collapseWhitespace: false,
+        removeAttributeQuotes: false
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+    }),
   ]
 })
 
