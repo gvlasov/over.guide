@@ -1,5 +1,5 @@
 import {Sequelize} from 'sequelize-typescript';
-import {SEQUELIZE, SQL_LOG} from '../constants';
+import {SEQUELIZE} from '../constants';
 import cls from 'cls-hooked';
 import PostTypeId from "data/PostTypeId";
 import models from './database.models'
@@ -30,7 +30,7 @@ export const databaseProviders = [
                     multipleStatements: true,
                 },
                 benchmark: true,
-                logging: SQL_LOG ? (...msg) => console.log(msg[0], ' — '+msg[1]+' ms') : false,
+                logging: process.env.SQL_LOG ? (...msg) => console.log(msg[0], ' — '+msg[1]+' ms') : false,
 
             });
             Sequelize.useCLS(
