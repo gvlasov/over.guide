@@ -6,7 +6,7 @@
   "scripts": {
     "test": "env TS_NODE_PROJECT=\"tsconfig.testing.json\" mocha --require ts-node/register ./test/**/*.ts",
     "build:dev": "node_modules/.bin/webpack --config build/webpack.dev.conf.js --mode development",
-    "build:prod": "node_modules/.bin/webpack --config build/webpack.prod.conf.js --mode production",
+    "build:prod": "env WEBPACK_OUTPUT_DIR=target/dist node_modules/.bin/webpack --config build/webpack.prod.conf.js --mode production",
     "dev-server": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --config build/webpack.dev.conf.js"
   },
   "author": "",

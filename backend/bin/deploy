@@ -3,6 +3,6 @@ set -ex
 cd $(git rev-parse --show-toplevel)/backend
 
 
-tar cfz - config package.json -C build dist -C ../src/database migrations | ssh site@smol.guide 'mkdir -p backend; cd backend; rm -rf config dist; cat | tar xz; ls -lah .'
+tar cfz - config package.json -C target dist -C ../src/database migrations | ssh site@smol.guide 'mkdir -p backend; cd backend; rm -rf config dist; cat | tar xz; ls -lah .'
 ssh root@smol.guide 'systemctl restart backend'
 

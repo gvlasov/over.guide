@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 cd $(git rev-parse --show-toplevel)/frontend
-set -e
-set -x
+set -ex
 
+npm run build:prod
 tar cfz - -C dist . | ssh site@smol.guide 'rm -rf public_html/*; cat | tar xz -C public_html; ls -lah public_html'
+rm -rf target/dist
