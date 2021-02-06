@@ -31,7 +31,7 @@ function pageBranchKey(query: GuideSearchQueryDto): number {
 
 
 @Injectable()
-export default class GuideSearchCacheService<T> {
+export default class SearchCacheService<T> {
 
     private root: CacheLevel<T> = {
         subnodes: new Map(),

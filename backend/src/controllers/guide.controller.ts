@@ -1,11 +1,9 @@
 import {
     Body,
-    CACHE_MANAGER,
     Controller,
     Get,
     HttpCode,
     HttpStatus,
-    Inject,
     Param,
     Post,
     Req,
@@ -35,10 +33,11 @@ import ApiErrorId from "data/ApiErrorId";
 import {RestrictionService} from "src/services/restriction.service";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
-import GuideSearchCacheService from "src/services/guide-search-cache.service";
+import SearchCacheService from "src/services/search-cache.service";
 
 @Controller('guide')
 export class GuideController {
+
 
     constructor(
         private readonly authService: AuthService,
@@ -46,9 +45,9 @@ export class GuideController {
         private readonly moderationService: ModerationService,
         private readonly guideSearchService: GuideSearchService,
         private readonly restrictionService: RestrictionService,
-        private readonly guideSearchCache: GuideSearchCacheService<GuideSearchPageDto>,
-        @Inject(CACHE_MANAGER) private readonly cacheManager
+        private readonly guideSearchCache: SearchCacheService<GuideSearchPageDto>
     ) {
+
     }
 
     @Get(':id')

@@ -18,6 +18,8 @@ import GuideHistoryEntryCreateDto from "data/dto/GuideHistoryEntryCreateDto";
 import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import {RestrictionService} from "src/services/restriction.service";
+import SearchCacheService from "src/services/search-cache.service";
+import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 
 export enum SaveResult {
     SavingDuplicateRejected,
@@ -32,6 +34,7 @@ export class GuideHistoryEntryService {
         private readonly contentHashService: ContentHashService,
         @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
         private readonly restrictionService: RestrictionService,
+        private readonly guideSearchCache: SearchCacheService<GuideSearchPageDto>
     ) {
     }
 

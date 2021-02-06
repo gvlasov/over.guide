@@ -1,7 +1,7 @@
 import {nestTest} from "src/test/nest-test";
 import heroesFixture from "@fixtures/heroes"
 import guideDescriptorsFixture from "@fixtures/guide-descriptor"
-import GuideSearchCacheService from "src/services/guide-search-cache.service";
+import SearchCacheService from "src/services/search-cache.service";
 import singleUserFixture from "@fixtures/single-user";
 import abilitiesFixture from "@fixtures/abilities";
 import mapsFixture from "@fixtures/maps";
@@ -12,8 +12,8 @@ import HeroId from "data/HeroId";
 import GuideSearchQueryQuickie from "data/dto/GuideSearchQueryQuickie";
 
 describe(
-    GuideSearchCacheService,
-    nestTest(GuideSearchCacheService, (ctx) => {
+    SearchCacheService,
+    nestTest(SearchCacheService, (ctx) => {
             it('returns null for any query to empty cache', async () => {
                 await ctx.fixtures(
                     heroesFixture,
