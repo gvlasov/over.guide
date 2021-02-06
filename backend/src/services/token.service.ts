@@ -14,11 +14,15 @@ export class TokenService {
     }
 
     async getUser(token: string): Promise<User | null> {
-        return User.findOne({
-            where: {
-                battleNetUserId: this.getBattleNetUserId(token)
-            },
-        })
+        try {
+            return User.findOne({
+                where: {
+                    battleNetUserId: this.getBattleNetUserId(token)
+                },
+            })
+        } catch(e) {
+            return null
+        }
     }
 
     getBattleNetUserId(token: string): string {
