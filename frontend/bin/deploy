@@ -3,5 +3,4 @@ cd $(git rev-parse --show-toplevel)/frontend
 set -e
 set -x
 
-ssh site@smol.guide bash -c 'set -x; rm -rf /home/site/public_html'
-scp -r dist site@smol.guide:~/public_html
+tar cfz - -C dist . | ssh site@smol.guide 'rm -rf public_html/*; cat | tar xz -C public_html; ls -lah public_html'
