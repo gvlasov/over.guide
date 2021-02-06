@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -ex
+cd $(git rev-parse --show-toplevel)/backend
+
+
+tar cfz - build/dist config package.json node_modules | ssh site@smol.guide 'rm -rf backend/*; cat | tar xz -C backend; du -sh backend'
+ssh root@smol.guide 'systemctl restart backend'
+
