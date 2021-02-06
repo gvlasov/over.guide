@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -ex
+cd $(git rev-parse --show-toplevel)/backend
+
+# Deploying node_modules is in a different script
+# from the rest of code because it is heavy
+
+tar cfz - node_modules | ssh site@smol.guide 'mkdir -p backend; cd backend; cat | tar xz; ls -lah .'
+

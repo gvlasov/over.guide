@@ -40,7 +40,7 @@ export const databaseProviders = [
             sequelize.addModels(models);
             const umzug = new Umzug({
                 migrations: {
-                    path: 'src/database/migrations',
+                    path: process.env.MIGRATIONS_PATH,
                     params: [
                         sequelize.getQueryInterface(),
                         PostTypeId.Guide
