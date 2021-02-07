@@ -10,7 +10,7 @@ import abilitiesFixture from '@fixtures/abilities'
 import commentsFixture from "@fixtures/commentsFixture";
 import patchFixture from "@fixtures/patchFixture";
 
-@Controller()
+@Controller('fixture')
 export class FixtureController {
 
     constructor(
