@@ -36,6 +36,7 @@ import {NotificationsGateway} from "src/controllers/notifications.gateway";
 import {OnlineUsersRepository} from "src/services/online-users.repository";
 import {NotificationService} from "src/services/notification.service";
 import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
+import TagIdService from "src/services/TagIdSerivce";
 
 const config = {
     imports: [
@@ -79,11 +80,8 @@ const config = {
         ReportSearchService,
         SentenceImmediateActionService,
         RestrictionService,
-        {
-            // Have to use provider because value is generic
-            provide: SearchCacheService,
-            useValue: new SearchCacheService<GuideSearchPageDto>(),
-        },
+        SearchCacheService,
+        TagIdService,
         NotificationsGateway,
         OnlineUsersRepository,
         NotificationService,

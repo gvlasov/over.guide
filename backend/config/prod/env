@@ -9,5 +9,5 @@ BATTLE_NET_CLIENT_ID=9b012b6e1edf492085cfc5eded56adae
 FRONTEND_ROOT_URL=https://smol.guide/
 TOKEN_CIPHER_SECRET=9hello beau&tiful ladee horse!
 COOKIE_DOMAIN=.smol.guide
-SQL_LOG=0
+SQL_LOG=1
 MIGRATIONS_PATH=migrations

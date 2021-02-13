@@ -30,7 +30,7 @@ export const databaseProviders = [
                     multipleStatements: true,
                 },
                 benchmark: true,
-                logging: process.env.SQL_LOG ? (...msg) => console.log(msg[0], ' — '+msg[1]+' ms') : false,
+                logging: Number.parseInt(process.env.SQL_LOG) ? (...msg) => console.log(msg[0], ' — '+msg[1]+' ms') : false,
 
             });
             Sequelize.useCLS(

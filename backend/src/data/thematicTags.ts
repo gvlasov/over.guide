@@ -58,11 +58,11 @@ const data = [
         dataName: 'Roles',
     },
 ]
-const map = new Map<string, ThematicTagDto>()
+const map = new Map<number, ThematicTagDto>()
 data.forEach(
     d => {
         map.set(
-            d.dataName,
+            d.id,
             {
                 id: d.id,
                 name: d.name,

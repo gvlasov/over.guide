@@ -45,7 +45,7 @@ export class GuideController {
         private readonly moderationService: ModerationService,
         private readonly guideSearchService: GuideSearchService,
         private readonly restrictionService: RestrictionService,
-        private readonly guideSearchCache: SearchCacheService<GuideSearchPageDto>
+        private readonly guideSearchCache: SearchCacheService
     ) {
 
     }
