@@ -41,7 +41,16 @@ group by GHL.guideId
 }
 
 async function down(queryInterface) {
-    throw new Error('Downing not available')
+    await database.sequelize.query(
+        `
+            DROP TABLE IF EXISTS GuideHead;
+        `
+    )
+    await database.sequelize.query(
+        `
+            DROP TABLE IF EXISTS GuideHeadLink;
+        `
+    )
 }
 
 module.exports = {up, down};
