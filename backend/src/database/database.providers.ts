@@ -3,6 +3,7 @@ import {SEQUELIZE} from '../constants';
 import cls from 'cls-hooked';
 import models from './database.models'
 import {ModuleRef} from "@nestjs/core";
+import * as fs from "fs";
 
 const Umzug = require('umzug')
 
@@ -45,7 +46,7 @@ export const databaseProviders = [
                 baseUrl: './',
                 paths:
                     process.env.ENV === 'prod'
-                        ? require('../tsconfig.prod.tsbuildinfo').program.options.paths
+                        ? JSON.parse(Buffer.from(await fs.promises.readFile('tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
                         : require('../../tsconfig.json').compilerOptions.paths
             })
             const umzug = new Umzug({
