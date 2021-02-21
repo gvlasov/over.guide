@@ -46,7 +46,7 @@ export const databaseProviders = [
                 baseUrl: './',
                 paths:
                     process.env.ENV === 'prod'
-                        ? JSON.parse(Buffer.from(await fs.promises.readFile('tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
+                        ? JSON.parse(Buffer.from(await fs.promises.readFile('./dist/tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
                         : require('../../tsconfig.json').compilerOptions.paths
             })
             const umzug = new Umzug({
