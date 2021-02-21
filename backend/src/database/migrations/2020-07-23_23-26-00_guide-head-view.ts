@@ -1,4 +1,4 @@
-import PostTypeId from '../../data/PostTypeId'
+import PostTypeId from 'data/PostTypeId'
 import {ModuleRef} from "@nestjs/core";
 import {Sequelize} from "sequelize-typescript";
 
