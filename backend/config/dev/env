@@ -1,4 +1,4 @@
-ENV=prod
+ENV=dev
 DB_USER=root
 DB_HOST=mariadb
 DB_NAME=overwatch
