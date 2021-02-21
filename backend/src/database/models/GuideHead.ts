@@ -18,6 +18,8 @@ import {GuideDescriptor} from "src/database/models/GuideDescriptor";
 import {YoutubeVideoExcerpt} from "src/database/models/YoutubeVideoExcerpt";
 import {User2TrainingGoal} from "src/database/models/User2TrainingGoal";
 import GuideHistoryEntryReadDto from "data/dto/GuideHistoryEntryReadDto";
+import {TruncateOptions} from "sequelize/types/lib/model";
+import PromiseBB from 'sequelize/lib/promise'
 
 @Table(
     {
@@ -115,5 +117,9 @@ export class GuideHead extends Model<GuideHead> {
                 ]
             },
         ]
+    }
+
+    public static truncate(options?: TruncateOptions): PromiseBB<void> {
+        return PromiseBB.resolve(void 0)
     }
 }

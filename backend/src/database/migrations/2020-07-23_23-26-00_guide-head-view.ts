@@ -7,7 +7,7 @@ export async function up(moduleRef: ModuleRef, sequelize: Sequelize) {
         sequelize.query(
                 `
                     DROP TABLE IF EXISTS GuideHeadLink;
-                    CREATE VIEW GuideHeadLink
+                    CREATE OR REPLACE VIEW GuideHeadLink
                     AS
                     select guideHistoryEntryId,
                            guideId
@@ -27,7 +27,7 @@ export async function up(moduleRef: ModuleRef, sequelize: Sequelize) {
     await sequelize.query(
         `
                 DROP TABLE IF EXISTS GuideHead;
-                CREATE VIEW GuideHead
+                CREATE OR REPLACE VIEW GuideHead
                 AS
                 select guideHistoryEntryId,
                        GHL.guideId,

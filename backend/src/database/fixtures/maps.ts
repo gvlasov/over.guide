@@ -3,10 +3,10 @@ import {Map as MapModel} from "src/database/models/Map"
 import MapDto from 'data/dto/MapDto'
 
 export default async () => {
-    await Promise.all(
+    return Promise.all(
         Array.from<MapDto>(maps.values()).map(
             map => {
-                MapModel.create({
+                return MapModel.create({
                     id: map.id,
                     name: map.name,
                     type: map.type,

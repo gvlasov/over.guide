@@ -42,11 +42,12 @@ export const databaseProviders = [
             // https://github.com/sequelize/umzug
             // Ctrl+F "You can also write your migrations in typescript"
             require('ts-node/register')
+            console.log(process.env.PWD)
             require('tsconfig-paths').register({
                 baseUrl: './',
                 paths:
                     process.env.ENV === 'prod'
-                        ? JSON.parse(Buffer.from(await fs.promises.readFile('./dist/tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
+                        ? JSON.parse(Buffer.from(await fs.promises.readFile('./dist/tsconfig.build.tsbuildinfo')).toString('utf8')).program.options.paths
                         : require('../../tsconfig.json').compilerOptions.paths
             })
             const umzug = new Umzug({

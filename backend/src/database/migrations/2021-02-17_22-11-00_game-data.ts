@@ -8,6 +8,7 @@ import {ThematicTag} from "src/database/models/ThematicTag";
 import {Hero} from "src/database/models/Hero";
 import {Ability} from "src/database/models/Ability";
 import {Map} from "src/database/models/Map";
+import {QueryOptions} from "sequelize";
 
 
 export async function up(moduleRef: ModuleRef, sequelize: Sequelize) {
@@ -19,15 +20,28 @@ export async function up(moduleRef: ModuleRef, sequelize: Sequelize) {
             Ability
         ]
     )
-    await heroes()
-    await thematicTags()
-    await maps()
-    await abilities()
+    await sequelize.transaction(t => {
+        const options: QueryOptions = {
+            raw: true,
+            transaction: t,
+
+        }
+        return sequelize
+            .query('SET FOREIGN_KEY_CHECKS = 0', options)
+            .then(() => sequelize.truncate(options))
+            .then(() =>
+                sequelize.query('SET FOREIGN_KEY_CHECKS = 1', options)
+            )
+            .then(heroes)
+            .then(thematicTags)
+            .then(maps)
+            .then(abilities)
+    })
 }
 
 export async function down(moduleRef: ModuleRef, sequelize: Sequelize) {
-    Hero.truncate()
-    ThematicTag.truncate()
-    Ability.truncate()
-    Map.truncate()
+    await Hero.truncate()
+    await ThematicTag.truncate()
+    await Ability.truncate()
+    await Map.truncate()
 }
