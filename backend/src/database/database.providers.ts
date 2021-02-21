@@ -1,15 +1,15 @@
 import {Sequelize} from 'sequelize-typescript';
 import {SEQUELIZE} from '../constants';
 import cls from 'cls-hooked';
-import PostTypeId from "data/PostTypeId";
 import models from './database.models'
+import {ModuleRef} from "@nestjs/core";
 
 const Umzug = require('umzug')
 
 export const databaseProviders = [
     {
         provide: SEQUELIZE,
-        useFactory: async () => {
+        useFactory: async (moduleRef: ModuleRef) => {
             const host: string = process.env.DB_HOST || 'mariadb';
             const port: number = Number.parseInt(process.env.DB_PORT, 10) || 3306;
             const sequelize = new Sequelize({
@@ -30,7 +30,7 @@ export const databaseProviders = [
                     multipleStatements: true,
                 },
                 benchmark: true,
-                logging: Number.parseInt(process.env.SQL_LOG) ? (...msg) => console.log(msg[0], ' — '+msg[1]+' ms') : false,
+                logging: Number.parseInt(process.env.SQL_LOG) ? (...msg) => console.log(msg[0], ' — ' + msg[1] + ' ms') : false,
 
             });
             Sequelize.useCLS(
@@ -38,22 +38,32 @@ export const databaseProviders = [
             )
 
             sequelize.addModels(models);
+            // https://github.com/sequelize/umzug
+            // Ctrl+F "You can also write your migrations in typescript"
+            require('ts-node/register')
+            const tsconfigPaths = require('tsconfig-paths')
+            const tsconfig = require('../../tsconfig.json')
+            tsconfigPaths.register({
+                baseUrl: './',
+                paths: tsconfig.compilerOptions.paths
+            })
             const umzug = new Umzug({
                 migrations: {
                     path: process.env.MIGRATIONS_PATH,
+                    pattern: /\.ts$/,
                     params: [
-                        sequelize.getQueryInterface(),
-                        PostTypeId.Guide
+                        moduleRef,
+                        sequelize,
                     ]
                 },
                 storage: 'sequelize',
                 storageOptions: {
                     sequelize: sequelize,
-
                 }
             });
             await sequelize.sync().then(() => umzug.up())
             return sequelize;
+
         },
     },
 ];
