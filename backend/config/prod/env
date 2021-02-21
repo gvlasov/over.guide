@@ -10,4 +10,4 @@ FRONTEND_ROOT_URL=https://smol.guide/
 TOKEN_CIPHER_SECRET=9hello beau&tiful ladee horse!
 COOKIE_DOMAIN=.smol.guide
 SQL_LOG=1
-MIGRATIONS_PATH=migrations
+MIGRATIONS_PATH=dist/database/migrations
