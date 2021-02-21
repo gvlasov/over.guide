@@ -44,7 +44,7 @@ export const databaseProviders = [
             require('tsconfig-paths').register({
                 baseUrl: './',
                 paths:
-                    process.env.ENVIRONMEMNT === 'prod'
+                    process.env.ENVIRONMENT === 'prod'
                         ? require('../tsconfig.prod.tsbuildinfo').program.options.paths
                         : require('../../tsconfig.json').compilerOptions.paths
             })
