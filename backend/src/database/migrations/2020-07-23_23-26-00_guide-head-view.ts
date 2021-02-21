@@ -1,6 +1,10 @@
-async function up(database, guidePostTypeId) {
+import PostTypeId from '../../data/PostTypeId'
+import {ModuleRef} from "@nestjs/core";
+import {Sequelize} from "sequelize-typescript";
+
+export async function up(moduleRef: ModuleRef, sequelize: Sequelize) {
     await
-        database.sequelize.query(
+        sequelize.query(
                 `
                     DROP TABLE IF EXISTS GuideHeadLink;
                     CREATE VIEW GuideHeadLink
@@ -20,7 +24,7 @@ async function up(database, guidePostTypeId) {
                     where __row_number = __row_count
             `
         );
-    await database.sequelize.query(
+    await sequelize.query(
         `
                 DROP TABLE IF EXISTS GuideHead;
                 CREATE VIEW GuideHead
@@ -32,25 +36,23 @@ async function up(database, guidePostTypeId) {
                 from GuideHeadLink GHL
 left join Comment C
 on GHL.guideId = C.postId
-and C.postType = ${guidePostTypeId}
+and C.postType = ${PostTypeId.Guide}
 left join Vote V 
-on V.postId = GHL.guideId and V.postTypeId = ${guidePostTypeId}
+on V.postId = GHL.guideId and V.postTypeId = ${PostTypeId.Guide}
 group by GHL.guideId
         `
     );
 }
 
-async function down(queryInterface) {
-    await database.sequelize.query(
+export async function down(moduleRef: ModuleRef, sequelize: Sequelize) {
+    await sequelize.query(
         `
             DROP TABLE IF EXISTS GuideHead;
         `
     )
-    await database.sequelize.query(
+    await sequelize.query(
         `
             DROP TABLE IF EXISTS GuideHeadLink;
         `
     )
 }
-
-module.exports = {up, down};
