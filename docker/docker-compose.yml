@@ -34,8 +34,8 @@ services:
       - ./nginx/server.key:/etc/nginx/server.key
     depends_on:
       - backend
-#  redis:
-#    image: redis:alpine
+  #  redis:
+  #    image: redis:alpine
   mariadb:
     image: mariadb:10.3.27
     expose:
@@ -58,3 +58,16 @@ services:
       MYSQL_ROOT_PASSWORD: "1"
       MYSQL_DATABASE: "overwatch"
       MYSQL_INITDB_SKIP_TZINFO: "1"
+  sensu-backend:
+    image: sensu/sensu:latest
+    volumes:
+      - /var/lib/sensu:/var/lib/sensu
+    ports:
+      - 3000:3000
+      - 8080:8080
+      - 8081:8081
+    environment:
+      SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: smol
+      SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: guide
+    command: "sensu-backend start --state-dir /var/lib/sensu/sensu-backend --log-level debug"
+
