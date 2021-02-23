@@ -4,3 +4,4 @@ set -ex
 
 npm run build:prod
 tar cfz - -C target . | ssh site@smol.guide 'rm -rf public_html/*; cat | tar xz -C public_html; ls -lah public_html'
+echo Frontend deployed at $(date "+%Y-%m-%d %H:%M:%S")
