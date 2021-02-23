@@ -145,6 +145,7 @@ export default class YoutubeVideo extends Vue {
         if (this.player !== void 0) {
             this.rescheduleLooping()
         }
+        this.player.seekTo(Math.max((this.start ?? 0), value-1), true);
     }
 
     @Watch('loop')
