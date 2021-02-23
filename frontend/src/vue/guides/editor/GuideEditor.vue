@@ -154,6 +154,7 @@ import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
 import LinkedDescriptorSuggestionSelector
     from "@/vue/guides/editor/LinkedDescriptorSuggestionSelector.vue";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
+import Cookies from "js-cookie";
 
 const Debounce = require('debounce-decorator').default
 
@@ -188,9 +189,14 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     $scrollTo: any
 
+    private readonly previewCookieName = 'creation-in-preview'
+
     @Watch('head', {deep: true})
     @Debounce(500)
-    onGuideChange(newValue: NewGuideHeadVso | ExistingGuideHeadVso) {
+    onGuideChange(newValue: NewGuideHeadVso | ExistingGuideHeadVso, oldValue) {
+        if (oldValue === null) {
+            this.preview = newValue !== null && Cookies.get(this.previewCookieName) === '1'
+        }
         if (newValue.entry instanceof NewGuideHistoryEntryVso) {
             if (newValue.entry.isEmpty) {
                 draft.reset();
@@ -324,6 +330,11 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
 
     get isNewGuide(): boolean {
         return this.head instanceof NewGuideHeadVso
+    }
+
+    @Watch('preview')
+    onPreviewChange(newValue: boolean) {
+        Cookies.set(this.previewCookieName, newValue ? '1' : '0')
     }
 }
 </script>
