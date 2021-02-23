@@ -35,4 +35,24 @@ export default class GuidePartText extends Vue {
     word-break: break-word;
     font-family: $body-font;
 }
+
+
+::v-deep h1 {
+    font-size: 1.8rem;
+}
+::v-deep h2 {
+    font-size: 1.6rem;
+}
+::v-deep h3 {
+    font-size: 1.3rem;
+}
+::v-deep h4 {
+    font-size: 1.1rem;
+}
+::v-deep h5 {
+    font-size: 1rem;
+}
+::v-deep h6 {
+    font-size: .7rem;
+}
 </style>
