@@ -34,6 +34,14 @@ export default class Upvoter extends Vue {
     @Prop({required: true})
     entry: ExistingGuideHistoryEntryVso
 
+    /**
+     * Whether training goal doesn't do anything if clicked,
+     * even if enabled. It will look and feel like normal,
+     * but doesn't act.
+     */
+    @Prop({required: false, default: false})
+    idle: boolean
+
     tappable: boolean = true
 
     auth: Authentication = Authentication.instance
@@ -41,7 +49,7 @@ export default class Upvoter extends Vue {
     cache: MyTrainingGoalsCache = myTrainingGoalsCache
 
     onTap() {
-        if (!this.tappable) {
+        if (!this.tappable || this.idle) {
             return
         }
         this.tappable = false

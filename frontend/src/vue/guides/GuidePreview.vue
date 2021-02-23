@@ -8,10 +8,26 @@
         <GuideContent
                 :entry="head.entry"
         />
-        <div class="comments">
-            <CommentsButton
-                    :comments-count="head.commentsCount"
-            />
+
+        <div class="footer">
+            <div class="buttons">
+                <Upvoter
+                        :post-id="-1"
+                        :post-type-id="PostTypeId.Guide"
+                        @upvote="() => void 0"
+                        @upvoteRemoved="() => void 0"
+                />
+                <div class="votes-count">{{ 0 }}</div>
+                <TrainingGoalButton
+                        :entry="head.entry"
+                        :idle="true"
+                />
+            </div>
+            <div class="comments">
+                <CommentsButton
+                        :comments-count="head.commentsCount"
+                />
+            </div>
         </div>
     </OverwatchPanel>
 </template>
@@ -36,6 +52,8 @@ import UserDto from "data/dto/UserDto";
 import Authentication from "@/ts/Authentication";
 import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
+import Upvoter from "@/vue/comments/Upvoter.vue";
+import PostTypeId from 'data/PostTypeId'
 
 
 @Component({
@@ -49,11 +67,16 @@ import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
         GuideVideo,
         GuidePartText,
         OverwatchButton,
+        Upvoter,
     },
 })
 export default class GuidePreview extends Vue {
+
+    PostTypeId = PostTypeId
+
     @Prop({required: true})
     head: NewGuideHeadVso
+
 
     get metaEntry(): ExistingGuideHistoryEntryVso {
         return new ExistingGuideHistoryEntryVso({
@@ -128,11 +151,42 @@ export default class GuidePreview extends Vue {
         }
     }
 
-    .comments {
-        text-align: right;
 
-        button {
-            font-size: 1.5em;
+    .footer {
+        border-top: 1px solid hsla(0, 0, 100%, .2);
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 1em;
+
+        .buttons {
+            flex-grow: 1;
+            text-align: left;
+            display: flex;
+            align-items: center;
+
+            .votes-count {
+                padding-left: .5em;
+                padding-right: 1.5em;
+                font-weight: bold;
+                font-size: 1.4em;
+                @include overwatch-futura;
+            }
+
+            .upvoter {
+                display: inline-block;
+            }
+
+            .training-goal-button {
+                display: inline-block;
+            }
+        }
+
+        .comments {
+            text-align: right;
+
+            button {
+                font-size: 1.5em;
+            }
         }
     }
 }
