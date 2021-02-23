@@ -605,7 +605,7 @@ const data = [
         heroId: HeroId.McCree,
         name: 'Fan the Hammer',
         dataName: 'fan-the-hammer',
-        keyIds: [KeyId.LMB],
+        keyIds: [KeyId.RMB],
         description: 'McCree can fan the Peacekeeper’s hammer to swiftly unload the entire cylinder.',
     },
     {
