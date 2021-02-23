@@ -190,6 +190,11 @@ export class GuideController {
                 response.status(HttpStatus.METHOD_NOT_ALLOWED)
             } else {
                 await guide.deactivate(user)
+                    .then(guide => {
+                        this.guideSearchCache.clear(
+                            guide.head.guideHistoryEntry.descriptor.toDto()
+                        )
+                    })
                 response.status(HttpStatus.NO_CONTENT)
             }
         }

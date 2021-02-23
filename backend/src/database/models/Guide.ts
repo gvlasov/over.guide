@@ -4,7 +4,7 @@ import {
     BelongsTo,
     Column,
     ForeignKey,
-    HasMany,
+    HasMany, HasOne,
     Model,
     PrimaryKey,
     Table
@@ -16,6 +16,7 @@ import {utcDate} from "@hamroctopus/utc-date";
 import GuideDto from "data/dto/GuideDto";
 import {Vote} from "src/database/models/Vote";
 import PostTypeId from "data/PostTypeId";
+import {GuideHead} from "src/database/models/GuideHead";
 
 @Table({
     name: {
@@ -69,6 +70,9 @@ export class Guide extends Model<Guide> {
         }
     )
     votes: Vote[]
+
+    @HasOne(() => GuideHead, 'guideId')
+    head: GuideHead
 
     isActive(): boolean {
         return this.deactivatedById === null && this.deactivatedAt === null
