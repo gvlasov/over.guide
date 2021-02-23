@@ -88,6 +88,7 @@ export default class GuidePreview extends Vue {
                     name: new Authentication().username || 'you',
                 } as UserDto,
                 id: 0,
+                isPublic: this.head.entry.isPublic,
             } as GuideDto,
             updatedAt: new Date().toISOString()
         })
