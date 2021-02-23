@@ -78,7 +78,7 @@ export class GuideSearchService {
                         },
                     },
                     limit: GuideSearchService.pageSize + 1,
-                    order: [['guideHistoryEntryId', 'DESC']]
+                    order: [['guideId', 'DESC']]
                 });
         return {
             items: nextGuides
