@@ -13,9 +13,7 @@
                 by
                 <UserLink :user="entry.author"/>
             </div>
-            <PrivateLabel
-                    v-else
-            ></PrivateLabel>
+            <PrivateLabel v-else></PrivateLabel>
         </div>
     </div>
 </template>
