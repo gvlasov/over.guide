@@ -241,6 +241,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                 }
                 this.$router.push(`/guide/${guideId}`)
                 draft.reset()
+                Cookies.set(this.previewCookieName, '0')
             })
             .catch(error => {
                 if (error.response.status === 403) {
