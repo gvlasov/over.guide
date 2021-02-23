@@ -78,7 +78,11 @@
                 >reset cut
                 </OverwatchPanelButton>
                 <div class="total-cut-length">
-                    {{ totalCutLengthText }}
+                    {{ relativePositionText }}<br/>
+                    <div>
+                        <span class="hanging">/ </span>
+                        {{ totalCutLengthText }}
+                    </div>
                 </div>
             </div>
             <div style="clear: both;"></div>
@@ -362,8 +366,8 @@ export default class YoutubeExcerptEditor extends Vue {
         }
     }
 
-    get totalCutLengthText(): string {
-        const length = this.endSeconds - this.startSeconds;
+    private secondsToText(totalSeconds: number): string {
+        const length = totalSeconds
         const hours = Math.floor(length / 3600);
         const minutes = Math.floor((length % 3600) / 60)
         const seconds = Math.floor(length % 60)
@@ -378,7 +382,14 @@ export default class YoutubeExcerptEditor extends Vue {
         } else {
             return parts[3] + ' ms';
         }
+    }
 
+    get totalCutLengthText(): string {
+        return this.secondsToText(this.endSeconds - this.startSeconds)
+    }
+
+    get relativePositionText() {
+        return this.secondsToText(this.currentSeconds - this.startSeconds)
     }
 
     pasteHandler(event) {
@@ -509,6 +520,12 @@ $max-portrait-mode-width: $root-content-width - 3rem;
         .total-cut-length {
             flex-basis: 100%;
             font-family: 'Futura Demi Bold', sans-serif;
+            .hanging {
+                display: inline;
+                position: absolute;
+                transform: translateX(-100%);
+                white-space: pre;
+            }
         }
 
         margin-bottom: 1.5em;
