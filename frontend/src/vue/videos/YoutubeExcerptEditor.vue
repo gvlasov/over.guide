@@ -292,7 +292,10 @@ export default class YoutubeExcerptEditor extends Vue {
     }
 
     onDraglessClick(clickCoord) {
-        this.player.seekTo(this.clickCoordToSeconds(clickCoord), allowSeekAhead);
+        this.player.seekTo(
+            this.clickCoordToSeconds(clickCoord),
+            true
+        );
     }
 
     setBoundsFromDrag(drag) {
