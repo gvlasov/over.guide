@@ -59,8 +59,6 @@ export default class HeroPortraitSkewed extends Vue {
     border-radius: .4vw;
     margin-right: .4vw;
     border: .14vw solid white;
-    cursor: pointer;
-
 
     &.banned > .skew-underlying {
         opacity: .3;

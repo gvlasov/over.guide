@@ -25,10 +25,11 @@
                                 :hero="hero"
                                 :selected="isHeroSelected(hero)"
                                 :gamer-position="gamerPosition"
-                                @heroSelect="onHeroTap"
+                                @heroSelect="onHeroTapIfEnabled"
                                 @skillSelectionStart="() => {selectingSkills = true}"
                                 :abilities="selectedHeroAbilities(hero)"
                                 :tag-group-abilities="tagGroup.abilities"
+                                :disabled="!isHeroSelected(hero) && hasMaxHeroes"
                         />
                         <div
                                 class="clear-button-wrap"
@@ -132,6 +133,8 @@ export default class HeroTagBuilderRoster extends mixins(Roster_SelectedHeroesMi
 
     draftDescriptor: GuideDescriptorVso = this.descriptor.clone()
 
+    private readonly maxHeroesNumber: number = 6
+
     onDoneTap() {
         this.$emit('descriptorChange', this.draftDescriptor)
         this.$emit('save')
@@ -140,6 +143,17 @@ export default class HeroTagBuilderRoster extends mixins(Roster_SelectedHeroesMi
     @Watch('descriptor')
     onInputDescriptorChange() {
         this.draftDescriptor = this.descriptor.clone()
+    }
+
+    onHeroTapIfEnabled(hero: HeroDto) {
+        if (this.hasMaxHeroes && !this.isHeroSelected(hero)) {
+            return
+        }
+        this.onHeroTap(hero)
+    }
+
+    get hasMaxHeroes(): boolean {
+        return this.draftDescriptor.heroesLength >= this.maxHeroesNumber
     }
 
     selectedHeroAbilities(hero) {

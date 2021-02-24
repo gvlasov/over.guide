@@ -116,6 +116,12 @@ export default class GuideDescriptorVso {
         ].join('|')
     }
 
+    get heroesLength(): number {
+        return this.players.heroes.length +
+            this.teammates.heroes.length +
+            this.enemies.heroes.length
+    }
+
     get hasHeroes(): boolean {
         return this.players.heroes.length > 0 ||
             this.teammates.heroes.length > 0 ||

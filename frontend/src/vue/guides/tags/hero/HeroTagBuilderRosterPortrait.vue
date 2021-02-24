@@ -73,7 +73,20 @@ export default class HeroTagBuilderRosterPortrait extends Vue {
     padding-bottom: 10.6%;
     display: inline-block;
     margin: .34%;
-    transform: skew(-25deg);
+    transform: skew(-25deg) translateZ(0);
+
+
+    opacity: 1;
+    filter: grayscale(0%);
+    transition: .12s;
+    cursor: pointer;
+    &[disabled=disabled] {
+        opacity: .4;
+        transform: skew(-25.1deg) translateZ(0);
+        filter: grayscale(70%);
+        transition: .12s;
+        cursor: default;
+    }
 }
 
 .roster-portrait {
