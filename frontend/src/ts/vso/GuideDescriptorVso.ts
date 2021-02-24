@@ -122,6 +122,12 @@ export default class GuideDescriptorVso {
             this.enemies.heroes.length
     }
 
+    get abilitiesLength(): number {
+        return this.players.abilities.length +
+            this.teammates.abilities.length +
+            this.enemies.abilities.length
+    }
+
     get hasHeroes(): boolean {
         return this.players.heroes.length > 0 ||
             this.teammates.heroes.length > 0 ||

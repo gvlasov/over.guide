@@ -3,9 +3,10 @@
         <AbilityCheckbox
                 v-for="ability in abilities"
                 :model-value="selectedAbilities"
-                @change="($event)=>$emit('selectedAbilitiesChange', $event)"
+                @change="($event)=>hasMaxAbilities && !isSelected(ability) || $emit('selectedAbilitiesChange', $event)"
                 :value="ability"
                 :key="ability.id"
+                :disabled="hasMaxAbilities && !isSelected(ability)"
         />
     </div>
 </template>
@@ -18,6 +19,7 @@ import Vue from 'vue'
 import Component from "vue-class-component";
 import {Model, Prop} from "vue-property-decorator";
 import HeroDto from "data/dto/HeroDto";
+import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
 
 @Component({
     components: {
@@ -25,11 +27,16 @@ import HeroDto from "data/dto/HeroDto";
     },
 })
 export default class AbilitySelect extends Vue {
+    @Prop({required: true})
+    descriptor: GuideDescriptorVso
+
     @Model('selectedAbilitiesChange', {required: true})
     selectedAbilities: AbilityVso[]
 
     @Prop({required: true})
     heroes: HeroDto[]
+
+    private readonly maxAbilitiesNumber: number = 7
 
     get abilities(): AbilityVso[] {
         const allAbilities = Array.from(abilities.values());
@@ -38,6 +45,15 @@ export default class AbilitySelect extends Vue {
         )
             .map(it => new AbilityVso(it))
     }
+
+    private isSelected(ability: AbilityVso): boolean  {
+        return this.selectedAbilities.find(it => it.id === ability.id) !== void 0
+    }
+
+    get hasMaxAbilities(): boolean {
+        return this.descriptor.abilitiesLength >= this.maxAbilitiesNumber
+    }
+
 }
 </script>
 
@@ -54,7 +70,18 @@ export default class AbilitySelect extends Vue {
     flex-wrap: wrap;
 
     .ability-checkbox {
+        user-select: none;
         margin: .2rem;
+        opacity: 1;
+        filter: grayscale(0%);
+        transition: .1s;
+        cursor: pointer;
+        &[disabled=disabled] {
+            opacity: .4;
+            filter: grayscale(70%);
+            transition: .1s;
+            cursor: default;
+        }
     }
 
 }

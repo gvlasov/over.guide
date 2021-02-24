@@ -58,6 +58,10 @@ export default class AbilityCheckbox extends Vue {
     value: any
 
     updateInput(event) {
+
+        if (this.$el.getAttribute('disabled') === 'disabled') {
+            return
+        }
         const checkbox = this.$refs.checkbox as HTMLInputElement;
         let isChecked = !checkbox.checked;
 

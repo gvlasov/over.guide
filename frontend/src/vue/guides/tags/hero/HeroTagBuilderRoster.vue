@@ -52,6 +52,7 @@
                 >
                     <AbilitySelect
                             :heroes="tagGroup.heroes"
+                            :descriptor="draftDescriptor"
                             v-model="tagGroup.abilities"
                             class="ability-select"
                     />
