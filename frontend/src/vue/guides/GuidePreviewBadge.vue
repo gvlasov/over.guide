@@ -211,6 +211,10 @@ export default class GuidePreviewBadge extends Vue {
                     height: 100%;
                     display: flex;
                     align-items: center;
+                    * {
+                        margin-right: .4em;
+                        font-size: 1.3rem !important;
+                    }
                 }
 
                 & ::v-deep * {
