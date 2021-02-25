@@ -177,6 +177,7 @@ export default class ThematicTagInput extends Vue {
         input[type=text] {
             font-family: $body-font;
             font-size: .9em;
+            margin-top: .25em;
         }
     }
 
