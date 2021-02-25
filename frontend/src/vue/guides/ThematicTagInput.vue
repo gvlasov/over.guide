@@ -90,6 +90,7 @@ export default class ThematicTagInput extends Vue {
 @import "~@/assets/css/fonts.scss";
 @import "~@voerro/vue-tagsinput/dist/style.css";
 @import "~@/assets/css/tags.scss";
+@import "~@/assets/css/common.scss";
 @import "~@/assets/css/overwatch-ui.scss";
 
 .thematic-tag-input {
@@ -136,6 +137,16 @@ export default class ThematicTagInput extends Vue {
         border-right: 0;
         z-index: 2;
         overscroll-behavior: none contain;
+        @include custom-desktop-scrollbar(#9f8daa);
+        @media screen and (hover: hover) {
+            &::-webkit-scrollbar {
+                background-color: transparent;
+                width: .5em;
+            }
+            &::-webkit-scrollbar-thumb {
+                border-radius: 0;
+            }
+        }
     }
 
     & ::v-deep .typeahead-badges > .tags-input-typeahead-item-default,
