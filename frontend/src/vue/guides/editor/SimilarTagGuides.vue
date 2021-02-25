@@ -56,6 +56,9 @@ import GuideSearchFeedVso from "@/ts/vso/GuideSearchFeedVso";
 import Vue from 'vue'
 import SpinnerBlock from "@/vue/SpinnerBlock.vue";
 import StickyHoverer from "@/vue/StickyHoverer.vue";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import SimilarGuideSearchFeedVso from "@/ts/vso/SimilarGuideSearchFeedVso";
 
 @Component({
     components: {
@@ -77,7 +80,14 @@ export default class SimilarTagGuides extends Vue {
     @Prop({required: true})
     descriptor: GuideDescriptorVso
 
-    feed: GuideSearchFeedVso = new GuideSearchFeedVso(this.descriptor, false)
+    @Prop({required: true})
+    entry: ExistingGuideHistoryEntryVso|null
+
+    feed: GuideSearchFeedVso =
+        new SimilarGuideSearchFeedVso(
+            this.descriptor,
+            this.entry
+        )
 
     openDropdown: boolean = false
 

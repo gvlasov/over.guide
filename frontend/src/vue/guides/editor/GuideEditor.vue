@@ -42,6 +42,7 @@
                     >
                         <SimilarTagGuides
                                 :descriptor="head.entry.descriptor"
+                                :entry="head.entry.guideId ? head.entry : null"
                         />
                     </div>
                     <LinkedDescriptorSuggestionSelector
