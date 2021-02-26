@@ -82,6 +82,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
               to: config.dev.assetsSubDirectory,
             },
             {
+              from: path.resolve(__dirname, '../src/assets/favicons/dev/*'),
+              to: config.dev.assetsSubDirectory + 'favicons/[name].[ext]',
+            },
+            {
               from: path.resolve(__dirname, '../src/index.html'),
               to: config.dev.assetsSubDirectory,
             },
