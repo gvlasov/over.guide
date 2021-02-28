@@ -35,8 +35,8 @@ import SearchCacheService from "src/services/search-cache.service";
 import {NotificationsGateway} from "src/controllers/notifications.gateway";
 import {OnlineUsersRepository} from "src/services/online-users.repository";
 import {NotificationService} from "src/services/notification.service";
-import GuideSearchPageDto from "data/dto/GuideSearchPageDto";
 import TagIdService from "src/services/TagIdSerivce";
+import {YoutubeScreenshotService} from "src/services/youtube-screenshot.service";
 
 const config = {
     imports: [
@@ -85,6 +85,7 @@ const config = {
         NotificationsGateway,
         OnlineUsersRepository,
         NotificationService,
+        YoutubeScreenshotService,
     ],
 }
 export default config

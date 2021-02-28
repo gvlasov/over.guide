@@ -40,6 +40,7 @@
     "lodash.sum": "^4.0.2",
     "lodash.uniq": "^4.5.0",
     "lodash.xor": "^4.5.0",
+    "moment-duration-format": "^2.3.2",
     "mysql2": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -47,7 +48,8 @@
     "seedrandom": "^3.0.5",
     "sequelize": "~5.22.2",
     "sequelize-typescript": "^1.1.0",
-    "umzug": "^2.3.0"
+    "umzug": "^2.3.0",
+    "ytdl-core": "^4.5.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
@@ -57,6 +59,7 @@
     "@types/jest": "^25.2.3",
     "@types/lodash.difference": "^4.5.6",
     "@types/lodash.uniq": "^4.5.6",
+    "@types/moment-duration-format": "^2.2.2",
     "@types/node": "^13.9.1",
     "@types/seedrandom": "^2.4.28",
     "@types/sequelize-fixtures": "^0.6.2",
