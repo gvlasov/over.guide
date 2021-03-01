@@ -1,10 +1,9 @@
 import {AllowNull, Column, Model, Table} from 'sequelize-typescript';
 import {DataTypes} from "sequelize";
-import IYoutubeVideoExcerpt from "data/dto/YoutubeVideoExcerptDto"
 import YoutubeVideoExcerptDto from "data/dto/YoutubeVideoExcerptDto"
 
 @Table
-export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> implements IYoutubeVideoExcerpt {
+export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> {
 
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(16)})
@@ -18,12 +17,17 @@ export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> implements I
     @Column({type: new DataTypes.FLOAT(8, 3)})
     endSeconds: number
 
+    @AllowNull(true)
+    @Column({type: new DataTypes.FLOAT(8, 3)})
+    thumbnail: number
+
     toDto(): YoutubeVideoExcerptDto {
         return {
             youtubeVideoId: this.youtubeVideoId,
             startSeconds: this.startSeconds,
             endSeconds: this.endSeconds,
-        } as YoutubeVideoExcerptDto
+            thumbnail: this.thumbnail,
+        }
     }
 
 }
