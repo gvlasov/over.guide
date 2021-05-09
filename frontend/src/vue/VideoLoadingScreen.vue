@@ -36,6 +36,8 @@ export default class VideoLoadingScreen extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/css/overwatch-ui.scss";
+
 .loading-screen {
     position: absolute;
     font-family: BigNoodleTooOblique, sans-serif;
@@ -67,10 +69,10 @@ export default class VideoLoadingScreen extends Vue {
     }
 
     .duration {
-        background-color: black;
+        background-color: rgba($overwatch-panel-bg-color, .6);
         height: 1em;
         width: min-content;
-        padding: 0 .4em;
+        padding: .1em .4em .1em .26em;
         position: absolute;
         bottom: 50%;
     }
