@@ -26,12 +26,12 @@ export class Hero extends Model<Hero> {
     public id: number
 
     @AllowNull(false)
-    @Unique
+    @Unique({name: 'name', msg: ''})
     @Column({type: new DataTypes.STRING(20)})
     name: string;
 
     @AllowNull(false)
-    @Unique
+    @Unique({name: 'dataName', msg: ''})
     @Column({type: new DataTypes.STRING(20)})
     dataName: string
 

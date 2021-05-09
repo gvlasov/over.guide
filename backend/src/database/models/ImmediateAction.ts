@@ -30,7 +30,6 @@ export class ImmediateAction extends Model<ImmediateAction> {
     })
     objectId: number
 
-    @Unique
     @AllowNull(false)
     @Column({
         type: new DataTypes.INTEGER(),

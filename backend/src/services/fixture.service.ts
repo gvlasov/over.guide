@@ -7,6 +7,8 @@ export type Fixture = ((any: any) => void)
 
 export function ActuallyNotTableButView<T extends Model>(constructor: new() => T) {
     (constructor as any).__onlyView = true;
+    (constructor as any).sync = () => Promise.resolve();
+    (constructor as any).truncate = () => Promise.resolve();
 }
 
 function isOnlyView(model: any) {

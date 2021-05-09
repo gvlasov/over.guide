@@ -75,11 +75,11 @@ import {Sentence} from "src/database/models/Sentence";
 export class User extends Model<User> {
 
     @AllowNull(false)
-    @Unique
+    @Unique({name: 'name', msg: ''})
     @Column({type: new DataTypes.STRING(20)})
     name: string;
 
-    @Unique
+    @Unique({name: 'battleNetUserId', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(15)})
     battleNetUserId: string

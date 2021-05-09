@@ -22,7 +22,7 @@ export class Map extends Model<Map> {
     @Column
     public id: number
 
-    @Unique
+    @Unique({name: 'name', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     name: string;
@@ -31,7 +31,7 @@ export class Map extends Model<Map> {
     @Column({type: new DataTypes.INTEGER()})
     type: number
 
-    @Unique
+    @Unique({name: 'dataName', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     dataName: string

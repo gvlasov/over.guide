@@ -21,12 +21,12 @@ export class Ability extends Model<Ability> {
     @Column
     public id: number
 
-    @Unique
+    @Unique({name: 'name', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     name: string
 
-    @Unique
+    @Unique({name: 'dataName', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(32)})
     dataName: string

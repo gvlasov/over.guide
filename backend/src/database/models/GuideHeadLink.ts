@@ -10,7 +10,6 @@ import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 import {Guide} from "src/database/models/Guide";
 import {ActuallyNotTableButView} from "src/services/fixture.service";
 import {TruncateOptions} from "sequelize/types/lib/model";
-import PromiseBB from 'sequelize/lib/promise'
 
 @Table(
     {
@@ -35,9 +34,5 @@ export class GuideHeadLink extends Model<GuideHeadLink> {
 
     @BelongsTo(() => GuideHistoryEntry, 'guideHistoryEntryId')
     guideHistoryEntry: GuideHistoryEntry
-
-    public static truncate(options?: TruncateOptions): PromiseBB<void> {
-        return PromiseBB.resolve(void 0)
-    }
 
 }

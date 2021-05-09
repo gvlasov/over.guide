@@ -76,7 +76,7 @@ export class GuideDescriptor extends Model<GuideDescriptor> {
 
     thematicTags: ThematicTag[]
 
-    @Unique
+    @Unique({name: 'contentHash', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.CHAR(32)})
     contentHash: string

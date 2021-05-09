@@ -17,17 +17,17 @@ export class Patch extends Model<Patch> {
     @Column
     public id: number
 
-    @Unique
+    @Unique({name: 'version', msg: ''})
     @AllowNull(false)
     @Column
     version: string;
 
-    @Unique
+    @Unique({name: 'date', msg: ''})
     @AllowNull(false)
     @Column
     date: Date
 
-    @Unique
+    @Unique({name: 'title', msg: ''})
     @AllowNull(false)
     @Column({type: new DataTypes.STRING(30)})
     title: string

@@ -23,11 +23,16 @@ export class YoutubeVideoExcerpt extends Model<YoutubeVideoExcerpt> {
 
     toDto(): YoutubeVideoExcerptDto {
         return {
+            id: this.id,
             youtubeVideoId: this.youtubeVideoId,
             startSeconds: this.startSeconds,
             endSeconds: this.endSeconds,
             thumbnail: this.thumbnail,
         }
+    }
+
+    get thumbnailUrl(): string {
+        return process.env.CDN_BASE_URL + '/images/custom-thumbnails/' + this.id + '.jpg'
     }
 
 }
