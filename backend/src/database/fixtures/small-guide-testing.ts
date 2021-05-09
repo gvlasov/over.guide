@@ -32,6 +32,7 @@ export default async (moduleRef: ModuleRef) => {
                     startSeconds: 155,
                     endSeconds: 159,
                     youtubeVideoId: videoId,
+                    thumbnail: -1,
                 },
                 kind: 'video'
             } as GuidePartVideoDto)
