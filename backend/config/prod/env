@@ -11,5 +11,5 @@ TOKEN_CIPHER_SECRET=9hello beau&tiful ladee horse!
 COOKIE_DOMAIN=.smol.guide
 SQL_LOG=1
 MIGRATIONS_PATH=dist/database/migrations
-CDN_WEB_ROOT=/mnt/cloud
+CDN_WEB_ROOT=/mnt/cloud/web
 CDN_BASE_URL=https://cdn.smol.guide/
