@@ -58,9 +58,9 @@ const data = [
         dataName: 'Roles',
     },
     {
-        id: GuideTheme.Offense,
-        name: 'Offense',
-        dataName: 'offense',
+        id: GuideTheme.Attack,
+        name: 'Attack',
+        dataName: 'attack',
     },
     {
         id: GuideTheme.Defense,
