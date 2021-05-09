@@ -94,7 +94,7 @@
                 v-bind:class="{'intersections-available': intersectingGuides.length > 0}"
                 v-hammer:tap="onSameVideoGuidesDropdownTap"
         >
-            {{ intersectingGuides.length }} guides intersecting with your cut
+            {{ intersectingGuides.length }} guide{{intersectingGuides.length % 10 === 1 ? '' : 's'}} intersecting with your cut
         </OverwatchDropdownButton>
         <div
                 v-if="showSameVideoGuides && intersectingGuides.length > 0"
