@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="guide-video">
         <AspectRatioBox
                 v-observe-visibility="{
         callback: onVisibilityChanged,
@@ -55,7 +55,6 @@ import Vue from 'vue'
 import {Prop, Ref} from "vue-property-decorator";
 import Component from "vue-class-component";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
-import GuideHistoryEntryVso from "@/ts/vso/GuideHistoryEntryVso";
 import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
 import GuideVideoExcerptTimebar
     from "@/vue/guides/GuideVideoExcerptTimebar.vue";
@@ -76,9 +75,6 @@ export default class GuideVideo extends Vue {
 
     @Ref('root')
     readonly root: HTMLElement
-
-    @Prop({required: true})
-    entry: GuideHistoryEntryVso
 
     @Prop({required: true})
     part: GuidePartVideoDto
@@ -176,7 +172,7 @@ export default class GuideVideo extends Vue {
         return 'GuideVideo' + this.guideVideoUid + '-' + this.index + '-' + this.part.excerpt.youtubeVideoId
     }
 
-    onVisibilityChanged(isVisible, entry) {
+    onVisibilityChanged(isVisible) {
         if (isVisible) {
             this.$emit('comesIntoVision', this.autoplayVideoHandle)
         } else {

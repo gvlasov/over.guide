@@ -14,6 +14,13 @@ async function bootstrap() {
         res.header('X-Powered-By', 'ur mom');
         next();
     });
+    app.use((err, req, res, next) => {
+        if (res.headersSent) {
+            return next(err)
+        }
+        res.status(500)
+        res.render('error', {error: err})
+    })
     await app.listen(8080);
 }
 

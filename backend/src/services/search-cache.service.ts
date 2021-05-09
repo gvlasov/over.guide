@@ -165,7 +165,7 @@ export default class SearchCacheService {
     clear(key: GuideDescriptorDto): void {
         const removed = this.nodesMap.get(this.nodeKeyHash(key))
         if (removed === undefined) {
-            throw new Error('Clearing non-existent key')
+            return
         }
         let nodes: Node<T>[] = [removed]
         let i = 0;

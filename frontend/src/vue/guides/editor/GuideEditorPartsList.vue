@@ -92,6 +92,7 @@ export default class GuideEditorPartsList extends Vue {
                             youtubeVideoId: '',
                             startSeconds: 0,
                             endSeconds: 0,
+                            thumbnail: -1
                         },
                     },
                     true

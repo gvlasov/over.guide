@@ -21,6 +21,7 @@ services:
       - "8080"
     volumes:
       - ..:/home/node/app
+      - yandex-disk-mock:/mnt/cloud
     command: "sh -c 'cd backend; npm run start:dev'"
     env_file:
       - ../backend/config/dev/env
@@ -34,6 +35,15 @@ services:
       - ./nginx/server.key:/etc/nginx/server.key
     depends_on:
       - backend
+  cdn-mock:
+    image: nginx:1.12-alpine
+    ports:
+      - 8083:443
+    volumes:
+      - yandex-disk-mock:/mnt/cloud
+      - ./nginx/cdn-mock.conf:/etc/nginx/conf.d/cdn-mock.conf
+      - ./nginx/server.crt:/etc/nginx/server.crt
+      - ./nginx/server.key:/etc/nginx/server.key
   #  redis:
   #    image: redis:alpine
   mariadb:
@@ -70,4 +80,7 @@ services:
       SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: smol
       SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: guide
     command: "sensu-backend start --state-dir /var/lib/sensu/sensu-backend --log-level debug"
+volumes:
+  yandex-disk-mock:
+
 

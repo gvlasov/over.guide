@@ -1,55 +1,59 @@
 import {Injectable} from "@nestjs/common";
-import ytdl from 'ytdl-core'
-import {spawn} from 'child_process'
+import {exec, ExecException} from 'child_process'
 import moment from 'moment'
+import {YoutubeStreamUrlService} from "src/services/youtube-stream-url.service";
 
 const momentDurationFormatSetup = require("moment-duration-format");
+
+type FfmpegResult = {
+    code: number,
+    stderr: string,
+}
 
 @Injectable()
 export class YoutubeScreenshotService {
 
+    constructor(
+        private readonly youtubeStreamUrlService: YoutubeStreamUrlService
+    ) {
+    }
+
     async screenshot(
-        videoUrl: string,
+        videoId: string,
         timeSeconds: number,
         outputPath: string
     ): Promise<void> {
         const ss = moment
             .duration(timeSeconds, 'second')
             .format('hh:mm:ss.SS', {trim: false})
-        return this.videoStreamDownloadUrl(videoUrl)
-            .then(url =>
-                new Promise(
-                    (resolve, reject) => {
-                        spawn(
-                            "ffmpeg",
-                            ['-ss', ss, '-i', url, '-vframes', '1', '-q:v', '2', outputPath, '-y', '-loglevel', 'quiet'],
-                            {
-                                env: process.env,
-                            }
-                        ).on('exit', (code) => {
-                            if (code === 0) {
-                                resolve()
-                            } else {
-                                console.log('reject')
-                                reject()
-                            }
-                        })
-                    }
-                )
-            )
-    }
-
-    async videoStreamDownloadUrl(videoUrl: string): Promise<string | undefined> {
-        return await ytdl.getInfo(videoUrl)
-            .then(
-                info =>
-                    info.formats.filter(
-                        format => format.hasVideo
-                            && format.quality === 'hd720'
-                            && format.mimeType.match(/^video\/mp4/)
+        return this.youtubeStreamUrlService.getStreamUrl(videoId)
+            .then(url => {
+                if (url === void 0) {
+                    return Promise.reject(new Error('Could not get stream URL'))
+                } else {
+                    return new Promise(
+                        (resolve, reject) => {
+                            const command = `ffmpeg -ss "${ss}" -i "${url}" -vframes 1 -q:v 2 "${outputPath}" -y -loglevel fatal`;
+                            console.log(command)
+                            exec(
+                                command,
+                                (execException: ExecException | null, stdout: string, stderr: string) => {
+                                    if (execException === null || execException.code === 0) {
+                                        console.log('stdout',stdout)
+                                        console.log('stderr',stderr)
+                                        resolve()
+                                    } else {
+                                        reject({
+                                            code: execException.code,
+                                            stdout: stdout + stderr,
+                                        })
+                                    }
+                                }
+                            );
+                        }
                     )
-                        [0]?.url
-            )
+                }
+            })
     }
 
 }

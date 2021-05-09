@@ -19,7 +19,6 @@ export default class SimilarGuideSearchFeedVso extends GuideSearchFeedVso {
                 return super.feed(ids)
             } else {
                 const entryId = this.entry.guideId
-                console.log('skip', entryId, ids, ids.filter(id => id !== entryId))
                 return super.feed(ids)
                     .then(result => {
                         result.items = result.items.filter(item => item.guideHistoryEntry.guide.id !== entryId)

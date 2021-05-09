@@ -1,12 +1,11 @@
 <template>
     <div class="guide-content">
         <div v-for="(widget, index) in entry.parts" :key="index" class="guide-part">
-            <div class="text-guide-part" v-if="widget.isText">
+            <div v-if="widget.isText" class="text-guide-part">
                 <GuidePartText :part="widget.part"/>
             </div>
             <GuideVideo
                     v-if="widget.part.kind === 'video'"
-                    entry="entry"
                     :part="widget.part"
                     :index="index"
                     :initial-show-preload="true"

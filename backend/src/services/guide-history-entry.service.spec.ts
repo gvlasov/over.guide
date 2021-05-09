@@ -23,6 +23,10 @@ import Descriptor from "data/dto/GuideDescriptorQuickie";
 import {Sentence} from "src/database/models/Sentence";
 import {Restriction} from "src/database/models/Restriction";
 import RestrictionTypeId from "data/RestrictionTypeId";
+import * as jetpack from "fs-jetpack";
+import {TokenService} from "src/services/token.service";
+import {YoutubeScreenshotService} from "src/services/youtube-screenshot.service";
+import {ThumbnailService} from "src/services/thumbnail.service";
 
 describe(
     GuideHistoryEntryService,
@@ -555,6 +559,45 @@ describe(
                     SaveResult.UserBannedFromGuideCreation
                 )
             });
+            it('creating guide with custom thumbnail creates thumbnail image file', async () => {
+                await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
+                const user = await User.findOne();
+                // const token = ctx.app.get(TokenService).getToken(user)
+                await jetpack.tmpDirAsync()
+                    .then(
+                        (fs) => {
+                            process.env.CDN_WEB_ROOT = fs.cwd()
+                            return ctx.app.get(GuideHistoryEntryService).create(
+                                {
+                                    parts: [
+                                        {
+                                            kind: 'video',
+                                            excerpt: {
+                                                youtubeVideoId: 'nQyJYzvnEBs',
+                                                startSeconds: 1000,
+                                                endSeconds: 1100,
+                                                thumbnail: 1050,
+                                            }
+                                        } as GuidePartVideoDto
+                                    ],
+                                    descriptor: new Descriptor({
+                                        mapTags: [MapId.Dorado],
+                                    }),
+                                    isPublic: false,
+                                },
+                                user
+                            )
+                                .then(() => {
+                                    let strings = fs.list(ThumbnailService.getDirectoryPath());
+                                    console.log(strings)
+                                    expect(
+                                        strings.length
+                                    )
+                                        .toBeGreaterThan(0)
+                                })
+                        }
+                    )
+            })
         }
     )
 )

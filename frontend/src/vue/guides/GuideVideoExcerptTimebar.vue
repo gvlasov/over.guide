@@ -6,15 +6,15 @@
             :duration-seconds="durationSeconds"
             :enable-slider-label="false"
             :enable-drag-behavior="false"
-            @draglessClick="(e) => $emit('draglessClick', e)"
+            @draglessClick="(e) => setCurrentSecondsFromEvent(e)"
     />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import ExcerptTimebar from "../videos/ExcerptTimebar.vue";
-import {Prop} from "vue-property-decorator";
+import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
+import {Model, Prop} from "vue-property-decorator";
 
 @Component({
     components: {
@@ -23,12 +23,15 @@ import {Prop} from "vue-property-decorator";
 })
 export default class GuideVideoExcerptTimebar extends Vue {
 
-    @Prop({required: true})
+    @Model('input')
     currentSeconds: number
 
     @Prop({required: true})
     durationSeconds: number
 
+    setCurrentSecondsFromEvent(dragPosition) {
+        this.$emit('input', dragPosition * this.durationSeconds)
+    }
 };
 </script>
 

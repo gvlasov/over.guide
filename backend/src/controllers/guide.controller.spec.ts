@@ -28,6 +28,7 @@ import {Restriction} from "src/database/models/Restriction";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import ApiErrorId from "data/ApiErrorId";
 import {GuideHead} from "src/database/models/GuideHead";
+import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 
 describe(
     GuideController,
@@ -1017,6 +1018,7 @@ describe(
                                 youtubeVideoId: commonVideoId,
                                 startSeconds: 0,
                                 endSeconds: 1,
+                                thumbnail: null,
                             }
                         }],
                         descriptor: new Descriptor({
@@ -1034,6 +1036,7 @@ describe(
                                 youtubeVideoId: commonVideoId,
                                 startSeconds: 1,
                                 endSeconds: 2,
+                                thumbnail: null,
                             }
                         }],
                         descriptor: new Descriptor({
@@ -1051,6 +1054,7 @@ describe(
                                 youtubeVideoId: `${commonVideoId}_DIFFERENT`,
                                 startSeconds: 1,
                                 endSeconds: 2,
+                                thumbnail: null,
                             }
                         }],
                         descriptor: new Descriptor({
@@ -1173,8 +1177,6 @@ describe(
                     .get(`/guide/${guide.id}`)
                     .set({Authorization: `Bearer ${token}`})
                     .expect(HttpStatus.OK)
-                    .then(async response => {
-                    })
             })
             it('user can\'t view others\' private guides', async () => {
                 await ctx.fixtures(singleUserFixture, heroesFixture, mapsFixture, thematicTagsFixture)
@@ -1433,6 +1435,7 @@ describe(
                                 youtubeVideoId: 'jijij',
                                 startSeconds: 0,
                                 endSeconds: 1,
+                                thumbnail: null,
                             }
                         }],
                         descriptor: new Descriptor({
@@ -1450,6 +1453,7 @@ describe(
                                 youtubeVideoId: 'ds8ud8sy88f',
                                 startSeconds: 1,
                                 endSeconds: 2,
+                                thumbnail: null,
                             }
                         }],
                         descriptor: new Descriptor({
@@ -1467,6 +1471,7 @@ describe(
                                 youtubeVideoId: '8ujsdfhus',
                                 startSeconds: 1,
                                 endSeconds: 2,
+                                thumbnail: null,
                             }
                         }],
                         descriptor: new Descriptor({

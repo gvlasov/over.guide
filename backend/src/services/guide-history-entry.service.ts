@@ -19,6 +19,7 @@ import GuideHistoryEntryDto from "data/dto/GuideHistoryEntryDto";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import {RestrictionService} from "src/services/restriction.service";
 import SearchCacheService from "src/services/search-cache.service";
+import {ThumbnailService} from "src/services/thumbnail.service";
 
 export enum SaveResult {
     SavingDuplicateRejected,
@@ -33,7 +34,8 @@ export class GuideHistoryEntryService {
         private readonly contentHashService: ContentHashService,
         @Inject(SEQUELIZE) private readonly sequelize: Sequelize,
         private readonly restrictionService: RestrictionService,
-        private readonly guideSearchCache: SearchCacheService
+        private readonly guideSearchCache: SearchCacheService,
+        private readonly thumbnailService: ThumbnailService
     ) {
     }
 
@@ -109,7 +111,7 @@ export class GuideHistoryEntryService {
                                 partDto as GuidePartTextDto
                             )
                         } else if (partDto.kind === 'video') {
-                            return GuideHistoryEntryService.obtainGuidePartVideo(
+                            return this.obtainGuidePartVideo(
                                 partDto as GuidePartVideoDto
                             )
                         }
@@ -160,7 +162,7 @@ export class GuideHistoryEntryService {
             })
     }
 
-    private static async obtainGuidePartVideo(
+    private async obtainGuidePartVideo(
         partDto: GuidePartVideoDto
     ): Promise<GuidePartVideo> {
         return YoutubeVideoExcerpt.findOne({
@@ -168,16 +170,22 @@ export class GuideHistoryEntryService {
                 youtubeVideoId: partDto.excerpt.youtubeVideoId,
                 startSeconds: partDto.excerpt.startSeconds,
                 endSeconds: partDto.excerpt.endSeconds,
+                thumbnail: partDto.excerpt.thumbnail,
             }
         })
             .then(excerpt => {
                 if (excerpt === null) {
-                    return YoutubeVideoExcerpt.create(partDto.excerpt)
+                    const excerptData = Object.assign({}, partDto.excerpt);
+                    delete excerptData.id
+                    return YoutubeVideoExcerpt.create(excerptData)
                         .then(
                             (excerpt) =>
-                                GuidePartVideo.create({
-                                    excerptId: excerpt.id
-                                })
+                                this.thumbnailService
+                                    .updateThumbnail(excerpt)
+                                    .then(() => {
+                                            return GuidePartVideo.create({excerptId: excerpt.id});
+                                        }
+                                    )
                         )
                 } else {
                     return GuidePartVideo.findOne({

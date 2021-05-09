@@ -37,6 +37,9 @@ import {OnlineUsersRepository} from "src/services/online-users.repository";
 import {NotificationService} from "src/services/notification.service";
 import TagIdService from "src/services/TagIdSerivce";
 import {YoutubeScreenshotService} from "src/services/youtube-screenshot.service";
+import {ThumbnailService} from "src/services/thumbnail.service";
+import {YoutubeStreamUrlService} from "src/services/youtube-stream-url.service";
+import {YoutubeController} from "src/controllers/youtube.controller";
 
 const config = {
     imports: [
@@ -62,6 +65,7 @@ const config = {
         ReportController,
         SentenceController,
         NotificationController,
+        YoutubeController,
     ],
     providers: [
         AppService,
@@ -86,6 +90,8 @@ const config = {
         OnlineUsersRepository,
         NotificationService,
         YoutubeScreenshotService,
+        ThumbnailService,
+        YoutubeStreamUrlService,
     ],
 }
 export default config

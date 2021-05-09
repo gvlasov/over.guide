@@ -71,7 +71,7 @@ export const databaseProviders = [
                     sequelize: sequelize,
                 }
             });
-            await sequelize.sync().then(() => umzug.up())
+            await sequelize.sync({alter: true}).then(() => umzug.up())
             return sequelize;
 
         },

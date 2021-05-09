@@ -60,7 +60,8 @@
     "vue-scrollto": "^2.18.2",
     "vue-sprite-animator": "^1.0.1",
     "vue2-hammer": "^2.1.2",
-    "vuedraggable": "~2.23.2"
+    "vuedraggable": "~2.23.2",
+    "ytdl-core-browser": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

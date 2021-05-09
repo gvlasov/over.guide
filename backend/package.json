@@ -19,7 +19,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "env DB_PORT=4307 env DB_HOST=localhost jest --config ./jest.json --runInBand --detectOpenHandles"
+    "test:e2e": "jest --config ./jest.json --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "@hamroctopus/utc-date": "^1.0.7",
@@ -70,7 +70,9 @@
     "eslint": "7.1.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
+    "fs-jetpack": "^4.1.0",
     "grunt": "^1.1.0",
+    "ini": "^2.0.0",
     "jest": "26.0.1",
     "prettier": "^1.19.1",
     "supertest": "^4.0.2",

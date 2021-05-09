@@ -133,6 +133,7 @@ import {Prop, Watch} from "vue-property-decorator";
 import AsyncComputedProp from 'vue-async-computed-decorator'
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
+import Player = YT.Player;
 
 const backend = new Backend(axios);
 const intersectionThresholdSeconds = .3
@@ -169,7 +170,7 @@ export default class YoutubeExcerptEditor extends Vue {
     endSeconds: number = this.initialEndSeconds
     durationSeconds: number = this.endSeconds - this.startSeconds
     currentSeconds: number = this.startSeconds
-    player: any = null
+    player: Player|null = null
     playing: boolean = false
     hovered: boolean = false
     playerHasBeenPlaying: boolean | null = null
@@ -245,6 +246,7 @@ export default class YoutubeExcerptEditor extends Vue {
         this.player = player;
         this.durationSeconds = player.getDuration();
         this.isVideoLoaded = true;
+        this.$emit('playerReady', player)
     }
 
     onPlay() {

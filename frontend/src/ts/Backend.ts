@@ -462,5 +462,14 @@ export default class Backend {
         )
     }
 
+    async getYoutubeStreamUrl(videoId: string): Promise<string> {
+        return this.query(
+            'GET',
+            `/youtube/video-stream-url/${videoId}`,
+            {},
+            response => response.data as string
+        )
+    }
+
 }
 

@@ -11,7 +11,7 @@ describe(
                     fs.unlinkSync(outputPath)
                 }
                 await ctx.service.screenshot(
-                    'https://www.youtube.com/watch?v=Z-p6LZZI2Uc',
+                    'Z-p6LZZI2Uc',
                     492.49,
                     outputPath
                 )
@@ -23,11 +23,28 @@ describe(
                 if (fs.existsSync(outputPath)) {
                     fs.unlinkSync(outputPath)
                 }
+                const secondsGreaterThanVideoEnd = 1000;
                 expect(ctx.service.screenshot(
-                    'https://www.youtube.com/watch?v=F12PJgyVKyA',
-                    1000,
+                    'F12PJgyVKyA',
+                    secondsGreaterThanVideoEnd,
                     outputPath
                 )).rejects
+                expect(!fs.existsSync(outputPath))
+            });
+            it('rejects if can\'t save file', async () => {
+                expect(!fs.existsSync('/tmp/non-existent-dir/'))
+                const outputPath = '/tmp/non-existent-dir/smol-guide-test_screenshot.jpg'
+                const screenshot = ctx.service.screenshot(
+                    'F12PJgyVKyA',
+                    5,
+                    outputPath
+                )
+                    .catch(result => {
+                        expect(result.code).toStrictEqual(1)
+                    })
+                expect(screenshot).rejects
+                // Не получилось протестировать получение сообщения об ошибке от ffmpeg
+                await screenshot
                 expect(!fs.existsSync(outputPath))
             });
         }

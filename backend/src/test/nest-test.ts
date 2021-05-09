@@ -2,6 +2,8 @@ import {Test, TestingModule} from "@nestjs/testing";
 import {Fixture, FixtureService} from "src/services/fixture.service";
 import {INestApplication, Type, ValidationPipe} from "@nestjs/common";
 import appModuleConfig from 'src/app.module.config'
+import * as ini from 'ini'
+import jetpack from "fs-jetpack";
 
 class TestContext<T> {
     service: T
@@ -13,8 +15,14 @@ export function nestTest<T>(
     serviceToTest: Type<T>,
     call: (testContext: TestContext<T>) => void
 ) {
+    process.env = {
+        ...process.env,
+        ...ini.parse(
+            jetpack.read('config/test/env')
+        )
+    }
     return () => {
-        let testContext = new TestContext<T>()
+        const testContext = new TestContext<T>()
 
         beforeEach(async () => {
             const app: TestingModule = await Test.createTestingModule({

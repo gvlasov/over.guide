@@ -1,8 +1,5 @@
 <template>
-    <VideoPreview
-            :excerpt="excerpt"
-        class="loading-screen"
-    >
+    <VideoPreview :excerpt="excerpt" class="loading-screen">
         <span class="duration">
             {{ excerpt === null ? '' : durationText }}
         </span>
@@ -26,6 +23,9 @@ import VideoPreview from "@/vue/VideoPreview.vue";
 export default class VideoLoadingScreen extends Vue {
     @Prop({required: true})
     excerpt: YoutubeVideoExcerptDto
+
+    @Prop({default: false})
+    screenshotExtracted: boolean
 
     get durationText(): string {
         const duration = Math.round(this.excerpt.endSeconds - this.excerpt.startSeconds);
@@ -73,6 +73,12 @@ export default class VideoLoadingScreen extends Vue {
         padding: 0 .4em;
         position: absolute;
         bottom: 50%;
+    }
+
+    video {
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 }
 </style>

@@ -72,7 +72,7 @@
 
 <script lang="ts">
 import GuidePartWidget from "@/ts/vso/GuidePartWidget";
-import YoutubeExcerptEditor from "@/vue/videos/YoutubeExcerptEditor";
+import YoutubeExcerptEditor from "@/vue/guides/editor/YoutubeExcerptEditor";
 import OverwatchButton from "@/vue/OverwatchButton";
 import GuidePartTextEditor from "@/vue/guides/editor/GuidePartTextEditor";
 import GuidePartVideoEditor from "@/vue/guides/editor/GuidePartVideoEditor";
@@ -85,7 +85,6 @@ import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
-
 
 @Component({
     components: {
@@ -122,10 +121,12 @@ export default class GuidePart extends Vue {
             startSeconds = 0
             endSeconds = null
         }
-        (this.widget.part as GuidePartVideoDto).excerpt = {
+        const part = this.widget.part as GuidePartVideoDto;
+        part.excerpt = {
             youtubeVideoId: url.videoId,
             startSeconds: startSeconds,
             endSeconds: endSeconds,
+            thumbnail: part.excerpt.thumbnail,
         };
     }
 
