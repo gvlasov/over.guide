@@ -26,7 +26,7 @@
                     :custom-player-element-id="playerId"
                     @play="onPlay"
                     @pause="onPause"
-                    @playerReady="(player) => $emit('playerReady', player)"
+                    @playerReady="onPlayerReady"
                     class="video"
             />
         </AspectRatioBox>
@@ -41,7 +41,7 @@
                     :duration-seconds="durationSeconds"
                     :enable-slider-label="false"
                     :enable-drag-behavior="false"
-                    @draglessClick="onDraglessClick"
+                    @input="onSeek"
             />
         </div>
     </div>
@@ -58,6 +58,7 @@ import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import ExcerptTimebar from "@/vue/videos/ExcerptTimebar.vue";
 import GuideVideoExcerptTimebar
     from "@/vue/guides/GuideVideoExcerptTimebar.vue";
+import Player = YT.Player;
 
 let guideVideoUid = 0;
 @Component({
@@ -93,6 +94,8 @@ export default class GuideVideo extends Vue {
 
     guideVideoUid: number = guideVideoUid++;
 
+    player: Player
+
     declare $refs!: {
         root: HTMLElement
     }
@@ -104,11 +107,20 @@ export default class GuideVideo extends Vue {
         }, 16)
     }
 
+    onPlayerReady(player) {
+        this.$emit('playerReady', player)
+        this.player = player
+    }
+
     onPause(player: YT.Player) {
         if (this.interval !== null) {
             clearInterval(this.interval)
             this.interval = null
         }
+    }
+
+    onSeek(seconds) {
+        this.player.seekTo(seconds, true)
     }
 
     onPlayPauseTap() {
@@ -117,18 +129,6 @@ export default class GuideVideo extends Vue {
         } else {
             this.video.player.playVideo()
         }
-    }
-
-    onDraglessClick(clickCoord) {
-        this.video.player.seekTo(
-            this.clickCoordToSeconds(clickCoord),
-            true
-        );
-    }
-
-
-    clickCoordToSeconds(clickCoord) {
-        return this.part.excerpt.startSeconds + Number.parseFloat((this.durationSeconds * clickCoord).toFixed(2));
     }
 
     get durationSeconds(): number {
