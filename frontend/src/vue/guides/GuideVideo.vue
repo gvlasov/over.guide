@@ -94,8 +94,6 @@ export default class GuideVideo extends Vue {
 
     guideVideoUid: number = guideVideoUid++;
 
-    player: Player
-
     declare $refs!: {
         root: HTMLElement
     }
@@ -109,7 +107,6 @@ export default class GuideVideo extends Vue {
 
     onPlayerReady(player) {
         this.$emit('playerReady', player)
-        this.player = player
     }
 
     onPause(player: YT.Player) {
@@ -120,7 +117,7 @@ export default class GuideVideo extends Vue {
     }
 
     onSeek(seconds) {
-        this.player.seekTo(seconds, true)
+        this.video.player.seekTo(this.video.start + seconds, true)
     }
 
     onPlayPauseTap() {
