@@ -13,6 +13,7 @@ enum GuideTheme {
     'Roles' = 12,
     'Attack' = 13,
     'Defense' = 14,
+    'Movement' = 15,
 }
 
 export default GuideTheme

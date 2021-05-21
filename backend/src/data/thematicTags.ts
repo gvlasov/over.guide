@@ -67,6 +67,11 @@ const data = [
         name: 'Defense',
         dataName: 'defense',
     },
+    {
+        id: GuideTheme.Movement,
+        name: 'Movement',
+        dataName: 'movement',
+    },
 ]
 const map = new Map<number, ThematicTagDto>()
 data.forEach(
