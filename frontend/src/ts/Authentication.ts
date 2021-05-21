@@ -9,8 +9,10 @@ export default class Authentication {
 
     static get instance(): Authentication {
         if (Authentication._instance === void 0) {
-
             Authentication._instance = new Authentication()
+            Cookies.defaults = {
+                domain: process.env.COOKIE_DOMAIN
+            };
         }
         return Authentication._instance;
     }
