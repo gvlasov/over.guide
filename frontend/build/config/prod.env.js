@@ -6,4 +6,5 @@ module.exports = {
   IMGUR_CLIENT_ID:  '"546c25a59c58ad7"',
   BACKEND_BASE_URL: '"https://backend.smol.guide"',
   CDN_BASE_URL: '"https://cdn.smol.guide"',
+  COOKIE_DOMAIN: '".smol.guide"',
 };
