@@ -1,3 +1,5 @@
 frontend.iml
 dist
 node_modules
+cypress/cypress/screenshots
+frontend/target
