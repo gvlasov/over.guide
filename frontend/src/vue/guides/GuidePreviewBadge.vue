@@ -200,18 +200,18 @@ export default class GuidePreviewBadge extends Vue {
                 font-size: 1em;
                 white-space: nowrap;
                 overflow: hidden;
-                margin: 1em;
                 flex-grow: 999;
                 font-family: $body-font;
-                height: 2em;
                 //& > *:not() {
                 //
                 //}
                 & ::v-deep .markdown {
-                    height: 100%;
                     display: flex;
+                    height: 100%;
+                    width: 100%;
+                    overflow: hidden;
                     align-items: center;
-                    * {
+                    & > * {
                         margin-right: .4em;
                         font-size: 1.3rem !important;
                     }
@@ -219,8 +219,6 @@ export default class GuidePreviewBadge extends Vue {
 
                 & ::v-deep * {
                     margin: 0;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
                 }
             }
 

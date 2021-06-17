@@ -299,6 +299,7 @@ export default class GuidePartVideoEditor extends Vue {
         .video-editor {
             display: block;
             flex-basis: 100%;
+            max-width: 100%;
         }
     }
 
