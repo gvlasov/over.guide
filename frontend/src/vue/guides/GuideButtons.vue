@@ -10,6 +10,10 @@
                     @back="() => showMatchupRate = false"
             />
         </NotificationModalPopup>
+        <a
+                :href="permalink"
+        >permalink
+        </a>
         <LinkLikeButton
                 v-if="entry.descriptor.matchup !== null"
                 :disabled="!auth.loggedIn"
@@ -139,6 +143,10 @@ export default class GuideButtons extends Vue {
         return auth.canEditGuide(this.entry)
     }
 
+    get permalink(): string {
+        return '/#/guide/' + this.entry.guideId;
+    }
+
 
 };
 
@@ -169,9 +177,26 @@ export default class GuideButtons extends Vue {
         }
     }
 
-    & > button {
+    & > button, & > a {
         padding-left: 1em;
         padding-right: 1em;
+    }
+
+    a {
+
+        font-size: 1em;
+        color: white;
+        cursor: pointer;
+        @include overwatch-futura;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        background-color: transparent;
+        border: 0;
+        padding-bottom: .2em;
     }
 
 }
