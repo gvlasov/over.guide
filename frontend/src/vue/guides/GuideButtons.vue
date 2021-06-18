@@ -21,6 +21,11 @@
         >rate matchup
         </LinkLikeButton>
         <LinkLikeButton
+                v-hammer:tap="() => $emit('show-markdown')"
+                title="Show post code"
+        >markdown
+        </LinkLikeButton>
+        <LinkLikeButton
                 :disabled="!auth.loggedIn"
                 v-hammer:tap="() => creatingReport = !creatingReport"
         >report

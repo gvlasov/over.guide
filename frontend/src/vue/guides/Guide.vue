@@ -8,7 +8,14 @@
         <GuideButtons
                 :entry="head.entry"
                 @guideDeactivated="guideId => $emit('guideDeactivated', guideId)"
+                @show-markdown="() => showMarkdown = true"
         />
+        <ModalPopup
+                v-if="showMarkdown"
+                @close="() => showMarkdown = false"
+        >
+            <MarkdownExplorer :entry="head.entry" />
+        </ModalPopup>
         <GuideContent
                 :entry="head.entry"
         />
@@ -65,6 +72,7 @@ import TrainingGoalButton from "@/vue/guides/TrainingGoalButton.vue";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import ModalPopup from "@/vue/general/ModalPopup.vue";
 import NotificationModalPopup from "@/vue/general/NotificationModalPopup.vue";
+import MarkdownExplorer from "@/vue/guides/MarkdownExplorer"
 
 const auth = new Authentication();
 const backend = new Backend(axios)
@@ -84,6 +92,7 @@ const backend = new Backend(axios)
         OverwatchButton,
         OverwatchPanel,
         TrainingGoalButton,
+        MarkdownExplorer,
     },
 })
 export default class Guide extends Vue {
@@ -101,6 +110,8 @@ export default class Guide extends Vue {
 
     showCommentsSection: boolean = this.initialShowCommentsSection
 
+    showMarkdown: boolean = false
+
 };
 
 </script>
@@ -109,6 +120,7 @@ export default class Guide extends Vue {
 @import '~@/assets/css/fonts.scss';
 @import '~@/assets/css/overwatch-ui.scss';
 @import '~@/assets/css/tags.scss';
+@import "~@/assets/css/common.scss";
 
 .guide {
     display: block;
@@ -191,6 +203,9 @@ export default class Guide extends Vue {
             }
         }
     }
+}
+.markdown-explorer {
+    width: native-min(30em, 100vw);
 }
 
 </style>
