@@ -15,7 +15,7 @@
         >permalink
         </a>
         <LinkLikeButton
-                v-if="entry.descriptor.matchup !== null"
+                v-if="shouldAllowRatingMatchup"
                 :disabled="!auth.loggedIn"
                 v-hammer:tap="() => showMatchupRate = true"
         >rate matchup
@@ -152,6 +152,10 @@ export default class GuideButtons extends Vue {
         return '/#/guide/' + this.entry.guideId;
     }
 
+    get shouldAllowRatingMatchup(): boolean {
+        return this.entry.descriptor.matchup !== null
+        && this.entry.descriptor.matchup.left.id !== this.entry.descriptor.matchup.right.id
+    }
 
 };
 
