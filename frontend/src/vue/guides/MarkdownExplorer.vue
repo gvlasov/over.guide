@@ -1,7 +1,7 @@
 <template>
     <div class="markdown-explorer">
         <div v-for="part in textParts">
-            <textarea>{{part.part.contentMd}}</textarea>
+            <textarea :rows="part.part.contentMd.split('\n').length+2">{{part.part.contentMd}}</textarea>
         </div>
     </div>
 </template>
@@ -36,9 +36,12 @@ export default class MarkdownExplorer extends Vue {
 @import "~@/assets/css/common.scss";
 
 .markdown-explorer {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
     textarea {
         width: 100%;
-        height: native-min(20em, 100vh);
+        max-height: native-min(20em, 100vh);
     }
 }
 </style>
