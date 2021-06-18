@@ -15,6 +15,7 @@
                 <div
                         v-if="auth.authenticated"
                         class="notifications"
+                        v-bind:class="feed.items.length === 0 ? 'empty' : ''"
                 >
                     <div
                             v-if="feed.items === null"
@@ -38,7 +39,7 @@
                         <SpinnerBlock slot="spinner"/>
                         <div
                                 slot="no-results"
-                                class="notifications-end"
+                                class="no-notifications"
                         >
                             No notifications
                         </div>
@@ -206,13 +207,28 @@ export default class NotificationsSection extends Vue {
             overscroll-behavior: none contain;
             max-height: 100%;
 
-            @include custom-desktop-scrollbar(hsla(227, 16%, 48%, 0.98));
+            @media screen and (hover: hover) {
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
 
             .notifications-end {
                 background-color: hsla(110, 47%, 48%, 0.98);
                 color: white;
                 padding: .7em;
                 font-size: 1.5em;
+            }
+
+            .no-notifications {
+                background-color: hsl(228, 25%, 56%);
+                color: white;
+                padding: .7em;
+                font-size: 1.5em;
+                height: 6em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .status-message {

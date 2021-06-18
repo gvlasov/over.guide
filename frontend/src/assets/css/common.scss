@@ -16,7 +16,13 @@ $root-content-width: 54rem;
     @media screen and (hover: hover) {
         &::-webkit-scrollbar {
             width: 1em;
+            overflow: visible;
             background-color: $background-color;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: red;
+            display: none;
         }
 
         &::-webkit-scrollbar-corner {
