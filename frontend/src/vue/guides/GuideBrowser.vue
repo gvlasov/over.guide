@@ -246,6 +246,9 @@ export default class GuideBrowser extends mixins(TagLinkMixin) {
 
 .guide-browser {
     margin: 0 auto;
+    .infinite-loading-container ::v-deep .infinite-status-prompt {
+        margin-bottom: 2.5rem;
+    }
 }
 
 
