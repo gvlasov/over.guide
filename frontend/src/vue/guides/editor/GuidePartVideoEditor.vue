@@ -129,9 +129,6 @@ export default class GuidePartVideoEditor extends Vue {
         this.editingThumbnail = false
     }
 
-    onPlayerReady(player: Player) {
-        this.player = player
-    }
 }
 </script>
 

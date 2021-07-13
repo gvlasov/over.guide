@@ -399,10 +399,10 @@ export default class YoutubeExcerptEditor extends Vue {
 
     pasteHandler(event) {
         if (document.activeElement === document.body) {
-            const clipboardContent =
-                event.clipboardData.getData('text');
-
-            var match = clipboardContent.match(/v=([^&]+)/);
+            const match =
+                event.clipboardData
+                    .getData('text')
+                    .match(/v=([^&]+)/);
             if (match === null || typeof match[1] == 'undefined') {
                 return null;
             }
