@@ -38,11 +38,14 @@
                     :widget="widget"
                     @save="() => widget.editing = false"
             />
+            <YoutubeVideoLinkForm
+                    v-if="widget.isVideo && widget.part.excerpt.youtubeVideoId === ''"
+                    @videoSelection="onVideoSelection"
+            />
             <GuidePartVideoEditor
-                    v-if="widget.isVideo"
+                    v-if="widget.isVideo && widget.part.excerpt.youtubeVideoId !== ''"
                     :widget="widget"
                     :index="index"
-                    @videoSelection="onVideoSelection"
             />
             <div class="guide-part-buttons">
                 <OverwatchButton
@@ -85,6 +88,7 @@ import GuidePartTextDto from "data/dto/GuidePartTextDto";
 import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
+import YoutubeVideoLinkForm from "@/vue/guides/editor/YoutubeVideoLinkForm.vue";
 
 @Component({
     components: {
@@ -95,6 +99,7 @@ import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
         YoutubeExcerptEditor,
         GuidePartTextEditor,
         MarkdownGuide,
+        YoutubeVideoLinkForm,
     },
 })
 export default class GuidePart extends Vue {

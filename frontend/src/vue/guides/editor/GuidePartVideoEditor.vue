@@ -1,13 +1,7 @@
 <template>
     <div class="guide-part-video-editor">
-        <YoutubeVideoLinkForm
-                v-if="widget.part.excerpt.youtubeVideoId === ''"
-                @videoSelection="(e) => $emit('videoSelection', e)"
-        />
-        <div v-else-if="widget.editing" key="editor" class="video-part-editor">
-            <template
-                    v-if="editingThumbnail"
-            >
+        <div v-if="widget.editing" key="editor" class="video-part-editor">
+            <template v-if="editingThumbnail">
                 <YoutubeThumbnail
                         v-if="widget.part.excerpt.thumbnail === ThumbnailOriginal"
                         :video-id="widget.part.excerpt.youtubeVideoId"
@@ -61,12 +55,9 @@
 import YoutubeVideo from "@/vue/videos/YoutubeVideo.vue";
 import YoutubeExcerptEditor from "@/vue/guides/editor/YoutubeExcerptEditor";
 import GuidePartVideoWidget from "@/ts/vso/GuidePartVideoWidget";
-import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
-import EmbeddableCache from "@/ts/EmbeddableCache";
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import {Prop, Watch} from "vue-property-decorator";
-import AsyncComputedProp from 'vue-async-computed-decorator'
+import {Prop} from "vue-property-decorator";
 import AspectRatioBox from "@/vue/AspectRatioBox.vue";
 import ThumbnailMethodSelector
     from "@/vue/guides/editor/ThumbnailMethodSelector.vue";
@@ -77,13 +68,11 @@ import OverwatchPanelButton from "@/vue/OverwatchPanelButton.vue";
 import VideoFrameViewer from "@/vue/videos/VideoFrameViewer.vue";
 import ThumbnailPreview from "@/vue/guides/editor/ThumbnailPreview.vue";
 import YoutubeThumbnail from "@/vue/videos/YoutubeThumbnail.vue";
-import Player = YT.Player;
 import GuideVideo from "@/vue/guides/GuideVideo.vue";
-import YoutubeVideoLinkForm from "@/vue/guides/editor/YoutubeVideoLinkForm.vue";
+import Player = YT.Player;
 
 @Component({
     components: {
-        YoutubeVideoLinkForm,
         GuideVideo,
         YoutubeThumbnail,
         ThumbnailPreview,
@@ -103,8 +92,6 @@ export default class GuidePartVideoEditor extends Vue {
     @Prop({required: true})
     index: number
 
-    youtubeVideoUrl: string = ''
-
     ThumbnailOriginal = YoutubeVideoExcerptDtoExternal.Original
 
     ThumbnailImage = YoutubeVideoExcerptDtoExternal.Image
@@ -112,11 +99,6 @@ export default class GuidePartVideoEditor extends Vue {
     player: Player | null = null
 
     editingThumbnail: boolean = false
-
-    @AsyncComputedProp()
-    validations() {
-        return this.validate(this.youtubeVideoUrl)
-    }
 
     onStartSecondsChangeHacky(widget: GuidePartVideoWidget, newValue) {
         widget.part.excerpt.startSeconds = newValue
@@ -136,7 +118,7 @@ export default class GuidePartVideoEditor extends Vue {
         if (this.player === null) {
             throw new Error()
         }
-        if (this.widget.part.excerpt.thumbnail !== null && this.widget.part.excerpt.thumbnail < 0)  {
+        if (this.widget.part.excerpt.thumbnail !== null && this.widget.part.excerpt.thumbnail < 0) {
             this.widget.part.excerpt.thumbnail = this.player.getCurrentTime()
         }
         this.editingThumbnail = true
@@ -145,58 +127,6 @@ export default class GuidePartVideoEditor extends Vue {
     setOriginalThumbnail() {
         this.widget.part.excerpt.thumbnail = YoutubeVideoExcerptDtoExternal.Original
         this.editingThumbnail = false
-    }
-
-    async validate(inputText) {
-        const validations = {
-            isUrl: false,
-            isValidYoutubeVideoUrl: false,
-            isEmbeddingAllowed: false,
-            videoExists: false,
-        };
-        let url;
-        try {
-            url = new URL(inputText)
-            validations.isUrl = true
-        } catch (e) {
-            return validations;
-        }
-        let youtubeUrl: YoutubeUrlVso;
-        try {
-            youtubeUrl = new YoutubeUrlVso(url)
-            validations.isValidYoutubeVideoUrl = true
-        } catch (e) {
-            return validations
-        }
-        /*
-        "Embedding allowed" is checked before "Video exists" because
-        embedding can be cached and checking if video exists is expensive
-         */
-        if (EmbeddableCache.isEmbeddable(youtubeUrl.videoId)) {
-            validations.isEmbeddingAllowed = true
-        } else {
-            return validations;
-        }
-        const videoInfo = await youtubeUrl.apiJson();
-        if (videoInfo.pageInfo.totalResults > 0) {
-            validations.videoExists = true;
-        } else {
-            return validations;
-        }
-        return validations;
-    }
-
-
-    @Watch('youtubeVideoUrl')
-    async onYoutubeVideoUrlChange(newValue) {
-        const validations = await this.validate(newValue);
-        for (let validation in validations) {
-            if (!validations[validation]) {
-                return false;
-            }
-        }
-        const youtubeUrl = new YoutubeUrlVso(new URL(this.youtubeVideoUrl));
-        this.$emit('videoSelection', youtubeUrl)
     }
 
     onPlayerReady(player: Player) {
