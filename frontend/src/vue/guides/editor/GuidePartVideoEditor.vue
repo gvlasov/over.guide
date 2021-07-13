@@ -1,25 +1,9 @@
 <template>
     <div class="guide-part-video-editor">
-        <div
+        <YoutubeVideoLinkForm
                 v-if="widget.part.excerpt.youtubeVideoId === ''"
-                class="youtube-video-link-form"
-        >
-            <input
-                    type="text"
-                    class="youtube-video-link-input"
-                    v-model="youtubeVideoUrl"
-                    placeholder="Put here a link to a Youtube video"
-            />
-            <div class="youtube-video-link-errors">
-                <template v-if="$asyncComputed.validations.success">
-                    <template v-if="youtubeVideoUrl === ''"></template>
-                    <div v-else-if="!validations.isUrl">This is not a valid URL</div>
-                    <div v-else-if="!validations.isValidYoutubeVideoUrl">This is not a valid Youtube video URL</div>
-                    <div v-else-if="!validations.isEmbeddingAllowed">Video owner prohibited embedding of this video</div>
-                    <div v-else-if="!validations.videoExists">This video doesn't exist</div>
-                </template>
-            </div>
-        </div>
+                @videoSelection="(e) => $emit('videoSelection', e)"
+        />
         <div v-else-if="widget.editing" key="editor" class="video-part-editor">
             <template
                     v-if="editingThumbnail"
@@ -95,9 +79,11 @@ import ThumbnailPreview from "@/vue/guides/editor/ThumbnailPreview.vue";
 import YoutubeThumbnail from "@/vue/videos/YoutubeThumbnail.vue";
 import Player = YT.Player;
 import GuideVideo from "@/vue/guides/GuideVideo.vue";
+import YoutubeVideoLinkForm from "@/vue/guides/editor/YoutubeVideoLinkForm.vue";
 
 @Component({
     components: {
+        YoutubeVideoLinkForm,
         GuideVideo,
         YoutubeThumbnail,
         ThumbnailPreview,
@@ -126,10 +112,6 @@ export default class GuidePartVideoEditor extends Vue {
     player: Player | null = null
 
     editingThumbnail: boolean = false
-
-    mounted() {
-        console.log(this.widget.part.excerpt)
-    }
 
     @AsyncComputedProp()
     validations() {
@@ -227,41 +209,6 @@ export default class GuidePartVideoEditor extends Vue {
 @import "~@/assets/css/overwatch-ui.scss";
 
 .guide-part-video-editor {
-    .youtube-video-link-form {
-        margin-bottom: 2em;
-
-        .youtube-video-link-input {
-            outline: 0;
-            display: inline-block;
-            margin: 0 auto 0 auto;
-            height: 3em;
-            padding: .1em;
-            max-width: 100%;
-            width: 30em;
-            box-sizing: border-box;
-            font-family: 'IBM Plex Sans', 'sans-serif';
-            font-weight: bold;
-            color: black;
-            font-size: 1.2em;
-            text-align: center;
-
-            &:focus {
-                text-decoration: underline;
-
-                &::-webkit-input-placeholder {
-                    visibility: hidden;
-                }
-            }
-        }
-
-        .youtube-video-link-errors {
-            @include overwatch-futura;
-            text-shadow: 0 0 .18em #ff6600;
-            font-size: 1.3em;
-        }
-
-    }
-
     .video-part-editor {
         display: flex;
         flex-wrap: wrap;
