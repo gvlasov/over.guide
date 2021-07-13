@@ -54,7 +54,7 @@
             <div class="time-input-group end-group">
                 <PreciseTimeInput
                         v-if="isVideoLoaded"
-                        v-model="endSecondsValidated"
+                        v-model.number="endSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
                         :max-seconds="durationSeconds"

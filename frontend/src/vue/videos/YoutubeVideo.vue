@@ -154,7 +154,12 @@ export default class YoutubeVideo extends Vue {
     @Watch('end')
     onEndChange(value: number) {
         if (this.player !== void 0) {
+            // Если здесь не ставить на паузу и перезапускать видео вокруг
+            // seekTo, то при повторяющемся уменьшении this.end видео будет
+            // иногда скакать в начало
+            this.player.pauseVideo()
             this.player.seekTo(Math.max((this.start ?? 0), value - 1), true);
+            this.player.playVideo()
         }
     }
 
