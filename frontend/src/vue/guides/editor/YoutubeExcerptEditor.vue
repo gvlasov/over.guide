@@ -170,7 +170,7 @@ export default class YoutubeExcerptEditor extends Vue {
     endSeconds: number = this.initialEndSeconds
     durationSeconds: number = this.endSeconds - this.startSeconds
     currentSeconds: number = this.startSeconds
-    player: Player|null = null
+    player: Player
     playing: boolean = false
     hovered: boolean = false
     playerHasBeenPlaying: boolean | null = null

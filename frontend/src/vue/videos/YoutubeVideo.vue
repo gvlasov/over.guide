@@ -10,8 +10,8 @@ import Component from "vue-class-component";
 @Component({})
 export default class YoutubeVideo extends Vue {
 
-
     player: YT.Player
+
     timeout: number
     @Prop({required: true})
     videoId: string
@@ -188,7 +188,7 @@ export default class YoutubeVideo extends Vue {
         this.rebuildVideo(videoId);
     }
 
-    mounted() {
+    beforeMount() {
         if (document.querySelectorAll(`[id="${this.playerElementId}"]`).length > 1) {
             throw new Error(
                 `Player element with id = ${this.playerElementId} is not unique`
