@@ -62,16 +62,11 @@ export default class YoutubeVideo extends Vue {
         }
     }
 
-    private emitCurrentTimeUpdate() {
-        this.$emit('currentTimeUpdated', this.player.getCurrentTime())
-    }
-
     goToLoopStart() {
         if (this.start === null) {
             throw new Error()
         }
         this.player.seekTo(this.start, true);
-        this.emitCurrentTimeUpdate()
     }
 
     rebuildVideo(videoId) {
@@ -128,17 +123,9 @@ export default class YoutubeVideo extends Vue {
                                 }
                                 self.rescheduleLooping();
                                 self.$emit('play', self.player);
-                                self.currentTimeUpdateInterval = setInterval(
-                                    () => {
-                                        self.emitCurrentTimeUpdate()
-                                    },
-                                    16.66
-                                )
                             } else if (event.data === YT.PlayerState.PAUSED) {
                                 self.tryClearingLoopTimeout();
                                 self.$emit('pause', self.player);
-                            } else if (event.data === YT.PlayerState.BUFFERING) {
-                                self.emitCurrentTimeUpdate()
                             } else if (event.data === YT.PlayerState.ENDED) {
                                 if (self.currentTimeUpdateInterval !== null) {
                                     clearInterval(self.currentTimeUpdateInterval)
@@ -162,14 +149,12 @@ export default class YoutubeVideo extends Vue {
     @Watch('start')
     onStartChange(value: number) {
         this.player.seekTo(value, true);
-        this.emitCurrentTimeUpdate()
     }
 
     @Watch('end')
     onEndChange(value: number) {
         if (this.player !== void 0) {
             this.player.seekTo(Math.max((this.start ?? 0), value - 1), true);
-            this.emitCurrentTimeUpdate()
             this.rescheduleLooping()
         }
     }
