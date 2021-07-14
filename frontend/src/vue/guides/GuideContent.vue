@@ -62,6 +62,10 @@ export default class GuideContent extends Vue {
             font-size: 1.5em;
             word-break: break-word;
         }
+
+        .guide-video {
+            margin: 2em 0;
+        }
     }
 }
 
