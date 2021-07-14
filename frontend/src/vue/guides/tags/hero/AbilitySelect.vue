@@ -20,6 +20,7 @@ import Component from "vue-class-component";
 import {Model, Prop} from "vue-property-decorator";
 import HeroDto from "data/dto/HeroDto";
 import GuideDescriptorVso from "@/ts/vso/GuideDescriptorVso";
+import {MAX_DESCRIPTOR_TOTAL_ABILITY_COUNT} from "data/dto/GuideDescriptorDto";
 
 @Component({
     components: {
@@ -36,8 +37,6 @@ export default class AbilitySelect extends Vue {
     @Prop({required: true})
     heroes: HeroDto[]
 
-    private readonly maxAbilitiesNumber: number = 7
-
     get abilities(): AbilityVso[] {
         const allAbilities = Array.from(abilities.values());
         return this.heroes.flatMap(
@@ -51,7 +50,7 @@ export default class AbilitySelect extends Vue {
     }
 
     get hasMaxAbilities(): boolean {
-        return this.descriptor.abilitiesLength >= this.maxAbilitiesNumber
+        return this.descriptor.abilitiesLength >= MAX_DESCRIPTOR_TOTAL_ABILITY_COUNT
     }
 
 }

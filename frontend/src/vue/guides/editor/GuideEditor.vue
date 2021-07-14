@@ -89,6 +89,7 @@
                     </div>
                     <hr/>
                     <GuideEditorPartsList :entry="head.entry"/>
+                    <hr/>
                     <OverwatchButton
                             type="main"
                             class="preview-button"
@@ -447,7 +448,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
         .preview-button {
             width: 100%;
             height: 3em;
-            margin-top: 3em;
+            margin-top: 1em;
             margin-bottom: 6em;
         }
 

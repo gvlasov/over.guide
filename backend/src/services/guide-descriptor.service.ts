@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {GuideDescriptor} from "src/database/models/GuideDescriptor";
-import GuideDescriptorDto from "data/dto/GuideDescriptorDto"
+import GuideDescriptorDto, {MAX_DESCRIPTOR_TOTAL_ABILITY_COUNT} from "data/dto/GuideDescriptorDto"
 import {Sequelize} from "sequelize-typescript";
 import {SEQUELIZE} from "src/constants";
 import {QueryTypes} from "sequelize";
@@ -140,6 +140,9 @@ export class GuideDescriptorService {
         GuideDescriptorService.validateAbilitiesCorrespondToHeroes(
             guideDescriptorDto.enemyHeroes,
             guideDescriptorDto.enemyAbilities
+        )
+        GuideDescriptorService.validateAbilitiesNumber(
+            guideDescriptorDto,
         )
         return this.getExact(guideDescriptorDto)
             .then(async oldDescriptor => {
@@ -295,4 +298,7 @@ select distinct guideDescriptorId from (
         }
     }
 
+    private static validateAbilitiesNumber(dto: GuideDescriptorDto) {
+        return dto.enemyAbilities.length + dto.playerAbilities.length + dto.teammateAbilities.length <= MAX_DESCRIPTOR_TOTAL_ABILITY_COUNT;
+    }
 }
