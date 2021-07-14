@@ -50,13 +50,12 @@ export default class VideoLoadingScreen extends Vue {
 
     .play-button {
         background-color: hsla(0, 0, 20%, .9);
-        width: 1em;
-        height: 1em;
+        width: 1.5em;
+        height: 1.5em;
         top: 50%;
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
         border-radius: 50%;
-        font-size: 1.2em;
 
         img {
             height: auto;
@@ -65,13 +64,12 @@ export default class VideoLoadingScreen extends Vue {
             top: 50%;
             left: 50%;
             transform: translateX(-50%) translateY(-50%);
-            padding-left: .08em;
+            padding-left: .15em;
         }
     }
 
     .duration {
         background-color: rgba($overwatch-panel-bg-color, .6);
-        font-size: .8em;
         height: 1em;
         width: min-content;
         padding: .1em .4em .1em .26em;

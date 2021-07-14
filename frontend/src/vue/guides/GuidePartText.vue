@@ -31,6 +31,7 @@ export default class GuidePartText extends Vue {
 
 .text-guide-part-content {
     text-align: left;
+    font-size: 1.5em;
     word-break: break-word;
     font-family: $body-font;
 }

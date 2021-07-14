@@ -45,12 +45,12 @@ export default class GuideContent extends Vue {
 @import '~@/assets/css/tags.scss';
 
 .guide-content {
-    font-size: 1.5em;
     .guide-part {
         box-sizing: border-box;
         /*background-color: rgba(43, 55, 83, 0.8);*/
         color: white;
         position: relative;
+
 
         .text-guide-part {
             max-width: 100%;
@@ -59,6 +59,7 @@ export default class GuideContent extends Vue {
 
         .text-guide-part-content {
             text-align: left;
+            font-size: 1.5em;
             word-break: break-word;
         }
     }
