@@ -3,6 +3,7 @@
             class="hero-portrait"
             :src="imgSrc(hero)"
             v-bind:data-hero-data-name="hero ? hero.dataName : ''"
+            :alt="hero.name"
     />
 </template>
 
