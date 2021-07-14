@@ -1,5 +1,5 @@
 <template>
-    <img class="youtube-thumbnail" :src="src"/>
+    <img class="youtube-thumbnail" :src="src" alt="Thumbnail"/>
 </template>
 
 <script lang="ts">
