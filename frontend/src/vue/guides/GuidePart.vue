@@ -223,11 +223,13 @@ export default class GuidePart extends Vue {
             line-height: 1em;
             display: inline-block;
             height: 1em;
-            vertical-align: top;
+            vertical-align: middle;
             padding-right: .3em;
         }
 
         button {
+            vertical-align: middle;
+
             & ::v-deep .content {
                 padding: 0;
                 display: flex;
