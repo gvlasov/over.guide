@@ -185,29 +185,33 @@ export default class GuideVideo extends Vue {
 @import "~@/assets/css/fonts.scss";
 @import "~@/assets/css/overwatch-ui.scss";
 
-.video-custom-ui {
-    $start-color: hsl(230, 70%, 64%);
-    $end-color: hsl(0, 70%, 64%);
+.guide-video {
+    margin: 1em 0;
 
-    $max-portrait-mode-width: $root-content-width - 3rem;
+    .video-custom-ui {
+        $start-color: hsl(230, 70%, 64%);
+        $end-color: hsl(0, 70%, 64%);
 
-    .play-pause {
-        background-color: hsla(0, 50%, 40%, .4);
-    }
+        $max-portrait-mode-width: $root-content-width - 3rem;
 
-    .excerpt-timebar {
-        height: 1.5em;
-        margin-bottom: .4em;
-        margin-top: .4em;
+        .play-pause {
+            background-color: hsla(0, 50%, 40%, .4);
+        }
 
-        & ::v-deep .excerpt-area {
-            background: rgb(78, 225, 255);
-            background: linear-gradient(90deg, $start-color 0%, $end-color 100%);
+        .excerpt-timebar {
+            height: 1.5em;
+            margin-bottom: .4em;
+            margin-top: .4em;
+
+            & ::v-deep .excerpt-area {
+                background: rgb(78, 225, 255);
+                background: linear-gradient(90deg, $start-color 0%, $end-color 100%);
+            }
         }
     }
-}
 
-.loading-screen {
-    cursor: pointer;
+    .loading-screen {
+        cursor: pointer;
+    }
 }
 </style>
