@@ -111,6 +111,7 @@
                 />
                 <div class="preview-buttons">
                     <OverwatchButton
+                            v-if="!isPublishing"
                             type="default"
                             v-hammer:tap="() => preview = false"
                     >Edit
@@ -118,7 +119,8 @@
                     <OverwatchButton
                             type="main"
                             v-hammer:tap="publish"
-                    >{{ head.entry.isPublic ? 'publish' : 'save' }}
+                            :disabled="isPublishing"
+                    >{{ head.entry.isPublic ? (isPublishing ? 'publishing...' : 'publish') : 'save' }}
                     </OverwatchButton>
                 </div>
             </div>
@@ -187,6 +189,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     preview: boolean = false
     forceDescriptorSelection: boolean = false
     guideNotFound: boolean = false
+    isPublishing: boolean = false
 
     $scrollTo: any
 
@@ -231,6 +234,10 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     }
 
     publish() {
+        if (this.isPublishing) {
+            throw new Error('Already publishing')
+        }
+        this.isPublishing = true;
         (
             this.head instanceof ExistingGuideHeadVso
                 ? backend.updateGuide(this.head.entry.toDto())
@@ -248,6 +255,7 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                 if (error.response.status === 403) {
                     this.loginRequired = true;
                 }
+                this.isPublishing = false
             })
     }
 
