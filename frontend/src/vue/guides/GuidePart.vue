@@ -260,6 +260,10 @@ export default class GuidePart extends Vue {
         }
 
     }
+
+    & ::v-deep .guide-video {
+        margin-top: .3em;
+    }
 }
 
 </style>
