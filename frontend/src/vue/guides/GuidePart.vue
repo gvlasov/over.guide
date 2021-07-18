@@ -180,6 +180,8 @@ export default class GuidePart extends Vue {
                 {
                     // https://github.com/rigor789/vue-scrollto/issues/36#issuecomment-313853007                }
                     cancelable: false,
+                    offset: () =>
+                        -document.getElementsByClassName('navigation-bar')[0].clientHeight - parseFloat(getComputedStyle(this.$el).fontSize) * 1.4,
                 }
             )
         })
