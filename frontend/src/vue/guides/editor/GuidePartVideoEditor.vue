@@ -33,7 +33,9 @@
                     @select-original="setOriginalThumbnail"
                     :disable-moment="editingThumbnail && widget.part.excerpt.thumbnail >= 0"
             />
-            <ThumbnailPreview :excerpt="widget.part.excerpt"/>
+            <div class="thumbnail-preview-wrap">
+                <ThumbnailPreview :excerpt="widget.part.excerpt"/>
+            </div>
             <OverwatchPanelButton
                     v-if="editingThumbnail"
                     type="main"
@@ -155,18 +157,14 @@ export default class GuidePartVideoEditor extends Vue {
             flex-basis: 100%;
         }
 
-        .thumbnail-preview {
-            display: block;
-            user-select: none;
-            pointer-events: none;
-            justify-items: center;
+        .thumbnail-preview-wrap {
+            flex-basis: 0;
+            flex-grow: 0;
             position: relative;
-
-            & ::v-deep > * {
-                height: 100%;
+            .thumbnail-preview {
                 position: absolute;
                 right: 0;
-                top: 0;
+                height: 100%;
             }
         }
 

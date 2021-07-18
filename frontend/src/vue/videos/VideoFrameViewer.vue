@@ -1,5 +1,6 @@
 <template>
     <YoutubeVideoStreamViewer
+            class="video-frame-viewer"
             :video-id="youtubeVideoId"
             :playing="false"
             :controls="false"
@@ -39,6 +40,12 @@ export default class VideoFrameViewer extends Vue {
         this.$el.addEventListener('loadedmetadata', function() {
             this.currentTime = self.timeSeconds
         }, false)
+        this.$el.onseeking = function() {
+            self.$emit('seeking')
+        }
+        this.$el.onseeked = function() {
+            self.$emit('seeked')
+        }
     }
 
 };

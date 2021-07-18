@@ -88,7 +88,6 @@ export default class MomentThumbnailEditor extends Vue {
         if (this.player.getPlayerState() === YT.PlayerState.PLAYING) {
             this.player.pauseVideo()
         }
-        console.log(this.excerpt)
         this.player.seekTo(seconds, true)
     }
 
