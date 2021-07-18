@@ -5,8 +5,8 @@ $root-content-width: 54rem;
 }
 
 .root-content-sizer {
-    max-width: native-min($root-content-width, 100vw);
-    min-width: native-min($root-content-width, 100vw);
+    max-width: native-min($root-content-width, 100%);
+    min-width: native-min($root-content-width, 100%);
 }
 
 @mixin custom-desktop-scrollbar(

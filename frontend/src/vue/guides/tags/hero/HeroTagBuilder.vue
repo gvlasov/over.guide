@@ -167,9 +167,18 @@ export default class HeroTagBuilder extends Vue {
 <style lang="scss" scoped>
 @import "~@/assets/css/tags.scss";
 .tag-builder {
+    max-width: 100%;
+    padding: 0 .5em 0 .5em;
+    box-sizing: border-box;
+
     .selected-tags {
+        max-width: 100%;
+        overflow: scroll;
+        overscroll-behavior-x: contain;
+        &::-webkit-scrollbar {
+            display: none;
+        }
         display: inline-flex;
-        padding: 0 .5rem 0 .5rem;
 
         .tappable-background {
             cursor: pointer;
