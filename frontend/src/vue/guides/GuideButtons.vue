@@ -21,6 +21,7 @@
         >rate matchup
         </LinkLikeButton>
         <LinkLikeButton
+                v-if="guideHasAnyMarkdown"
                 v-hammer:tap="() => $emit('show-markdown')"
                 title="Show post code"
         >markdown
@@ -146,6 +147,13 @@ export default class GuideButtons extends Vue {
 
     get canEdit(): boolean {
         return auth.canEditGuide(this.entry)
+    }
+
+    get guideHasAnyMarkdown(): boolean {
+        return this.entry
+            .parts
+            .filter(part => part.isText && !part.isEmpty)
+            .length > 0
     }
 
     get permalink(): string {
