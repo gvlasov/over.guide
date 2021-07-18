@@ -46,6 +46,7 @@
                     v-if="widget.isVideo && widget.part.excerpt.youtubeVideoId !== ''"
                     :widget="widget"
                     :index="index"
+                    :entry="entry"
             />
             <div class="guide-part-buttons">
                 <OverwatchButton
@@ -89,6 +90,9 @@ import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 import OverwatchPanel from "@/vue/general/OverwatchPanel.vue";
 import YoutubeUrlVso from "@/ts/vso/YoutubeUrlVso";
 import YoutubeVideoLinkForm from "@/vue/guides/editor/YoutubeVideoLinkForm.vue";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
 
 @Component({
     components: {
@@ -103,6 +107,9 @@ import YoutubeVideoLinkForm from "@/vue/guides/editor/YoutubeVideoLinkForm.vue";
     },
 })
 export default class GuidePart extends Vue {
+    @Prop({required: true})
+    entry: ExistingGuideHistoryEntryVso|NewGuideHistoryEntryVso
+
     @Prop({required: true})
     widget: GuidePartWidget
 

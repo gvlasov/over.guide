@@ -21,6 +21,7 @@
                     :initial-start-seconds="widget.part.excerpt.startSeconds"
                     :initial-end-seconds="widget.part.excerpt.endSeconds"
                     :player-element-id="'video-editor-' + widget.part.excerpt.youtubeVideoId + '-' + index"
+                    :entry="entry"
                     @startSecondsChange="onStartSecondsChangeHacky(widget, $event)"
                     @endSecondsChange="onEndSecondsChangeHacky(widget, $event)"
                     class="video-editor"
@@ -72,6 +73,9 @@ import ThumbnailPreview from "@/vue/guides/editor/ThumbnailPreview.vue";
 import YoutubeThumbnail from "@/vue/videos/YoutubeThumbnail.vue";
 import GuideVideo from "@/vue/guides/GuideVideo.vue";
 import Player = YT.Player;
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
 
 @Component({
     components: {
@@ -88,6 +92,9 @@ import Player = YT.Player;
     },
 })
 export default class GuidePartVideoEditor extends Vue {
+    @Prop({required: true})
+    entry: ExistingGuideHistoryEntryVso|NewGuideHistoryEntryVso
+
     @Prop({required: true})
     widget: GuidePartVideoWidget
 

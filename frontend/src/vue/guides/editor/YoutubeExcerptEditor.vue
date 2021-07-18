@@ -134,6 +134,10 @@ import AsyncComputedProp from 'vue-async-computed-decorator'
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
 import Player = YT.Player;
+import NewGuideHeadVso from "@/ts/vso/NewGuideHeadVso";
+import ExistingGuideHistoryEntryVso
+    from "@/ts/vso/ExistingGuideHistoryEntryVso";
+import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
 
 const backend = new Backend(axios);
 const intersectionThresholdSeconds = .3
@@ -154,6 +158,9 @@ const allowSeekAhead = false
     }
 })
 export default class YoutubeExcerptEditor extends Vue {
+    @Prop({required: true})
+    entry: ExistingGuideHistoryEntryVso|NewGuideHistoryEntryVso
+
     @Prop({required: true})
     videoId: string
 
@@ -205,6 +212,9 @@ export default class YoutubeExcerptEditor extends Vue {
                         return part.part.kind === 'video' &&
                             part.part.excerpt.endSeconds >= (this.startSeconds + intersectionThresholdSeconds) &&
                             part.part.excerpt.startSeconds <= (this.endSeconds - intersectionThresholdSeconds)
+                            &&
+                            (this.entry instanceof NewGuideHistoryEntryVso
+                                || guide.entry.guideId !== this.entry.guideId)
                     }
                 )
                     .length > 0

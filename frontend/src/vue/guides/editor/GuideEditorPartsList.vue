@@ -22,6 +22,7 @@
                     :widget="widget"
                     :parts="entry.parts"
                     :index="index"
+                    :entry="entry"
             />
         </transition-group>
         <transition name="new-buttons-appear">
