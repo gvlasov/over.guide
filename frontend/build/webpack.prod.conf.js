@@ -111,6 +111,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             {
               from: path.resolve(__dirname, '../src/assets/favicons/prod/*'),
               to: config.dev.assetsSubDirectory + 'favicons',
+              context: path.resolve(__dirname, '../src/assets/favicons/prod/'),
             },
             {
               from: path.resolve(__dirname, '../src/index.html'),
