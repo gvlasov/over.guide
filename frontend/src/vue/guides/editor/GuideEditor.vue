@@ -200,7 +200,8 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
     @Debounce(500)
     onGuideChange(newValue: NewGuideHeadVso | ExistingGuideHeadVso, oldValue) {
         if (oldValue === null) {
-            this.preview = newValue !== null && Cookies.get(this.previewCookieName) === '1'
+            this.preview = (newValue instanceof ExistingGuideHeadVso
+                && Cookies.get(this.previewCookieName) === '1');
         }
         if (newValue.entry instanceof NewGuideHistoryEntryVso) {
             if (newValue.entry.isEmpty) {
@@ -249,7 +250,9 @@ export default class GuideEditor extends mixins(ParamsDescriptorMixin) {
                     guideId = (this.head.entry as ExistingGuideHistoryEntryVso).guideId
                 }
                 this.$router.push(`/guide/${guideId}`)
-                draft.reset()
+                if (this.head instanceof NewGuideHeadVso) {
+                    draft.reset()
+                }
                 Cookies.set(this.previewCookieName, '0')
             })
             .catch(error => {
