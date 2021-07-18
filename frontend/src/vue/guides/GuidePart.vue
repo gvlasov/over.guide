@@ -180,11 +180,20 @@ export default class GuidePart extends Vue {
                 {
                     // https://github.com/rigor789/vue-scrollto/issues/36#issuecomment-313853007                }
                     cancelable: false,
-                    offset: () =>
-                        -document.getElementsByClassName('navigation-bar')[0].clientHeight - parseFloat(getComputedStyle(this.$el).fontSize) * 1.4,
+                    offset: this.getScrollOffsetY(),
                 }
             )
         })
+    }
+
+    getScrollOffsetY() {
+        // TODO: Replace with scroll snap when browsers get good support:
+        // https://developers.google.com/web/updates/2018/07/css-scroll-snap
+        const navigationBar = document.getElementsByClassName('navigation-bar')[0];
+        return (getComputedStyle(navigationBar).bottom === '0px'
+                ? 0
+                : -navigationBar.clientHeight
+        ) - parseFloat(getComputedStyle(this.$el).fontSize) * 1.4;
     }
 
     deletePart(index) {
@@ -209,6 +218,8 @@ export default class GuidePart extends Vue {
     padding: 1em;
     color: white;
     position: relative;
+    scroll-padding-top: 2em;
+    scroll-padding-bottom: 2em;
 
     .markup-help-button {
         position: absolute;
