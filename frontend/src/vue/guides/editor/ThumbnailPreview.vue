@@ -19,7 +19,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from "vue-class-component";
-import {Prop, Watch} from "vue-property-decorator";
+import {Prop} from "vue-property-decorator";
 import VideoFrameViewer from "@/vue/videos/VideoFrameViewer.vue";
 import YoutubeVideoExcerptDto, {YoutubeVideoExcerptDtoExternal} from "data/dto/YoutubeVideoExcerptDto";
 import YoutubeThumbnail from "@/vue/videos/YoutubeThumbnail.vue";
@@ -39,11 +39,6 @@ export default class ThumbnailPreview extends Vue {
     loading: boolean = false
 
     OriginalThumbnail = YoutubeVideoExcerptDtoExternal.Original
-
-    @Watch('loading')
-    watchLoading() {
-        console.log(this.loading)
-    }
 
 }
 
