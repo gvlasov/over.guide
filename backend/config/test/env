@@ -11,6 +11,6 @@ FRONTEND_ROOT_URL=https://192.168.1.39:8000/
 TOKEN_CIPHER_SECRET=9hello beau&tiful ladee horse!
 COOKIE_DOMAIN=192.168.1.39
 SQL_LOG=0
-MIGRATIONS_PATH=src/database/migrations
+MIGRATIONS_PATH=dist/database/migrations
 CDN_WEB_ROOT=out/test/cdn
 CDN_BASE_URL=https://192.168.1.39:8000/cdn
