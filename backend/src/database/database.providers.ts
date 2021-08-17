@@ -4,6 +4,7 @@ import cls from 'cls-hooked';
 import models from './database.models'
 import {ModuleRef} from "@nestjs/core";
 import * as fs from "fs";
+import {checkMigrationDir} from "src/database/database.migrationDirChecker";
 
 const Umzug = require('umzug')
 
@@ -57,15 +58,21 @@ export const databaseProviders = [
                 baseUrl: './',
                 paths: paths
             })
+            const migrationsPattern = /\.js$/
+            checkMigrationDir(
+                process.env.MIGRATIONS_PATH,
+                migrationsPattern
+            )
             const umzug = new Umzug({
                 migrations: {
                     path: process.env.MIGRATIONS_PATH,
-                    pattern: /\.js$/,
+                    pattern: migrationsPattern,
                     params: [
                         moduleRef,
                         sequelize,
                     ]
                 },
+                logging: console.log,
                 storage: 'sequelize',
                 storageOptions: {
                     sequelize: sequelize,
