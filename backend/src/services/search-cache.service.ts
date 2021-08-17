@@ -58,7 +58,7 @@ export default class SearchCacheService {
     ) {
     }
 
-    protected set(
+    set(
         query: GuideSearchQueryDto,
         value: T
     ): void {

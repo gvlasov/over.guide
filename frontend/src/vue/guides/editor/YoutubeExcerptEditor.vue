@@ -15,27 +15,29 @@
                     class="video"
             />
         </AspectRatioBox>
-        <div v-if="preciseDurationAvailable">
-            <ExcerptTimebar
-                    v-if="isVideoLoaded"
-                    :start-seconds="startSeconds"
-                    :end-seconds="endSeconds"
-                    :current-seconds="currentSeconds"
-                    :duration-seconds="durationSeconds"
-                    @mouseenter.native="hovered = true"
-                    @mouseleave.native="hovered = false"
-                    :enable-slider-label="hovered"
-                    @dragStart="onDragStart"
-                    @dragEnd="onDragEnd"
-                    @dragContinue="onDragContinue"
-                    @draglessClick="onDraglessClick"
-                    class="timebar"
-            />
-        </div>
-        <div v-if="preciseDurationAvailable" class="controls">
-            <div class="time-input-group start-group">
+        <ExcerptTimebar
+                v-bind:class="isVideoLoaded ? '' : 'ui-loading'"
+                :start-seconds="startSeconds"
+                :end-seconds="endSeconds"
+                :current-seconds="currentSeconds"
+                :duration-seconds="durationSeconds"
+                @mouseenter.native="hovered = true"
+                @mouseleave.native="hovered = false"
+                :enable-slider-label="hovered"
+                @dragStart="onDragStart"
+                @dragEnd="onDragEnd"
+                @dragContinue="onDragContinue"
+                @draglessClick="onDraglessClick"
+                class="timebar"
+        />
+        <div
+                class="controls"
+                v-bind:class="isVideoLoaded ? '' : 'ui-loading'"
+        >
+            <div
+                    class="time-input-group start-group"
+            >
                 <PreciseTimeInput
-                        v-if="isVideoLoaded"
                         v-model.number="startSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
@@ -53,7 +55,6 @@
             </div>
             <div class="time-input-group end-group">
                 <PreciseTimeInput
-                        v-if="isVideoLoaded"
                         v-model.number="endSecondsValidated"
                         :show-hours="durationSeconds > 3600"
                         :current-time-seconds="currentSeconds"
@@ -94,7 +95,7 @@
                 v-bind:class="{'intersections-available': intersectingGuides.length > 0}"
                 v-hammer:tap="onSameVideoGuidesDropdownTap"
         >
-            {{ intersectingGuides.length }} guide{{intersectingGuides.length % 10 === 1 ? '' : 's'}} intersecting with your cut
+            {{ intersectingGuides.length }} guide{{ intersectingGuides.length % 10 === 1 ? '' : 's' }} intersecting with your cut
         </OverwatchDropdownButton>
         <div
                 v-if="showSameVideoGuides && intersectingGuides.length > 0"
@@ -133,11 +134,10 @@ import {Prop, Watch} from "vue-property-decorator";
 import AsyncComputedProp from 'vue-async-computed-decorator'
 import Component from "vue-class-component";
 import ExistingGuideHeadVso from "@/ts/vso/ExistingGuideHeadVso";
-import Player = YT.Player;
-import NewGuideHeadVso from "@/ts/vso/NewGuideHeadVso";
 import ExistingGuideHistoryEntryVso
     from "@/ts/vso/ExistingGuideHistoryEntryVso";
 import NewGuideHistoryEntryVso from "@/ts/vso/NewGuideHistoryEntryVso";
+import Player = YT.Player;
 
 const backend = new Backend(axios);
 const intersectionThresholdSeconds = .3
@@ -159,7 +159,7 @@ const allowSeekAhead = false
 })
 export default class YoutubeExcerptEditor extends Vue {
     @Prop({required: true})
-    entry: ExistingGuideHistoryEntryVso|NewGuideHistoryEntryVso
+    entry: ExistingGuideHistoryEntryVso | NewGuideHistoryEntryVso
 
     @Prop({required: true})
     videoId: string
@@ -175,7 +175,7 @@ export default class YoutubeExcerptEditor extends Vue {
 
     startSeconds: number = this.initialStartSeconds
     endSeconds: number = this.initialEndSeconds
-    durationSeconds: number = this.endSeconds - this.startSeconds
+    durationSeconds: number = 100
     currentSeconds: number = this.startSeconds
     player: Player
     playing: boolean = false
@@ -446,6 +446,11 @@ $max-portrait-mode-width: $root-content-width - 3rem;
     justify-content: center;
 }
 
+.ui-loading {
+    visibility: hidden;
+    pointer-events: none;
+}
+
 .timebar {
     margin-bottom: .4em;
     margin-top: .4em;
@@ -535,6 +540,7 @@ $max-portrait-mode-width: $root-content-width - 3rem;
         .total-cut-length {
             flex-basis: 100%;
             font-family: 'Futura Demi Bold', sans-serif;
+
             .hanging {
                 display: inline;
                 position: absolute;
