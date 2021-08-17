@@ -10,6 +10,7 @@ import smallGuideTestingFixture from "@fixtures/small-guide-testing";
 import MapId from "data/MapId";
 import HeroId from "data/HeroId";
 import GuideSearchQueryQuickie from "data/dto/GuideSearchQueryQuickie";
+import EmptyGuideSearchPage from "data/dto/EmptyGuideSearchPage";
 
 describe(
     SearchCacheService,
@@ -33,10 +34,11 @@ describe(
                 const query = new GuideSearchQueryQuickie({
                     playerHeroes: [HeroId.Bastion]
                 });
-                ctx.service.set(query, '123')
+                const cachedPage = new EmptyGuideSearchPage();
+                ctx.service.set(query, cachedPage)
                 expect(
                     ctx.service.get(query)
-                ).toBe('123')
+                ).toStrictEqual(cachedPage)
                 ctx.service.clear(query)
                 expect(
                     ctx.service.get(query)
@@ -53,10 +55,11 @@ describe(
                 const subsetQuery = new GuideSearchQueryQuickie({
                     playerHeroes: [HeroId.Hanzo]
                 });
-                ctx.service.set(query, '123')
+                const cachedPage = new EmptyGuideSearchPage();
+                ctx.service.set(query, cachedPage)
                 expect(
                     ctx.service.get(query)
-                ).toBe('123')
+                ).toStrictEqual(cachedPage)
                 ctx.service.clear(subsetQuery)
                 expect(
                     ctx.service.get(query)
@@ -76,14 +79,15 @@ describe(
                 const supersetQuery = new GuideSearchQueryQuickie({
                     playerHeroes: [HeroId.Bastion, HeroId.Hanzo]
                 });
-                ctx.service.set(query, '123')
+                const cachedPage = new EmptyGuideSearchPage()
+                ctx.service.set(query, cachedPage)
                 expect(
                     ctx.service.get(query)
-                ).toBe('123')
+                ).toStrictEqual(cachedPage)
                 ctx.service.clear(supersetQuery)
                 expect(
                     ctx.service.get(query)
-                ).toBe('123')
+                ).toStrictEqual(cachedPage)
                 expect(
                     ctx.service.get(supersetQuery)
                 ).toBeNull()
@@ -125,7 +129,7 @@ describe(
                     mapTags: [MapId.BlizzardWorld, MapId.Busan],
                     clientAlreadyHasGuideIds: clientGuideIds
                 });
-                ctx.service.set(query, '3434')
+                ctx.service.set(query, new EmptyGuideSearchPage())
                 expect(ctx.service.get(anotherQuery)).toBeNull()
             });
         }
