@@ -34,13 +34,13 @@ export class YoutubeScreenshotService {
                     return new Promise(
                         (resolve, reject) => {
                             const command = `ffmpeg -ss "${ss}" -i "${url}" -vframes 1 -q:v 2 "${outputPath}" -y -loglevel fatal`;
-                            console.log(command)
+                            // console.log(command)
                             exec(
                                 command,
                                 (execException: ExecException | null, stdout: string, stderr: string) => {
                                     if (execException === null || execException.code === 0) {
-                                        console.log('stdout',stdout)
-                                        console.log('stderr',stderr)
+                                        // console.log('stdout',stdout)
+                                        // console.log('stderr',stderr)
                                         resolve()
                                     } else {
                                         reject({
