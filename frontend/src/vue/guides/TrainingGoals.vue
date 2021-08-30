@@ -179,6 +179,7 @@ export default class TrainingGoals extends Vue {
         flex-direction: row;
         justify-content: center;
         gap: 1em;
+        max-width: 100%;
     }
 
     .sortable-ghost {
