@@ -1,0 +1,1 @@
+{"version":3,"file":"patchFixture.js","sourceRoot":"","sources":["../../../../src/database/fixtures/patchFixture.ts"],"names":[],"mappings":";;AACA,2CAAgD;AAEhD,kBAAe,KAAK,EAAE,SAAoB,EAAE,EAAE;IAC1C,MAAM,aAAK,CAAC,MAAM,CAAC;QACf,OAAO,EAAE,QAAQ;QACjB,IAAI,EAAE,IAAI,IAAI,CAAC,qBAAqB,CAAC;QACrC,KAAK,EAAE,WAAW;KACrB,CAAC,CAAA;AACN,CAAC,CAAA"}

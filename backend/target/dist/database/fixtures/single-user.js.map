@@ -1,0 +1,1 @@
+{"version":3,"file":"single-user.js","sourceRoot":"","sources":["../../../../src/database/fixtures/single-user.ts"],"names":[],"mappings":";;AAAA,yCAA8C;AAE9C,kBAAe,KAAK,EAAE,SAAS,EAAE,EAAE;IAC/B,MAAM,WAAI,CAAC,MAAM,CAAC;QACd,IAAI,EAAE,cAAc;QACpB,eAAe,EAAE,cAAc;QAC/B,MAAM,EAAE,CAAC;KACZ,CAAC,CAAA;AACN,CAAC,CAAA"}
