@@ -31,8 +31,8 @@ services:
       - 8082:8080
     volumes:
       - ./nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
-      - ./nginx/server.crt:/etc/nginx/server.crt
-      - ./nginx/server.key:/etc/nginx/server.key
+      - ./../backend/src/certs/server.crt:/etc/nginx/server.crt
+      - ./../backend/src/certs/server.key:/etc/nginx/server.key
     depends_on:
       - backend
   cdn-mock:
@@ -68,18 +68,18 @@ services:
       MYSQL_ROOT_PASSWORD: "1"
       MYSQL_DATABASE: "overwatch"
       MYSQL_INITDB_SKIP_TZINFO: "1"
-  sensu-backend:
-    image: sensu/sensu:latest
-    volumes:
-      - /var/lib/sensu:/var/lib/sensu
-    ports:
-      - 3000:3000
-      - 8080:8080
-      - 8081:8081
-    environment:
-      SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: smol
-      SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: guide
-    command: "sensu-backend start --state-dir /var/lib/sensu/sensu-backend --log-level debug"
+#  sensu-backend:
+#    image: sensu/sensu:latest
+#    volumes:
+#      - /var/lib/sensu:/var/lib/sensu
+#    ports:
+#      - 3000:3000
+#      - 8080:8080
+#      - 8081:8081
+#    environment:
+#      SENSU_BACKEND_CLUSTER_ADMIN_USERNAME: smol
+#      SENSU_BACKEND_CLUSTER_ADMIN_PASSWORD: guide
+#    command: "sensu-backend start --state-dir /var/lib/sensu/sensu-backend --log-level debug"
 volumes:
   yandex-disk-mock:
 

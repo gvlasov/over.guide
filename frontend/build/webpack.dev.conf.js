@@ -46,8 +46,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     hot: true,
 
     https: true,
-    key: fs.readFileSync('../backend/src/test/server.key'),
-    cert: fs.readFileSync('../backend/src/test/server.crt'),
+    key: fs.readFileSync('../backend/src/certs/server.key'),
+    cert: fs.readFileSync('../backend/src/certs/server.crt'),
 
     contentBase: false, // since we use CopyWebpackPlugin.
     compress: true,
