@@ -28,7 +28,6 @@ import {Restriction} from "src/database/models/Restriction";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import ApiErrorId from "data/ApiErrorId";
 import {GuideHead} from "src/database/models/GuideHead";
-import GuidePartVideoDto from "data/dto/GuidePartVideoDto";
 
 describe(
     GuideController,

@@ -1,0 +1,10 @@
+[Unit]
+Description=NestJS backend
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+WorkingDirectory=/home/site/repo/backend
+EnvironmentFile=/home/site/repo/backend/config/prod/env
+ExecStart=/usr/bin/npm run start:prod

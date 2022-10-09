@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+cd frontend
+[ -d node_modules ] || npm install
+cd ../backend
+[ -d node_modules ] || npm install
+cd ../docker
+docker-compose up -d --remove-orphans; docker-compose logs backend

@@ -163,7 +163,7 @@ export class TrainingGoalController {
                     return;
                 }
                 const goalSaves = [];
-                for (let goal of goals) {
+                for (const goal of goals) {
                     goal.order = dto.newGoalsOrder.length - dto.newGoalsOrder.indexOf(goal.guideId) - 1;
                     goalSaves.push(goal.save())
                 }

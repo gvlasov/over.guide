@@ -13,6 +13,7 @@
   "moduleNameMapper": {
     "^src/(.*)": "<rootDir>/src/$1",
     "^data/(.*)": "<rootDir>/src/data/$1",
-    "^@fixtures/(.*)": "<rootDir>/src/database/fixtures/$1"
+    "^@fixtures/(.*)": "<rootDir>/src/database/fixtures/$1",
+    "source-map-support/register": "identity-obj-proxy"
   }
 }

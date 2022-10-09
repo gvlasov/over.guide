@@ -1,4 +1,4 @@
-const shuffle = require("fast-shuffle").default;
+import * as shuffle from "fast-shuffle"
 
 export default class SeededShuffler {
 
@@ -9,7 +9,7 @@ export default class SeededShuffler {
     }
 
     shuffle<T>(array: T[]): T[] {
-        return shuffle(this.seed)(
+        return shuffle.default(this.seed)(
             array
         );
     }

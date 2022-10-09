@@ -5,6 +5,7 @@ import models from './database.models'
 import {ModuleRef} from "@nestjs/core";
 import * as fs from "fs";
 import {checkMigrationDir} from "src/database/database.migrationDirChecker";
+import * as tsconfig from '../../tsconfig.json'
 
 const Umzug = require('umzug')
 
@@ -47,18 +48,22 @@ export const databaseProviders = [
 
 
             if (process.env.ENV === 'prod') {
-                paths = JSON.parse(Buffer.from(await fs.promises.readFile('./dist/tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
+                paths = JSON.parse(Buffer.from(await fs.promises.readFile('./target/dist/tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
                 for (const key in paths) {
                     paths[key] = paths[key].map(it => 'dist/' + it.substr('src/'.length))
                 }
             } else {
-                paths = require('../../tsconfig.json').compilerOptions.paths
+                paths = tsconfig.compilerOptions.paths
             }
             require('tsconfig-paths').register({
                 baseUrl: './',
                 paths: paths
             })
             const migrationsPattern = /\.js$/
+            if (!process.env.MIGRATIONS_PATH) {
+                console.log("MIGRATIONS_PATH env variable must be set")
+                process.exit(1)
+            }
             checkMigrationDir(
                 process.env.MIGRATIONS_PATH,
                 migrationsPattern

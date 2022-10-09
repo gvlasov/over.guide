@@ -1,7 +1,7 @@
 <template>
     <OverwatchPanel class="support-website">
         <p>
-            Hi, my name is Georgy Vlasov. <a>smol.guides</a> is my personal endeavor.
+            Hi, my name is Geo Vlasov. <a>overgudie.com</a> is my personal endeavor.
         </p>
         <div class="methods">
             <a

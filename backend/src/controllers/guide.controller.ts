@@ -34,6 +34,7 @@ import {RestrictionService} from "src/services/restriction.service";
 import RestrictionTypeId from "data/RestrictionTypeId";
 import GuideSearchByAuthorQuery from "data/dto/GuideSearchByAuthorQuery";
 import SearchCacheService from "src/services/search-cache.service";
+import {GuideHistoryEntry} from "src/database/models/GuideHistoryEntry";
 
 @Controller('guide')
 export class GuideController {
@@ -176,7 +177,19 @@ export class GuideController {
     ) {
         const user = await this.authService.getUser(request)
         const guide = await Guide.findOne(
-            {where: {id: target.id}}
+            {
+                where: {id: target.id},
+                include: [{
+                    association: 'head',
+                    include: [{
+                        association: 'guideHistoryEntry',
+                        include: [{
+                            association: 'descriptor',
+                            include: [{all: true}]
+                        }]
+                    }],
+                }]
+            }
         );
         if (guide === null) {
             response.status(HttpStatus.NOT_FOUND)

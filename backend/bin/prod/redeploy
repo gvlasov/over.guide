@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -ex
+cd $(git rev-parse --show-toplevel)/backend
+
+git pull origin master
+[ -d node_modules ] || npm install
+mkdir -p ~/.config/systemd/user
+cp systemd/backend.service ~/.config/systemd/user
+systemctl --user daemon-reload
+systemctl --user enable backend.service
+systemctl --user restart backend.service
+journalctl --user -u backend
