@@ -163,12 +163,7 @@ export default class SearchCacheService {
     }
 
     clear(key: GuideDescriptorDto): void {
-        const hash = this.nodeKeyHash(key);
-        const removed = this.nodesMap.get(hash)
-        if (removed === undefined) {
-            console.log('no node with hash ', hash)
-            return
-        }
+        const removed = this.obtainNode(key)
         let nodes: Node<T>[] = [removed]
         let i = 0;
         do {
