@@ -9,4 +9,4 @@ cp systemd/backend.service ~/.config/systemd/user
 systemctl --user daemon-reload
 systemctl --user enable backend.service
 systemctl --user restart backend.service
-journalctl --user -u backend
+journalctl --user -u backend -f
