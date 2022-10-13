@@ -1,10 +1,16 @@
 [Unit]
 Description=NestJS backend
+Requires=nginx.service
+Requires=mariadb.service
+StartLimitBurst=3
+StartLimitIntervalSec=30
 
 [Install]
 WantedBy=multi-user.target
 
 [Service]
-WorkingDirectory=/home/site/repo/backend
-EnvironmentFile=/home/site/repo/backend/config/prod/env
-ExecStart=/usr/bin/npm run start:prod
+User=site
+WorkingDirectory=/home/site/backend
+EnvironmentFile=/home/site/backend/env
+ExecStart=/usr/bin/node dist/src/main.js
+Restart=on-failure

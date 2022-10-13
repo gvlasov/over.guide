@@ -1,7 +1,7 @@
 <template>
     <OverwatchPanel class="support-website">
         <p>
-            Hi, my name is Geo Vlasov. <a>overgudie.com</a> is my personal endeavor.
+            Hi, my name is Geo Vlasov. <a>over.guide</a> is my personal endeavor.
         </p>
         <div class="methods">
             <a
@@ -56,13 +56,13 @@ export default class SupportWebsitePage extends Vue {
             hero: heroes.get(HeroId.Soldier),
             url: 'https://paypal.com',
         },
-        {
-            name: 'Bitcoin',
-            icon: 'bitcoin',
-            hero: heroes.get(HeroId.Sombra),
-            url: 'https://bitcoin.com',
-            text: 'bc1qw4jkdwat5eswgyc4zhhvq09amthr3fcq9lvvzk'
-        },
+        // {
+        //     name: 'Bitcoin',
+        //     icon: 'bitcoin',
+        //     hero: heroes.get(HeroId.Sombra),
+        //     url: 'https://bitcoin.com',
+        //     text: 'bc1qw4jkdwat5eswgyc4zhhvq09amthr3fcq9lvvzk'
+        // },
     ]
 }
 

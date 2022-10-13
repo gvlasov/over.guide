@@ -4,8 +4,14 @@ cd $(git rev-parse --show-toplevel)/backend
 
 
 # Install code to backend directory on server
-tar cfz - config package.json -C target dist | ssh site@smol.guide 'mkdir -p backend; cd backend; rm -rf config dist; cat | tar xz; ls -lah .'
-ssh site@smol.guide 'cd backend; npm install'
-ssh root@smol.guide 'systemctl restart backend'
-echo Backend deployed at $(date "+%Y-%m-%d %H:%M:%S")
+npm run build:prod
+tar cfz - config package.json -C target dist \
+  | ssh site@over.guide 'mkdir -p backend; cd backend; rm -rf *; cat | tar xz; ls -lah .'
+ssh site@over.guide 'cd backend; npm install'
+scp \
+  systemd/backend.service \
+  root@over.guide:/etc/systemd/system/backend.service
+ssh root@over.guide 'systemctl daemon-reload && systemctl restart backend'
+rm -rf target
+echo Backend deployed at "$(date '+%Y-%m-%d %H:%M:%S')"
 
