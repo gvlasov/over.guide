@@ -48,7 +48,7 @@ export const databaseProviders = [
 
 
             if (process.env.ENV === 'prod') {
-                paths = JSON.parse(Buffer.from(await fs.promises.readFile('./target/dist/tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
+                paths = JSON.parse(Buffer.from(await fs.promises.readFile('./dist/tsconfig.prod.tsbuildinfo')).toString('utf8')).program.options.paths
                 for (const key in paths) {
                     paths[key] = paths[key].map(it => 'dist/' + it.substr('src/'.length))
                 }
