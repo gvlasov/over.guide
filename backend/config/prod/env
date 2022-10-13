@@ -10,6 +10,6 @@ FRONTEND_ROOT_URL=https://over.guide/
 TOKEN_CIPHER_SECRET=9hello beau&tiful ladee horse!
 COOKIE_DOMAIN=.over.guide
 SQL_LOG=1
-MIGRATIONS_PATH=target/dist/src/database/migrations
+MIGRATIONS_PATH=dist/src/database/migrations
 CDN_WEB_ROOT=/mnt/cloud/web
 CDN_BASE_URL=https://cdn.over.guide/
