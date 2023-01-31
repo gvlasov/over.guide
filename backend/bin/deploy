@@ -2,7 +2,12 @@
 set -ex
 cd $(git rev-parse --show-toplevel)/backend
 
-
+# Test ssh connection
+ssh root@over.guide true
+# Select nodejs version
+export NVM_DIR=$HOME/.nvm;
+source $NVM_DIR/nvm.sh;
+nvm use 16
 # Install code to backend directory on server
 npm run build:prod
 tar cfz - config package.json -C target dist \
@@ -11,7 +16,10 @@ ssh site@over.guide 'cd backend; npm install'
 scp \
   systemd/backend.service \
   root@over.guide:/etc/systemd/system/backend.service
-ssh root@over.guide 'systemctl daemon-reload && systemctl restart backend'
+scp \
+  config/prod/env \
+  root@over.guide:/home/site/backend/env
+ssh root@over.guide 'systemctl daemon-reload && systemctl enable backend && systemctl restart backend'
 rm -rf target
 echo Backend deployed at "$(date '+%Y-%m-%d %H:%M:%S')"
 
